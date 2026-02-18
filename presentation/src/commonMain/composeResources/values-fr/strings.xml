@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Fitverse Journey</string>
+
+    <string name="onboarding_title_1">Suivez vos entraînements</string>
+    <string name="onboarding_description_1">Enregistrez facilement vos exercices, séries et répétitions.\nSuivez vos progrès et restez régulier dans votre entraînement.</string>
+
+    <string name="onboarding_title_2">Alimentez votre corps correctement</string>
+    <string name="onboarding_description_2">Recevez des conseils nutritionnels intelligents adaptés à vos objectifs.\nApprenez quoi, quand et comment manger pour améliorer vos performances.</string>
+
+    <string name="onboarding_title_3">Entraînez-vous avec l’IA</string>
+    <string name="onboarding_description_3">Des entraînements personnalisés propulsés par l’intelligence artificielle.\nAdaptez votre entraînement à la performance, à la récupération et aux progrès.</string>
+
+    <string name="onboarding_title_4">Partager avec des amis</string>
+    <string name="onboarding_description_4">Restez motivé en partageant vos progrès et réussites.\nEntraînez-vous ensemble, défiez vos amis et célébrez chaque étape.</string>
+
+
+
+    <string name="trial_flag_day_trial_title">Essai de 7 jours</string>
+    <string name="trial_rocket">🚀</string>
+    <string name="trial_title_1">Débloquez votre programme d’entraînement personnalisé</string>
+    <string name="trial_description_1">Essayez Premium gratuitement pendant 7 jours — entraînements personnalisés, analyses et plans premium.</string>
+    <string name="trial_card_title">FITVERSE PREMIUM</string>
+    <string name="trial_card_description_1">Entraînements IA personnalisés</string>
+    <string name="trial_card_description_2">Analyses de performance détaillées</string>
+    <string name="trial_card_description_3">Plans d’entraînement et défis exclusifs</string>
+    <string name="trial_card_description_4">Expérience sans publicité</string>
+    <string name="trial_card_description_5">Essai gratuit de 7 jours — résiliable à tout moment</string>
+    <string name="trial_cta_text">Commencer l’essai gratuit de 7 jours</string>
+    <string name="trial_trust_message_1">Aucun paiement maintenant • Annulez à tout moment</string>
+    <string name="trial_trust_message_2">Puis 9,99 $/mois</string>
+    <string name="trial_footer_text">Essayez tout gratuitement pendant 7 jours — annulez à tout moment.</string>
+
+
+
+
+
+    <string name="login_title">Commencez votre parcours !</string>
+    <string name="login_subtitle">Entraînez-vous à votre rythme.</string>
+    <string name="login_email_label">E-mail</string>
+    <string name="login_password_label">Mot de passe</string>
+    <string name="login_button_text">Se connecter</string>
+    <string name="login_not_account">Vous n’avez pas de compte ?</string>
+    <string name="login_sign_up">S’inscrire</string>
+    <string name="login_forget_password">Mot de passe oublié ?</string>
+
+</resources>
+
+

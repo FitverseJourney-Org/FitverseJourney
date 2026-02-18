@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Fitverse Journey</string>
+
+    <string name="onboarding_title_1">Trainings verfolgen</string>
+    <string name="onboarding_description_1">Erfasse deine Übungen, Sätze und Wiederholungen ganz einfach.\nVerfolge deinen Fortschritt und bleibe konstant bei deinem Training.</string>
+
+    <string name="onboarding_title_2">Ernähre deinen Körper richtig</string>
+    <string name="onboarding_description_2">Erhalte intelligente Ernährungstipps, die auf deine Ziele abgestimmt sind.\nLerne, was, wann und wie du essen solltest, um deine Leistung zu steigern.</string>
+
+    <string name="onboarding_title_3">Trainiere mit KI</string>
+    <string name="onboarding_description_3">Personalisierte Workouts mit künstlicher Intelligenz.\nPasse dein Training an Leistung, Erholung und Fortschritt an.</string>
+
+    <string name="onboarding_title_4">Mit Freunden teilen</string>
+    <string name="onboarding_description_4">Bleibe motiviert, indem du Fortschritte und Erfolge teilst.\nTrainiere gemeinsam, fordere Freunde heraus und feiere jeden Meilenstein.</string>
+
+
+    <string name="trial_flag_day_trial_title">7 Tage Testversion</string>
+    <string name="trial_rocket">🚀</string>
+    <string name="trial_title_1">Schalte deinen personalisierten Trainingsplan frei</string>
+    <string name="trial_description_1">Teste Premium 7 Tage kostenlos — personalisierte Workouts, Analysen und Premium-Pläne.</string>
+    <string name="trial_card_title">FITVERSE PREMIUM</string>
+    <string name="trial_card_description_1">Personalisierte KI-Workouts</string>
+    <string name="trial_card_description_2">Detaillierte Leistungsanalysen</string>
+    <string name="trial_card_description_3">Exklusive Trainingspläne &amp; Challenges</string>
+    <string name="trial_card_description_4">Werbefreies Erlebnis</string>
+    <string name="trial_card_description_5">7 Tage kostenlos testen — jederzeit kündbar</string>
+    <string name="trial_cta_text">7 Tage kostenlos testen</string>
+    <string name="trial_trust_message_1">Keine Zahlung jetzt • Jederzeit kündbar</string>
+    <string name="trial_trust_message_2">Danach 9,99 $/Monat</string>
+    <string name="trial_footer_text">Teste alles 7 Tage kostenlos — jederzeit kündbar.</string>
+
+
+
+    <string name="login_title">Starte deine Reise!</string>
+    <string name="login_subtitle">Trainiere in deinem eigenen Tempo.</string>
+    <string name="login_email_label">E-Mail</string>
+    <string name="login_password_label">Passwort</string>
+    <string name="login_button_text">Einloggen</string>
+    <string name="login_not_account">Noch kein Konto?</string>
+    <string name="login_sign_up">Registrieren</string>
+    <string name="login_forget_password">Passwort vergessen?</string>
+
+
+</resources>
+

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Fitverse Journey</string>
+
+    <string name="onboarding_title_1">Acompanhe seus treinos</string>
+    <string name="onboarding_description_1">Registre facilmente seus exercícios, séries e repetições.\nAcompanhe seu progresso e mantenha consistência no treino.</string>
+
+    <string name="onboarding_title_2">Alimente seu corpo corretamente</string>
+    <string name="onboarding_description_2">Receba dicas inteligentes de nutrição adaptadas aos seus objetivos.\nAprenda o que, quando e como comer para melhorar seu desempenho.</string>
+
+    <string name="onboarding_title_3">Treine com IA</string>
+    <string name="onboarding_description_3">Treinos personalizados com inteligência artificial.\nAdapte seu treino ao desempenho, recuperação e progresso.</string>
+
+    <string name="onboarding_title_4">Compartilhe com amigos</string>
+    <string name="onboarding_description_4">Mantenha-se motivado compartilhando progresso e conquistas.\nTreine junto, desafie amigos e celebre cada marco.</string>
+
+
+
+    <string name="trial_flag_day_trial_title">Teste grátis de 7 dias</string>
+    <string name="trial_rocket">🚀</string>
+    <string name="trial_title_1">Desbloqueie seu plano de treino personalizado</string>
+    <string name="trial_description_1">Experimente o Premium grátis por 7 dias — treinos personalizados, análises e planos premium.</string>
+    <string name="trial_card_title">FITVERSE PREMIUM</string>
+    <string name="trial_card_description_1">Treinos com IA personalizados</string>
+    <string name="trial_card_description_2">Análises detalhadas de desempenho</string>
+    <string name="trial_card_description_3">Planos de treino e desafios exclusivos</string>
+    <string name="trial_card_description_4">Experiência sem anúncios</string>
+    <string name="trial_card_description_5">Teste grátis de 7 dias — cancele quando quiser</string>
+    <string name="trial_cta_text">Iniciar teste grátis de 7 dias</string>
+    <string name="trial_trust_message_1">Nenhum pagamento agora • Cancele quando quiser</string>
+    <string name="trial_trust_message_2">Depois $9.99/mês</string>
+    <string name="trial_footer_text">Experimente tudo grátis por 7 dias — cancele quando quiser.</string>
+
+
+
+    <string name="login_title">Comece sua jornada!</string>
+    <string name="login_subtitle">Treine no seu próprio ritmo.</string>
+    <string name="login_email_label">E-mail</string>
+    <string name="login_password_label">Senha</string>
+    <string name="login_button_text">Entrar</string>
+    <string name="login_not_account">Ainda não tem uma conta?</string>
+    <string name="login_sign_up">Cadastrar-se</string>
+    <string name="login_forget_password">Esqueceu a senha?</string>
+
+
+</resources>
+
+

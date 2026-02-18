@@ -1,0 +1,23 @@
+CREATE TABLE workout (
+  id TEXT NOT NULL PRIMARY KEY,
+  user_id TEXT NOT NULL REFERENCES user(user_id),
+  title TEXT NOT NULL,
+  created_at INTEGER NOT NULL DEFAULT (strftime('%s','now'))
+);
+
+selectAll:
+SELECT * FROM workout;
+
+selectById:
+SELECT * FROM workout WHERE id = ?;
+
+selectByUserId:
+SELECT * FROM workout WHERE user_id = ?;
+
+insertWorkout:
+INSERT OR REPLACE INTO workout (
+  id, user_id, title, created_at
+) VALUES (?, ?, ?, ?);
+
+deleteById:
+DELETE FROM workout WHERE id = ?;

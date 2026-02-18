@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1098274024216",
+    "project_id": "fitversejourney-1fc99",
+    "storage_bucket": "fitversejourney-1fc99.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1098274024216:android:71e67b4dc3a43a9f2b0c6d",
+        "android_client_info": {
+          "package_name": "org.fitverse.fitverseJourney"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWyrORmoRtXf7KuI7d2Itw6KoqSSou6Ps"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

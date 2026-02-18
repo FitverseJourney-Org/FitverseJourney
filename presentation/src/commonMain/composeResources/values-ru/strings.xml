@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string name="app_name">Fitverse Journey</string>
+
+    <string name="onboarding_title_1">Отслеживайте тренировки</string>
+    <string name="onboarding_description_1">Легко записывайте упражнения, подходы и повторения.\nОтслеживайте прогресс и сохраняйте регулярность тренировок.</string>
+
+    <string name="onboarding_title_2">Правильно питайтесь</string>
+    <string name="onboarding_description_2">Получайте умные советы по питанию, адаптированные под ваши цели.\nУзнайте, что, когда и как есть для повышения эффективности.</string>
+
+    <string name="onboarding_title_3">Тренируйтесь с ИИ</string>
+    <string name="onboarding_description_3">Персонализированные тренировки на базе искусственного интеллекта.\nАдаптируйте тренировки под производительность, восстановление и прогресс.</string>
+
+    <string name="onboarding_title_4">Делитесь с друзьями</string>
+    <string name="onboarding_description_4">Оставайтесь мотивированными, делясь прогрессом и достижениями.\nТренируйтесь вместе, бросайте вызов друзьям и отмечайте каждый успех.</string>
+
+
+
+    <string name="trial_flag_day_trial_title">Пробный период 7 дней</string>
+    <string name="trial_rocket">🚀</string>
+    <string name="trial_title_1">Откройте персональный план тренировок</string>
+    <string name="trial_description_1">Попробуйте Premium бесплатно в течение 7 дней — персональные тренировки, аналитика и премиум-планы.</string>
+    <string name="trial_card_title">FITVERSE PREMIUM</string>
+    <string name="trial_card_description_1">Персонализированные тренировки с ИИ</string>
+    <string name="trial_card_description_2">Подробная аналитика производительности</string>
+    <string name="trial_card_description_3">Эксклюзивные планы тренировок и челленджи</string>
+    <string name="trial_card_description_4">Без рекламы</string>
+    <string name="trial_card_description_5">Бесплатный пробный период 7 дней — отмена в любое время</string>
+    <string name="trial_cta_text">Начать бесплатный пробный период</string>
+    <string name="trial_trust_message_1">Оплата сейчас не требуется • Отмена в любое время</string>
+    <string name="trial_trust_message_2">Затем $9.99/месяц</string>
+    <string name="trial_footer_text">Попробуйте всё бесплатно 7 дней — отмена в любое время.</string>
+
+
+
+    <string name="login_title">Начните свой путь!</string>
+    <string name="login_subtitle">Тренируйтесь в своем темпе.</string>
+    <string name="login_email_label">Электронная почта</string>
+    <string name="login_password_label">Пароль</string>
+    <string name="login_button_text">Войти</string>
+    <string name="login_not_account">Нет аккаунта?</string>
+    <string name="login_sign_up">Зарегистрироваться</string>
+    <string name="login_forget_password">Забыли пароль?</string>
+
+
+</resources>
+

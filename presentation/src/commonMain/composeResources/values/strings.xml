@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FitverseJourneyApp</string>
+
+    <!-- Onboarding Resources Strings -->
+
+
+    <string name="onboarding_title_1">Track your workouts</string>
+    <string name="onboarding_description_1">Easily log your exercises, sets, and repetitions.\nTrack your progress and stay consistent with your training.</string>
+
+    <string name="onboarding_title_2">Fuel your body properly</string>
+    <string name="onboarding_description_2">Get smart nutrition tips tailored to your goals.\nLearn what, when, and how to eat to improve your performance.</string>
+
+    <string name="onboarding_title_3">Train with AI</string>
+    <string name="onboarding_description_3">Personalized workouts powered by artificial intelligence.\nAdapt your training to performance, recovery, and progress.</string>
+
+    <string name="onboarding_title_4">Share with friends</string>
+    <string name="onboarding_description_4">Stay motivated by sharing progress and achievements.\nTrain together, challenge friends, and celebrate every milestone.</string>
+
+    <!-- Trial Resources Strings -->
+    <string name="trial_flag_day_trial_title">7-day trial</string>
+    <string name="trial_rocket">🚀</string>
+    <string name="trial_title_1">Unlock your personalized training plan</string>
+    <string name="trial_description_1">Try Premium free for 7 days — personalized workouts, insights and premium plans.</string>
+
+    <string name="trial_card_title">FITVERSE PREMIUM</string>
+    <string name="trial_card_description_1">Personalized AI workouts</string>
+    <string name="trial_card_description_2">Detailed performance analytics</string>
+    <string name="trial_card_description_3">Exclusive training plans &amp; challenges</string>
+    <string name="trial_card_description_4">Ad-free experience</string>
+    <string name="trial_card_description_5">7-day free trial — cancel anytime</string>
+    <string name="trial_cta_text">Start 7-day Free Trial</string>
+    <string name="trial_trust_message_1">No payment now • Cancel anytime</string>
+    <string name="trial_trust_message_2">Then $9.99/month</string>
+    <string name="trial_footer_text">Try everything free for 7 days — cancel anytime.</string>
+
+    <!-- Authentication Resources Strings -->
+    <string name="login_title">Start your journey!</string>
+    <string name="login_subtitle">Train at your own pace.</string>
+    <string name="login_email_label">Email</string>
+    <string name="login_password_label">Password</string>
+    <string name="login_button_text">Enter</string>
+    <string name="login_not_account">Don’t have an account?</string>
+    <string name="login_sign_up">Sign Up</string>
+    <string name="login_forget_password">Forgot password?</string>
+
+
+</resources>

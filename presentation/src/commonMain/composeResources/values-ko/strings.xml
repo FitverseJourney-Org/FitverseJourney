@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Fitverse Journey</string>
+
+    <string name="onboarding_title_1">운동 기록하기</string>
+    <string name="onboarding_description_1">운동, 세트 및 반복 횟수를 쉽게 기록하세요.\n진행 상황을 추적하고 꾸준히 훈련을 이어가세요.</string>
+
+    <string name="onboarding_title_2">몸에 맞는 영양 섭취</string>
+    <string name="onboarding_description_2">목표에 맞춘 스마트한 영양 팁을 받아보세요.\n성과를 높이기 위해 무엇을, 언제, 어떻게 먹어야 하는지 배워보세요.</string>
+
+    <string name="onboarding_title_3">AI와 함께 훈련하기</string>
+    <string name="onboarding_description_3">인공지능 기반의 맞춤형 운동 프로그램.\n성과, 회복 및 진행 상황에 맞게 훈련을 조정하세요.</string>
+
+    <string name="onboarding_title_4">친구와 공유하기</string>
+    <string name="onboarding_description_4">진행 상황과 성과를 공유하며 동기를 유지하세요.\n함께 훈련하고 친구에게 도전하며 모든 성취를 축하하세요.</string>
+
+
+
+    <string name="trial_flag_day_trial_title">7일 무료 체험</string>
+    <string name="trial_rocket">🚀</string>
+    <string name="trial_title_1">맞춤형 트레이닝 플랜을 잠금 해제하세요</string>
+    <string name="trial_description_1">7일 동안 Premium을 무료로 체험하세요 — 맞춤형 운동, 분석 및 프리미엄 플랜.</string>
+    <string name="trial_card_title">FITVERSE PREMIUM</string>
+    <string name="trial_card_description_1">개인화된 AI 운동</string>
+    <string name="trial_card_description_2">상세한 퍼포먼스 분석</string>
+    <string name="trial_card_description_3">독점 트레이닝 플랜 및 챌린지</string>
+    <string name="trial_card_description_4">광고 없는 경험</string>
+    <string name="trial_card_description_5">7일 무료 체험 — 언제든지 취소 가능</string>
+    <string name="trial_cta_text">7일 무료 체험 시작하기</string>
+    <string name="trial_trust_message_1">지금 결제 없음 • 언제든지 취소 가능</string>
+    <string name="trial_trust_message_2">이후 월 $9.99</string>
+    <string name="trial_footer_text">7일 동안 모든 기능을 무료로 사용하세요 — 언제든지 취소 가능.</string>
+
+
+
+    <string name="login_title">당신의 여정을 시작하세요!</string>
+    <string name="login_subtitle">자신의 페이스에 맞춰 훈련하세요.</string>
+    <string name="login_email_label">이메일</string>
+    <string name="login_password_label">비밀번호</string>
+    <string name="login_button_text">로그인</string>
+    <string name="login_not_account">계정이 없으신가요?</string>
+    <string name="login_sign_up">회원가입</string>
+    <string name="login_forget_password">비밀번호를 잊으셨나요?</string>
+
+
+</resources>
+
+
