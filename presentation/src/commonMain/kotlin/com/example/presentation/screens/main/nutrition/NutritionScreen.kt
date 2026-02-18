@@ -190,7 +190,7 @@ fun NutritionScreenV3(
                 "Lettuce",
                 "Tomatoes",
                 "Avocado",
-                "Olive oil"
+                "Olive oila"
             )
         )
     )
