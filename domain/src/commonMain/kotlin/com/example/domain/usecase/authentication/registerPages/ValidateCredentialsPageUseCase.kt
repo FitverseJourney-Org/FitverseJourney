@@ -1,8 +1,8 @@
 package com.example.domain.usecase.authentication.registerPages
 
 import com.example.domain.model.ValidationResult
-import com.example.domain.usecase.authentication.validations.ValidateEmail
-import com.example.domain.usecase.authentication.validations.ValidatePassword
+import com.example.domain.usecase.authentication.authValidations.ValidateEmail
+import com.example.domain.usecase.authentication.authValidations.ValidatePassword
 
 class ValidateCredentialsPageUseCase(
     private val validateEmail: ValidateEmail,

@@ -28,36 +28,44 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(project(":domain"))
-
-            // koin dependencies
+            implementation(libs.kotlin.stdlib)
 
             // compose
-            implementation(libs.androidx.compose.foundation)
-            implementation(libs.androidx.compose.runtime)
-            implementation(libs.androidx.compose.components.resources)
-
-            // material
-            implementation(libs.compose.material.icons)
+            implementation(libs.compose.androidx.foundation)
+            implementation(libs.compose.androidx.runtime)
+            // material3
             implementation(libs.material3)
+
+            implementation(project(":domain"))
+
+            // koin (ok em commonMain)
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+
+            // icons
+            implementation(libs.icons.compose.material)
+
+            // components resources
+            implementation(libs.components.resources)
 
             // coroutines
             implementation(libs.kotlinx.coroutines.core)
+
+            // dateTime
             implementation(libs.kotlinx.datetime)
-
-
-
         }
         iosMain.dependencies {
-
         }
         androidMain.dependencies {
-            implementation(libs.koin.android)
+            // lifecycle (mover para androidMain)
+            implementation(libs.lifecycle.viewmodel)
+
             // lottie
             implementation(libs.android.lottie.compose)
-        }
-        commonTest.dependencies {
-            implementation(libs.kotlin.test)
+
+            implementation(libs.koin.android)
+            implementation(libs.koin.androidx.compose)
         }
     }
 

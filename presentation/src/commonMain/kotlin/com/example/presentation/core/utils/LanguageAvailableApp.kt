@@ -2,14 +2,14 @@ package com.example.presentation.core.utils
 
 import com.example.domain.model.dbLocal.language.Language
 import com.example.domain.model.dbLocal.language.TagLanguage
-import fitversejorneyapp.presentation.generated.resources.Res
-import fitversejorneyapp.presentation.generated.resources.locale_de
-import fitversejorneyapp.presentation.generated.resources.locale_en
-import fitversejorneyapp.presentation.generated.resources.locale_es
-import fitversejorneyapp.presentation.generated.resources.locale_fr
-import fitversejorneyapp.presentation.generated.resources.locale_ko
-import fitversejorneyapp.presentation.generated.resources.locale_pt
-import fitversejorneyapp.presentation.generated.resources.locale_ru
+import fitversejourneyapp.presentation.generated.resources.Res
+import fitversejourneyapp.presentation.generated.resources.locale_de
+import fitversejourneyapp.presentation.generated.resources.locale_en
+import fitversejourneyapp.presentation.generated.resources.locale_es
+import fitversejourneyapp.presentation.generated.resources.locale_fr
+import fitversejourneyapp.presentation.generated.resources.locale_ko
+import fitversejourneyapp.presentation.generated.resources.locale_pt
+import fitversejourneyapp.presentation.generated.resources.locale_ru
 
 object LanguageAvailableApp {
 

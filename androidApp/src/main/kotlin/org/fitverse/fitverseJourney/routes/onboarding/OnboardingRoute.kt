@@ -1,7 +1,7 @@
 package org.fitverse.fitverseJourney.routes.onboarding
 
 import androidx.compose.runtime.Composable
-import com.example.presentation.screens.onboarding.OnboardingScreen
+import com.example.presentation.screens.ui.onboarding.OnboardingScreen
 import com.example.presentation.states.onboarding.OnboardingState
 
 @Composable

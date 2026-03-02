@@ -1,6 +1,5 @@
 package org.fitverse.fitverseJourney.di
 
-import com.example.data.dbRemote.datasources.KtorAuthRemoteDataSource
 import com.example.datasource.FirebaseAuthRemoteDataSource
 import com.example.domain.repository.authentication.AuthRemoteDataSource
 import com.google.firebase.auth.FirebaseAuth

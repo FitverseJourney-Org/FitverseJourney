@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.android.kotlin.multiplatform.library)
+    alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.composeMultiplatform)
+    alias(libs.plugins.composeCompiler)
 }
 
 
@@ -23,9 +26,24 @@ kotlin {
     }
     sourceSets {
         androidMain.dependencies {
+            // koin
+            api(libs.koin.core)
 
         }
         commonMain.dependencies {
+            implementation(libs.kotlin.stdlib)
+            implementation(projects.presentation)
+            implementation(projects.domain)
+            implementation(projects.data)
+
+            implementation(libs.compose.androidx.runtime)
+            implementation(libs.compose.androidx.foundation)
+
+            implementation(libs.jetbrains.navigation3.ui)
+            implementation(libs.jetbrains.lifecycle.viewmodel.navigation3)
+            implementation(libs.koin.compose.navigation3)
+            implementation(libs.jetbrains.lifecycle.viewmodel)
+            implementation(libs.kotlinx.serialization)
 
         }
         commonTest.dependencies {

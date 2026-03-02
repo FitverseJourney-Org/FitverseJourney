@@ -45,40 +45,39 @@ dependencies {
     implementation(projects.data)
     implementation(projects.presentation)
     implementation(projects.domain)
+    implementation(projects.composeApp)
 
-    // lifecycle
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.10.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.10.0")
-    implementation("androidx.navigation:navigation-compose:2.7.0")
 
     // koin plugin
-    implementation(libs.koin.core)
+    api(libs.koin.core)
     implementation(libs.koin.compose)
 
-    // datastore
-    implementation(libs.androidx.datastore.preferences)
-    implementation(libs.androidx.datastore)
 
-    implementation(platform(libs.androidx.compose.bom))
+
+    // datastore
+    implementation(libs.datastore.androidx.preferences)
+    implementation(libs.datastore.androidx)
+
+    api(project.dependencies.platform(libs.compose.bom))
     implementation(libs.navigation.compose)
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    debugImplementation(libs.androidx.compose.ui.tooling.preview)
+    debugImplementation(libs.compose.androidx.ui.tooling)
+    debugImplementation(libs.compose.androidx.ui.tooling.preview)
 
     // Import the Firebase BoM
-    implementation(platform(libs.firebase.bom))
-    implementation("com.google.firebase:firebase-analytics")
+    api(project.dependencies.platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
     implementation(libs.firebase.auth.ktx)
 
     // Compose
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.compose.ui.graphics)
-    implementation(libs.androidx.compose.material3)
+    implementation(libs.compose.androidx.ui)
+    implementation(libs.compose.androidx.ui.tooling.preview)
+    implementation(libs.compose.androidx.ui.graphics)
+    implementation(libs.compose.androidx.material3)
     implementation(libs.androidx.activity.compose)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-    implementation(libs.material)
+    implementation(libs.material3)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.testExt.junit)
     androidTestImplementation(libs.androidx.espresso.core)

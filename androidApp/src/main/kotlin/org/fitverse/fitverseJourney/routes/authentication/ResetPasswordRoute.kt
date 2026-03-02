@@ -9,15 +9,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import com.example.presentation.components.snackbar.AppSnackbarHost
 import com.example.presentation.components.snackbar.SnackbarType
-import com.example.presentation.presenter.authentication.ResetPasswordPresenter
-import com.example.presentation.screens.authentication.resetPassword.ResetPasswordScreen
+import com.example.presentation.screens.ui.authentication.resetPassword.ResetPasswordScreen
+import com.example.presentation.screens.ui.authentication.resetPassword.ResetPasswordViewModel
 
 @Composable
 fun ResetPasswordRoute(
-    presenter: ResetPasswordPresenter,
+    viewmodel: ResetPasswordViewModel,
     onBackClick: () -> Unit,
 ) {
-    val state by presenter.state.collectAsState()
+    val state by viewmodel.state.collectAsState()
     val snackBarHostState = remember { SnackbarHostState() }
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -27,7 +27,7 @@ fun ResetPasswordRoute(
                 message = it.message,
                 withDismissAction = true
             )
-            presenter.cleanSnackBar()
+            viewmodel.cleanSnackBar()
         }
     }
 
@@ -41,10 +41,10 @@ fun ResetPasswordRoute(
         },
         onBackClick = onBackClick,
         isLoading = false,
-        onEmailChange = presenter::onEmailChange,
+        onEmailChange = viewmodel::onEmailChange,
         onSendResetLink = {
             keyboardController?.hide()
-            presenter.onClickResetPassword()
+            viewmodel.onClickResetPassword()
 
         },
         emailErrors = emptyList(),

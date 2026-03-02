@@ -30,3 +30,53 @@ val TrialAccentGreen = Color(0xFF3FAE6A)
 val TrialSurfaceGreen = Color(0xFF122916)
 val TrialTextPrimary = Color.White
 val TrialTextSecondary = Color(0xFFBFCFC0)
+
+
+object DarkGamifiedColors {
+
+    // Backgrounds
+    val Background = Color(0xFF0E0B16)
+    val Surface = Color(0xFF17121E)
+    val Card = Color(0xFF1C1626)
+
+    // Text
+    val Title = Color(0xFFF5F3FF)
+    val Body = Color(0xFFEDE9FE)
+    val Subtitle = Color(0xFFBDB4E6)
+    val Disabled = Color(0xFF7C77A6)
+
+    // Primary / Accent
+    val Primary = Color(0xFFA78BFA)        // roxo premium
+    val PrimarySoft = Color(0xFF4C1D95)
+    val Accent = Color(0xFF22D3EE)         // contraste moderno
+
+    // Status
+    val Health = Color(0xFFF87171)
+    val Stamina = Color(0xFF6EE7B7)
+    val Xp = Color(0xFFFACC15)             // XP dourado acessível
+
+    // UI helpers
+    val Divider = Color(0xFF2E2442)
+    val Outline = Color(0xFF3F2E5E)
+}
+
+object GamifiedBackgroundBrushes {
+
+    /** Versão levemente mais clara — ideal para dashboard e hero areas */
+    val SoftDepth: Brush = Brush.verticalGradient(
+        colorStops = arrayOf(
+            0.0f to DarkGamifiedColors.Background,
+            0.55f to DarkGamifiedColors.Surface,
+            1.0f to DarkGamifiedColors.Card
+        )
+    )
+
+    /** Versão mais escura — ideal para listas e telas densas */
+    val DeepContrast: Brush = Brush.verticalGradient(
+        colorStops = arrayOf(
+            0.0f to DarkGamifiedColors.Background,
+            0.75f to DarkGamifiedColors.Surface,
+            1.0f to DarkGamifiedColors.Surface
+        )
+    )
+}

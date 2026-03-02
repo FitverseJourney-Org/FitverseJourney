@@ -14,12 +14,12 @@ import com.example.domain.model.authentication.register.RegisterAction
 import com.example.domain.model.authentication.register.progress
 import com.example.presentation.components.snackbar.AppSnackbarHost
 import com.example.presentation.components.snackbar.SnackbarType
-import com.example.presentation.presenter.authentication.RegisterPresenter
-import com.example.presentation.screens.authentication.register.RegisterScreen
+import com.example.presentation.screens.ui.authentication.register.RegisterViewModel
+import com.example.presentation.screens.ui.authentication.register.RegisterScreen
 
 @Composable
 fun RegisterRoute(
-    presenter: RegisterPresenter,
+    presenter: RegisterViewModel,
     onExitToLogin: () -> Unit
 ) {
     val state by presenter.state.collectAsState()

@@ -38,10 +38,16 @@ kotlin {
 
             implementation(libs.kotlin.stdlib)
             implementation(libs.kotlinx.coroutines.core)
-            implementation(libs.compose.material.icons)
-            implementation(libs.androidx.compose.components.resources)
+            implementation(libs.material3)
 
+            // koin
+            api(libs.koin.core)
 
+            // icons extended
+            implementation(libs.icons.compose.material)
+
+            // drawable resources
+            implementation(libs.components.resources)
 
         }
         iosMain.dependencies {

@@ -1,6 +1,6 @@
 package com.example.data.mappers
 
-import com.example.data.dbLocal.models.User
+import com.example.data.models.entity.User
 import com.fitverse.database.User as UserEntity
 
 fun UserEntity.toDomain(): User {

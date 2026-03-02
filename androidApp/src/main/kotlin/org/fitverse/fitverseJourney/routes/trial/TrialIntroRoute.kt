@@ -1,7 +1,7 @@
 package org.fitverse.fitverseJourney.routes.trial
 
 import androidx.compose.runtime.Composable
-import com.example.presentation.screens.trial.TrialIntroScreen
+import com.example.presentation.screens.ui.trial.TrialIntroScreen
 
 @Composable
 fun TrialIntroRoute(

@@ -2,7 +2,7 @@ package org.fitverse.fitverseJourney.routes.main
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.presentation.screens.main.dashboard.NotificationMainScreen
+import com.example.presentation.screens.ui.main.dashboard.NotificationMainScreen
 
 @Composable
 fun NotificationRoute(

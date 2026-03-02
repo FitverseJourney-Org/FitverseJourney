@@ -1,24 +1,14 @@
 package org.fitverse.fitverseJourney.navigation
 
-import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.foundation.background
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -26,10 +16,10 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.example.domain.model.authentication.login.LoginAction
-import com.example.presentation.createLoginPresenterAndroid
-import com.example.presentation.createOnboardingPresenterAndroid
-import com.example.presentation.createRegisterPresenterAndroid
-import com.example.presentation.createResetPasswordPresenterAndroid
+import com.example.presentation.screens.ui.authentication.login.LoginViewModel
+import com.example.presentation.screens.ui.authentication.register.RegisterViewModel
+import com.example.presentation.screens.ui.authentication.resetPassword.ResetPasswordViewModel
+import com.example.presentation.screens.ui.onboarding.OnboardingViewModel
 import org.fitverse.fitverseJourney.routes.LoadingNewLanguageRoute
 import org.fitverse.fitverseJourney.routes.SplashRoute
 import org.fitverse.fitverseJourney.routes.authentication.LoginRoute
@@ -44,21 +34,8 @@ import org.koin.compose.koinInject
 @Composable
 fun SetupNavigation() {
     val navController = rememberNavController()
-    val noEnterTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition =
-        {
-            fadeIn(
-                animationSpec = tween(durationMillis = 200),
-                initialAlpha = 0.99f
-            )
-        }
 
-    val noExitTransition: AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition =
-        {
-            fadeOut(
-                animationSpec = tween(durationMillis = 300),
-                targetAlpha = 0.99f
-            )
-        }
+
     Surface {
         NavHost(
             navController = navController,
@@ -84,18 +61,16 @@ fun SetupNavigation() {
             }
             navigation(startDestination = "onboarding", route = "graph_onboarding") {
                 composable("onboarding") {
-                    val presenter = remember {
-                        createOnboardingPresenterAndroid()
-                    }
-                    val state by presenter.state.collectAsState()
+                    val viewmodel = koinInject<OnboardingViewModel>()
+                    val state by viewmodel.state.collectAsState()
                     OnboardingRoute(
                         state = state,
                         onFinish = { navController.navigate("trial/intro") },
                         nextPage = {
-                            presenter.nextPage()
+                            viewmodel.nextPage()
                         },
                         skipToLastPage = {
-                            presenter.skipToLastPage()
+                            viewmodel.skipToLastPage()
                         },
                     )
                 }
@@ -108,11 +83,10 @@ fun SetupNavigation() {
             }
             navigation(startDestination = "login", route = "graph_auth") {
                 composable("login") {
-                    val presenter = remember {
-                        createLoginPresenterAndroid()
-                    }
+                    val viewmodel = koinInject<LoginViewModel>()
+                    val state = viewmodel.state.collectAsState()
                     LoginRoute(
-                        presenter = presenter,
+                        presenter = viewmodel,
                         onNavigateToRegister = { navController.navigate("register") },
                         onNavigateToResetPassword = {
                             navController.navigate(Routes.ResetPassword.route)
@@ -126,7 +100,7 @@ fun SetupNavigation() {
                                     ?.startsWith("loadingNewLanguage") == true
                             ) return@LoginRoute
 
-                            presenter.onAction(LoginAction.LanguageChanged(selectedLanguage))
+                            viewmodel.onAction(LoginAction.LanguageChanged(selectedLanguage))
 
                             navController.navigate(route)
                         },
@@ -138,21 +112,23 @@ fun SetupNavigation() {
                     )
                 }
                 composable("register") {
-                    val presenter = remember { createRegisterPresenterAndroid() }
+                    val viewmodel = koinInject<RegisterViewModel>()
+                    val state = viewmodel.state.collectAsState()
+
                     RegisterRoute(
                         onExitToLogin = {
                             navController.navigate("auth")
                         },
-                        presenter = presenter
+                        presenter = viewmodel
                     )
                 }
                 composable("resetPassword") {
-                    val presenter = remember { createResetPasswordPresenterAndroid() }
+                    val viewmodel = koinInject<ResetPasswordViewModel>()
                     ResetPasswordRoute(
                         onBackClick = {
                             navController.popBackStack()
                         },
-                        presenter = presenter
+                        viewmodel = viewmodel
                     )
                 }
             }
@@ -160,16 +136,16 @@ fun SetupNavigation() {
 
 
             // LoadingNewLanguage (com argumento)
-            composable(
-                route = Routes.LoadingNewLanguage.route,
-                arguments = listOf(navArgument("langIso") { type = NavType.StringType })
-            ) { backStackEntry ->
-                LoadingNewLanguageRoute(
-                    navController = navController,
-                    backStackEntry = backStackEntry,
-                    appPresenter = koinInject()
-                )
-            }
+//            composable(
+//                route = Routes.LoadingNewLanguage.route,
+//                arguments = listOf(navArgument("langIso") { type = NavType.StringType })
+//            ) { backStackEntry ->
+//                LoadingNewLanguageRoute(
+//                    navController = navController,
+//                    backStackEntry = backStackEntry,
+//                    appViewModel = koinInject()
+//                )
+//            }
 
             composable("main") {
                 MainScreen()

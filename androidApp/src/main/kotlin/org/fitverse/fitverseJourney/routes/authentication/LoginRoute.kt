@@ -1,6 +1,5 @@
 package org.fitverse.fitverseJourney.routes.authentication
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.SizeTransform
@@ -10,50 +9,31 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.with
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import com.example.domain.model.authentication.login.LoginAction
 import com.example.domain.model.dbLocal.language.Language
-import com.example.domain.model.onboarding.OnboardingAnimationTopics
-import com.example.expect.FitnessLottieAnimation
 import com.example.presentation.components.snackbar.AppSnackbarHost
 import com.example.presentation.components.snackbar.SnackbarType
-import com.example.presentation.presenter.AppPresenter
-import com.example.presentation.presenter.authentication.LoginPresenter
-import com.example.presentation.screens.authentication.login.LoginScreen
-import com.example.presentation.screens.authentication.login.components.AnimatedLoginBackground
-import com.example.presentation.screens.setupLanguage.SetupLanguageScreen
-import kotlinx.coroutines.delay
+import com.example.presentation.screens.ui.authentication.login.LoginViewModel
+import com.example.presentation.screens.ui.authentication.login.LoginScreen
+import com.example.presentation.screens.ui.authentication.login.components.AnimatedLoginBackground
+import com.example.presentation.screens.ui.setupLanguage.SetupLanguageScreen
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun LoginRoute(
-    presenter: LoginPresenter,
+    presenter: LoginViewModel,
     onLoginSuccess: () -> Unit,
     onConfirmLanguage: (Language) -> Unit,
     onNavigateToRegister: () -> Unit,

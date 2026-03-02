@@ -1,9 +1,9 @@
 package com.example.domain.usecase.authentication.registerPages
 
 import com.example.domain.model.ValidationResult
-import com.example.domain.usecase.authentication.validations.ValidateAge
-import com.example.domain.usecase.authentication.validations.ValidateGender
-import com.example.domain.usecase.authentication.validations.ValidateName
+import com.example.domain.usecase.authentication.authValidations.ValidateAge
+import com.example.domain.usecase.authentication.authValidations.ValidateGender
+import com.example.domain.usecase.authentication.authValidations.ValidateName
 
 class ValidateProfilePageUseCase(
     private val validateName: ValidateName,

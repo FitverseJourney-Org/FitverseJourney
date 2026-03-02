@@ -25,11 +25,9 @@ import androidx.navigation.NavController
 import com.example.domain.model.dbLocal.language.TagLanguage
 import com.example.domain.model.onboarding.OnboardingAnimationTopics
 import com.example.expect.FitnessLottieAnimation
-import com.example.presentation.presenter.AppPresenter
 
 @Composable
 fun LoadingNewLanguageRoute(
-    appPresenter: AppPresenter,
     navController: NavController,
     backStackEntry: NavBackStackEntry
 ) {
@@ -81,11 +79,11 @@ fun LoadingNewLanguageRoute(
         // chama o método suspenso do presenter que faz a troca
         // (use switchLanguageAndShow que já gere isChangingLanguage internamente)
 
-        runCatching {
-            appPresenter.switchLanguageAndShow(targetLanguage)
-        }.onFailure {
-            // opcional: log ou mostrar snackbar
-        }
+//        runCatching {
+//            appViewModel.switchLanguageAndShow(targetLanguage)
+//        }.onFailure {
+//            // opcional: log ou mostrar snackbar
+//        }
 
         // garantir mínimo de 3 segundos de tela visível
         val elapsed = System.currentTimeMillis() - start

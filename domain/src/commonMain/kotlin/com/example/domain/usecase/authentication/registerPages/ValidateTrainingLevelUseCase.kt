@@ -2,7 +2,7 @@ package com.example.domain.usecase.authentication.registerPages
 
 import com.example.domain.model.ValidationResult
 import com.example.domain.model.authentication.register.TrainingLevel
-import com.example.domain.usecase.authentication.validations.ValidateTrainingLevel
+import com.example.domain.usecase.authentication.authValidations.ValidateTrainingLevel
 
 class ValidateTrainingLevelUseCase(
     private val validateLevel: ValidateTrainingLevel

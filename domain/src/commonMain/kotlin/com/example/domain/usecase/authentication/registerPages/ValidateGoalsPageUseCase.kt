@@ -2,7 +2,7 @@ package com.example.domain.usecase.authentication.registerPages
 
 import com.example.domain.model.ValidationResult
 import com.example.domain.model.authentication.register.Goal
-import com.example.domain.usecase.authentication.validations.ValidateGoals
+import com.example.domain.usecase.authentication.authValidations.ValidateGoals
 
 class ValidateGoalsPageUseCase(
     private val validateGoals: ValidateGoals,

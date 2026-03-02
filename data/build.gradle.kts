@@ -48,37 +48,37 @@ kotlin {
             implementation(project(":domain"))
 
             // koin
-            implementation(libs.koin.core)
-            implementation(libs.koin.compose)
+            api(libs.koin.core)
 
             // datastore
-            implementation(libs.androidx.datastore)
-            implementation(libs.androidx.datastore.preferences)
+            implementation(libs.datastore.androidx)
+            implementation(libs.datastore.androidx.preferences)
 
             // sqldelight
-            implementation(libs.runtime)
+            implementation(libs.sqldelight.runtime)
             implementation(libs.kotlinx.datetime)
             
-            implementation(libs.androidx.compose.runtime)
+            implementation(libs.compose.androidx.runtime)
 
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
-            implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.ktor.client.auth)
+
+            // serialization
+            implementation(libs.kotlinx.serialization)
         }
         iosMain.dependencies {
 
             // sqlDelight
             implementation(libs.ktor.client.darwin)
-            implementation(libs.native.driver)
+            implementation(libs.sqldelight.native.driver)
         }
         androidMain.dependencies {
 
 
             // firebase
             implementation(project.dependencies.platform(libs.firebase.bom))
-            implementation(libs.android.firebase.auth)
-            implementation(libs.android.firebase.analytics)
+            implementation(libs.firebase.auth.ktx)
 
             // engine ktor
             implementation(libs.ktor.client.okhttp)
@@ -86,10 +86,11 @@ kotlin {
 
             // sqlDelight
             implementation(libs.ktor.client.android)
-            implementation(libs.android.driver)
+            implementation(libs.sqldelight.android.driver)
 
-            // koin android
-            implementation(libs.koin.android)
+
+            // coroutines
+            implementation(libs.kotlinx.coroutines.android)
 
         }
         commonTest.dependencies {

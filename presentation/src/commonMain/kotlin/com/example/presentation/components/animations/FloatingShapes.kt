@@ -7,17 +7,21 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import com.example.presentation.theme.AccentGreen
+import androidx.compose.ui.graphics.lerp
+import com.example.presentation.theme.DarkGamifiedColors
 
 @Composable
 fun FloatingShapes(
     modifier: Modifier = Modifier
 ) {
-    val infinite = rememberInfiniteTransition(label = "floating")
+    val colors = MaterialTheme.colorScheme
+
+    val infinite = rememberInfiniteTransition()
 
     val offsetA by infinite.animateFloat(
         initialValue = -40f,
@@ -25,8 +29,7 @@ fun FloatingShapes(
         animationSpec = infiniteRepeatable(
             animation = tween(5000, easing = LinearEasing),
             repeatMode = RepeatMode.Reverse
-        ),
-        label = "offsetA"
+        )
     )
 
     val offsetB by infinite.animateFloat(
@@ -35,14 +38,23 @@ fun FloatingShapes(
         animationSpec = infiniteRepeatable(
             animation = tween(7200, easing = LinearEasing),
             repeatMode = RepeatMode.Reverse
-        ),
-        label = "offsetB"
+        )
     )
 
     Canvas(modifier = modifier) {
+
+        // cor base: mistura primary + secondary (Accent) para profundidade
+        val blobColorA = lerp(
+            colors.primary,
+            colors.secondary,
+            0.35f
+        ).copy(alpha = 0.035f)
+
+        val blobColorB = colors.primary.copy(alpha = 0.02f)
+
         // Blob esquerdo superior
         drawCircle(
-            color = AccentGreen.copy(alpha = 0.035f),
+            color = blobColorA,
             radius = size.minDimension * 0.55f,
             center = Offset(
                 x = size.width * 0.15f + offsetA,
@@ -52,7 +64,7 @@ fun FloatingShapes(
 
         // Blob direito inferior
         drawCircle(
-            color = AccentGreen.copy(alpha = 0.025f),
+            color = blobColorB,
             radius = size.minDimension * 0.45f,
             center = Offset(
                 x = size.width * 0.85f + offsetB,
