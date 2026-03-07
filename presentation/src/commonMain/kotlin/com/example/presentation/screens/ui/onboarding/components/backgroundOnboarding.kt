@@ -13,9 +13,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import com.example.presentation.theme.DarkGamifiedColors
-import androidx.compose.ui.graphics.lerp
 import kotlin.random.Random
 import kotlin.math.PI
 import kotlin.math.sin
@@ -159,4 +157,4 @@ private fun DrawScope.drawWave(
 }
 
 /** Helper: graus -> radianos */
-private fun Float.toRad(): Float = this * (PI.toFloat() / 180f)
+fun Float.toRad(): Float = this * (PI.toFloat() / 180f)

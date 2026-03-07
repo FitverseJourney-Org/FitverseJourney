@@ -51,14 +51,14 @@ kotlin {
             api(libs.koin.core)
 
             // datastore
-            implementation(libs.datastore.androidx)
-            implementation(libs.datastore.androidx.preferences)
+            implementation(libs.datastore)
+            implementation(libs.datastore.preferences)
 
             // sqldelight
             implementation(libs.sqldelight.runtime)
             implementation(libs.kotlinx.datetime)
             
-            implementation(libs.compose.androidx.runtime)
+            implementation(libs.compose.runtime)
 
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
@@ -99,7 +99,6 @@ kotlin {
         getByName("androidDeviceTest") {
             dependencies {
                 implementation(libs.androidx.runner)
-                implementation(libs.androidx.core)
                 implementation(libs.androidx.testExt.junit)
             }
         }

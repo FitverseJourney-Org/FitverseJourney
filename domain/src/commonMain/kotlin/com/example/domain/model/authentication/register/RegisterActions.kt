@@ -14,8 +14,8 @@ sealed class RegisterAction {
     object GoalsClean : RegisterAction()
 
     object Next : RegisterAction()
-    object Back : RegisterAction()
     object Exit : RegisterAction()
+    object Back : RegisterAction()
     object Finish : RegisterAction()
     object Submit : RegisterAction()
 }

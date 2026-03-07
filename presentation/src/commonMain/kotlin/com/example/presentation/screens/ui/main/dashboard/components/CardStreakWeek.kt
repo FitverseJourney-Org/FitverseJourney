@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -70,14 +71,7 @@ fun CardStreakWeek(state: StreakState) {
     ) {
         StreakWeek(
             state = state,
-            onToggleCheckIn = { index ->
-                // simples lógica: toggle check
-//                state = if (state.isChecked(index)) {
-//                    state.copy(checkedDays = state.checkedDays - index)
-//                } else {
-//                    state.copy(checkedDays = state.checkedDays + index)
-//                }
-            },
+            onToggleCheckIn = { /* lógica externa */ },
             size = 48.dp,
         )
     }
@@ -93,12 +87,10 @@ fun StreakWeek(
     val scope = rememberCoroutineScope()
     var showConfetti by remember { mutableStateOf(false) }
 
-    // quando entra na meta disparamos confetti
     LaunchedEffect(state.checkedDays) {
         val consecutive = state.consecutiveCount()
         if (consecutive >= state.consecutiveGoal) {
             showConfetti = true
-            // esconde depois de um tempo
             scope.launch {
                 delay(2500)
                 showConfetti = false
@@ -109,27 +101,26 @@ fun StreakWeek(
     val labels = listOf("SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT")
 
     Row(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 5.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 5.dp),
         horizontalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterHorizontally),
         verticalAlignment = Alignment.CenterVertically
-    ){
-        for(i in 0 until 7){
+    ) {
+        for (i in 0 until 7) {
             val isToday = i == state.todayIndex
             val checked = state.isChecked(i)
-           DayRing(
+
+            DayRing(
                 modifier = Modifier.weight(1f),
                 dayLabel = labels[i],
                 sizeAll = size,
-                dayNumber = (i + 1).toString(), // substitua por data real se quiser
+                dayNumber = (i + 1).toString(),
                 checked = checked,
                 isToday = isToday,
-                onClick = {
-                    // prevenir múltiplos cliques durante animação é tratado internamente
-                    onToggleCheckIn(i)
-                }
+                onClick = { onToggleCheckIn(i) }
             )
         }
-
     }
 }
 
@@ -146,55 +137,74 @@ fun DayRing(
     isToday: Boolean,
     onClick: () -> Unit
 ) {
+    val cs = MaterialTheme.colorScheme
     val scope = rememberCoroutineScope()
-    // animação do arco (de 0f -> 1f se checked)
-    val target = if (checked) 1f else 0f
-    val progress = animateFloatAsState(targetValue = target, animationSpec = tween(durationMillis = 520))
 
-    // pulse quando checado agora
+    val target = if (checked) 1f else 0f
+    val progress = animateFloatAsState(
+        targetValue = target,
+        animationSpec = tween(durationMillis = 520)
+    )
+
     val scaleAnim = remember { Animatable(1f) }
+
     LaunchedEffect(checked) {
         if (checked) {
             scaleAnim.snapTo(0.92f)
-            scaleAnim.animateTo(1.06f, animationSpec = tween(250, easing = FastOutSlowInEasing))
-            scaleAnim.animateTo(1f, animationSpec = tween(220, easing = LinearOutSlowInEasing))
+            scaleAnim.animateTo(1.06f, tween(250, easing = FastOutSlowInEasing))
+            scaleAnim.animateTo(1f, tween(220, easing = LinearOutSlowInEasing))
         }
     }
 
-    val ringColor = if (checked) Brush.horizontalGradient(listOf(Color(0xFF7BF2A6), Color(0xFF3FAE6A)))
-    else Brush.horizontalGradient(listOf(Color(0xFF2D7F3B), Color(0xFF1B4728)))
+    // Gradientes usando sua paleta
+    val ringBrush = if (checked) {
+        Brush.horizontalGradient(
+            listOf(cs.primary, cs.secondary)
+        )
+    } else {
+        Brush.horizontalGradient(
+            listOf(
+                cs.outline.copy(alpha = 0.4f),
+                cs.outline.copy(alpha = 0.2f)
+            )
+        )
+    }
 
-    Box(modifier=modifier){
+    Box(modifier = modifier) {
         Column(
-            modifier = Modifier,
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterVertically)
-        ){
+            verticalArrangement = Arrangement.spacedBy(5.dp)
+        ) {
+
             Box(
-                modifier = Modifier.size(sizeAll).graphicsLayer {
-                    scaleX = scaleAnim.value
-                    scaleY = scaleAnim.value
-                }.clickable { onClick() },
-                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .size(sizeAll)
+                    .graphicsLayer {
+                        scaleX = scaleAnim.value
+                        scaleY = scaleAnim.value
+                    }.clickable { onClick() },
+                contentAlignment = Alignment.Center
             ) {
-                // canvas para desenho do anel
+
                 Canvas(modifier = Modifier.fillMaxSize()) {
+
                     val stroke = size.minDimension * 0.12f
                     val center = this.center
                     val radius = (size.minDimension - stroke) / 2f
 
                     // fundo do anel
                     drawCircle(
-                        color = Color.White.copy(alpha = 0.06f),
+                        color = cs.outline.copy(alpha = 0.15f),
                         radius = radius,
                         center = center,
                         style = Stroke(width = stroke)
                     )
 
-                    // arco de progresso
+                    // progresso
                     val sweep = 360f * progress.value
+
                     drawArc(
-                        brush = ringColor,
+                        brush = ringBrush,
                         startAngle = -90f,
                         sweepAngle = sweep,
                         useCenter = false,
@@ -204,18 +214,24 @@ fun DayRing(
                     )
                 }
 
-                // conteúdo interno (numero + label)
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(text = dayNumber, color = Color.White, fontWeight = FontWeight.Bold)
+                    Text(
+                        text = dayNumber,
+                        color = cs.onSurface,
+                        fontWeight = FontWeight.Bold
+                    )
                 }
             }
+
             Text(
                 text = dayLabel,
-                color = if(isToday) Color.White else Color.White.copy(alpha = 0.7f),
-                fontWeight = if(isToday) FontWeight.Bold else FontWeight.Normal,
+                color = when {
+                    isToday -> cs.primary
+                    else -> cs.onSurface.copy(alpha = 0.65f)
+                },
+                fontWeight = if (isToday) FontWeight.SemiBold else FontWeight.Normal,
                 fontSize = 12.sp
             )
         }
-
     }
 }

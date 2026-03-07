@@ -26,7 +26,6 @@ import org.fitverse.fitverseJourney.routes.authentication.LoginRoute
 import org.fitverse.fitverseJourney.routes.authentication.RegisterRoute
 import org.fitverse.fitverseJourney.routes.authentication.ResetPasswordRoute
 import org.fitverse.fitverseJourney.routes.main.MainScreen
-import org.fitverse.fitverseJourney.routes.onboarding.OnboardingRoute
 import org.fitverse.fitverseJourney.routes.trial.TrialIntroRoute
 import org.koin.compose.koinInject
 
@@ -63,16 +62,7 @@ fun SetupNavigation() {
                 composable("onboarding") {
                     val viewmodel = koinInject<OnboardingViewModel>()
                     val state by viewmodel.state.collectAsState()
-                    OnboardingRoute(
-                        state = state,
-                        onFinish = { navController.navigate("trial/intro") },
-                        nextPage = {
-                            viewmodel.nextPage()
-                        },
-                        skipToLastPage = {
-                            viewmodel.skipToLastPage()
-                        },
-                    )
+
                 }
             }
             composable("trial/intro") {

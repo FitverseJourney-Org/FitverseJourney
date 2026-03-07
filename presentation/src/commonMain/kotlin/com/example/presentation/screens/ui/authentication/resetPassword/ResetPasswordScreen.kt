@@ -12,6 +12,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -24,7 +25,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.presentation.screens.ui.authentication.login.components.AuthDefaultButton
-import com.example.presentation.screens.ui.authentication.login.components.TextFieldAuthentication
+import com.example.presentation.screens.ui.authentication.login.components.FitverseOutlinedTextField
 import com.example.presentation.screens.ui.authentication.resetPassword.components.ResetPasswordTopBar
 import com.example.presentation.states.authentication.ResetPasswordState
 import com.example.presentation.theme.backgroundBrush
@@ -51,7 +52,6 @@ fun ResetPasswordScreen(
 
         Column(
             modifier = Modifier
-                .background(backgroundBrush)
                 .padding(padding)
                 .padding(horizontal = 16.dp)
                 .fillMaxSize(),
@@ -90,11 +90,17 @@ fun ResetPasswordScreen(
 
             Spacer(Modifier.height(32.dp))
 
-            TextFieldAuthentication(
-                value = { state.email },
+            FitverseOutlinedTextField(
+                value = state.email,
                 onValueChange = onEmailChange,
-                icon = Icons.Outlined.Email,
-                txtHint = "Email",
+                label = "Email",
+                placeholder = "your@email.com",
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Outlined.Email,
+                        contentDescription = null
+                    )
+                },
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Done,
                     keyboardType = KeyboardType.Email
@@ -102,8 +108,8 @@ fun ResetPasswordScreen(
                 keyboardActions = KeyboardActions(
                     onDone = { onSendResetLink() }
                 ),
-                txtPlaceholder = "you@email.com",
-                errorsList = emptyList()
+                isError = emailErrors.isNotEmpty(),
+                errorText = emailErrors.firstOrNull()
             )
 
             Spacer(Modifier.height(24.dp))

@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeCompiler)
     id("com.google.gms.google-services")
+    id("org.jetbrains.compose")
 }
 
 android {
@@ -42,42 +43,56 @@ android {
 
 dependencies {
 
+    // -----------------------------------------------------------------------------------------
+    // MODULES
+    // -----------------------------------------------------------------------------------------
     implementation(projects.data)
-    implementation(projects.presentation)
     implementation(projects.domain)
+    implementation(projects.presentation)
     implementation(projects.composeApp)
 
-
-    // koin plugin
+    // -----------------------------------------------------------------------------------------
+    // KOIN
+    // -----------------------------------------------------------------------------------------
     api(libs.koin.core)
     implementation(libs.koin.compose)
 
+    // -----------------------------------------------------------------------------------------
+    // DATASTORE
+    // -----------------------------------------------------------------------------------------
+    implementation(libs.datastore)
+    implementation(libs.datastore.preferences)
 
-
-    // datastore
-    implementation(libs.datastore.androidx.preferences)
-    implementation(libs.datastore.androidx)
-
-    api(project.dependencies.platform(libs.compose.bom))
-    implementation(libs.navigation.compose)
-    debugImplementation(libs.compose.androidx.ui.tooling)
-    debugImplementation(libs.compose.androidx.ui.tooling.preview)
-
-    // Import the Firebase BoM
-    api(project.dependencies.platform(libs.firebase.bom))
+    // -----------------------------------------------------------------------------------------
+    // FIREBASE
+    // -----------------------------------------------------------------------------------------
+    api(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.auth.ktx)
 
-    // Compose
-    implementation(libs.compose.androidx.ui)
-    implementation(libs.compose.androidx.ui.tooling.preview)
-    implementation(libs.compose.androidx.ui.graphics)
-    implementation(libs.compose.androidx.material3)
-    implementation(libs.androidx.activity.compose)
+    // -----------------------------------------------------------------------------------------
+    // COMPOSE
+    // -----------------------------------------------------------------------------------------
 
+    implementation(libs.compose.ui)
+    implementation(libs.compose.material3)
+    implementation(libs.compose.ui.graphics)
+
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.navigation.compose)
+
+    debugImplementation(libs.compose.ui.tooling)
+    debugImplementation(libs.compose.ui.tooling.preview)
+
+    // -----------------------------------------------------------------------------------------
+    // ANDROIDX CORE
+    // -----------------------------------------------------------------------------------------
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-    implementation(libs.material3)
+
+    // -----------------------------------------------------------------------------------------
+    // TESTS
+    // -----------------------------------------------------------------------------------------
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.testExt.junit)
     androidTestImplementation(libs.androidx.espresso.core)

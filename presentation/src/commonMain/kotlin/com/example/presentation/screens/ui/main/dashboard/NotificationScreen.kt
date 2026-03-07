@@ -32,7 +32,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.presentation.screens.ui.main.dashboard.components.LevelNotification
 import com.example.presentation.screens.ui.main.dashboard.components.Notification
 import com.example.presentation.screens.ui.main.dashboard.components.NotificationCard
@@ -67,9 +69,8 @@ fun NotificationMainScreen(
 
 
     Column(modifier = modifier) {
-        // Header (mantido igual)
         Row(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp),
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(5.dp)
         ) {
@@ -81,12 +82,22 @@ fun NotificationMainScreen(
                     tint = Color.White
                 )
             }
-            Text("Notification", style = MaterialTheme.typography.titleMedium.copy(color = Color.White))
+            Text(
+                text = "Notification",
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+                ),
+
+            )
         }
         Spacer(modifier = Modifier.height(10.dp))
 
         LazyColumn(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(notifications) { item ->
                 NotificationCard(data = item)

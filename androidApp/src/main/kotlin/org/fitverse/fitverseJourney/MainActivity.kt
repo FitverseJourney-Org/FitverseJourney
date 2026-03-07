@@ -11,7 +11,6 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.expect.LocalAppLocale
 import com.example.presentation.theme.GamifiedTheme
-import org.fitverse.fitverseJourney.navigation.SetupNavigation
 import org.fitverse.project.navigation.FitVerseNavRoot
 import org.koin.compose.koinInject
 
@@ -31,14 +30,14 @@ class MainActivity : ComponentActivity() {
 fun App() {
     GamifiedTheme {
 
-
+        FitVerseNavRoot()
 //        CompositionLocalProvider(
 //            LocalAppLocale provides language.iso
 //        ) {
 //
 //        }
 //        SetupNavigation()
-        FitVerseNavRoot()
+        //FitVerseNavRoot()
     }
 }
 

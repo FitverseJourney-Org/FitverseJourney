@@ -18,9 +18,8 @@ dependencies {
     implementation(libs.ktor.server.netty)
     //ktor logback
     implementation(libs.ktor.server.logback)
-    testImplementation(libs.ktor.server.testHost)
-    testImplementation(libs.kotlin.testJunit)
-
+    testImplementation(libs.ktor.server.testhost)
+    testImplementation(libs.kotlin.test.junit)
 
     // firebase
     implementation("com.google.firebase:firebase-admin:9.2.0")

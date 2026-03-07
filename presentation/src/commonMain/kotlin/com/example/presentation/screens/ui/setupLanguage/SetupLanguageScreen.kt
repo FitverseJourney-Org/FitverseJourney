@@ -30,13 +30,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.domain.model.dbLocal.language.Language
 import com.example.presentation.core.utils.LanguageAvailableApp.availableLanguages
 import com.example.presentation.screens.ui.setupLanguage.components.BtnChangeLanguage
 import com.example.presentation.screens.ui.setupLanguage.components.LanguageItem
-import com.example.presentation.theme.backgroundBrush
 
 @Composable
 fun SetupLanguageScreen(

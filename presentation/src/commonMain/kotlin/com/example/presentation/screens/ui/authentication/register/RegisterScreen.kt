@@ -48,6 +48,7 @@ fun RegisterScreen(
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
+        containerColor = Color.Transparent,
         topBar = {
             Column(modifier = Modifier.fillMaxWidth()) {
                 CenterAlignedTopAppBar(
@@ -119,7 +120,7 @@ fun RegisterScreen(
     ) { padding ->
 
         AnimatedContent(
-            modifier = Modifier.background(backgroundBrush).padding(padding).padding(16.dp),
+            modifier = Modifier.padding(padding).padding(16.dp),
             targetState = state.page
         ) { page ->
             when (page) {

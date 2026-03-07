@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
@@ -23,18 +25,20 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.domain.model.authentication.register.RegisterAction
 import com.example.domain.usecase.authentication.ValidationRegisterScreen.hasMinimumLength
 import com.example.domain.usecase.authentication.ValidationRegisterScreen.hasNumber
-import com.example.presentation.screens.ui.authentication.login.components.TextFieldAuthentication
+import com.example.presentation.screens.ui.authentication.login.components.FitverseOutlinedTextField
 import com.example.presentation.states.authentication.RegisterState
 
 @Composable
@@ -42,69 +46,77 @@ fun RegisterPageCredentials(
     state: RegisterState,
     onAction: (RegisterAction) -> Unit
 ) {
+
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
-    ){
+    ) {
+
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
-        ){
-            // 🔐 Título
+        ) {
+
             Text(
                 text = "Almost there!",
                 color = Color.White,
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.SemiBold,
                 textAlign = TextAlign.Center
-
             )
 
             Spacer(modifier = Modifier.height(6.dp))
 
-            // 🧠 Mensagem explicativa
             Text(
                 text = "To complete your registration, please enter your email and create a password. This will keep your progress safe and accessible on any device.",
                 color = Color.LightGray,
                 style = MaterialTheme.typography.bodyLarge,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
+                textAlign = TextAlign.Center
             )
 
             Spacer(modifier = Modifier.height(32.dp))
 
             // 📧 Email
-            TextFieldAuthentication(
-                value = { state.email },
-                onValueChange = {
-                    onAction(RegisterAction.EmailChanged(it))
+            FitverseOutlinedTextField(
+                value = state.email,
+                onValueChange = { onAction(RegisterAction.EmailChanged(it)) },
+                label = "Email",
+                placeholder = "example@example.com",
+                leadingIcon = {
+                    Icon(Icons.Default.Email, contentDescription = null)
                 },
-                txtHint = "Email",
-                txtPlaceholder = "example@example.com",
-                errorsList = state.emailErrors,
-                icon = Icons.Default.Email
+                isError = state.emailErrors.isNotEmpty(),
+                errorText = state.emailErrors.firstOrNull(),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Email
+                )
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             // 🔑 Password
-            TextFieldAuthentication(
-                value = { state.password },
-                onValueChange = {
-                    onAction(RegisterAction.PasswordChanged(it))
+            FitverseOutlinedTextField(
+                value = state.password,
+                onValueChange = { onAction(RegisterAction.PasswordChanged(it)) },
+                label = "Password",
+                placeholder = "********",
+                leadingIcon = {
+                    Icon(Icons.Default.Lock, contentDescription = null)
                 },
-                txtHint = "Password",
-                txtPlaceholder = "********",
-                errorsList = state.passwordErrors,
-                hasSupportText = false,
-                icon = Icons.Default.Lock
+                isError = state.passwordErrors.isNotEmpty(),
+                errorText = state.passwordErrors.firstOrNull(),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password
+                )
             )
+
             PasswordStrengthIndicator(
                 password = state.password,
                 passwordErrors = state.passwordErrors
             )
         }
+
         Text(
             text = "Your data is securely stored and never shared.",
             color = Color(0xFF81C784),

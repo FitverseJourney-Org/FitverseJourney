@@ -8,6 +8,7 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -16,15 +17,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 
-private val BaseGreen = Color(0xFF0A160C)
-private val DeepGreen = Color(0xFF0F2A17)
-private val AccentGreen = Color(0xFF3FAE6A)
-
 @Composable
 fun AnimatedLoginBackground(
     modifier: Modifier = Modifier
 ) {
-    val infiniteTransition = rememberInfiniteTransition(label = "bg")
+    val cs = MaterialTheme.colorScheme
+    val infiniteTransition = rememberInfiniteTransition()
 
     // Movimento vertical suave (respiração)
     val waveOffset by infiniteTransition.animateFloat(
@@ -32,68 +30,56 @@ fun AnimatedLoginBackground(
         targetValue = 1f,
         animationSpec = infiniteRepeatable(
             animation = tween(
-                durationMillis = 9000,
+                durationMillis = 9_000,
                 easing = LinearEasing
             ),
             repeatMode = RepeatMode.Reverse
-        ),
-        label = "waveOffset"
+        )
     )
 
-    // Pulsação leve de energia
+    // Pulsação leve de energia (usa cor secundária da paleta)
     val glowAlpha by infiniteTransition.animateFloat(
-        initialValue = 0.05f,
+        initialValue = 0.04f,
         targetValue = 0.12f,
         animationSpec = infiniteRepeatable(
             animation = tween(
-                durationMillis = 5000,
+                durationMillis = 5_000,
                 easing = LinearEasing
             ),
             repeatMode = RepeatMode.Reverse
-        ),
-        label = "glowAlpha"
+        )
     )
 
-    Canvas(
-        modifier = modifier.fillMaxSize()
-    ) {
-        val width = size.width
-        val height = size.height
+    Canvas(modifier = modifier.fillMaxSize()) {
+        val w = size.width
+        val h = size.height
 
-        /* ===============================
-           FUNDO BASE (gradiente)
-           =============================== */
+        // fundo base: gradiente usando background -> surface -> surfaceVariant
         drawRect(
             brush = Brush.verticalGradient(
                 colors = listOf(
-                    BaseGreen,
-                    DeepGreen,
-                    BaseGreen
-                )
-            ),
-            size = size
+                    cs.background,
+                    cs.surface,
+                    cs.surfaceVariant
+                ),
+                startY = 0f,
+                endY = h
+            )
         )
 
-        /* ===============================
-           ONDA ORGÂNICA (movimento)
-           =============================== */
+        // onda orgânica (suave) — usa primaryContainer para um tom coeso
         val wavePath = Path().apply {
-            val amplitude = height * 0.12f
-            val centerY = height * (0.75f + waveOffset * 0.05f)
+            val amplitude = h * 0.11f
+            val centerY = h * (0.72f + waveOffset * 0.04f)
 
             moveTo(0f, centerY)
-
             cubicTo(
-                width * 0.25f,
-                centerY - amplitude,
-                width * 0.75f,
-                centerY + amplitude,
-                width,
-                centerY
+                w * 0.22f, centerY - amplitude,
+                w * 0.55f, centerY + amplitude,
+                w, centerY
             )
-
-            lineTo(width, height)
-            lineTo(0f, height)
+            lineTo(w, h)
+            lineTo(0f, h)
             close()
         }
 
@@ -101,28 +87,35 @@ fun AnimatedLoginBackground(
             path = wavePath,
             brush = Brush.verticalGradient(
                 colors = listOf(
-                    AccentGreen.copy(alpha = 0.12f),
-                    Color.Transparent
+                    cs.primaryContainer.copy(alpha = 0.10f),
+                    cs.primaryContainer.copy(alpha = 0.02f),
+                    androidx.compose.ui.graphics.Color.Transparent
                 )
             )
         )
 
-        /* ===============================
-           GLOW DE ENERGIA (radial)
-           =============================== */
+        // glow radial de energia usando secondary (accent)
         drawCircle(
             brush = Brush.radialGradient(
                 colors = listOf(
-                    AccentGreen.copy(alpha = glowAlpha),
-                    Color.Transparent
-                ),
-                center = Offset(
-                    x = width / 2f,
-                    y = height * 0.25f
-                ),
-                radius = width * 0.9f
+                    cs.secondary.copy(alpha = glowAlpha),
+                    androidx.compose.ui.graphics.Color.Transparent
+                )
             ),
-            radius = width
+            radius = w * 0.9f,
+            center = Offset(x = w / 2f, y = h * 0.26f)
+        )
+
+        // um segundo glow mais discreto próximo à base (para profundidade)
+        drawCircle(
+            brush = Brush.radialGradient(
+                colors = listOf(
+                    cs.primary.copy(alpha = 0.03f),
+                    androidx.compose.ui.graphics.Color.Transparent
+                )
+            ),
+            radius = w * 0.6f,
+            center = Offset(x = w * 0.22f, y = h * 0.78f)
         )
     }
 }

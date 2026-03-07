@@ -8,5 +8,10 @@ sealed class LoginAction {
     data class LanguageChanged(val value: Language) : LoginAction()
 
     object TogglePasswordVisibility : LoginAction()
-    object Login : LoginAction()
+    object LoginClicked : LoginAction()
+
+    object NavigateToRegister: LoginAction()
+    object NavigateToForgotPassword: LoginAction()
+    object NavigateToHome : LoginAction()
+
 }

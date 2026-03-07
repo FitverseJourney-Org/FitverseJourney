@@ -19,11 +19,14 @@ import com.example.domain.usecase.authentication.registerPages.ValidateProfilePa
 import com.example.domain.usecase.authentication.registerPages.ValidateTrainingLevelUseCase
 import com.example.presentation.components.snackbar.SnackBarData
 import com.example.presentation.components.snackbar.SnackbarType
+import com.example.presentation.navigations.LoginNavigation
+import com.example.presentation.navigations.RegisterNavigation
 import com.example.presentation.states.authentication.RegisterState
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -31,10 +34,13 @@ class RegisterViewModel(
     private val registerUseCase: RegisterUseCase
 ) : ViewModel() {
 
+    private val _navigationState = MutableSharedFlow<RegisterNavigation>()
+    val navigationState = _navigationState.asSharedFlow()
+
     private val _state = MutableStateFlow(RegisterState())
     val state: StateFlow<RegisterState> = _state
 
-    private val _uiEvent = MutableSharedFlow<RegisterAction>(replay = 1)
+    private val _uiEvent = MutableSharedFlow<RegisterAction>(replay = 0)
     val uiEvent: SharedFlow<RegisterAction> = _uiEvent
 
     fun onAction(action: RegisterAction) {
@@ -83,14 +89,18 @@ class RegisterViewModel(
                 previousPageOrExit()
             }
 
-            is RegisterAction.Exit -> {
-                emitExit()
-            }
             is RegisterAction.Submit -> {
                 submitRegistration()
             }
+            is RegisterAction.Exit -> {
+                viewModelScope.launch {
+                    _navigationState.emit(RegisterNavigation.ToLogin)
+                }
+            }
             is RegisterAction.Finish -> {
-                emitFinish()
+                viewModelScope.launch {
+                    _navigationState.emit(RegisterNavigation.ToLogin)
+                }
             }
         }
     }
@@ -190,16 +200,6 @@ class RegisterViewModel(
                 page = it.page.next(),
                 snackBarData = null
             )
-        }
-    }
-    private fun emitExit() {
-        viewModelScope.launch {
-            _uiEvent.emit(RegisterAction.Exit)
-        }
-    }
-    private fun emitFinish() {
-        viewModelScope.launch {
-            _uiEvent.emit(RegisterAction.Finish)
         }
     }
     private fun previousPageOrExit() {

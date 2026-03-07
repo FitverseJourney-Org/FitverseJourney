@@ -1,7 +1,10 @@
 package com.example.presentation.screens.ui.main.dashboard.components
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -16,6 +20,7 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -27,6 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
@@ -56,117 +62,141 @@ data class Notification(
 
 @Composable
 fun NotificationCard(data: Notification) {
-    val colors = MaterialTheme.colorScheme
+
+    val cs = MaterialTheme.colorScheme
 
     var isExpanded by remember { mutableStateOf(false) }
     var isClickable by remember { mutableStateOf(false) }
 
+    val levelColor = when (data.level) {
+        LevelNotification.INFO -> cs.primary
+        LevelNotification.WARNING -> cs.error
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .animateContentSize()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-        shape = RoundedCornerShape(14.dp),
+            .animateContentSize(),
+        shape = RoundedCornerShape(16.dp),
         onClick = { if (isClickable) isExpanded = !isExpanded },
         colors = CardDefaults.cardColors(
-            containerColor = colors.surface
+            containerColor = cs.surfaceVariant
+        ),
+        border = BorderStroke(
+            1.dp,
+            cs.primary.copy(alpha = 0.08f)
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
+
         Column(
             modifier = Modifier.padding(
-                top = 12.dp,
-                bottom = 20.dp,
-                start = 16.dp,
-                end = 16.dp
+                top = 5.dp,
+                bottom = 10.dp,
+                start = 10.dp,
+                end = 10.dp
             )
         ) {
 
-            // Top row (date + delete)
+            // ───────────────── HEADER ─────────────────
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
+
                 Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+
                     Text(
                         text = data.date,
                         style = MaterialTheme.typography.bodySmall,
-                        color = colors.onSurfaceVariant
+                        color = cs.onSurfaceVariant
                     )
+
                     Text(
                         text = data.time,
                         style = MaterialTheme.typography.bodySmall,
-                        color = colors.onSurfaceVariant
+                        color = cs.onSurfaceVariant.copy(alpha = 0.8f)
                     )
                 }
-
                 IconButton(onClick = { }) {
                     Icon(
                         modifier = Modifier.size(20.dp),
                         imageVector = Icons.Default.Delete,
                         contentDescription = null,
-                        tint = colors.error
+                        tint = cs.error
                     )
                 }
             }
 
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(3.dp))
 
-            // Title + Level Icon
+            Divider(
+                color = cs.outline.copy(alpha = 0.1f)
+            )
+
+            Spacer(Modifier.height(5.dp))
+
+            // ───────────── TITLE + ICON ─────────────
+
             Row(
-                modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
 
-                val levelColor = when (data.level) {
-                    LevelNotification.INFO -> colors.primary
-                    LevelNotification.WARNING -> colors.error
+                Box(
+                    modifier = Modifier
+                        .size(36.dp)
+                        .clip(CircleShape)
+                        .background(levelColor.copy(alpha = 0.15f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = data.level.icon,
+                        contentDescription = null,
+                        tint = levelColor,
+                        modifier = Modifier.size(18.dp)
+                    )
                 }
-
-                Icon(
-                    modifier = Modifier.size(24.dp),
-                    imageVector = data.level.icon,
-                    contentDescription = null,
-                    tint = levelColor
-                )
 
                 Text(
                     text = data.title,
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
-                    color = colors.onSurface
+                    color = cs.onSurface
                 )
             }
 
-            Spacer(modifier = Modifier.height(6.dp))
+            Spacer(Modifier.height(12.dp))
 
-            // Description
+            // ───────────── DESCRIPTION ─────────────
+
             Text(
                 text = data.description,
                 maxLines = if (isExpanded) Int.MAX_VALUE else 3,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.bodyMedium,
-                color = colors.onSurfaceVariant,
-                onTextLayout = { textLayoutResult ->
+                color = cs.onSurfaceVariant,
+                onTextLayout = { layout ->
                     if (!isExpanded) {
-                        isClickable = textLayoutResult.didOverflowHeight
+                        isClickable = layout.didOverflowHeight
                     }
                 }
             )
 
             if (isClickable) {
+
+                Spacer(Modifier.height(8.dp))
+
                 Text(
                     text = if (isExpanded) "Ver menos" else "Ler mais",
                     style = MaterialTheme.typography.labelMedium.copy(
                         fontWeight = FontWeight.SemiBold
                     ),
-                    color = colors.primary,
-                    modifier = Modifier
-                        .padding(top = 8.dp)
-                        .align(Alignment.End)
+                    color = cs.primary,
+                    modifier = Modifier.align(Alignment.End)
                 )
             }
         }

@@ -25,27 +25,83 @@ kotlin {
         }
     }
     sourceSets {
+
         androidMain.dependencies {
-            // koin
+
+            // -----------------------------------------------------------------------------------------
+            // DEPENDENCY INJECTION
+            // -----------------------------------------------------------------------------------------
             api(libs.koin.core)
 
         }
+
         commonMain.dependencies {
-            implementation(libs.kotlin.stdlib)
+
+
+            // -----------------------------------------------------------------------------------------
+            // PROJECT MODULES
+            // -----------------------------------------------------------------------------------------
             implementation(projects.presentation)
             implementation(projects.domain)
-            implementation(projects.data)
 
-            implementation(libs.compose.androidx.runtime)
-            implementation(libs.compose.androidx.foundation)
+            // -----------------------------------------------------------------------------------------
+            // KOTLIN / CORE
+            // -----------------------------------------------------------------------------------------
+            implementation(libs.kotlin.stdlib)
 
+            // -----------------------------------------------------------------------------------------
+            // MATERIAL 3
+            // -----------------------------------------------------------------------------------------
+            api(libs.compose.material3)
+
+            // -----------------------------------------------------------------------------------------
+            // ICONS
+            // -----------------------------------------------------------------------------------------
+            implementation(libs.icons.compose.material)
+
+
+            // -----------------------------------------------------------------------------------------
+            // COMPOSE MULTIPLATFORM
+            // -----------------------------------------------------------------------------------------
+            implementation(libs.compose.runtime)
+            implementation(libs.compose.foundation)
+
+            // -----------------------------------------------------------------------------------------
+            // NAVIGATION
+            // -----------------------------------------------------------------------------------------
             implementation(libs.jetbrains.navigation3.ui)
-            implementation(libs.jetbrains.lifecycle.viewmodel.navigation3)
-            implementation(libs.koin.compose.navigation3)
+
+            // -----------------------------------------------------------------------------------------
+            // LIFECYCLE / VIEWMODEL
+            // -----------------------------------------------------------------------------------------
             implementation(libs.jetbrains.lifecycle.viewmodel)
+            implementation(libs.jetbrains.lifecycle.viewmodel.navigation3)
+
+            // -----------------------------------------------------------------------------------------
+            // DEPENDENCY INJECTION
+            // -----------------------------------------------------------------------------------------
+            implementation(libs.koin.compose.navigation3)
+
+            // -----------------------------------------------------------------------------------------
+            // SERIALIZATION
+            // -----------------------------------------------------------------------------------------
             implementation(libs.kotlinx.serialization)
 
+            // -----------------------------------------------------------------------------------------
+            // VOYAGER ( NAVIGATION )
+            // -----------------------------------------------------------------------------------------
+            implementation(libs.voyager.navigator)
+            implementation(libs.voyager.tabNavigator)
+            implementation(libs.voyager.transitions)
+            implementation(libs.voyager.screenModel)
+
+
+            // -----------------------------------------------------------------------------------------
+            // RESOURCES
+            // -----------------------------------------------------------------------------------------
+            implementation(libs.components.resources)
         }
+
         commonTest.dependencies {
 
         }

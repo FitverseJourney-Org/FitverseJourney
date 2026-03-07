@@ -11,9 +11,9 @@ data class LoginState(
     val emailErrors: List<String> = emptyList(),
     val passwordErrors: List<String> = emptyList(),
     val language: Language = availableLanguages.first(),
-    val imageLanguage: DrawableResource? = null,
     val isPasswordVisible: Boolean = false,
     val snackBarData: SnackBarData? = null,
     val isLoading: Boolean = false,
+    val processLogin: Boolean = false,
     val isLoggedIn: Boolean = false
 )

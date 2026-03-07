@@ -16,6 +16,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -23,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.domain.model.dbLocal.language.Language
+import com.example.presentation.navigations.LoginNavigation
 import com.example.presentation.screens.ui.authentication.login.components.HeaderContainerLoginScreen
 import com.example.presentation.screens.ui.authentication.login.components.LoginFooter
 import com.example.presentation.screens.ui.authentication.login.components.LoginForm
@@ -31,6 +33,7 @@ import fitversejourneyapp.presentation.generated.resources.Res
 import fitversejourneyapp.presentation.generated.resources.locale_ru
 import fitversejourneyapp.presentation.generated.resources.login_subtitle
 import fitversejourneyapp.presentation.generated.resources.login_title
+import kotlinx.coroutines.flow.collectLatest
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -38,18 +41,19 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun LoginScreen(
     state: LoginState,
+    viewmodel: LoginViewModel,
     currentLanguage: Language,
     onPasswordChanged: (String) -> Unit,
     onEmailChanged: (String) -> Unit,
     snackBarHost: @Composable () -> Unit,
     onTogglePasswordVisibility: () -> Unit,
     onLoginClick: () -> Unit,
-    onNavigateToRegister: () -> Unit,
-    onNavigateToForgotPassword: () -> Unit,
+    navigateToRegister: () -> Unit,
+    navigateToForgotPassword: () -> Unit,
+    navigateToHome: () -> Unit,
     showLanguageScreen: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-
     val colors = MaterialTheme.colorScheme
 
     // Gradiente profissional usando apenas o tema
@@ -64,6 +68,7 @@ fun LoginScreen(
     Scaffold(
         modifier = modifier.fillMaxSize(),
         snackbarHost = snackBarHost,
+        containerColor = Color.Transparent,
         topBar = {
             HeaderContainerLoginScreen(
                 showLanguageScreen = showLanguageScreen,
@@ -75,7 +80,6 @@ fun LoginScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(backgroundBrush)
                 .padding(innerPadding)
                 .padding(top = 35.dp),
             contentAlignment = Alignment.Center
@@ -127,8 +131,8 @@ fun LoginScreen(
                 )
 
                 LoginFooter(
-                    onNavigateToRegister = onNavigateToRegister,
-                    onNavigateToForgotPassword = onNavigateToForgotPassword
+                    onNavigateToRegister = navigateToRegister,
+                    onNavigateToForgotPassword = navigateToForgotPassword,
                 )
             }
         }

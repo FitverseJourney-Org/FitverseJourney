@@ -20,9 +20,7 @@ fun FloatingShapes(
     modifier: Modifier = Modifier
 ) {
     val colors = MaterialTheme.colorScheme
-
     val infinite = rememberInfiniteTransition()
-
     val offsetA by infinite.animateFloat(
         initialValue = -40f,
         targetValue = 40f,
@@ -42,7 +40,6 @@ fun FloatingShapes(
     )
 
     Canvas(modifier = modifier) {
-
         // cor base: mistura primary + secondary (Accent) para profundidade
         val blobColorA = lerp(
             colors.primary,

@@ -31,14 +31,15 @@ kotlin {
             implementation(libs.kotlin.stdlib)
 
             // compose
-            implementation(libs.compose.androidx.foundation)
-            implementation(libs.compose.androidx.runtime)
-            // material3
-            implementation(libs.material3)
+            implementation(libs.compose.foundation)
+            implementation(libs.compose.runtime)
+            implementation(libs.compose.ui)
+
+            implementation(libs.compose.material3)
 
             implementation(project(":domain"))
 
-            // koin (ok em commonMain)
+            // koin
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
@@ -54,19 +55,24 @@ kotlin {
 
             // dateTime
             implementation(libs.kotlinx.datetime)
+
+            // -----------------------------------------------------------------------------------------
+            // VOYAGER ( NAVIGATION )
+            // -----------------------------------------------------------------------------------------
+            implementation(libs.voyager.navigator)
+            implementation(libs.voyager.tabNavigator)
+            implementation(libs.voyager.transitions)
+            implementation(libs.voyager.screenModel)
+
+
         }
         iosMain.dependencies {
         }
         androidMain.dependencies {
-            // lifecycle (mover para androidMain)
             implementation(libs.lifecycle.viewmodel)
-
-            // lottie
             implementation(libs.android.lottie.compose)
-
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
         }
     }
-
 }

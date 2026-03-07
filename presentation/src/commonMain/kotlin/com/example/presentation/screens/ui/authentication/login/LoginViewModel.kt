@@ -1,13 +1,12 @@
 package com.example.presentation.screens.ui.authentication.login
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.domain.model.authentication.login.LoginAction
-import com.example.domain.model.dbLocal.language.Language
-import com.example.domain.model.dbLocal.language.TagLanguage
 import com.example.domain.usecase.authentication.login.LoginUseCase
 import com.example.presentation.components.snackbar.SnackBarData
 import com.example.presentation.components.snackbar.SnackbarType
-import com.example.presentation.core.utils.LanguageAvailableApp
+import com.example.presentation.navigations.LoginNavigation
 import com.example.presentation.states.authentication.LoginState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -16,6 +15,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -23,7 +23,8 @@ class LoginViewModel(
     private val loginUseCase: LoginUseCase,
 ) : ViewModel() {
 
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+    private val _navigationState = MutableSharedFlow<LoginNavigation>()
+    val navigationState = _navigationState.asSharedFlow()
 
     private val _state = MutableStateFlow(LoginState())
     val state: StateFlow<LoginState> = _state
@@ -31,36 +32,16 @@ class LoginViewModel(
     private val _uiAction = MutableSharedFlow<LoginAction>(replay = 0)
     val uiAction: SharedFlow<LoginAction> = _uiAction
 
-
-
-
-
-
     fun onAction(action: LoginAction){
         when(action){
-            is LoginAction.EmailChanged -> {
-                _state.update {
-                    it.copy(email = action.value)
-                }
-            }
-            is LoginAction.PasswordChanged -> {
-                _state.update {
-                    it.copy(password = action.value)
-                }
-            }
-            is LoginAction.LanguageChanged -> {
-                // atualiza estado e persiste escolha
-                _state.update {
-                    it.copy(language = action.value)
-                }
-
-            }
-            is LoginAction.TogglePasswordVisibility -> {
-                onTogglePasswordVisibility()
-            }
-            is LoginAction.Login -> {
-                onLoginClick()
-            }
+            is LoginAction.EmailChanged -> _state.update { it.copy(email = action.value) }
+            is LoginAction.PasswordChanged -> _state.update { it.copy(password = action.value) }
+            is LoginAction.LanguageChanged -> _state.update { it.copy(language = action.value) }
+            is LoginAction.TogglePasswordVisibility -> onTogglePasswordVisibility()
+            is LoginAction.LoginClicked -> onLoginClick()
+            is LoginAction.NavigateToRegister -> viewModelScope.launch { _navigationState.emit(LoginNavigation.ToRegister) }
+            is LoginAction.NavigateToForgotPassword -> viewModelScope.launch { _navigationState.emit(LoginNavigation.ToResetPassword) }
+            is LoginAction.NavigateToHome -> viewModelScope.launch { _navigationState.emit(LoginNavigation.ToHome) }
         }
     }
 
@@ -69,50 +50,41 @@ class LoginViewModel(
     }
 
     fun onLoginClick() {
-        scope.launch {
-            _state.update {
-                it.copy(isLoading = true)
-            }
+        viewModelScope.launch {
+            _state.update { it.copy(isLoading = true) }
 
             val result = loginUseCase(
                 _state.value.email,
                 _state.value.password
             )
 
-            _state.update { state ->
-                result.fold(
-                    onSuccess = {
-                        state.copy(
+            result.fold(
+                onSuccess = {
+                    // 1) atualizar UI
+                    _state.update { s ->
+                        s.copy(
                             isLoading = false,
-                            isLoggedIn = true
                         )
-                    },
-                    onFailure = { error ->
-                        state.copy(
+                    }
+                    // 2) emitir evento de navegação para a Home
+                    _navigationState.emit(LoginNavigation.ToHome)
+                },
+                onFailure = { error ->
+                    _state.update { s ->
+                        s.copy(
                             isLoading = false,
                             snackBarData = SnackBarData(
-                                message = error.message
-                                    ?: "Something went wrong. Please try again.",
+                                message = error.message ?: "Something went wrong. Please try again.",
                                 type = SnackbarType.ERROR
                             )
                         )
                     }
-                )
-            }
+                }
+            )
         }
     }
 
-
-    private fun mapTagToLanguage(tag: TagLanguage): Language =
-        LanguageAvailableApp.availableLanguages.firstOrNull { it.code == tag } ?: LanguageAvailableApp.availableLanguages.first()
-
-    private fun mapLanguageToTag(language: Language): TagLanguage =
-        language.code
-
-
     fun consumeSnackBar() {
-        _state.update {
-            it.copy(snackBarData = null)
-        }
+        _state.update { it.copy(snackBarData = null) }
     }
 }

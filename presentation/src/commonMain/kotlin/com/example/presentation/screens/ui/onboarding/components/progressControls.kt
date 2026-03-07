@@ -9,6 +9,7 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -31,8 +32,12 @@ fun OnboardingControls(
     onFinish: () -> Unit
 ) {
 
+    val cs = MaterialTheme.colorScheme
+
     Column(
-        modifier = modifier.fillMaxWidth().padding(16.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
@@ -41,7 +46,8 @@ fun OnboardingControls(
             total = totalPages
         )
 
-        // Botão principal
+        Spacer(Modifier.height(18.dp))
+
         Button(
             onClick = {
                 if (currentPage == totalPages - 1) {
@@ -50,11 +56,13 @@ fun OnboardingControls(
                     onNext()
                 }
             },
-            modifier = Modifier.fillMaxWidth().height(52.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(54.dp),
             shape = RoundedCornerShape(14.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = AccentGreen,
-                contentColor = Color.White
+                containerColor = cs.primary,
+                contentColor = cs.onPrimary
             )
         ) {
             Text(
@@ -63,20 +71,19 @@ fun OnboardingControls(
                 else
                     "Next",
                 fontWeight = FontWeight.Bold,
-                fontSize = 16.sp,
+                fontSize = 16.sp
             )
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(Modifier.height(10.dp))
 
-        // Skip
         TextButton(
             modifier = Modifier.fillMaxWidth(),
             onClick = onSkip
         ) {
             Text(
                 text = "Skip",
-                color = Color.White.copy(alpha = 0.85f)
+                color = cs.onBackground.copy(alpha = 0.7f)
             )
         }
     }

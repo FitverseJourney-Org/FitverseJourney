@@ -38,7 +38,7 @@ kotlin {
 
             implementation(libs.kotlin.stdlib)
             implementation(libs.kotlinx.coroutines.core)
-            implementation(libs.material3)
+            implementation(libs.compose.material3)
 
             // koin
             api(libs.koin.core)

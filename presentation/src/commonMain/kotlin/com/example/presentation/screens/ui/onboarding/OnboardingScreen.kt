@@ -16,6 +16,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,14 +39,14 @@ import fitversejourneyapp.presentation.generated.resources.onboarding_title_1
 import fitversejourneyapp.presentation.generated.resources.onboarding_title_2
 import fitversejourneyapp.presentation.generated.resources.onboarding_title_3
 import fitversejourneyapp.presentation.generated.resources.onboarding_title_4
+import kotlinx.coroutines.flow.distinctUntilChanged
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun OnboardingScreen(
     state: OnboardingState,
+    viewmodel: OnboardingViewModel,
     onFinish: () -> Unit,
-    nextPage: () -> Unit,
-    skipToLastPage: () -> Unit,
 ) {
     val onboardingPages = listOf(
         OnboardingPage(
@@ -69,17 +70,17 @@ fun OnboardingScreen(
             animation = OnboardingAnimationTopics.COMMUNITY
         )
     )
+    val lastIndex = onboardingPages.lastIndex
 
     val pagerState = rememberPagerState(
         initialPage = state.currentPage,
         pageCount = { onboardingPages.size },
     )
 
+    // anima quando viewmodel.state muda; se exceder lastIndex -> finaliza
     LaunchedEffect(state.currentPage) {
-        if(pagerState.currentPage != state.totalPages){
+        if (state.currentPage <= lastIndex) {
             pagerState.animateScrollToPage(state.currentPage)
-        }else{
-            onFinish()
         }
     }
 
@@ -93,11 +94,15 @@ fun OnboardingScreen(
                 OnboardingContent(
                     modifier = Modifier.padding(it),
                     pagerState = pagerState,
-                    page = onboardingPages[pagerState.currentPage],
                     onFinish = onFinish,
-                    nextPage = nextPage,
-                    skipToLastPage = skipToLastPage,
-                    onboardingPages = onboardingPages
+                    nextPage = {
+                        viewmodel.nextPage(lastIndex)
+                    },
+                    skipToLastPage = {
+                        viewmodel.skipToLastPage(lastIndex)
+                    },
+                    onboardingPages = onboardingPages,
+                    viewmodel = viewmodel
                 )
             }
         }
@@ -107,62 +112,72 @@ fun OnboardingScreen(
 fun OnboardingContent(
     modifier: Modifier,
     pagerState: PagerState,
-    page: OnboardingPage,
     onFinish: () -> Unit = {},
     nextPage: () -> Unit = {},
     skipToLastPage: () -> Unit = {},
-    onboardingPages: List<OnboardingPage>
+    onboardingPages: List<OnboardingPage>,
+    viewmodel: OnboardingViewModel
 ) {
-    Column(modifier = modifier.fillMaxSize()){
+    val cs = MaterialTheme.colorScheme
+    val lastIndex = onboardingPages.lastIndex
+
+    LaunchedEffect(pagerState) {
+        snapshotFlow { pagerState.currentPage to pagerState.isScrollInProgress }
+            .distinctUntilChanged()
+            .collect { (pageIndex, isScrolling) ->
+                if (!isScrolling) {
+                    viewmodel.setCurrentPage(pageIndex, lastIndex)
+                }
+            }
+    }
+
+    Column(modifier = modifier.fillMaxSize()) {
+
         HorizontalPager(
             modifier = Modifier.weight(1f),
-            state = pagerState,
-            userScrollEnabled = true
-        ) {
+            state = pagerState
+        ) { pageIndex ->
+
+            val pageItem = onboardingPages[pageIndex]
+
             Column(
-                modifier = Modifier.fillMaxSize().padding(16.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(20.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Bottom
             ) {
-                Column(
-                    modifier = Modifier,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Bottom
-                ){
-                    val tilePerPage1 = stringResource(Res.string.onboarding_title_1)
-                    val tilePerPage2 = stringResource(Res.string.onboarding_title_2)
-                    val tilePerPage3 = stringResource(Res.string.onboarding_title_3)
 
-                    FitnessLottieAnimation(
-                        modifier = Modifier.height(320.dp).fillMaxWidth(),
-                        animation = when (page.title) {
-                            tilePerPage1 -> OnboardingAnimationTopics.WORKOUT
-                            tilePerPage2 -> OnboardingAnimationTopics.NUTRITION
-                            tilePerPage3 -> OnboardingAnimationTopics.AI
-                            else -> OnboardingAnimationTopics.COMMUNITY
-                        }
-                    )
-                    Spacer(Modifier.height(32.dp))
-                    Text(
-                        text = page.title,
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White,
-                        textAlign = TextAlign.Center
-                    )
-                    Spacer(Modifier.height(12.dp))
-                    Text(
-                        text = page.description,
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = Color.White.copy(alpha = 0.85f),
-                        textAlign = TextAlign.Center,
-                        lineHeight = 22.sp
-                    )
-                }
+                FitnessLottieAnimation(
+                    modifier = Modifier
+                        .height(320.dp)
+                        .fillMaxWidth(),
+                    animation = pageItem.animation
+                )
+
+                Spacer(Modifier.height(36.dp))
+
+                Text(
+                    text = pageItem.title,
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = cs.onBackground,
+                    textAlign = TextAlign.Center
+                )
+
+                Spacer(Modifier.height(12.dp))
+
+                Text(
+                    text = pageItem.description,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = cs.onBackground.copy(alpha = 0.75f),
+                    textAlign = TextAlign.Center,
+                    lineHeight = 22.sp
+                )
             }
         }
+
         OnboardingControls(
-            modifier = Modifier,
             currentPage = pagerState.currentPage,
             totalPages = onboardingPages.size,
             onNext = nextPage,
@@ -170,7 +185,4 @@ fun OnboardingContent(
             onFinish = onFinish
         )
     }
-
-
-
 }
