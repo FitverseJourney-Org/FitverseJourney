@@ -8,6 +8,8 @@ import io.ktor.server.netty.Netty
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
+import org.fitverse.project.plugins.configurePlugins
+import org.fitverse.project.routes.authRoutes
 
 fun main() {
     embeddedServer(
@@ -24,5 +26,6 @@ fun main() {
 }
 
 fun Application.module() {
+    configurePlugins()
     initFirebase()
 }

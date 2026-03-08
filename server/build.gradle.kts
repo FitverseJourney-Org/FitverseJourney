@@ -26,7 +26,15 @@ dependencies {
 
     // coroutines
     implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.core.jvm)
+
+    implementation("io.ktor:ktor-server-content-negotiation-jvm:3.4.1")
+    implementation("io.ktor:ktor-server-call-logging-jvm:3.4.1")
+    implementation("io.ktor:ktor-server-status-pages-jvm:3.4.1")
+    implementation("io.ktor:ktor-server-cors-jvm:3.4.1")
 
     // serializable
     implementation(libs.kotlinx.serialization)
+    implementation(libs.ktor.serialization.kotlinx.json)
+
 }
