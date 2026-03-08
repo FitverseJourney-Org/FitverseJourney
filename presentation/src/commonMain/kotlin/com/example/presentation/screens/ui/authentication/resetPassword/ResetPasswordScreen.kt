@@ -27,7 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.example.presentation.screens.ui.authentication.login.components.AuthDefaultButton
 import com.example.presentation.screens.ui.authentication.login.components.FitverseOutlinedTextField
 import com.example.presentation.screens.ui.authentication.resetPassword.components.ResetPasswordTopBar
-import com.example.presentation.states.authentication.ResetPasswordState
+import com.example.presentation.screens.ui.authentication.resetPassword.state.ResetPasswordState
 import com.example.presentation.theme.backgroundBrush
 
 @Composable

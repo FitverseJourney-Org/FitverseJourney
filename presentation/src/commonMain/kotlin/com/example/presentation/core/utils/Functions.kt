@@ -26,11 +26,3 @@ object Dashboard {
 }
 
 
-
-fun shouldShowBottomBar(route: String?): Boolean {
-    if (route == null) return false
-
-    val parts = route.split("/")
-
-    return parts.size == 2 && parts.first() == "main"
-}

@@ -43,7 +43,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.domain.model.authentication.register.RegisterAction
 import com.example.domain.model.authentication.register.TrainingLevel
-import com.example.presentation.states.authentication.RegisterState
+import com.example.presentation.screens.ui.authentication.register.state.RegisterState
 
 /**
  * Page root: usa MaterialTheme colors (onBackground / onSurfaceVariant) para texto e componentes.

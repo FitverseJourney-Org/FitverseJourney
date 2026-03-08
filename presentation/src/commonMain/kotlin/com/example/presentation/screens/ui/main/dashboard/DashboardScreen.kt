@@ -42,12 +42,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import cafe.adriel.voyager.core.screen.Screen
 import com.example.domain.model.dashboard.TaskIcon
 import com.example.domain.model.dashboard.TaskItem
 import com.example.presentation.core.utils.Dashboard.levelFromXp
@@ -57,14 +54,8 @@ import com.example.presentation.screens.ui.main.dashboard.components.DailyTaskIt
 import com.example.presentation.screens.ui.main.dashboard.components.PointsGainCard
 import com.example.presentation.screens.ui.main.dashboard.components.StreakCard
 import com.example.presentation.screens.ui.main.dashboard.components.StreakState
-import com.example.presentation.theme.AccentGreen
-import com.example.presentation.theme.BaseGreen
-import com.example.presentation.theme.DeepGreen
-import com.example.presentation.theme.OnSurfaceText
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.math.max
-import androidx.compose.runtime.mutableStateListOf as rememberMutableStateListOf
 
 data class AvatarState(
     val name: String = "Your Avatar",
@@ -118,7 +109,7 @@ fun DashboardScreen(
     exit: () -> Unit,
     onNotificationsClick: () -> Unit
 ){
-    // in-memory state (mantive sua lógica)
+
     val avatarState = remember {
         AvatarState(
             xp = 120,
@@ -163,12 +154,8 @@ fun DashboardScreen(
     // usaremos as cores do MaterialTheme
     val cs = MaterialTheme.colorScheme
 
-    // gradiente de fundo: usando primary e primaryContainer (ou surface -> card)
-
     LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
+        modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
         contentPadding = PaddingValues(vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
@@ -223,7 +210,7 @@ fun DashboardScreen(
                 text = "Daily Tasks",
                 color = cs.onSurface,
                 fontSize = 18.sp,
-                fontWeight = androidx.compose.ui.text.font.FontWeight.Bold,
+                fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(top = 6.dp, bottom = 4.dp)
             )
         }

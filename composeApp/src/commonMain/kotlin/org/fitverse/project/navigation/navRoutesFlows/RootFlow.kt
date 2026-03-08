@@ -22,7 +22,6 @@ fun RootFlow(
     start: NavKey = NavRoutes.SplashScreen,
     goNext: () -> Unit
 ) {
-    println("ENTROU NO FLUXO ROOT____________________________")
 
     val rootBackStack = rememberNavBackStack(config, start)
     NavDisplay(

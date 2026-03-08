@@ -21,7 +21,7 @@ import com.example.presentation.components.snackbar.SnackBarData
 import com.example.presentation.components.snackbar.SnackbarType
 import com.example.presentation.navigations.LoginNavigation
 import com.example.presentation.navigations.RegisterNavigation
-import com.example.presentation.states.authentication.RegisterState
+import com.example.presentation.screens.ui.authentication.register.state.RegisterState
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow

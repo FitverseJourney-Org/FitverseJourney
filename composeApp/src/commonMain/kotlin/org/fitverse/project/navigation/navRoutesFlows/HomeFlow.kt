@@ -7,8 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.savedstate.serialization.SavedStateConfiguration
-import com.example.presentation.screens.ui.main.ModalDrawerSheetMainScreen
 import org.fitverse.project.navigation.ContentFlowApp
+import org.fitverse.project.navigation.ModalDrawerSheetMainScreen
 import org.fitverse.project.navigation.NavRoutes
 
 @Composable
@@ -44,6 +44,9 @@ fun HomeFlow(
                     tabs = tabs,
                     homeBackStack = homeBackStack
                 )
+            },
+            onNavigate = {
+                homeBackStack.add(it)
             }
         )
     } else {

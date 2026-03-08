@@ -46,7 +46,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.domain.model.authentication.register.Goal
 import com.example.domain.model.authentication.register.RegisterAction
-import com.example.presentation.states.authentication.RegisterState
+import com.example.presentation.screens.ui.authentication.register.state.RegisterState
 
 /**
  * Page root: mantém tipografia e cores via MaterialTheme.

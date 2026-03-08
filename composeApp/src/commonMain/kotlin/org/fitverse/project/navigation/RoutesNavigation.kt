@@ -17,5 +17,6 @@ sealed interface NavRoutes : NavKey {
     @Serializable object ProfileScreen : NavRoutes
     @Serializable object NotificationScreen : NavRoutes
     @Serializable object PlanScreen : NavRoutes
+    @Serializable object Devices : NavRoutes
 
 }

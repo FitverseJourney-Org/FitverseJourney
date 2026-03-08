@@ -1,13 +1,13 @@
 package org.fitverse.project
 
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.application.*
-import io.ktor.server.engine.*
-import io.ktor.server.netty.*
-import io.ktor.server.request.receive
-import io.ktor.server.response.*
-import io.ktor.server.routing.*
-import org.fitverse.project.routes.testAuthRoute
+import io.ktor.server.application.Application
+import io.ktor.server.application.install
+import io.ktor.server.engine.connector
+import io.ktor.server.engine.embeddedServer
+import io.ktor.server.netty.Netty
+import io.ktor.server.response.respondText
+import io.ktor.server.routing.get
+import io.ktor.server.routing.routing
 
 fun main() {
     embeddedServer(
@@ -25,14 +25,4 @@ fun main() {
 
 fun Application.module() {
     initFirebase()
-    routing {
-        get("/") {
-            call.respondText("Hello my Friend !")
-        }
-        post("/login") {
-
-        }
-        testAuthRoute()
-
-    }
 }

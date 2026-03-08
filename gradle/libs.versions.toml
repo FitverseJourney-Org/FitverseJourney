@@ -4,6 +4,7 @@
 # ANDROID / BUILD
 # ----------------------------------------------------
 agp = "9.0.0"
+firebaseAdmin = "9.2.0"
 kotlin = "2.3.0"
 
 android-compileSdk = "36"
@@ -33,24 +34,25 @@ androidx-savedstate = "1.4.0"
 junit = "4.13.2"
 androidx-espresso = "3.7.0"
 androidx-testExt = "1.3.0"
+kotlinxCoroutinesAndroid = "1.7.3"
+kotlinxCoroutinesCore = "latest_version"
 runner = "1.5.2"
 
 # ----------------------------------------------------
 # COROUTINES
 # ----------------------------------------------------
-coroutines = "1.10.2"
+kotlinx-coroutines = "1.10.2"
 
 # ----------------------------------------------------
 # KTOR
 # ----------------------------------------------------
-ktor = "3.3.3"
+ktor = "3.4.1"
 ktor-logback = "1.5.32"
 
 # ----------------------------------------------------
 # SERIALIZATION
 # ----------------------------------------------------
 kotlinxSerialization = "1.10.0"
-kotlinxSerializationCore = "1.9.0"
 
 # ----------------------------------------------------
 # DEPENDENCY INJECTION
@@ -87,6 +89,7 @@ navigationJetbrains = "1.0.0-alpha03"
 # ----------------------------------------------------
 firebase-bom = "34.9.0"
 firebaseAuthKtx = "23.2.1"
+firebaseFirestore = "26.0.0"
 
 # ----------------------------------------------------
 # DATASTORE
@@ -104,16 +107,7 @@ material3 = "1.9.0"
 # ----------------------------------------------------
 google-services-plugin = "4.4.4"
 
-voyager = "1.0.1"
-
 [libraries]
-voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
-voyager-screenModel = { module = "cafe.adriel.voyager:voyager-screenmodel", version.ref = "voyager" }
-voyager-bottomSheetNavigator = { module = "cafe.adriel.voyager:voyager-bottom-sheet-navigator", version.ref = "voyager" }
-voyager-tabNavigator = { module = "cafe.adriel.voyager:voyager-tab-navigator", version.ref = "voyager" }
-voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
-voyager-koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voyager" }
-
 
 ## ---------------------------------------------------------------------------------------------------------
 ## ------------------------------------------- COMPOSE ----------------------------------------------------
@@ -141,6 +135,7 @@ androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", vers
 jetbrains-navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "navigationJetbrains" }
 jetbrains-lifecycle-viewmodel-navigation3 = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "androidx-lifecycle" }
 jetbrains-lifecycle-viewmodel = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
+kotlinx-coroutines-core-vlatestversion = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "navigation3" }
 
@@ -165,10 +160,9 @@ datastore-preferences = { module = "androidx.datastore:datastore-preferences", v
 ## ---------------------------------------------------------------------------------------------------------
 ## --------------------------------------------- COROUTINES ----------------------------------------------
 ## ---------------------------------------------------------------------------------------------------------
-
-kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
-kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
-
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
+kotlinx-coroutines-core-jvm = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm", version.ref = "kotlinx-coroutines" }
 ## ---------------------------------------------------------------------------------------------------------
 ## --------------------------------------------- KTOR ----------------------------------------------------
 ## ---------------------------------------------------------------------------------------------------------
@@ -239,10 +233,11 @@ components-resources = { module = "org.jetbrains.compose.components:components-r
 ## ---------------------------------------------------------------------------------------------------------
 ## ------------------------------------------- FIREBASE --------------------------------------------------
 ## ---------------------------------------------------------------------------------------------------------
-
+firebase-admin = { module = "com.google.firebase:firebase-admin", version.ref = "firebaseAdmin" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
 firebase-auth-ktx = { module = "com.google.firebase:firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-firestore = { module = "com.google.firebase:firebase-firestore", version.ref = "firebaseFirestore" }
 
 ## ---------------------------------------------------------------------------------------------------------
 ## ------------------------------------------- ICONS -----------------------------------------------------

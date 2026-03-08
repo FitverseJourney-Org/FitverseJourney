@@ -16,11 +16,17 @@ application {
 dependencies {
     implementation(libs.ktor.server.core)
     implementation(libs.ktor.server.netty)
-    //ktor logback
+    // ktor logback
     implementation(libs.ktor.server.logback)
     testImplementation(libs.ktor.server.testhost)
     testImplementation(libs.kotlin.test.junit)
 
     // firebase
-    implementation("com.google.firebase:firebase-admin:9.2.0")
+    implementation(libs.firebase.admin)
+
+    // coroutines
+    implementation(libs.kotlinx.coroutines.core)
+
+    // serializable
+    implementation(libs.kotlinx.serialization)
 }

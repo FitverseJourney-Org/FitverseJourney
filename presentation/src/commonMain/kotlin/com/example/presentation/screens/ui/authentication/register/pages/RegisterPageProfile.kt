@@ -21,7 +21,7 @@ import com.example.domain.model.authentication.register.RegisterAction
 import com.example.presentation.screens.ui.authentication.register.components.GenreSelection
 import com.example.presentation.screens.ui.authentication.register.components.HeightRangeSelector
 import com.example.presentation.screens.ui.authentication.register.components.WeightRangeSelector
-import com.example.presentation.states.authentication.RegisterState
+import com.example.presentation.screens.ui.authentication.register.state.RegisterState
 import com.example.presentation.screens.ui.authentication.login.components.FitverseOutlinedTextField
 
 @Composable

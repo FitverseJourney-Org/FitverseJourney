@@ -63,9 +63,11 @@ kotlin {
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.client.auth)
+            implementation(libs.ktor.client.logging)
 
             // serialization
             implementation(libs.kotlinx.serialization)
+            implementation(libs.ktor.serialization.kotlinx.json)
         }
         iosMain.dependencies {
 
@@ -79,6 +81,7 @@ kotlin {
             // firebase
             implementation(project.dependencies.platform(libs.firebase.bom))
             implementation(libs.firebase.auth.ktx)
+            implementation(libs.firebase.firestore)
 
             // engine ktor
             implementation(libs.ktor.client.okhttp)

@@ -39,7 +39,7 @@ import com.example.domain.model.authentication.register.RegisterAction
 import com.example.domain.usecase.authentication.ValidationRegisterScreen.hasMinimumLength
 import com.example.domain.usecase.authentication.ValidationRegisterScreen.hasNumber
 import com.example.presentation.screens.ui.authentication.login.components.FitverseOutlinedTextField
-import com.example.presentation.states.authentication.RegisterState
+import com.example.presentation.screens.ui.authentication.register.state.RegisterState
 
 @Composable
 fun RegisterPageCredentials(

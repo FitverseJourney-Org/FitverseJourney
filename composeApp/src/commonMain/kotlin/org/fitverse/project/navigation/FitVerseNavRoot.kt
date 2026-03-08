@@ -3,18 +3,13 @@ package org.fitverse.project.navigation
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.core.Easing
 import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -22,60 +17,37 @@ import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LocalDining
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberNavBackStack
-import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
-import com.example.presentation.components.background.PremiumGamifiedBackground
-import com.example.presentation.screens.ui.main.ModalDrawerSheetMainScreen
-import com.example.presentation.screens.ui.main.dashboard.DashboardScreen
-import com.example.presentation.screens.ui.main.dashboard.NotificationMainScreen
-import com.example.presentation.screens.ui.main.nutrition.NutritionScreenV3
-import com.example.presentation.screens.ui.main.plans.AppPlansScreen
-import com.example.presentation.screens.ui.main.profile.ProfileScreenV2
-import com.example.presentation.screens.ui.main.workout.WorkoutScreenV2
-import fitversejourneyapp.composeapp.generated.resources.Res
-import fitversejourneyapp.composeapp.generated.resources.icon_cookie
-import fitversejourneyapp.composeapp.generated.resources.icon_dashboard
-import fitversejourneyapp.composeapp.generated.resources.icon_fitness
-import fitversejourneyapp.composeapp.generated.resources.icon_person
+import com.example.presentation.screens.ui.device.SettingsScreenInMemoryEnhancedV2_Extended
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import org.fitverse.project.navigation.destinations.DashboardDestination
-import org.fitverse.project.navigation.destinations.ResetPasswordDestination
-import org.fitverse.project.navigation.destinations.LoginDestination
+import org.fitverse.project.navigation.destinations.DevicesDestination
+import org.fitverse.project.navigation.destinations.NotificationDestination
 import org.fitverse.project.navigation.destinations.NutritionDestination
-import org.fitverse.project.navigation.destinations.OnboardingDestination
+import org.fitverse.project.navigation.destinations.PlanDestination
 import org.fitverse.project.navigation.destinations.ProfileDestination
-import org.fitverse.project.navigation.destinations.RegisterDestination
-import org.fitverse.project.navigation.destinations.SplashDestination
-import org.fitverse.project.navigation.destinations.TrialDestination
 import org.fitverse.project.navigation.destinations.WorkoutDestination
 import org.fitverse.project.navigation.navRoutesFlows.AuthFlow
 import org.fitverse.project.navigation.navRoutesFlows.HomeFlow
 import org.fitverse.project.navigation.navRoutesFlows.RootFlow
-import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun FitVerseNavRoot() {
@@ -99,6 +71,7 @@ fun FitVerseNavRoot() {
 
     var isAuthenticated by remember { mutableStateOf(false) }
     var goNext by remember { mutableStateOf(false) }
+
 
     if (!isAuthenticated) {
         if(!goNext){
@@ -188,8 +161,6 @@ fun ContentFlowApp(
                 val consumed = handleHomeBackPress(homeBackStack)
                 println("homeBackStack onBack: $consumed")
                 if (!consumed) {
-                    // Se não consumimos (ex.: já estava no Dashboard ou pilha vazia),
-                    // aplicar o pop padrão (o mesmo comportamento que seu código usava).
                     homeBackStack.removeLastOrNull()
                 }
             },
@@ -210,9 +181,7 @@ fun ContentFlowApp(
             entryProvider = { key ->
                 when (key) {
                     is NavRoutes.DashboardScreen -> NavEntry(key) {
-                        DashboardDestination(
-                            navigateToNotification = { homeBackStack.add(NavRoutes.NotificationScreen) }
-                        )
+                        DashboardDestination(navigateToNotification = { homeBackStack.add(NavRoutes.NotificationScreen) })
                     }
                     is NavRoutes.WorkoutScreen -> NavEntry(key) {
                         WorkoutDestination()
@@ -229,18 +198,19 @@ fun ContentFlowApp(
                         )
                     }
                     is NavRoutes.NotificationScreen -> NavEntry(key) {
-                        NotificationDestination(
-                            navigateToDashboard = {
+                        NotificationDestination(navigateToDashboard = {
                                 homeBackStack.removeLastOrNull()
-                            }
-                        )
+                            })
                     }
                     is NavRoutes.PlanScreen -> NavEntry(key) {
-                        PlanDestination(
-                            navigateToProfile = {
+                        PlanDestination(navigateToProfile = {
                                 homeBackStack.removeLastOrNull()
-                            }
-                        )
+                            })
+                    }
+                    is NavRoutes.Devices -> NavEntry(key) {
+                        DevicesDestination(backStack = {
+                                homeBackStack.removeLastOrNull()
+                            })
                     }
                     else -> error("HomeFlow: rota desconhecida: $key")
                 }
@@ -248,8 +218,6 @@ fun ContentFlowApp(
         )
     }
 }
-
-
 fun handleHomeBackPress(homeBackStack: MutableList<NavKey>): Boolean {
     val current = homeBackStack.lastOrNull() ?: return false
 
@@ -271,21 +239,4 @@ fun handleHomeBackPress(homeBackStack: MutableList<NavKey>): Boolean {
             true
         }
     }
-}
-
-
-@Composable
-fun PlanDestination(navigateToProfile: () -> Unit) {
-    AppPlansScreen(
-        navigateToProfile = { navigateToProfile() }
-    )
-}
-
-
-@Composable
-fun NotificationDestination(navigateToDashboard: () -> Unit) {
-    NotificationMainScreen(
-        modifier = Modifier,
-        onExit = { navigateToDashboard() }
-    )
 }

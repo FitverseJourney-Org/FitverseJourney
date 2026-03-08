@@ -19,7 +19,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import com.example.presentation.states.authentication.LoginState
+import com.example.presentation.screens.ui.authentication.login.state.LoginState
 import fitversejourneyapp.presentation.generated.resources.Res
 import fitversejourneyapp.presentation.generated.resources.login_button_text
 import fitversejourneyapp.presentation.generated.resources.login_email_label

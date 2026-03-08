@@ -36,12 +36,6 @@ class OnboardingViewModel : ViewModel() {
         _state.update { it.copy(currentPage = lastIndex) }
 
     }
-
-    fun emitToLogin() {
-        viewModelScope.launch {
-            _navigationState.emit(OnboardingNavigation.ToLogin)
-        }
-    }
     fun emitToTrial() {
         viewModelScope.launch {
             _navigationState.emit(OnboardingNavigation.ToTrial)

@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.domain.model.authentication.register.RegisterAction
 import com.example.presentation.screens.ui.authentication.login.components.AuthDefaultButton
-import com.example.presentation.states.authentication.RegisterState
+import com.example.presentation.screens.ui.authentication.register.state.RegisterState
 
 
 @Composable

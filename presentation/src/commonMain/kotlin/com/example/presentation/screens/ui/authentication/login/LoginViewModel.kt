@@ -7,7 +7,7 @@ import com.example.domain.usecase.authentication.login.LoginUseCase
 import com.example.presentation.components.snackbar.SnackBarData
 import com.example.presentation.components.snackbar.SnackbarType
 import com.example.presentation.navigations.LoginNavigation
-import com.example.presentation.states.authentication.LoginState
+import com.example.presentation.screens.ui.authentication.login.state.LoginState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

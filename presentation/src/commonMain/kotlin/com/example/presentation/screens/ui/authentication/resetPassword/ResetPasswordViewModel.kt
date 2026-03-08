@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.example.domain.usecase.authentication.reset.ResetPasswordUseCase
 import com.example.presentation.components.snackbar.SnackBarData
 import com.example.presentation.components.snackbar.SnackbarType
-import com.example.presentation.states.authentication.ResetPasswordState
+import com.example.presentation.screens.ui.authentication.resetPassword.state.ResetPasswordState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

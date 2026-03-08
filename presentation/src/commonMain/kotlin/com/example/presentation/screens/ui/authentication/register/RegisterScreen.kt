@@ -34,7 +34,7 @@ import com.example.presentation.screens.ui.authentication.register.pages.Registe
 import com.example.presentation.screens.ui.authentication.register.pages.RegisterPageProfile
 import com.example.presentation.screens.ui.authentication.register.pages.RegisterPageSuccess
 import com.example.presentation.screens.ui.authentication.register.components.RegisterProgressBar
-import com.example.presentation.states.authentication.RegisterState
+import com.example.presentation.screens.ui.authentication.register.state.RegisterState
 import com.example.presentation.theme.backgroundBrush
 import com.example.presentation.theme.transparent
 
