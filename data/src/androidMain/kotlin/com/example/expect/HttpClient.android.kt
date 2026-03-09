@@ -12,6 +12,7 @@ import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.plugins.logging.SIMPLE
 import io.ktor.client.request.header
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
@@ -26,6 +27,7 @@ actual fun httpClientCore(): HttpClient {
                 Json {
                     ignoreUnknownKeys = true    // tolera campos extras
                     explicitNulls = false
+                    prettyPrint = true
                 }
             )
         }
@@ -39,12 +41,8 @@ actual fun httpClientCore(): HttpClient {
 
         // Logging (use com cuidado em produção)
         install(Logging) {
-            logger = object : Logger {
-                override fun log(message: String) {
-                    println("Ktor: $message")
-                }
-            }
-            level = LogLevel.INFO
+            logger = Logger.SIMPLE
+            level = LogLevel.ALL
         }
 
         // Retry com backoff simples

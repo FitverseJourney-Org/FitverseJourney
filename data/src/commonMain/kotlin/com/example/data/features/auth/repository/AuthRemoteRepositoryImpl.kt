@@ -2,12 +2,12 @@ package com.example.data.features.auth.repository
 
 import com.example.domain.model.authentication.login.UserToken
 import com.example.domain.model.authentication.register.RegisterRequest
-import com.example.domain.repository.authentication.AuthRemoteDataSource
+import com.example.domain.repository.authentication.AuthRemoteRepository
 import com.example.domain.repository.authentication.AuthRepository
 import com.example.domain.repository.authentication.AuthTokenStoreRepository
 
 class AuthRemoteRepositoryImpl(
-    private val remote: AuthRemoteDataSource,
+    private val remote: AuthRemoteRepository,
     private val tokenStore: AuthTokenStoreRepository
 ): AuthRepository {
     override suspend fun login(email: String,password: String): Result<UserToken> = runCatching{

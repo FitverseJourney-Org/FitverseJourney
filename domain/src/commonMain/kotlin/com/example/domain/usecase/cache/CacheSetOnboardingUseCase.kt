@@ -1,11 +1,11 @@
 package com.example.domain.usecase.cache
 
-import com.example.domain.repository.cache.CacheDataSource
+import com.example.domain.repository.cache.CacheDataSourceOnboarding
 
 class CacheSetOnboardingUseCase(
-    private val cacheDataSource: CacheDataSource
+    private val cacheDataSourceOnboarding: CacheDataSourceOnboarding
 ) {
     suspend operator fun invoke(isCompleted: Boolean) {
-        cacheDataSource.setOnboardingCompleted(isCompleted)
+        cacheDataSourceOnboarding.setOnboardingCompleted(isCompleted)
     }
 }

@@ -4,15 +4,15 @@ import com.example.data.HttpUrlStrings
 import com.example.data.features.auth.local.model.LoginRequest
 import com.example.domain.model.authentication.login.UserToken
 import com.example.domain.model.authentication.register.RegisterRequest
-import com.example.domain.repository.authentication.AuthRemoteDataSource
+import com.example.domain.repository.authentication.AuthRemoteRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 
-class AuthRemoteDataSourceImpl(
+class AuthRemoteRepositoryImpl(
     private val client: HttpClient
-) : AuthRemoteDataSource {
+) : AuthRemoteRepository {
 
     override suspend fun login(email: String, password: String): Result<UserToken> =
         runCatching {

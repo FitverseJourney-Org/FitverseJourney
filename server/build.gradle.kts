@@ -21,20 +21,41 @@ dependencies {
     testImplementation(libs.ktor.server.testhost)
     testImplementation(libs.kotlin.test.junit)
 
-    // firebase
+    // ---------------------------------------------------------------------------------------------------------
+    // --------------------------------------------- FIREBASE ----------------------------------------------------
+    // ---------------------------------------------------------------------------------------------------------
     implementation(libs.firebase.admin)
+    implementation(libs.firebase.firestore.ktx)
 
-    // coroutines
-    implementation(libs.kotlinx.coroutines.core)
-    implementation(libs.kotlinx.coroutines.core.jvm)
+    // ---------------------------------------------------------------------------------------------------------
+    // --------------------------------------------- COROUTINES ----------------------------------------------------
+    // ---------------------------------------------------------------------------------------------------------
+    implementation(libs.jetbrains.kotlinx.coroutines.core)
+    implementation(libs.jetbrains.kotlinx.coroutines.android)
 
-    implementation("io.ktor:ktor-server-content-negotiation-jvm:3.4.1")
-    implementation("io.ktor:ktor-server-call-logging-jvm:3.4.1")
-    implementation("io.ktor:ktor-server-status-pages-jvm:3.4.1")
-    implementation("io.ktor:ktor-server-cors-jvm:3.4.1")
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.client.logging)
+    implementation(libs.ktor.client.auth)
 
-    // serializable
+    // ---------------------------------------------------------------------------------------------------------
+    // --------------------------------------------- PLUGINS KTOR ----------------------------------------------------
+    // ---------------------------------------------------------------------------------------------------------
+    implementation(libs.ktor.server.content.negotiation.jvm)
+    implementation(libs.ktor.server.call.logging.jvm)
+    implementation(libs.ktor.server.status.pages.jvm)
+    implementation(libs.ktor.server.cors.jvm)
+
+    // ---------------------------------------------------------------------------------------------------------
+    // --------------------------------------------- SERIALIZABLE ----------------------------------------------------
+    // ---------------------------------------------------------------------------------------------------------
     implementation(libs.kotlinx.serialization)
     implementation(libs.ktor.serialization.kotlinx.json)
+
+    // ---------------------------------------------------------------------------------------------------------
+    // --------------------------------------------- KOIN ----------------------------------------------------
+    // ---------------------------------------------------------------------------------------------------------
+    implementation(libs.koin.ktor)
+    implementation(libs.koin.ktor.logger)
 
 }

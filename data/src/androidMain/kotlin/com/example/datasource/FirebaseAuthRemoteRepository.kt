@@ -3,13 +3,13 @@ package com.example.datasource
 import android.util.Log
 import com.example.domain.model.authentication.login.UserToken
 import com.example.domain.model.authentication.register.RegisterRequest
-import com.example.domain.repository.authentication.AuthRemoteDataSource
+import com.example.domain.repository.authentication.AuthRemoteRepository
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.tasks.await
 
-class FirebaseAuthRemoteDataSource(
+class FirebaseAuthRemoteRepository(
     private val auth: FirebaseAuth
-) : AuthRemoteDataSource {
+) : AuthRemoteRepository {
     override suspend fun login(email: String,password: String): Result<UserToken> {
         return runCatching {
 

@@ -30,8 +30,8 @@ fun Application.configurePlugins() {
     install(StatusPages) {
         exception<Throwable> { call, cause ->
             call.respond(
-                HttpStatusCode.InternalServerError,
-                mapOf(
+                status = HttpStatusCode.InternalServerError,
+                message = mapOf(
                     "error" to (cause.message ?: "Unknown error")
                 )
             )

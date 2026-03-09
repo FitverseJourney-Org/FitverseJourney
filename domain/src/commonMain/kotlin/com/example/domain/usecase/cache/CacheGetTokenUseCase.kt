@@ -1,11 +1,12 @@
 package com.example.domain.usecase.cache
 
-import com.example.domain.repository.cache.CacheDataSource
+import com.example.domain.repository.cache.CacheDataSourceAuthToken
+import com.example.domain.repository.cache.CacheDataSourceOnboarding
 
 class CacheGetTokenUseCase(
-    private val cacheDataSource: CacheDataSource
+    private val cacheDataSourceAuthToken: CacheDataSourceAuthToken
 ) {
     suspend operator fun invoke(): String? {
-        return cacheDataSource.getAuthToken()
+        return cacheDataSourceAuthToken.getAuthToken()
     }
 }

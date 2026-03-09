@@ -34,8 +34,6 @@ androidx-savedstate = "1.4.0"
 junit = "4.13.2"
 androidx-espresso = "3.7.0"
 androidx-testExt = "1.3.0"
-kotlinxCoroutinesAndroid = "1.7.3"
-kotlinxCoroutinesCore = "latest_version"
 runner = "1.5.2"
 
 # ----------------------------------------------------
@@ -46,8 +44,16 @@ kotlinx-coroutines = "1.10.2"
 # ----------------------------------------------------
 # KTOR
 # ----------------------------------------------------
-ktor = "3.4.1"
+ktor = "3.1.1"
 ktor-logback = "1.5.32"
+
+# ----------------------------------------------------
+# PLUGINS KTOR
+# ----------------------------------------------------
+ktorServerCallLoggingJvm = "3.1.1"
+ktorServerContentNegotiationJvm = "3.1.1"
+ktorServerCorsJvm = "3.1.1"
+ktorServerStatusPagesJvm = "3.1.1"
 
 # ----------------------------------------------------
 # SERIALIZATION
@@ -90,7 +96,7 @@ navigationJetbrains = "1.0.0-alpha03"
 firebase-bom = "34.9.0"
 firebaseAuthKtx = "23.2.1"
 firebaseFirestore = "26.0.0"
-
+firebaseFirestoreCloud = "3.38.0"
 # ----------------------------------------------------
 # DATASTORE
 # ----------------------------------------------------
@@ -132,10 +138,11 @@ androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", vers
 ## --------------------------------------------- NAVIGATION ----------------------------------------------
 ## ---------------------------------------------------------------------------------------------------------
 
+jetbrains-kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android" }
+jetbrains-kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core" }
 jetbrains-navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "navigationJetbrains" }
 jetbrains-lifecycle-viewmodel-navigation3 = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "androidx-lifecycle" }
 jetbrains-lifecycle-viewmodel = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
-kotlinx-coroutines-core-vlatestversion = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "navigation3" }
 
@@ -210,6 +217,9 @@ koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", versi
 koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }
 koin-compose-navigation3 = { module = "io.insert-koin:koin-compose-navigation3", version.ref = "koin" }
 
+koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koin"}
+koin-ktor-logger = { module = "io.insert-koin:koin-logger-slf4j", version.ref = "koin"}
+
 ## ---------------------------------------------------------------------------------------------------------
 ## --------------------------------------------- SQLDELIGHT ----------------------------------------------
 ## ---------------------------------------------------------------------------------------------------------
@@ -238,7 +248,7 @@ firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "fir
 firebase-auth-ktx = { module = "com.google.firebase:firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-firestore = { module = "com.google.firebase:firebase-firestore", version.ref = "firebaseFirestore" }
-
+firebase-firestore-ktx = { module = "com.google.cloud:google-cloud-firestore", version.ref = "firebaseFirestoreCloud"}
 ## ---------------------------------------------------------------------------------------------------------
 ## ------------------------------------------- ICONS -----------------------------------------------------
 ## ---------------------------------------------------------------------------------------------------------
@@ -251,6 +261,16 @@ kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "
 ## ---------------------------------------------------------------------------------------------------------
 
 lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
+
+## ---------------------------------------------------------------------------------------------------------
+## ------------------------------------------- PLUGINS KTOR -------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------
+
+ktor-server-call-logging-jvm = { module = "io.ktor:ktor-server-call-logging-jvm", version.ref = "ktorServerCallLoggingJvm" }
+ktor-server-content-negotiation-jvm = { module = "io.ktor:ktor-server-content-negotiation-jvm", version.ref = "ktorServerContentNegotiationJvm" }
+ktor-server-cors-jvm = { module = "io.ktor:ktor-server-cors-jvm", version.ref = "ktorServerCorsJvm" }
+ktor-server-status-pages-jvm = { module = "io.ktor:ktor-server-status-pages-jvm", version.ref = "ktorServerStatusPagesJvm" }
+
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

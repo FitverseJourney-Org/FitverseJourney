@@ -1,11 +1,12 @@
 package com.example.domain.usecase.cache
 
-import com.example.domain.repository.cache.CacheDataSource
+import com.example.domain.repository.cache.CacheDataSourceLanguage
+import com.example.domain.repository.cache.CacheDataSourceOnboarding
 
 class CacheSaveLanguageUseCase(
-    private val cacheDataSource: CacheDataSource
+    private val cacheDataSourceLanguage: CacheDataSourceLanguage
 ) {
     suspend operator fun invoke(language: String) {
-        cacheDataSource.saveLanguage(language)
+        cacheDataSourceLanguage.saveLanguage(language)
     }
 }
