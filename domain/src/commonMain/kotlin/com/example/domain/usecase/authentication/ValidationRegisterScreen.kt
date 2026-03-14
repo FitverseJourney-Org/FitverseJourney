@@ -1,6 +1,6 @@
 package com.example.domain.usecase.authentication
 
-import com.example.domain.model.authentication.register.Goal
+import com.example.domain.model.authentication.register.FitnessGoal
 import com.example.domain.model.authentication.register.TrainingLevel
 
 object ValidationRegisterScreen {
@@ -13,7 +13,7 @@ object ValidationRegisterScreen {
     fun hasMaximumLength(password: String, max: Int = 10): Boolean =
         password.length <= max
 
-    fun hasSelectedGoals(goal: Goal?): Boolean {
+    fun hasSelectedGoals(goal: FitnessGoal?): Boolean {
         return goal != null
     }
     fun hasSelectedLevel(level: TrainingLevel?): Boolean {

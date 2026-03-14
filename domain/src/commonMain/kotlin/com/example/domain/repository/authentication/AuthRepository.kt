@@ -1,7 +1,7 @@
 package com.example.domain.repository.authentication
 
 import com.example.domain.model.authentication.login.UserToken
-import com.example.domain.model.authentication.register.RegisterRequest
+import com.example.domain.model.authentication.register.SignUp
 
 
 interface AuthRepository {
@@ -9,5 +9,5 @@ interface AuthRepository {
 
     suspend fun resetPassword(email: String): Result<Unit>
 
-    suspend fun register(data: RegisterRequest) : Result<Unit>
+    suspend fun register(data: SignUp) : Result<Unit>
 }

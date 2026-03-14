@@ -83,7 +83,7 @@ fun RegisterPageProfile(
         Spacer(modifier = Modifier.height(10.dp))
 
         GenreSelection(
-            selectedGenre = state.gender,
+            selectedGenre = state.gender.name,
             onGenreSelected = {
                 onAction(RegisterAction.GenderChanged(it))
             },

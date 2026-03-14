@@ -1,9 +1,9 @@
 package com.example.data.features.auth.remote
 
 import com.example.data.HttpUrlStrings
-import com.example.data.features.auth.local.model.LoginRequest
+import com.example.data.features.auth.model.SignIn.SignInRequest
 import com.example.domain.model.authentication.login.UserToken
-import com.example.domain.model.authentication.register.RegisterRequest
+import com.example.domain.model.authentication.register.SignUp
 import com.example.domain.repository.authentication.AuthRemoteRepository
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -18,7 +18,7 @@ class AuthRemoteRepositoryImpl(
         runCatching {
             client.post(HttpUrlStrings.URL_LOGIN.url) {
                 setBody(
-                    LoginRequest(
+                    SignInRequest(
                         email = email,
                         password = password
                     )
@@ -30,7 +30,7 @@ class AuthRemoteRepositoryImpl(
         return Result.success(Unit)
     }
 
-    override suspend fun register(data: RegisterRequest): Result<Unit> =
+    override suspend fun register(data: SignUp): Result<Unit> =
         runCatching {
             client.post(HttpUrlStrings.URL_REGISTER.url) {
                 setBody(data)

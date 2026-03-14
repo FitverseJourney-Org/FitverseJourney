@@ -2,7 +2,7 @@ package com.example.datasource
 
 import android.util.Log
 import com.example.domain.model.authentication.login.UserToken
-import com.example.domain.model.authentication.register.RegisterRequest
+import com.example.domain.model.authentication.register.SignUp
 import com.example.domain.repository.authentication.AuthRemoteRepository
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.tasks.await
@@ -39,7 +39,7 @@ class FirebaseAuthRemoteRepository(
         }
     }
 
-    override suspend fun register(data: RegisterRequest): Result<Unit> =
+    override suspend fun register(data: SignUp): Result<Unit> =
         runCatching {
             // cria o usuário e já autentica
             val authResult = auth.createUserWithEmailAndPassword(data.email, data.password).await()

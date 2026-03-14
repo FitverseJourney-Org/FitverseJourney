@@ -1,7 +1,6 @@
 package com.example.presentation.screens.ui.authentication.register
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -26,16 +25,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.domain.model.authentication.register.RegisterAction
 import com.example.domain.model.authentication.register.RegisterPage
-import com.example.presentation.screens.ui.authentication.login.components.AuthDefaultButton
 import com.example.presentation.screens.ui.authentication.register.components.RegisterProgressBar
 import com.example.presentation.screens.ui.authentication.register.pages.RegisterPageCredentials
 import com.example.presentation.screens.ui.authentication.register.pages.RegisterPageGoals
 import com.example.presentation.screens.ui.authentication.register.pages.RegisterPageLevel
 import com.example.presentation.screens.ui.authentication.register.pages.RegisterPageProfile
 import com.example.presentation.screens.ui.authentication.register.pages.RegisterPageSuccess
-import com.example.presentation.screens.ui.authentication.register.components.RegisterProgressBar
 import com.example.presentation.screens.ui.authentication.register.state.RegisterState
-import com.example.presentation.theme.backgroundBrush
+import com.example.presentation.screens.widgets.FitVerseButton
 import com.example.presentation.theme.transparent
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -145,28 +142,30 @@ fun RegisterBottomBar(
     onBack: () -> Unit,
     onNext: () -> Unit
 ) {
+    val cs = MaterialTheme.colorScheme
     Column(
         modifier = modifier
     ) {
         Row {
             if(!isLastPage){
-                AuthDefaultButton(
+                FitVerseButton(
                     modifier = Modifier.weight(1f),
                     text = txtBack(),
+                    topColor = cs.primary,
+                    edgeColor = cs.outline, // Ou uma cor mais escura que o primary
+                    textColor = cs.onPrimary,
                     onClick = onBack,
                     enabled = true
                 )
-
                 Spacer(Modifier.width(12.dp))
-
-                AuthDefaultButton(
+                FitVerseButton(
                     modifier = Modifier.weight(1f),
                     text = txtProcess(),
-                    onClick = {
-                        onNext()
-                    },
-                    isLoading = isLoading,
-                    enabled = true
+                    onClick = { onNext() },
+                    enabled = true,
+                    topColor = cs.primary,
+                    edgeColor = cs.outline, // Ou uma cor mais escura que o primary
+                    textColor = cs.onPrimary,
                 )
             }
         }

@@ -1,6 +1,8 @@
 package com.example.domain.model.authentication.register
 
-data class Goal(
-    val code:String,
-    val description: String
-)
+enum class FitnessGoal{
+    LOSE_WEIGHT,
+    GAIN_MUSCLE,
+    IMPROVE_ENDURANCE,
+    MAINTAIN,
+}

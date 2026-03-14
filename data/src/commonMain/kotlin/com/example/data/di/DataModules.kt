@@ -1,11 +1,12 @@
 package com.example.data.di
 
-import com.example.data.features.cache.CacheDataSourceOnboardingImpl
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import com.example.data.features.auth.remote.AuthRemoteRepositoryImpl
 import com.example.data.features.auth.repository.AuthRemoteRepositoryImpl
 import com.example.data.features.auth.repository.AuthTokenStoreImpl
+import com.example.data.features.cache.CacheDataSourceKeyAuthTokenImpl
+import com.example.data.features.cache.CacheDataSourceKeyLanguageImpl
+import com.example.data.features.cache.CacheDataSourceKeyOnboardingCompletedImpl
 import com.example.domain.repository.authentication.AuthRemoteRepository
 import com.example.domain.repository.authentication.AuthRepository
 import com.example.domain.repository.authentication.AuthTokenStoreRepository
@@ -13,9 +14,9 @@ import org.koin.dsl.module
 
 val dataModules = module {
 
-    single { CacheDataSourceOnboardingImpl(dataStore = get<DataStore<Preferences>>()) }
-
-    single { AuthRemoteRepositoryImpl(client = get()) }
+    single { CacheDataSourceKeyOnboardingCompletedImpl(dataStore = get<DataStore<Preferences>>()) }
+    single { CacheDataSourceKeyLanguageImpl(dataStore = get<DataStore<Preferences>>()) }
+    single { CacheDataSourceKeyAuthTokenImpl(dataStore = get<DataStore<Preferences>>()) }
 
     single<AuthRepository> {
         AuthRemoteRepositoryImpl(

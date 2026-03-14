@@ -10,13 +10,13 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LocalDining
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -35,19 +35,27 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
-import com.example.presentation.screens.ui.device.SettingsScreenInMemoryEnhancedV2_Extended
+import com.example.presentation.screens.ui.main.nutrition.AddManualMealScreen
+import com.example.presentation.screens.ui.main.nutrition.MealPeriod
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import org.fitverse.project.navigation.destinations.DashboardDestination
-import org.fitverse.project.navigation.destinations.DevicesDestination
 import org.fitverse.project.navigation.destinations.NotificationDestination
-import org.fitverse.project.navigation.destinations.NutritionDestination
+import org.fitverse.project.navigation.destinations.modal.AchievementsModalDestination
+import org.fitverse.project.navigation.destinations.modal.DevicesModalDestination
+import org.fitverse.project.navigation.destinations.modal.HelpSupportModalDestination
+import org.fitverse.project.navigation.destinations.nutrition.NutritionDestination
 import org.fitverse.project.navigation.destinations.PlanDestination
 import org.fitverse.project.navigation.destinations.ProfileDestination
-import org.fitverse.project.navigation.destinations.WorkoutDestination
-import org.fitverse.project.navigation.navRoutesFlows.AuthFlow
+import org.fitverse.project.navigation.destinations.modal.FriendsModalDestination
+import org.fitverse.project.navigation.destinations.modal.HistoricModalDestination
+import org.fitverse.project.navigation.destinations.modal.LeaderboardsModalDestination
+import org.fitverse.project.navigation.destinations.modal.MealsPlanDestination
+import org.fitverse.project.navigation.destinations.modal.TasksModalDestination
+import org.fitverse.project.navigation.destinations.modal.WorkoutCreateDestination
+import org.fitverse.project.navigation.destinations.workout.WorkoutDestination
+import org.fitverse.project.navigation.destinations.workout.WorkoutSessionDestination
 import org.fitverse.project.navigation.navRoutesFlows.HomeFlow
-import org.fitverse.project.navigation.navRoutesFlows.RootFlow
 
 @Composable
 fun FitVerseNavRoot() {
@@ -73,17 +81,19 @@ fun FitVerseNavRoot() {
     var goNext by remember { mutableStateOf(false) }
 
 
-    if (!isAuthenticated) {
-        if(!goNext){
-            RootFlow(config = config, goNext = {goNext = !goNext})
-        }else {
-            AuthFlow(config = config, onAuthSuccess = { isAuthenticated = true })
-        }
-    } else {
-        HomeFlow(config = config, onSignOut = { isAuthenticated = false })
-    }
+//    if (!isAuthenticated) {
+//        if(!goNext){
+//            RootFlow(config = config, goNext = {goNext = !goNext})
+//        }else {
+//            AuthFlow(config = config, onAuthSuccess = { isAuthenticated = true })
+//        }
+//    } else {
+//
+//    }
+    HomeFlow(config = config, onSignOut = { isAuthenticated = false })
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContentFlowApp(
     config: SavedStateConfiguration,
@@ -93,7 +103,7 @@ fun ContentFlowApp(
 ) {
     val cs = MaterialTheme.colorScheme
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+
         bottomBar = {
 
             val currentKey = homeBackStack.lastOrNull()
@@ -154,9 +164,9 @@ fun ContentFlowApp(
                 }
             }
         }
-    ) { innerPadding ->
+    ) {
         NavDisplay(
-            modifier = Modifier.padding(innerPadding),
+            modifier = Modifier.padding(it),
             onBack = {
                 val consumed = handleHomeBackPress(homeBackStack)
                 println("homeBackStack onBack: $consumed")
@@ -180,14 +190,24 @@ fun ContentFlowApp(
             },
             entryProvider = { key ->
                 when (key) {
+                    // home bottom
                     is NavRoutes.DashboardScreen -> NavEntry(key) {
-                        DashboardDestination(navigateToNotification = { homeBackStack.add(NavRoutes.NotificationScreen) })
+                        DashboardDestination(
+                            navigateToNotification = { homeBackStack.add(NavRoutes.NotificationScreen) }
+                        )
                     }
                     is NavRoutes.WorkoutScreen -> NavEntry(key) {
-                        WorkoutDestination()
+                        WorkoutDestination(
+                            navigateToWorkoutSession = { homeBackStack.add(NavRoutes.WorkoutSession) }
+
+                        )
                     }
                     is NavRoutes.NutritionScreen -> NavEntry(key) {
-                        NutritionDestination()
+                        NutritionDestination(
+                            navigateToAddMeal = { period ->
+                                homeBackStack.add(NavRoutes.AddMeal(period.name))
+                            }
+                        )
                     }
                     is NavRoutes.ProfileScreen -> NavEntry(key) {
                         ProfileDestination(
@@ -197,20 +217,83 @@ fun ContentFlowApp(
                             }
                         )
                     }
+
+
                     is NavRoutes.NotificationScreen -> NavEntry(key) {
-                        NotificationDestination(navigateToDashboard = {
-                                homeBackStack.removeLastOrNull()
-                            })
+                        NotificationDestination(
+                            navigateToDashboard = { homeBackStack.removeLastOrNull()})
                     }
                     is NavRoutes.PlanScreen -> NavEntry(key) {
-                        PlanDestination(navigateToProfile = {
+                        PlanDestination(
+                            navigateToProfile = {
                                 homeBackStack.removeLastOrNull()
-                            })
+                            }
+                        )
                     }
-                    is NavRoutes.Devices -> NavEntry(key) {
-                        DevicesDestination(backStack = {
-                                homeBackStack.removeLastOrNull()
-                            })
+                    is NavRoutes.WorkoutSession -> NavEntry(key) {
+                        WorkoutSessionDestination(
+                            navigateToWorkoutSession = { homeBackStack.removeLastOrNull() }
+                        )
+                    }
+                    is NavRoutes.AddMeal -> NavEntry(key = key) { key ->
+                        // 1. Recupera o período passado via argumento (ex: "BREAKFAST")
+
+                        AddManualMealScreen(
+                            initialPeriod = key,
+                            onNavigateBack = {
+
+                            },
+                            onSaveMeal = { newMeal ->
+
+                            }
+                        )
+                    }
+
+                    // modal screens
+                    is NavRoutes.ActionsWorkout -> NavEntry(key) {
+                        WorkoutCreateDestination(
+                            navigateBack = { homeBackStack.removeLastOrNull() }
+                        )
+                    }
+                    is NavRoutes.ActionsNutrition -> NavEntry(key) {
+                        MealsPlanDestination(
+                            navigateBack = { homeBackStack.removeLastOrNull() }
+                        )
+                    }
+                    is NavRoutes.ActionsTasks -> NavEntry(key) {
+                        TasksModalDestination(
+                            navigateBack = { homeBackStack.removeLastOrNull() }
+                        )
+                    }
+                    is NavRoutes.ActionsFriends -> NavEntry(key) {
+                        FriendsModalDestination(
+                            navigateBack = { homeBackStack.removeLastOrNull() }
+                        )
+                    }
+                    is NavRoutes.ActionsLeaderboards -> NavEntry(key) {
+                        LeaderboardsModalDestination(
+                            navigateBack = { homeBackStack.removeLastOrNull() }
+                        )
+                    }
+                    is NavRoutes.ActionsHistoric -> NavEntry(key) {
+                        HistoricModalDestination(
+                            navigateBack = { homeBackStack.removeLastOrNull() }
+                        )
+                    }
+                    is NavRoutes.ActionsAchievements -> NavEntry(key) {
+                        AchievementsModalDestination(
+                            navigateBack = { homeBackStack.removeLastOrNull() }
+                        )
+                    }
+
+                    // preferences modal
+                    is NavRoutes.PreferencesDevicesConnect -> NavEntry(key) {
+                        DevicesModalDestination(
+                            navigateBack = { homeBackStack.removeLastOrNull() }
+                        )
+                    }
+                    is NavRoutes.PreferencesHelpSupport -> NavEntry(key) {
+                        HelpSupportModalDestination()
                     }
                     else -> error("HomeFlow: rota desconhecida: $key")
                 }
@@ -218,6 +301,12 @@ fun ContentFlowApp(
         )
     }
 }
+
+
+
+
+
+
 fun handleHomeBackPress(homeBackStack: MutableList<NavKey>): Boolean {
     val current = homeBackStack.lastOrNull() ?: return false
 

@@ -19,8 +19,7 @@ import com.example.domain.usecase.authentication.registerPages.ValidateProfilePa
 import com.example.domain.usecase.authentication.registerPages.ValidateTrainingLevelUseCase
 import com.example.presentation.components.snackbar.SnackBarData
 import com.example.presentation.components.snackbar.SnackbarType
-import com.example.presentation.navigations.LoginNavigation
-import com.example.presentation.navigations.RegisterNavigation
+import com.example.presentation.navigationState.RegisterNavigation
 import com.example.presentation.screens.ui.authentication.register.state.RegisterState
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -67,12 +66,12 @@ class RegisterViewModel(
                 _state.update { it.copy(weight = action.value) }
             }
             is RegisterAction.GoalsChanged -> {
-                _state.update { it.copy(goals = action.value) }
+                _state.update { it.copy(fitnessGoal = action.value) }
             }
             is RegisterAction.TrainingLevelChanged -> {
                 _state.update {
                     it.copy(
-                        trainingLevel = action.level,
+                        trainingLevel = it.trainingLevel,
                         trainingLevelErrors = emptyList()
                     )
                 }
@@ -120,7 +119,7 @@ class RegisterViewModel(
             validateGender = ValidateGender(),
         ).execute(
             name = _state.value.name,
-            gender = _state.value.gender,
+            gender = _state.value.gender!!.name,
             age = _state.value.age.toIntOrNull(),
         )
 
@@ -139,7 +138,7 @@ class RegisterViewModel(
     private fun validateGoals() {
         val errors = ValidateGoalsPageUseCase(
             validateGoals = ValidateGoals()
-        ).execute(goal = _state.value.goals)
+        ).execute(goal = _state.value.fitnessGoal)
 
         if(errors.isEmpty()){
             nextPage()
@@ -158,7 +157,7 @@ class RegisterViewModel(
     private fun validateLevel() {
         val errors = ValidateTrainingLevelUseCase(
             validateLevel = ValidateTrainingLevel()
-        ).execute(trainingLevel = _state.value.trainingLevel)
+        ).execute(fitnessLevel = _state.value.trainingLevel)
 
         if(errors.isEmpty()){
             nextPage()
@@ -224,9 +223,9 @@ class RegisterViewModel(
                 email = _state.value.email,
                 age = _state.value.age.toInt(),
                 height = _state.value.height,
-                gender = _state.value.gender!!,
-                trainingLevel = _state.value.trainingLevel!!,
-                goal = _state.value.goals!!,
+                gender = _state.value.gender,
+                trainingLevel = _state.value.trainingLevel,
+                goal = _state.value.fitnessGoal!!,
                 weight = _state.value.weight,
                 password = _state.value.password
             )

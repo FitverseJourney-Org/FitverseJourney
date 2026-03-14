@@ -31,7 +31,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -44,7 +43,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.domain.model.authentication.register.Goal
+import com.example.domain.model.authentication.register.FitnessGoal
 import com.example.domain.model.authentication.register.RegisterAction
 import com.example.presentation.screens.ui.authentication.register.state.RegisterState
 
@@ -80,7 +79,7 @@ fun RegisterPageGoals(
         Spacer(Modifier.height(28.dp))
 
         FitnessGoalsSelector(
-            selectedGoal = state.goals,
+            selectedGoal = state.fitnessGoal,
             onGoalSelected = {
                 onAction(RegisterAction.GoalsChanged(it))
             }
@@ -90,25 +89,25 @@ fun RegisterPageGoals(
 
 /* ---------------- Models + static list ---------------- */
 
-private data class FitnessGoal(
+data class FitnessGoalTemplate(
     val code: String,
     val title: String,
     val description: String
 )
 
-private fun defaultGoals(): List<FitnessGoal> = listOf(
-    FitnessGoal(code = "LOSE_WEIGHT", title = "Lose weight", description = "Burn fat and reduce body weight"),
-    FitnessGoal(code = "BUILD_MUSCLE", title = "Build muscle", description = "Increase strength and muscle mass"),
-    FitnessGoal(code = "IMPROVE_ENDURANCE", title = "Improve endurance", description = "Boost stamina and cardiovascular health"),
-    FitnessGoal(code = "STAY_HEALTHY", title = "Stay healthy", description = "Maintain a balanced and healthy lifestyle")
+private fun defaultGoals(): List<FitnessGoalTemplate> = listOf(
+    FitnessGoalTemplate(code = "LOSE_WEIGHT", title = "Lose weight", description = "Burn fat and reduce body weight"),
+    FitnessGoalTemplate(code = "BUILD_MUSCLE", title = "Build muscle", description = "Increase strength and muscle mass"),
+    FitnessGoalTemplate(code = "IMPROVE_ENDURANCE", title = "Improve endurance", description = "Boost stamina and cardiovascular health"),
+    FitnessGoalTemplate(code = "STAY_HEALTHY", title = "Stay healthy", description = "Maintain a balanced and healthy lifestyle")
 )
 
 /* ---------------- Selector ---------------- */
 
 @Composable
 fun FitnessGoalsSelector(
-    selectedGoal: Goal?,
-    onGoalSelected: (Goal) -> Unit,
+    selectedGoal: FitnessGoal?,
+    onGoalSelected: (FitnessGoal) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val goals = remember { defaultGoals() }
@@ -119,13 +118,21 @@ fun FitnessGoalsSelector(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         goals.forEach { goal ->
-            val isSelected = selectedGoal?.code == goal.code
+            val isSelected = selectedGoal?.name == goal.code
             GoalOptionCard(
                 title = goal.title,
                 description = goal.description,
                 isSelected = isSelected,
                 onClick = {
-                    onGoalSelected(Goal(code = goal.code, description = goal.description))
+                    onGoalSelected(
+                        when (goal.code) {
+                            "LOSE_WEIGHT" -> FitnessGoal.LOSE_WEIGHT
+                            "BUILD_MUSCLE" -> FitnessGoal.GAIN_MUSCLE
+                            "IMPROVE_ENDURANCE" -> FitnessGoal.IMPROVE_ENDURANCE
+                            "STAY_HEALTHY" -> FitnessGoal.MAINTAIN
+                            else -> throw IllegalArgumentException("Invalid goal code")
+                        }
+                    )
                 }
             )
         }

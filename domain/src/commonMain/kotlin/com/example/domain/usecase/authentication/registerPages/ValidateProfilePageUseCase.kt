@@ -12,7 +12,7 @@ class ValidateProfilePageUseCase(
 ) {
     fun execute(
         name: String?,
-        gender: String?,
+        gender: String,
         age: Int?,
     ): Map<String, List<String>> {
 

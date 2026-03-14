@@ -5,22 +5,17 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.pager.PagerState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.presentation.theme.AccentGreen
+import com.example.presentation.screens.widgets.FitVerseButton
 
 @Composable
 fun OnboardingControls(
@@ -33,7 +28,7 @@ fun OnboardingControls(
 ) {
 
     val cs = MaterialTheme.colorScheme
-
+    val buttonText = if (currentPage == totalPages - 1) "Get Started" else "Next"
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -48,7 +43,9 @@ fun OnboardingControls(
 
         Spacer(Modifier.height(18.dp))
 
-        Button(
+        FitVerseButton(
+            text = buttonText,
+            // Lógica de clique transferida para cá
             onClick = {
                 if (currentPage == totalPages - 1) {
                     onFinish()
@@ -56,24 +53,16 @@ fun OnboardingControls(
                     onNext()
                 }
             },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(54.dp),
-            shape = RoundedCornerShape(14.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = cs.primary,
-                contentColor = cs.onPrimary
+            modifier = Modifier.fillMaxWidth(), // Agora funciona sem conflito
+            // Mapeamento de cores do seu sistema (cs)
+            topColor = cs.primary,
+            edgeColor = cs.outline, // Ou uma cor mais escura que o primary
+            textColor = cs.onPrimary,
+            textStyle = TextStyle(
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
             )
-        ) {
-            Text(
-                text = if (currentPage == totalPages - 1)
-                    "Get Started"
-                else
-                    "Next",
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp
-            )
-        }
+        )
 
         Spacer(Modifier.height(10.dp))
 

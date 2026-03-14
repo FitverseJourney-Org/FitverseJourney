@@ -2,6 +2,7 @@ package com.example.presentation.screens.ui.authentication.login.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -12,6 +13,7 @@ import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
@@ -20,6 +22,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.example.presentation.screens.ui.authentication.login.state.LoginState
+import com.example.presentation.screens.widgets.FitVerseButton
 import fitversejourneyapp.presentation.generated.resources.Res
 import fitversejourneyapp.presentation.generated.resources.login_button_text
 import fitversejourneyapp.presentation.generated.resources.login_email_label
@@ -34,6 +37,8 @@ fun LoginForm(
     onTogglePasswordVisibility: () -> Unit,
     onLoginClick: () -> Unit
 ) {
+    val cs = MaterialTheme.colorScheme
+
     Column {
 
         LoginTextField(
@@ -82,12 +87,17 @@ fun LoginForm(
 
         Spacer(Modifier.height(16.dp))
 
-        AuthDefaultButton(
+        FitVerseButton(
+            modifier = Modifier.fillMaxWidth(),
             text = stringResource(Res.string.login_button_text),
+            topColor = cs.primary,
+            edgeColor = cs.outline, // Ou uma cor mais escura que o primary
+            textColor = cs.onPrimary,
+            isLoading = state.isLoading,
             onClick = {
                 onLoginClick()
-            },
-            isLoading = state.isLoading
+            }
         )
+        Spacer(Modifier.height(16.dp))
     }
 }

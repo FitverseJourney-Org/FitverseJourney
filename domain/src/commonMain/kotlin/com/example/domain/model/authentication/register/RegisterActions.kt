@@ -7,9 +7,9 @@ sealed class RegisterAction {
     data class AgeChanged(val value: String) : RegisterAction()
     data class HeightChanged(val value: Int) : RegisterAction()
     data class WeightChanged(val value: Int) : RegisterAction()
-    data class GenderChanged(val value: String) : RegisterAction()
-    data class GoalsChanged(val value: Goal) : RegisterAction()
-    data class TrainingLevelChanged(val level: TrainingLevel) : RegisterAction()
+    data class GenderChanged(val value: Gender) : RegisterAction()
+    data class GoalsChanged(val value: FitnessGoal) : RegisterAction()
+    data class TrainingLevelChanged(val level: FitnessLevel) : RegisterAction()
 
     object GoalsClean : RegisterAction()
 

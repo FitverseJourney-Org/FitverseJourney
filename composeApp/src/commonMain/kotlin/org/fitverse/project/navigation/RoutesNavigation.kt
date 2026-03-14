@@ -18,5 +18,15 @@ sealed interface NavRoutes : NavKey {
     @Serializable object NotificationScreen : NavRoutes
     @Serializable object PlanScreen : NavRoutes
     @Serializable object Devices : NavRoutes
-
+    @Serializable object WorkoutSession : NavRoutes
+    @Serializable object ActionsWorkout : NavRoutes
+    @Serializable object ActionsNutrition : NavRoutes
+    @Serializable object ActionsTasks : NavRoutes
+    @Serializable object ActionsFriends : NavRoutes
+    @Serializable object ActionsLeaderboards : NavRoutes
+    @Serializable object ActionsHistoric : NavRoutes
+    @Serializable object ActionsAchievements : NavRoutes
+    @Serializable object PreferencesDevicesConnect : NavRoutes
+    @Serializable object PreferencesHelpSupport : NavRoutes
+    data class AddMeal(val period: String) : NavRoutes
 }

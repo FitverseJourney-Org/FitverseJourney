@@ -6,11 +6,8 @@ import com.example.domain.model.authentication.login.LoginAction
 import com.example.domain.usecase.authentication.login.LoginUseCase
 import com.example.presentation.components.snackbar.SnackBarData
 import com.example.presentation.components.snackbar.SnackbarType
-import com.example.presentation.navigations.LoginNavigation
+import com.example.presentation.navigationState.LoginNavigation
 import com.example.presentation.screens.ui.authentication.login.state.LoginState
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow

@@ -6,24 +6,48 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.*
+import androidx.compose.material.icons.rounded.AutoAwesome
+import androidx.compose.material.icons.rounded.CheckCircle
+import androidx.compose.material.icons.rounded.FitnessCenter
+import androidx.compose.material.icons.rounded.Person
+import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material.icons.rounded.WorkspacePremium
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -34,10 +58,9 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlin.jvm.JvmName
+
 
 // ---------- Models ----------
 data class UserProfile(
@@ -57,8 +80,7 @@ enum class AccountType { FREE, PREMIUM }
 
 // ---------- Public Profile Screen API ----------
 @Composable
-fun ProfileScreenV2(
-    modifier: Modifier = Modifier,
+fun ProfileScreenPro(
     initialName: String = "John Doe",
     initialEmail: String = "rafael@gmail.com",
     initialBio: String = "",
@@ -70,8 +92,8 @@ fun ProfileScreenV2(
     onSave: () -> Unit = {},
     onLogout: () -> Unit = {},
     onOpenSettings: () -> Unit = {},
-    onChoosePackage: () -> Unit, // <- nova callback
-    navigateToPlans: () -> Unit
+    onChoosePackage: () -> Unit = {},
+    navigateToPlans: () -> Unit = {}
 ) {
     val cs = MaterialTheme.colorScheme
 
@@ -82,667 +104,332 @@ fun ProfileScreenV2(
     var weight by rememberSaveable { mutableStateOf(initialWeight) }
     var height by rememberSaveable { mutableStateOf(initialHeight) }
     var goal by rememberSaveable { mutableStateOf(initialGoal) }
-    var premium by rememberSaveable { mutableStateOf(isPremium) }
+
 
     LazyColumn(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
-            .background(
-                Brush.verticalGradient(
-                    listOf(
-                        cs.background,
-                        cs.surface
-                    )
-                )
-            ),
+            .background(Brush.verticalGradient(listOf(cs.surface, cs.background))),
         contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(24.dp) // Espaçamento mais generoso
     ) {
-
-        // HEADER
+        // HEADER GAMIFICADO
         item {
-            ProfileHeaderCard(
+            ProfileHeaderCardPro(
                 name = name,
                 email = email,
-                level = 1,
-                xp = 0,
-                xpForNextLevel = 100,
-                hpPercent = 100,
-                staminaPercent = 100,
-                isPremium = premium,
-                onEditProfile = { /* open edit */ },
-                onUpgradeAccount = { onChoosePackage() }
+                level = 12,
+                xp = 450,
+                xpForNextLevel = 1000,
+                hpPercent = 80,
+                staminaPercent = 60,
+                isPremium = isPremium,
+                cs = cs
             )
         }
 
         // EDIT PROFILE
-        item { SectionTitle("Edit profile", cs) }
         item {
-            ProfileFormCard(cs) {
-                ProfileInput(
-                    "Name",
-                    name
-                ) { name = it }
-                ProfileInput(
-                    "Email",
-                    email
-                ) { email = it }
-                ProfileInput(
-                    "Bio",
-                    bio,
-                    singleLine = false
-                ) { bio = it }
+            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                SectionTitlePro("Personal Info", Icons.Rounded.Person, cs)
+                ProfileFormContainer(cs) {
+                    ProfileInputPro("Full Name", name, cs) { name = it }
+                    ProfileInputPro("Email Address", email, cs) { email = it }
+                    ProfileInputPro("Bio", bio, cs, singleLine = false) { bio = it }
+                }
             }
         }
 
         // BODY & GOALS
-        item { SectionTitle("Body & goals", cs) }
         item {
-            ProfileFormCard(cs) {
-                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    ProfileInput(
-                        "Age",
-                        age,
-                        Modifier.weight(1f)
-                    ) { age = it }
-                    ProfileInput(
-                        "Weight (kg)",
-                        weight,
-                        Modifier.weight(1f)
-                    ) { weight = it }
-                    ProfileInput(
-                        "Height (cm)",
-                        height,
-                        Modifier.weight(1f)
-                    ) { height = it }
+            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                SectionTitlePro("Body & Goals", Icons.Rounded.FitnessCenter, cs)
+                ProfileFormContainer(cs) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                        ProfileInputPro("Age", age, cs, Modifier.weight(1f)) { age = it }
+                        ProfileInputPro("Weight (kg)", weight, cs, Modifier.weight(1f)) { weight = it }
+                        ProfileInputPro("Height (cm)", height, cs, Modifier.weight(1f)) { height = it }
+                    }
+                    ProfileInputPro("Main Goal", goal, cs) { goal = it }
                 }
-                ProfileInput(
-                    "Fitness goal",
-                    goal
-                ) { goal = it }
             }
         }
 
-        // ACCOUNT LEVEL (reutiliza card com CTA para escolha de pacote)
-        item { SectionTitle("Account", cs) }
+        // ACCOUNT STATUS
         item {
-            AccountStatusCard(
-                cs = cs,
-                isPremium = premium,
-                onUpgrade = { onChoosePackage() },
-                onManage = { /* open manage account */ }
-            )
+            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                SectionTitlePro("Subscription", Icons.Rounded.WorkspacePremium, cs)
+                AccountStatusCardPro(
+                    isPremium = isPremium,
+                    onUpgrade = onChoosePackage,
+                    onManage = { /* manage */ },
+                    cs = cs
+                )
+            }
         }
 
-        // SAVE
+        // SAVE BUTTON
         item {
             Button(
-                onClick = { navigateToPlans() },
+                onClick = {
+                    onSave()
+                    navigateToPlans()
+                },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(52.dp),
+                    .height(56.dp), // Botão mais alto e imponente
                 colors = ButtonDefaults.buttonColors(containerColor = cs.primary),
-                shape = RoundedCornerShape(14.dp)
+                shape = RoundedCornerShape(16.dp),
+                elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
             ) {
-                Text("Save changes", color = cs.onPrimary, fontSize = 16.sp)
+                Text("Save Changes", color = cs.onPrimary, fontSize = 16.sp, fontWeight = FontWeight.Bold)
             }
+            Spacer(Modifier.height(24.dp))
         }
     }
 }
 
-// ---------- Small components ----------
+/* -------------------------------------------------------------------------- */
+/* HEADER GAMIFICADO (Avatar, Nível e Barras)                                 */
+/* -------------------------------------------------------------------------- */
 @Composable
-private fun SectionTitle(text: String, cs: ColorScheme) {
-    Text(
-        text = text,
-        color = cs.onSurface.copy(alpha = 0.75f),
-        fontSize = 13.sp,
-        modifier = Modifier.padding(horizontal = 4.dp)
-    )
-}
-
-@Composable
-private fun ProfileFormCard(cs: ColorScheme, content: @Composable ColumnScope.() -> Unit) {
-    Card(
-        colors = CardDefaults.cardColors(containerColor = cs.surfaceVariant),
-        shape = RoundedCornerShape(14.dp)
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            content = content
-        )
-    }
-}
-
-@Composable
-private fun ProfileInput(
-    label: String,
-    value: String,
-    modifier: Modifier = Modifier,
-    singleLine: Boolean = true,
-    onChange: (String) -> Unit
+fun ProfileHeaderCardPro(
+    name: String, email: String, level: Int, xp: Int, xpForNextLevel: Int,
+    hpPercent: Int, staminaPercent: Int, isPremium: Boolean, cs: ColorScheme
 ) {
-    val cs = MaterialTheme.colorScheme
-    OutlinedTextField(
-        value = value,
-        onValueChange = onChange,
-        label = { Text(label, color = cs.onSurface.copy(alpha = 0.8f)) },
-        modifier = modifier.fillMaxWidth(),
-        singleLine = singleLine,
-        colors = OutlinedTextFieldDefaults.colors(
-            unfocusedTextColor = cs.onSurface,
-            focusedTextColor = cs.onSurface,
-            focusedContainerColor = cs.surface,
-            unfocusedContainerColor = cs.surface,
-            focusedBorderColor = cs.primary,
-            unfocusedBorderColor = cs.onSurface.copy(alpha = 0.08f),
-        )
-    )
-}
-
-@Composable
-private fun BenefitRow(text: String) {
-    val cs = MaterialTheme.colorScheme
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Box(
-            modifier = Modifier
-                .size(10.dp)
-                .clip(CircleShape)
-                .background(cs.primary)
-        )
-        Spacer(Modifier.width(8.dp))
-        Text(text = text, color = cs.onSurface, fontSize = 13.sp)
-    }
-}
-
-@Composable
-@JvmName("AccountOptionComposable")
-fun AccountOption(
-    label: String,
-    subtitle: String,
-    selected: Boolean,
-    onSelect: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val cs = MaterialTheme.colorScheme
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable { onSelect() },
-        colors = CardDefaults.cardColors(
-            containerColor = if (selected) cs.primary.copy(alpha = 0.12f) else Color.Transparent
-        ),
-        shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(24.dp),
+        color = cs.surface,
+        border = BorderStroke(1.dp, cs.outline.copy(alpha = 0.1f)),
+        tonalElevation = 2.dp
     ) {
-        Row(
-            modifier = Modifier
-                .padding(horizontal = 12.dp, vertical = 10.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(36.dp)
-                    .clip(CircleShape)
-                    .background(if (selected) cs.primary else cs.onSurface.copy(alpha = 0.04f)),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = label.firstOrNull()?.toString() ?: "",
-                    color = if (selected) cs.onPrimary else cs.onSurface,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-
-            Spacer(modifier = Modifier.width(12.dp))
-
-            Column(modifier = Modifier.weight(1f)) {
-                Text(text = label, color = cs.onSurface, fontWeight = FontWeight.SemiBold)
-                Spacer(modifier = Modifier.height(2.dp))
-                Text(text = subtitle, color = cs.onSurface.copy(alpha = 0.7f), fontSize = 12.sp)
-            }
-
-            if (selected) {
-                Text(text = "Selected", color = cs.primary, fontWeight = FontWeight.Bold, fontSize = 12.sp)
-            }
-        }
-    }
-}
-
-@Composable
-fun AccountStatusCard(
-    cs: ColorScheme,
-    isPremium: Boolean,
-    onUpgrade: () -> Unit,
-    onManage: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = cs.surfaceVariant),
-        shape = RoundedCornerShape(14.dp)
-    ) {
-        Column(Modifier.padding(16.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Column {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        if (!isPremium) {
-                            val pulse = rememberInfiniteTransition()
-                            val scale by pulse.animateFloat(
-                                initialValue = 1f,
-                                targetValue = 1.06f,
-                                animationSpec = infiniteRepeatable(
-                                    animation = tween(900, easing = FastOutSlowInEasing),
-                                    repeatMode = RepeatMode.Reverse
-                                )
-                            )
-                            Box(
-                                modifier = Modifier
-                                    .scale(scale)
-                                    .clip(RoundedCornerShape(12.dp))
-                                    .background(
-                                        Brush.horizontalGradient(
-                                            listOf(cs.primary, cs.primary.copy(alpha = 0.9f))
-                                        )
-                                    )
-                                    .padding(horizontal = 10.dp, vertical = 6.dp)
-                            ) {
-                                Text(text = "Upgrade", color = cs.onPrimary, fontWeight = FontWeight.Bold, fontSize = 13.sp)
-                            }
-                        } else {
-                            Box(
-                                modifier = Modifier
-                                    .clip(RoundedCornerShape(10.dp))
-                                    .background(cs.onSurface.copy(alpha = 0.04f))
-                                    .padding(horizontal = 10.dp, vertical = 6.dp)
-                            ) {
-                                Text(text = "✓ Premium", color = cs.primary, fontWeight = FontWeight.SemiBold, fontSize = 13.sp)
-                            }
-                        }
-
-                        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.End) {
-                            Text(text = if (isPremium) "Active" else "Basic", color = cs.onSurface.copy(alpha = 0.7f), fontSize = 12.sp)
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Surface(
-                                color = cs.onSurface.copy(alpha = 0.02f),
-                                shape = RoundedCornerShape(8.dp),
-                                tonalElevation = 0.dp
-                            ) {
-                                Text(
-                                    text = if (isPremium) "Member" else "Try Premium",
-                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp),
-                                    color = if (isPremium) cs.primary else cs.onSurface.copy(alpha = 0.7f),
-                                    fontWeight = FontWeight.SemiBold,
-                                    fontSize = 12.sp
-                                )
-                            }
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    Text(
-                        text = if (isPremium) "Premium account" else "Free account",
-                        color = cs.onSurface,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp
-                    )
-
-                    Spacer(modifier = Modifier.height(6.dp))
-
-                    Text(
-                        text = if (isPremium)
-                            "You have access to all premium features."
-                        else
-                            "Unlock AI workouts, advanced insights and priority plans.",
-                        color = cs.onSurface.copy(alpha = 0.75f),
-                        fontSize = 13.sp
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(14.dp))
-
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                BenefitRow(text = "AI workout generation")
-                BenefitRow(text = "Detailed analytics & insights")
-                BenefitRow(text = "Priority support & exclusive plans")
-            }
-
-            Spacer(modifier = Modifier.height(18.dp))
-
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-                if (!isPremium) {
-                    Button(
-                        onClick = onUpgrade,
-                        colors = ButtonDefaults.buttonColors(containerColor = cs.primary, contentColor = cs.onPrimary),
-                        shape = RoundedCornerShape(12.dp),
-                        modifier = Modifier.fillMaxWidth(0.75f)
-                    ) {
-                        Text("Go Premium — Start 7-day trial", fontWeight = FontWeight.Bold)
-                    }
-                } else {
-                    OutlinedButton(
-                        onClick = onManage,
-                        modifier = Modifier.fillMaxWidth(0.75f),
-                        shape = RoundedCornerShape(12.dp),
-                        colors = ButtonDefaults.outlinedButtonColors(contentColor = cs.primary)
-                    ) {
-                        Text("Manage subscription", fontWeight = FontWeight.SemiBold)
-                    }
-                }
-            }
-
-            if (!isPremium) {
-                Spacer(modifier = Modifier.height(12.dp))
-                Text(
-                    text = "Start a 7-day free trial — cancel anytime before payment.",
-                    color = cs.onSurface.copy(alpha = 0.7f),
-                    fontSize = 12.sp,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
-        }
-    }
-}
-
-// ---------- Small helpers ----------
-@Composable
-fun AccountOption(
-    label: String,
-    subtitle: String? = null,
-    selected: Boolean,
-    onSelect: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    val cs = MaterialTheme.colorScheme
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable(onClick = onSelect)
-            .padding(horizontal = 8.dp, vertical = 10.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Box(
-            modifier = Modifier
-                .size(36.dp)
-                .background(
-                    color = if (selected) cs.primary.copy(alpha = 0.15f) else Color.Transparent,
-                    shape = CircleShape
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            RadioButton(
-                selected = selected,
-                onClick = null,
-                colors = RadioButtonDefaults.colors(
-                    selectedColor = cs.primary,
-                    unselectedColor = cs.onSurface.copy(alpha = 0.35f),
-                    disabledSelectedColor = Color.Gray
-                )
-            )
-        }
-
-        Spacer(modifier = Modifier.width(12.dp))
-
-        Column(modifier = Modifier.weight(1f)) {
-            Text(text = label, color = cs.onSurface, fontSize = 15.sp)
-            subtitle?.let {
-                Spacer(modifier = Modifier.height(2.dp))
-                Text(text = it, color = cs.onSurface.copy(alpha = 0.7f), fontSize = 12.sp)
-            }
-        }
-    }
-}
-
-@Composable
-fun ActionRow(
-    label: String,
-    icon: ImageVector,
-    onClick: () -> Unit,
-    danger: Boolean = false,
-    modifier: Modifier = Modifier
-) {
-    val cs = MaterialTheme.colorScheme
-    val textColor = if (danger) cs.error else cs.onSurface
-    val iconTint = if (danger) cs.error else cs.primary
-
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = cs.surfaceVariant),
-        shape = RoundedCornerShape(14.dp),
-        onClick = onClick
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 12.dp, vertical = 14.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Card(
-                shape = RoundedCornerShape(8.dp),
-                colors = CardDefaults.cardColors(containerColor = cs.onSurface.copy(alpha = 0.03f)),
-                modifier = Modifier.size(40.dp)
-            ) {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Icon(imageVector = icon, contentDescription = label, tint = iconTint, modifier = Modifier.size(18.dp))
-                }
-            }
-
-            Spacer(modifier = Modifier.width(12.dp))
-
-            Column(modifier = Modifier.weight(1f)) {
-                Text(text = label, color = textColor, fontSize = 15.sp)
-            }
-
-            Icon(
-                imageVector = Icons.Default.KeyboardArrowRight,
-                contentDescription = "open",
-                tint = cs.onSurface.copy(alpha = 0.5f),
-                modifier = Modifier.size(20.dp)
-            )
-        }
-    }
-}
-
-@Composable
-fun ProfileHeaderCard(
-    modifier: Modifier = Modifier,
-    name: String,
-    email: String?,
-    level: Int,
-    xp: Int,
-    xpForNextLevel: Int,
-    hpPercent: Int,
-    staminaPercent: Int,
-    isPremium: Boolean,
-    onEditProfile: () -> Unit = {},
-    onUpgradeAccount: () -> Unit = {},
-    onAvatarClick: () -> Unit = {}
-) {
-    val cs = MaterialTheme.colorScheme
-
-    var previousLevel by remember { mutableStateOf(level) }
-    val levelScale by animateFloatAsState(
-        targetValue = if (level > previousLevel) 1.06f else 1f,
-        animationSpec = spring(stiffness = 450f)
-    )
-
-    LaunchedEffect(level) { previousLevel = level }
-
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(18.dp),
-        elevation = CardDefaults.cardElevation(6.dp),
-        colors = CardDefaults.cardColors(containerColor = cs.surfaceVariant)
-    ) {
-        Column(modifier = Modifier.padding(18.dp)) {
+        Column(modifier = Modifier.padding(20.dp)) {
+            // Linha 1: Avatar e Info Básica
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(
                     modifier = Modifier
                         .size(72.dp)
                         .clip(CircleShape)
-                        .background(cs.onSurface.copy(alpha = 0.06f))
-                        .clickable { onAvatarClick() },
+                        .background(Brush.linearGradient(listOf(cs.primary, cs.tertiary))),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = initials(name),
-                        color = cs.onSurface,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 20.sp
+                        text = name.split(" ").take(2).joinToString("") { it.take(1) }.uppercase(),
+                        color = cs.onPrimary, fontWeight = FontWeight.Black, fontSize = 22.sp
                     )
+                }
+
+                Spacer(Modifier.width(16.dp))
+
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(name, fontSize = 20.sp, fontWeight = FontWeight.ExtraBold, color = cs.onSurface)
+                    Text(email, fontSize = 13.sp, color = cs.onSurfaceVariant)
+                }
+
+                // Badge Premium/Free
+                Surface(
+                    shape = RoundedCornerShape(12.dp),
+                    color = if (isPremium) cs.primary.copy(alpha = 0.15f) else cs.outline.copy(alpha = 0.1f)
+                ) {
+                    Text(
+                        text = if (isPremium) "PRO" else "FREE",
+                        modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
+                        fontSize = 11.sp, fontWeight = FontWeight.Black,
+                        color = if (isPremium) cs.primary else cs.onSurfaceVariant
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(24.dp))
+
+            // Linha 2: XP e Nível
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clip(RoundedCornerShape(14.dp))
+                        .background(cs.secondary.copy(alpha = 0.1f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Icon(Icons.Rounded.Star, null, tint = cs.secondary, modifier = Modifier.size(16.dp))
+                        Text("Lvl $level", fontSize = 11.sp, fontWeight = FontWeight.Bold, color = cs.secondary)
+                    }
                 }
 
                 Spacer(Modifier.width(14.dp))
 
                 Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = name,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = cs.onSurface
-                    )
-                    email?.let {
-                        Spacer(Modifier.height(2.dp))
-                        Text(
-                            text = it,
-                            fontSize = 13.sp,
-                            color = cs.onSurface.copy(alpha = 0.7f)
-                        )
+                    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                        Text("Experience", fontSize = 12.sp, fontWeight = FontWeight.SemiBold, color = cs.onSurface)
+                        Text("$xp / $xpForNextLevel", fontSize = 12.sp, color = cs.onSurfaceVariant)
                     }
-                }
-
-                Column(horizontalAlignment = Alignment.End) {
-                    AccountBadge(isPremium, cs)
-                }
-            }
-
-            Spacer(Modifier.height(16.dp))
-
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Surface(
-                    shape = RoundedCornerShape(12.dp),
-                    color = cs.onSurface.copy(alpha = 0.05f),
-                    modifier = Modifier
-                        .size(46.dp)
-                        .scale(levelScale)
-                ) {
-                    Box(contentAlignment = Alignment.Center) {
-                        Icon(
-                            Icons.Default.Star,
-                            contentDescription = null,
-                            tint = cs.primary,
-                            modifier = Modifier.size(18.dp)
-                        )
-                        Text(
-                            text = level.toString(),
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = cs.onSurface,
-                            modifier = Modifier.align(Alignment.BottomCenter)
-                                .padding(bottom = 2.dp)
-                        )
-                    }
-                }
-
-                Spacer(Modifier.width(12.dp))
-
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = "$xp XP • ${xpForNextLevel - xp} to next level",
-                        fontSize = 12.sp,
-                        color = cs.onSurface.copy(alpha = 0.75f)
-                    )
-
-                    Spacer(Modifier.height(6.dp))
-
-                    val progress = (xp.toFloat() / xpForNextLevel.coerceAtLeast(1)).coerceIn(0f, 1f)
-                    val animatedProgress by animateFloatAsState(progress, spring())
-
+                    Spacer(Modifier.height(8.dp))
+                    val progress by animateFloatAsState(targetValue = xp.toFloat() / xpForNextLevel, tween(1000))
                     LinearProgressIndicator(
-                        progress = animatedProgress,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(8.dp)
-                            .clip(RoundedCornerShape(8.dp)),
-                        color = cs.primary,
-                        trackColor = cs.onSurface.copy(alpha = 0.06f)
+                        progress = progress,
+                        modifier = Modifier.fillMaxWidth().height(8.dp).clip(CircleShape),
+                        color = cs.secondary, trackColor = cs.outline.copy(alpha = 0.1f)
                     )
                 }
             }
 
-            Spacer(Modifier.height(18.dp))
+            Spacer(Modifier.height(20.dp))
+            HorizontalDivider(color = cs.outline.copy(alpha = 0.1f))
+            Spacer(Modifier.height(20.dp))
 
-            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                SmallStat(
-                    label = "Health",
-                    percent = hpPercent,
-                    color = cs.error
-                )
-                SmallStat(
-                    label = "Stamina",
-                    percent = staminaPercent,
-                    color = cs.secondary
-                )
+            // Linha 3: HP e Stamina
+            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                ArcadeBarPro("Health", hpPercent, cs.error, Modifier.weight(1f), cs)
+                ArcadeBarPro("Stamina", staminaPercent, cs.primary, Modifier.weight(1f), cs)
             }
         }
     }
 }
 
 @Composable
-private fun AccountBadge(isPremium: Boolean, cs: ColorScheme) {
-    Surface(
-        shape = RoundedCornerShape(12.dp),
-        color = if (isPremium) cs.primary.copy(alpha = 0.14f) else cs.onSurface.copy(alpha = 0.04f)
-    ) {
-        Text(
-            text = if (isPremium) "PREMIUM" else "FREE",
-            modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
-            fontSize = 11.sp,
-            fontWeight = FontWeight.Bold,
-            color = if (isPremium) cs.onPrimary else cs.onSurface.copy(alpha = 0.8f)
+fun ArcadeBarPro(label: String, percent: Int, color: Color, modifier: Modifier = Modifier, cs: ColorScheme) {
+    val progress by animateFloatAsState(targetValue = percent / 100f, tween(1000))
+    Column(modifier = modifier) {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Text(label, fontSize = 12.sp, fontWeight = FontWeight.SemiBold, color = cs.onSurfaceVariant)
+            Text("$percent%", fontSize = 12.sp, fontWeight = FontWeight.Bold, color = color)
+        }
+        Spacer(Modifier.height(6.dp))
+        LinearProgressIndicator(
+            progress = progress,
+            modifier = Modifier.fillMaxWidth().height(8.dp).clip(CircleShape),
+            color = color, trackColor = color.copy(alpha = 0.15f)
         )
+    }
+}
+
+/* -------------------------------------------------------------------------- */
+/* FORMS (Inputs e Containers)                                                */
+/* -------------------------------------------------------------------------- */
+@Composable
+fun SectionTitlePro(title: String, icon: ImageVector, cs: ColorScheme) {
+    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(start = 4.dp)) {
+        Icon(icon, contentDescription = null, tint = cs.primary, modifier = Modifier.size(18.dp))
+        Spacer(Modifier.width(8.dp))
+        Text(title, color = cs.onSurface, fontSize = 16.sp, fontWeight = FontWeight.Black)
     }
 }
 
 @Composable
-private fun SmallStat(
-    label: String,
-    percent: Int,
-    color: Color,
-    modifier: Modifier = Modifier
-) {
-    val cs = MaterialTheme.colorScheme
-    val animated = animateFloatAsState(targetValue = (percent.coerceIn(0, 100) / 100f), animationSpec = spring())
-    Column(modifier = modifier.widthIn(min = 80.dp)) {
-        Text(text = label, color = cs.onSurface.copy(alpha = 0.75f), fontSize = 12.sp)
-        Spacer(modifier = Modifier.height(6.dp))
-        LinearProgressIndicator(
-            progress = animated.value,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(6.dp)
-                .clip(RoundedCornerShape(6.dp)),
-            color = color,
-            trackColor = cs.onSurface.copy(alpha = 0.04f)
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(text = "${percent}%", color = cs.onSurface, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+fun ProfileFormContainer(cs: ColorScheme, content: @Composable ColumnScope.() -> Unit) {
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(24.dp),
+        color = cs.surface,
+        border = BorderStroke(1.dp, cs.outline.copy(alpha = 0.1f)),
+        tonalElevation = 1.dp
+    ) {
+        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp), content = content)
     }
 }
 
-private fun initials(name: String?): String {
-    if (name.isNullOrBlank()) return ""
-    return name.trim().split(' ').mapNotNull { it.firstOrNull()?.toString()?.uppercase() }
-        .take(2).joinToString("")
+@Composable
+fun ProfileInputPro(label: String, value: String, cs: ColorScheme, modifier: Modifier = Modifier, singleLine: Boolean = true, onChange: (String) -> Unit) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onChange,
+        label = { Text(label, color = cs.onSurfaceVariant) },
+        modifier = modifier.fillMaxWidth(),
+        singleLine = singleLine,
+        shape = RoundedCornerShape(16.dp),
+        colors = OutlinedTextFieldDefaults.colors(
+            unfocusedBorderColor = cs.outline.copy(alpha = 0.15f),
+            focusedBorderColor = cs.primary,
+            unfocusedContainerColor = cs.surface,
+            focusedContainerColor = cs.surface
+        )
+    )
+}
+
+/* -------------------------------------------------------------------------- */
+/* ACCOUNT STATUS                                                             */
+/* -------------------------------------------------------------------------- */
+@Composable
+fun AccountStatusCardPro(isPremium: Boolean, onUpgrade: () -> Unit, onManage: () -> Unit, cs: ColorScheme) {
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(24.dp),
+        color = if (isPremium) cs.primary.copy(alpha = 0.05f) else cs.surface,
+        border = BorderStroke(1.dp, if (isPremium) cs.primary.copy(alpha = 0.3f) else cs.outline.copy(alpha = 0.1f)),
+        tonalElevation = 1.dp
+    ) {
+        Column(Modifier.padding(20.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clip(RoundedCornerShape(14.dp))
+                        .background(if (isPremium) cs.primary else cs.outline.copy(alpha = 0.1f)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        Icons.Rounded.AutoAwesome,
+                        contentDescription = null,
+                        tint = if (isPremium) cs.onPrimary else cs.onSurfaceVariant
+                    )
+                }
+                Spacer(Modifier.width(16.dp))
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(if (isPremium) "Premium Member" else "Free Account", fontSize = 18.sp, fontWeight = FontWeight.ExtraBold, color = cs.onSurface)
+                    Text(if (isPremium) "All features unlocked" else "Basic access only", fontSize = 13.sp, color = cs.onSurfaceVariant)
+                }
+            }
+
+            Spacer(Modifier.height(20.dp))
+
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                BenefitRowPro("AI workout generation", isPremium, cs)
+                BenefitRowPro("Detailed analytics & insights", isPremium, cs)
+                BenefitRowPro("Priority support & exclusive plans", isPremium, cs)
+            }
+
+            Spacer(Modifier.height(24.dp))
+
+            if (!isPremium) {
+                val infiniteTransition = rememberInfiniteTransition()
+                val scale by infiniteTransition.animateFloat(
+                    initialValue = 1f, targetValue = 1.02f,
+                    animationSpec = infiniteRepeatable(tween(800, easing = FastOutSlowInEasing), RepeatMode.Reverse)
+                )
+                Button(
+                    onClick = onUpgrade,
+                    modifier = Modifier.fillMaxWidth().height(52.dp).scale(scale),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = cs.primary)
+                ) {
+                    Text("Upgrade to Premium", fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                }
+            } else {
+                OutlinedButton(
+                    onClick = onManage,
+                    modifier = Modifier.fillMaxWidth().height(52.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    border = BorderStroke(1.dp, cs.primary.copy(alpha = 0.5f))
+                ) {
+                    Text("Manage Subscription", color = cs.primary, fontWeight = FontWeight.Bold)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun BenefitRowPro(text: String, isPremium: Boolean, cs: ColorScheme) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Icon(
+            Icons.Rounded.CheckCircle,
+            contentDescription = null,
+            tint = if (isPremium) cs.primary else cs.onSurfaceVariant.copy(alpha = 0.5f),
+            modifier = Modifier.size(18.dp)
+        )
+        Spacer(Modifier.width(10.dp))
+        Text(text, color = cs.onSurface, fontSize = 13.sp, fontWeight = FontWeight.Medium)
+    }
 }

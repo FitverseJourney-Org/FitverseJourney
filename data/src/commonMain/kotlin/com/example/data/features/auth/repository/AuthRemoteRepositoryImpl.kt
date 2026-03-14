@@ -1,7 +1,7 @@
 package com.example.data.features.auth.repository
 
 import com.example.domain.model.authentication.login.UserToken
-import com.example.domain.model.authentication.register.RegisterRequest
+import com.example.domain.model.authentication.register.SignUp
 import com.example.domain.repository.authentication.AuthRemoteRepository
 import com.example.domain.repository.authentication.AuthRepository
 import com.example.domain.repository.authentication.AuthTokenStoreRepository
@@ -21,9 +21,8 @@ class AuthRemoteRepositoryImpl(
         return Result.success(Unit)
     }
 
-    override suspend fun register(data: RegisterRequest): Result<Unit> {
-        val result = remote.register(data)
-        println("result: $result")
+    override suspend fun register(data: SignUp): Result<Unit> {
+        val result = remote.register(data = data)
         return result
     }
 

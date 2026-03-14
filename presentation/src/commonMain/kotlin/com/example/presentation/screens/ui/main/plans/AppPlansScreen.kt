@@ -19,7 +19,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -43,6 +42,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.presentation.screens.widgets.FitVerseButton
 
 // --- Dados de exemplo ---
 data class Plan(
@@ -85,6 +85,7 @@ fun AppPlansScreen(
             PointPackage("Gold Pack", 3000, 19.99)
         )
     }
+    var selectedTitle by rememberSaveable { mutableStateOf<String?>(null) }
 
     Scaffold(
         modifier = Modifier
@@ -112,17 +113,21 @@ fun AppPlansScreen(
         },
         bottomBar = {
             if (selectedTab == 0) {
-                Button(
-                    onClick = {  },
-                    modifier = Modifier.fillMaxWidth().padding(16.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = cs.primary,
-                        contentColor = cs.onPrimary
-                    ),
-                    shape = RoundedCornerShape(6.dp)
-                ) {
-                    Text("Confirm Selection", fontWeight = FontWeight.Bold)
-                }
+                // Variável para checar se temos um plano selecionado
+                val isButtonEnabled = selectedTitle != null
+
+                FitVerseButton(
+                    modifier = Modifier.padding(16.dp),
+                    text = "Confirm Selection",
+                    // Se habilitado, usa as cores normais. Se não, aplica uma opacidade (alpha) para escurecer/apagar
+                    topColor = if (isButtonEnabled) cs.primary else cs.primary.copy(alpha = 0.4f),
+                    edgeColor = if (isButtonEnabled) cs.outline else cs.outline.copy(alpha = 0.4f),
+                    textColor = if (isButtonEnabled) cs.onPrimary else cs.onSurface.copy(alpha = 0.5f),
+                    enabled = isButtonEnabled,
+                    onClick = {
+                        // Ação ao confirmar
+                    }
+                )
             }
         },
         content = { padding ->
@@ -156,7 +161,14 @@ fun AppPlansScreen(
 
                 // Conteúdo condicional por aba
                 when (selectedTab) {
-                    0 -> PlansContent(plans = plans, onSelect = { /* disparar fluxo compra/seleção */ })
+                    0 -> PlansContent(
+                        plans = plans,
+                        onSelect = { /* disparar fluxo compra/seleção */ },
+                        selectedTitle = selectedTitle, // Passa o valor atual do estado (String?)
+                        onSelectedTitleChange = { title ->
+                            selectedTitle = title // Atualiza o estado
+                        }
+                    )
                     1 -> PointsContent(userPoints = userPoints, packages = pointPackages, onBuy = { pkg ->
                         /* fluxo de compra de pts */
                     })
@@ -168,10 +180,12 @@ fun AppPlansScreen(
 
 // --- Conteúdo da aba "Plans" ---
 @Composable
-fun PlansContent(plans: List<Plan>, onSelect: (Plan) -> Unit) {
-    // estado local de seleção (pode vir do ViewModel também)
-    var selectedTitle by rememberSaveable { mutableStateOf<String?>(null) }
-
+fun PlansContent(
+    plans: List<Plan>,
+    onSelect: (Plan) -> Unit,
+    selectedTitle: String?, // Alterado para receber a String (ou null)
+    onSelectedTitleChange: (String) -> Unit // Novo parâmetro para o callback
+) {
     LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item {
             // features / bullets summarizadas
@@ -197,9 +211,9 @@ fun PlansContent(plans: List<Plan>, onSelect: (Plan) -> Unit) {
         items(plans) { plan ->
             PlanCard(
                 plan = plan,
-                isSelected = selectedTitle == plan.title,
+                isSelected = selectedTitle == plan.title, // Agora a comparação de Strings funciona!
                 onSelect = {
-                    selectedTitle = plan.title
+                    onSelectedTitleChange(plan.title) // Aciona a mudança de estado
                     onSelect(plan)
                 }
             )

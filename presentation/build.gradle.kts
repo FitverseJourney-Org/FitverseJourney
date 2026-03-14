@@ -66,6 +66,9 @@ kotlin {
             implementation(libs.android.lottie.compose)
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
+            // preview
+            implementation(libs.compose.ui.tooling.preview)
+            implementation(libs.compose.ui.tooling)
         }
     }
 }

@@ -7,12 +7,15 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -27,12 +30,24 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.MoodBad
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.rounded.AutoAwesome
+import androidx.compose.material.icons.rounded.Bolt
+import androidx.compose.material.icons.rounded.Favorite
+import androidx.compose.material.icons.rounded.GeneratingTokens
+import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.Person
+import androidx.compose.material.icons.rounded.RestaurantMenu
+import androidx.compose.material.icons.rounded.SentimentVeryDissatisfied
+import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material.icons.rounded.Warning
+import androidx.compose.material.icons.rounded.WorkspacePremium
 import androidx.compose.material3.Badge
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
@@ -42,8 +57,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -55,50 +73,47 @@ fun AvatarCard(
     modifier: Modifier = Modifier
 ) {
     val cs = MaterialTheme.colorScheme
+    val isAlive = state.health > 0
 
-    val xpProgress by animateFloatAsState(
-        targetValue = state.xp / state.xpToNext.toFloat(),
-        animationSpec = tween(600)
-    )
+    // Animações mais responsivas com FastOutSlowIn
+    val healthProgress by animateFloatAsState(targetValue = state.health / 100f, animationSpec = tween(1000, easing = FastOutSlowInEasing), label = "health")
+    val foodProgress by animateFloatAsState(targetValue = state.food / 100f, animationSpec = tween(1000, easing = FastOutSlowInEasing), label = "food")
 
-    val healthProgress by animateFloatAsState(
-        targetValue = state.health / 100f,
-        animationSpec = tween(600)
-    )
-
-    val staminaProgress by animateFloatAsState(
-        targetValue = state.stamina / 100f,
-        animationSpec = tween(600)
-    )
-
-    Card(
+    // Superfície com base mais escura (surfaceVariant)
+    Surface(
         modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = cs.surfaceVariant
+        shape = RoundedCornerShape(24.dp),
+        color = cs.surfaceVariant.copy(alpha = 0.7f), // Tom mais fechado
+        border = BorderStroke(
+            width = 1.dp,
+            color = if (isAlive) cs.outline.copy(alpha = 0.2f) else cs.error.copy(alpha = 0.4f)
         ),
-        shape = RoundedCornerShape(20.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
+        tonalElevation = 4.dp
     ) {
-        Column(
-            modifier = Modifier.padding(
-                start = 16.dp,
-                end = 16.dp,
-                top = 16.dp,
-                bottom = 20.dp
-            )
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    Brush.verticalGradient(
+                        colors = if (isAlive) {
+                            // Gradiente bem sutil e escuro
+                            listOf(cs.primary.copy(alpha = 0.08f), cs.surface.copy(alpha = 0.1f))
+                        } else {
+                            listOf(cs.error.copy(alpha = 0.15f), Color.Transparent)
+                        }
+                    )
+                )
         ) {
-            if (state.health > 0) {
-                AvatarAlive(
-                    state = state,
-                    xpProgress = xpProgress,
-                    healthProgress = healthProgress,
-                    staminaProgress = staminaProgress
-                )
-            } else {
-                AvatarDead(
-                    onCreateNew = {},
-                    onRestore = {}
-                )
+            Column(modifier = Modifier.padding(20.dp)) {
+                if (isAlive) {
+                    AvatarAlive(
+                        state = state,
+                        healthProgress = healthProgress,
+                        foodProgress = foodProgress
+                    )
+                } else {
+                    AvatarDead(onCreateNew = {}, onRestore = {})
+                }
             }
         }
     }
@@ -107,113 +122,144 @@ fun AvatarCard(
 @Composable
 fun AvatarAlive(
     state: AvatarState,
-    xpProgress: Float,
     healthProgress: Float,
-    staminaProgress: Float
+    foodProgress: Float
 ) {
     val cs = MaterialTheme.colorScheme
 
+    // Layout principal: Identidade do Avatar
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-
+        // Foto do Avatar - Estilo Profile Pro
         Box(
             modifier = Modifier
                 .size(64.dp)
                 .clip(CircleShape)
-                .background(cs.primary.copy(alpha = 0.18f)),
+                .background(cs.onSurface.copy(alpha = 0.08f))
+                .border(1.dp, cs.onSurface.copy(alpha = 0.1f), CircleShape),
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                imageVector = Icons.Default.Person,
+                imageVector = Icons.Rounded.Person,
                 contentDescription = null,
-                tint = cs.primary,
-                modifier = Modifier.size(36.dp)
+                tint = cs.onSurface.copy(alpha = 0.8f),
+                modifier = Modifier.size(32.dp)
             )
         }
 
         Spacer(Modifier.width(16.dp))
 
-        Column {
+        // Info: Nome e Status Rápido
+        Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = state.name,
                 color = cs.onSurface,
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp
+                fontWeight = FontWeight.Black,
+                fontSize = 20.sp,
+                letterSpacing = (-0.5).sp
             )
 
+            // Indicador de "Em Missão" ou Status Ativo (Opcional)
             Text(
-                text = "Level ${state.level}",
-                color = cs.secondary,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Medium
+                text = "Online agora",
+                color = Color(0xFF4CAF50), // Verde discreto
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Bold
             )
         }
 
-        Spacer(Modifier.weight(1f))
-
-        Surface(
-            shape = RoundedCornerShape(12.dp),
-            color = cs.primary.copy(alpha = 0.12f)
-        ) {
-            Row(
-                modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Spacer(Modifier.width(6.dp))
-
-                Column(horizontalAlignment = Alignment.End) {
-
-                    Text(
-                        text = "12.000",
-                        color = cs.primary,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp
-                    )
-
-                    Text(
-                        text = "points",
-                        color = cs.onSurface.copy(alpha = 0.6f),
-                        fontSize = 10.sp
-                    )
-                }
+        // Moedas/Pontos - Estilo Minimalista
+        Column(horizontalAlignment = Alignment.End) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Rounded.GeneratingTokens,
+                    contentDescription = null,
+                    tint = Color(0xFFFFB300), // Tom Dourado Dark
+                    modifier = Modifier.size(16.dp)
+                )
+                Spacer(Modifier.width(4.dp))
+                Text(
+                    text = "12,450",
+                    color = cs.onSurface,
+                    fontWeight = FontWeight.Black,
+                    fontSize = 16.sp
+                )
             }
+            Text(
+                text = "FitCoins",
+                color = cs.onSurfaceVariant,
+                fontSize = 10.sp,
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 
-    Spacer(Modifier.height(20.dp))
+    Spacer(Modifier.height(28.dp))
 
-    // XP — usa primary
-    StatRow(
-        label = "XP",
-        value = "${state.xp} / ${state.xpToNext}",
-        progress = xpProgress,
-        icon = Icons.Default.Star,
-        color = cs.primary
-    )
+    // Seção de Status de Sobrevivência
+    // Cores em tons sóbrios (Dark Mode friendly)
+    val healthColor = Color(0xFFCF6679) // Vermelho suave/desaturado
+    val foodColor = Color(0xFFFFB74D)   // Laranja suave/desaturado
 
-    Spacer(Modifier.height(12.dp))
+    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        PremiumStatRow(
+            label = "Health",
+            value = "${state.health}%",
+            progress = healthProgress,
+            icon = Icons.Rounded.Favorite,
+            color = healthColor
+        )
 
-    // Health — usa error
-    StatRow(
-        label = "Health",
-        value = "${state.health}%",
-        progress = healthProgress,
-        icon = Icons.Default.Favorite,
-        color = cs.error
-    )
+        PremiumStatRow(
+            label = "Food",
+            value = "${state.food}%",
+            progress = foodProgress,
+            icon = Icons.Rounded.RestaurantMenu,
+            color = foodColor
+        )
+    }
+}
 
-    Spacer(Modifier.height(12.dp))
+@Composable
+fun PremiumStatRow(
+    label: String,
+    value: String,
+    progress: Float,
+    icon: ImageVector,
+    color: Color
+) {
+    val cs = MaterialTheme.colorScheme
 
-    // Stamina — usa secondary
-    StatRow(
-        label = "Stamina",
-        value = "${state.stamina}%",
-        progress = staminaProgress,
-        icon = Icons.Default.Bolt,
-        color = cs.secondary
-    )
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.Bottom
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(icon, contentDescription = null, tint = color, modifier = Modifier.size(14.dp))
+                Spacer(Modifier.width(6.dp))
+                Text(label, color = cs.onSurfaceVariant, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+            }
+            Text(value, color = cs.onSurface, fontSize = 12.sp, fontWeight = FontWeight.Black)
+        }
+
+        Spacer(Modifier.height(6.dp))
+
+        // Barra de progresso com design arredondado
+        LinearProgressIndicator(
+            progress = { progress },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(8.dp)
+                .clip(RoundedCornerShape(4.dp)),
+            color = color,
+            trackColor = color.copy(alpha = 0.2f), // Fundo da barra com a mesma cor, mas transparente
+            strokeCap = StrokeCap.Round
+        )
+    }
 }
 
 @Composable
@@ -223,44 +269,37 @@ fun AvatarDead(
 ) {
     val cs = MaterialTheme.colorScheme
 
-    val pulse = rememberInfiniteTransition()
+    val pulse = rememberInfiniteTransition(label = "pulse")
     val iconScale by pulse.animateFloat(
-        initialValue = 0.96f,
-        targetValue = 1.08f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(800, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
-        )
+        initialValue = 0.95f,
+        targetValue = 1.05f,
+        animationSpec = infiniteRepeatable(animation = tween(1000, easing = FastOutSlowInEasing), repeatMode = RepeatMode.Reverse),
+        label = "scale"
     )
 
-    Column(modifier = Modifier.padding(4.dp)) {
-
-        Box(
-            modifier = Modifier
-                .clip(RoundedCornerShape(10.dp))
-                .background(cs.error.copy(alpha = 0.15f))
-                .padding(horizontal = 10.dp, vertical = 6.dp)
+    Column {
+        // Tag de Alerta
+        Surface(
+            color = cs.errorContainer,
+            shape = RoundedCornerShape(8.dp),
+            contentColor = cs.onErrorContainer
         ) {
-            Text(
-                text = "Bloqueado",
-                color = cs.error,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 12.sp
-            )
+            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp)) {
+                Icon(Icons.Rounded.Warning, contentDescription = null, modifier = Modifier.size(14.dp))
+                Spacer(modifier = Modifier.width(6.dp))
+                Text("BLOQUEADO", fontWeight = FontWeight.Bold, fontSize = 11.sp, letterSpacing = 1.sp)
+            }
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+            // Ícone Pulsante
             Box(
                 modifier = Modifier
-                    .size(64.dp)
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(cs.surface.copy(alpha = 0.4f))
+                    .size(68.dp)
+                    .clip(RoundedCornerShape(18.dp))
+                    .background(cs.error.copy(alpha = 0.15f))
                     .graphicsLayer {
                         scaleX = iconScale
                         scaleY = iconScale
@@ -268,70 +307,71 @@ fun AvatarDead(
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    imageVector = Icons.Default.MoodBad,
+                    imageVector = Icons.Rounded.SentimentVeryDissatisfied,
                     contentDescription = null,
                     tint = cs.error,
-                    modifier = Modifier.size(34.dp)
+                    modifier = Modifier.size(38.dp)
                 )
             }
 
-            Spacer(modifier = Modifier.width(12.dp))
+            Spacer(modifier = Modifier.width(16.dp))
 
             Column {
                 Text(
-                    text = "Seu avatar foi derrotado",
+                    text = "Avatar Derrotado",
                     color = cs.onSurface,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
+                    fontWeight = FontWeight.ExtraBold,
+                    fontSize = 18.sp
                 )
-
                 Spacer(modifier = Modifier.height(4.dp))
-
                 Text(
-                    text = "Para voltar a ganhar recompensas e completar tarefas, crie um novo avatar ou tente restaurá-lo.",
-                    color = cs.onSurface.copy(alpha = 0.7f),
+                    text = "Crie um novo avatar ou restaure o atual para continuar ganhando recompensas.",
+                    color = cs.onSurfaceVariant,
                     fontSize = 13.sp,
-                    maxLines = 3
+                    lineHeight = 18.sp
                 )
             }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(24.dp))
 
+        // Botões de Ação
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Button(
                 onClick = onCreateNew,
-                modifier = Modifier.weight(1f).height(48.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = cs.primary,
-                    contentColor = cs.onPrimary
-                ),
-                shape = RoundedCornerShape(12.dp)
+                modifier = Modifier.weight(1f).height(52.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = cs.primary),
+                shape = RoundedCornerShape(16.dp)
             ) {
-                Text("Criar novo Avatar", fontWeight = FontWeight.Bold)
+                Text("Criar Novo", fontWeight = FontWeight.Bold)
             }
 
             OutlinedButton(
                 onClick = onRestore,
-                modifier = Modifier.height(48.dp),
-                shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.outlinedButtonColors(
-                    contentColor = cs.secondary
-                )
+                modifier = Modifier.weight(1f).height(52.dp),
+                shape = RoundedCornerShape(16.dp),
+                border = BorderStroke(1.dp, cs.primary.copy(alpha = 0.5f)),
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = cs.primary)
             ) {
-                Text("Tentar restaurar")
+                Text("Restaurar", fontWeight = FontWeight.Bold)
             }
         }
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-        Text(
-            text = "Dica: você pode restaurar usando seus pontos.",
-            color = cs.onSurface.copy(alpha = 0.6f),
-            fontSize = 12.sp
-        )
+        // Dica
+        Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
+            Icon(Icons.Rounded.Info, contentDescription = null, tint = cs.onSurfaceVariant, modifier = Modifier.size(14.dp))
+            Spacer(modifier = Modifier.width(6.dp))
+            Text(
+                text = "Dica: você pode restaurar usando seus pontos.",
+                color = cs.onSurfaceVariant,
+                fontSize = 12.sp
+            )
+        }
     }
 }
+

@@ -2,7 +2,7 @@ package com.example.presentation.screens.ui.onboarding
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.presentation.navigations.OnboardingNavigation
+import com.example.presentation.navigationState.OnboardingNavigation
 import com.example.presentation.states.onboarding.OnboardingState
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

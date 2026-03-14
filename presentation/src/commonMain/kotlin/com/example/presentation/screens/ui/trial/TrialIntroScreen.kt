@@ -28,8 +28,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -50,11 +48,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.presentation.components.animations.FloatingShapes
+import com.example.presentation.screens.widgets.FitVerseButton
 import com.example.presentation.theme.TrialAccentGreen
 import com.example.presentation.theme.TrialTextPrimary
 import fitversejourneyapp.presentation.generated.resources.Res
@@ -290,24 +290,21 @@ fun TrialIntroScreen(
                             )
                         )
 
-                        Button(
+                        FitVerseButton(
+                            text = stringResource(Res.string.trial_cta_text),
                             onClick = onStartTrial,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(58.dp)
-                                .scale(scale),
-                            shape = RoundedCornerShape(16.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = colors.primary,
-                                contentColor = colors.onPrimary
+                                .scale(scale), // Mantém a sua animação de escala original
+                            topColor = colors.primary,
+                            // Para o edgeColor, usamos uma versão mais escura do primary para o efeito 3D
+                            edgeColor = colors.outline,
+                            textColor = colors.onPrimary,
+                            textStyle = TextStyle(
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold
                             )
-                        ) {
-                            Text(
-                                text = stringResource(Res.string.trial_cta_text),
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 16.sp
-                            )
-                        }
+                        )
 
                         Text(
                             text = stringResource(Res.string.trial_trust_message_1),

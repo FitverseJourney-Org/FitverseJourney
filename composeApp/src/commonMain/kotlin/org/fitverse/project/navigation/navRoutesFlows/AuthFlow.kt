@@ -4,7 +4,6 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
@@ -13,9 +12,9 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
 import org.fitverse.project.navigation.NavRoutes
-import org.fitverse.project.navigation.destinations.LoginDestination
-import org.fitverse.project.navigation.destinations.RegisterDestination
-import org.fitverse.project.navigation.destinations.ResetPasswordDestination
+import org.fitverse.project.navigation.destinations.auth.LoginDestination
+import org.fitverse.project.navigation.destinations.auth.RegisterDestination
+import org.fitverse.project.navigation.destinations.auth.ResetPasswordDestination
 
 @Composable
 fun AuthFlow(

@@ -41,6 +41,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.domain.model.authentication.register.FitnessLevel
 import com.example.domain.model.authentication.register.RegisterAction
 import com.example.domain.model.authentication.register.TrainingLevel
 import com.example.presentation.screens.ui.authentication.register.state.RegisterState
@@ -90,14 +91,14 @@ fun RegisterPageLevel(
  */
 @Composable
 fun TrainingLevelSelector(
-    selectedLevel: TrainingLevel?,
-    onLevelSelected: (TrainingLevel) -> Unit
+    selectedLevel: FitnessLevel?,
+    onLevelSelected: (FitnessLevel) -> Unit
 ) {
     val goals = remember {
         listOf(
-            Triple(TrainingLevel.BEGINNER, "Beginner", "New to training or getting back on track"),
-            Triple(TrainingLevel.INTERMEDIATE, "Intermediate", "You train regularly and know the basics"),
-            Triple(TrainingLevel.ADVANCED, "Advanced", "High experience and intense training routine")
+            Triple(FitnessLevel.BEGINNER, "Beginner", "New to training or getting back on track"),
+            Triple(FitnessLevel.INTERMEDIATE, "Intermediate", "You train regularly and know the basics"),
+            Triple(FitnessLevel.ADVANCED, "Advanced", "High experience and intense training routine")
         )
     }
 
@@ -129,7 +130,7 @@ fun TrainingLevelItem(
     description: String,
     isSelected: Boolean,
     onClick: () -> Unit,
-    level: TrainingLevel,
+    level: FitnessLevel,
     modifier: Modifier = Modifier
 ) {
     val colors = MaterialTheme.colorScheme
@@ -140,9 +141,9 @@ fun TrainingLevelItem(
 
     // border / accent
     val accent = when (level) {
-        TrainingLevel.BEGINNER -> colors.primary.copy(alpha = 0.95f)
-        TrainingLevel.INTERMEDIATE -> colors.secondary
-        TrainingLevel.ADVANCED -> colors.tertiary
+        FitnessLevel.BEGINNER -> colors.primary.copy(alpha = 0.95f)
+        FitnessLevel.INTERMEDIATE -> colors.secondary
+        FitnessLevel.ADVANCED -> colors.tertiary
     }
 
     // scale subtle
@@ -230,10 +231,10 @@ fun TrainingLevelItem(
 }
 
 /** Mapeia icon + tint por nível — usa colorScheme para garantir contraste. */
-private fun levelToIcon(level: TrainingLevel, colors: androidx.compose.material3.ColorScheme, accent: Color): Pair<ImageVector, Color> {
+private fun levelToIcon(level: FitnessLevel, colors: androidx.compose.material3.ColorScheme, accent: Color): Pair<ImageVector, Color> {
     return when (level) {
-        TrainingLevel.BEGINNER -> Icons.Default.AccessibilityNew to accent
-        TrainingLevel.INTERMEDIATE -> Icons.Default.DirectionsRun to accent
-        TrainingLevel.ADVANCED -> Icons.Default.FitnessCenter to accent
+        FitnessLevel.BEGINNER -> Icons.Default.AccessibilityNew to accent
+        FitnessLevel.INTERMEDIATE -> Icons.Default.DirectionsRun to accent
+        FitnessLevel.ADVANCED -> Icons.Default.FitnessCenter to accent
     }
 }

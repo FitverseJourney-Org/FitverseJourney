@@ -1,6 +1,5 @@
 package com.example.presentation.screens.ui.authentication.resetPassword
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,11 +23,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.example.presentation.screens.ui.authentication.login.components.AuthDefaultButton
 import com.example.presentation.screens.ui.authentication.login.components.FitverseOutlinedTextField
 import com.example.presentation.screens.ui.authentication.resetPassword.components.ResetPasswordTopBar
 import com.example.presentation.screens.ui.authentication.resetPassword.state.ResetPasswordState
-import com.example.presentation.theme.backgroundBrush
+import com.example.presentation.screens.widgets.FitVerseButton
 
 @Composable
 fun ResetPasswordScreen(
@@ -114,11 +112,10 @@ fun ResetPasswordScreen(
 
             Spacer(Modifier.height(24.dp))
 
-            AuthDefaultButton(
+            FitVerseButton(
                 text = "Send reset link",
-                isLoading = isLoading,
+                onClick = onSendResetLink,
                 enabled = emailErrors.isEmpty(),
-                onClick = onSendResetLink
             )
 
             Spacer(Modifier.height(24.dp))

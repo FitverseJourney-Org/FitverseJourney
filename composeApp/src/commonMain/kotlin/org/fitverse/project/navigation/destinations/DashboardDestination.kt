@@ -9,11 +9,12 @@ import com.example.presentation.screens.ui.main.dashboard.DashboardScreen
 
 
 @Composable
-fun DashboardDestination(navigateToNotification: () -> Unit) {
+fun DashboardDestination(
+    navigateToNotification: () -> Unit
+) {
     Box(modifier = Modifier.fillMaxSize()){
         PremiumGamifiedBackground()
         DashboardScreen(
-            modifier = Modifier.fillMaxSize(),
             username = "Athlete",
             avatarInitials = "A",
             exit = {},

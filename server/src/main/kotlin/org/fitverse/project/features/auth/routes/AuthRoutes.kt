@@ -21,9 +21,15 @@ import org.koin.ktor.ext.inject
 fun Route.authRouting() {
     val authController by inject<AuthController>()
 
-    post("/register") {
-        authController.register(call) // Apenas passa a bola
+    route("/auth"){
+        post("/register") {
+            authController.register(call) // Apenas passa a bola
+        }
+        post("/login") {
+            authController.login(call)
+        }
     }
+
 }
 @Serializable
 data class RegisterRequest(
