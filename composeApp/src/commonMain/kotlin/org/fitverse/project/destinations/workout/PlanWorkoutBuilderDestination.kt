@@ -1,0 +1,26 @@
+package org.fitverse.project.destinations.workout
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import com.example.presentation.screens.ui.modal.planWorkout.WorkoutPlanBuilderScreen
+
+@Composable
+fun PlanWorkoutBuilderDestination(
+    onBack: () -> Unit,
+    toAddExercises: () -> Unit
+)  {
+    val cs = MaterialTheme.colorScheme
+
+    Box(modifier = Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(cs.surface, cs.background)))){
+        WorkoutPlanBuilderScreen(
+            onBack = onBack,
+            onSave = {},
+            toAddExercises = toAddExercises
+        )
+    }
+}

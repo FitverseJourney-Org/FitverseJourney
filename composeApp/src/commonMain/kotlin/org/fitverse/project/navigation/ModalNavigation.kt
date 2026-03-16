@@ -49,12 +49,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation3.runtime.NavKey
+import org.fitverse.project.routes.NavRoutes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ModalDrawerSheetMainScreen(
     drawerState: DrawerState,
     content: @Composable () -> Unit,
+    gesturesEnabled: Boolean = true,
     onNavigate: (backStackEntry: NavKey) -> Unit = {},
     onLogout: () -> Unit = {}
 ) {
@@ -62,6 +64,7 @@ fun ModalDrawerSheetMainScreen(
 
     ModalNavigationDrawer(
         drawerState = drawerState,
+        gesturesEnabled = gesturesEnabled,
         drawerContent = {
             ModalDrawerSheet(
                 drawerContainerColor = cs.surfaceVariant
@@ -87,7 +90,7 @@ fun ModalDrawerSheetMainScreen(
                         ActionRow(
                             label = "Plan Workout",
                             icon = Icons.Default.FitnessCenter,
-                            onClick = { onNavigate(NavRoutes.ActionsWorkout) } // Lembre de atualizar as rotas depois!
+                            onClick = { onNavigate(NavRoutes.PlanWorkoutFlow) } // Lembre de atualizar as rotas depois!
                         )
                         ActionRow(
                             label = "Plan Nutrition",

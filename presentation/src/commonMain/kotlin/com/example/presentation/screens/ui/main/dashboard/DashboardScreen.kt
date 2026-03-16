@@ -34,6 +34,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,6 +54,11 @@ import com.example.presentation.screens.ui.main.dashboard.components.PointsGainC
 import com.example.presentation.screens.ui.main.dashboard.components.StreakState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.daysUntil
+import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
 
 data class AvatarState(
     val name: String = "Your Avatar",
@@ -123,14 +129,18 @@ fun DashboardScreen(
     var previousLevel by remember { mutableStateOf(avatarState.level) }
 
     // Inicializamos o StreakState já com os dias marcados, simulando os 3 dias do avatarState
-    var streakState by remember {
-        mutableStateOf(
-            StreakState(
-                // Simula preenchimento retroativo baseado no consecutiveDays atual para manter a UI consistente
-                checkedDays = (0 until avatarState.consecutiveDays).toSet()
-            )
-        )
-    }
+    var totalStreakCount by rememberSaveable { mutableStateOf(0) }
+    var lastCheckInDate by rememberSaveable { mutableStateOf<String?>(null) } // Formato "yyyy-MM-dd"
+
+    // 2. Cálculo do estado atual
+    val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+    val isTodayChecked = lastCheckInDate == today.toString()
+
+    // 3. Criamos o StreakState para passar para o componente visual
+    var streakState = StreakState(
+        totalStreakCount = totalStreakCount,
+        isTodayChecked = isTodayChecked
+    )
 
     val scope = rememberCoroutineScope()
     val becameLevelUp = remember { mutableStateOf(false) }
@@ -168,27 +178,33 @@ fun DashboardScreen(
         item {
             CardStreakWeek(
                 state = streakState,
-                onCheckInClick = { index ->
-                    // Lógica de check-in normal que você já tem
-                    val updatedDays = streakState.checkedDays.toMutableSet()
-                    if (!updatedDays.contains(index)) {
-                        updatedDays.add(index)
-                        if (index == streakState.todayIndex) {
-                            avatarState.consecutiveDays += 1
+                onCheckInClick = {
+                    val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+
+                    if (lastCheckInDate == null) {
+                        // Primeiro check-in da história
+                        totalStreakCount = 1
+                    } else {
+                        val lastDate = LocalDate.parse(lastCheckInDate!!)
+                        val daysBetween = now.daysUntil(lastDate) // Comparação de datas
+
+                        when {
+                            now == lastDate -> { /* Já fez check-in hoje, não faz nada */ }
+                            daysBetween == -1 -> {
+                                // Ontem foi o último check-in, mantém o streak vivo!
+                                totalStreakCount += 1
+                            }
+                            else -> {
+                                // Perdeu um dia ou mais, resetou o streak para 1
+                                totalStreakCount = 1
+                            }
                         }
                     }
-                    streakState = streakState.copy(checkedDays = updatedDays)
+                    lastCheckInDate = now.toString()
                 },
                 onClaimPremium = {
-                    // Lógica de RESGATE
-                    avatarState.xp += 200 // Adiciona os 200 pontos
-                    avatarState.level = levelFromXp(avatarState.xp) // Atualiza nível se necessário
-
-                    // Resetamos a semana para um novo ciclo de 7 dias
-                    streakState = streakState.copy(checkedDays = emptySet())
-                    avatarState.consecutiveDays = 0
-
-                    // Dica: Você pode disparar um som ou efeito de confetti aqui!
+                    // Lógica de resgate: Opcional resetar ou apenas dar os pontos
+                    println("Resgatou prêmio do dia ${streakState.totalStreakCount}!")
                 }
             )
         }
@@ -201,14 +217,6 @@ fun DashboardScreen(
         }
         item {
             AvatarCard(state = avatarState)
-        }
-
-        item {
-            PointsGainCard(
-                todayPts = tasks.filter { it.completed }.sumOf { it.xp },
-                totalPts = avatarState.todayPts,
-                modifier = Modifier.fillMaxWidth()
-            )
         }
 
         item {
@@ -256,37 +264,6 @@ fun DashboardScreen(
                     }
                 }
             )
-        }
-
-        item {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                Button(
-                    onClick = {
-                        // Sincroniza a perda do dia nos dois componentes
-                        avatarState.consecutiveDays = 0
-                        streakState = streakState.copy(checkedDays = emptySet())
-
-                        avatarState.hp = (avatarState.hp - 10).coerceAtLeast(0)
-                    },
-                    modifier = Modifier.weight(1f),
-                    colors = ButtonDefaults.buttonColors(containerColor = cs.surfaceVariant)
-                ) {
-                    Text("Simulate Missed Day", color = cs.onSurface)
-                }
-
-                Button(
-                    onClick = {
-                        avatarState.food = (avatarState.food + 30).coerceAtMost(100)
-                    },
-                    modifier = Modifier.weight(1f),
-                    colors = ButtonDefaults.buttonColors(containerColor = cs.primary)
-                ) {
-                    Text("Rest +30 Stamina", color = cs.onPrimary)
-                }
-            }
         }
     }
 

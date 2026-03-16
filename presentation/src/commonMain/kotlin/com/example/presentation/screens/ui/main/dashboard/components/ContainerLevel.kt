@@ -145,16 +145,21 @@ fun ContainerLevel(
                     Spacer(Modifier.height(8.dp))
 
                     // Barra Estilo Pílula Espessa
-                    LinearProgressIndicator(
-                        progress = { xpProgress },
+                    Box(
                         modifier = Modifier
+                            .background(xpColor.copy(alpha = 0.2f))
                             .fillMaxWidth()
                             .height(14.dp)
-                            .clip(RoundedCornerShape(50)),
-                        color = xpColor,
-                        trackColor = xpColor.copy(alpha = 0.2f),
-                        strokeCap = StrokeCap.Round
-                    )
+                            .clip(RoundedCornerShape(50))
+                    ){
+                        Box(
+                            modifier = Modifier
+                                .background(xpColor)
+                                .fillMaxWidth(xpProgress)
+                                .height(14.dp)
+                                .clip(RoundedCornerShape(50)),
+                        )
+                    }
                 }
             }
 
@@ -187,7 +192,7 @@ fun ContainerLevel(
 
                 // Botão de Resgate Customizado (Altura fixa 52.dp e Cor parametrizada)
                 ClaimRewardButton(
-                    text = "Nada a reclamar",
+                    text = "Recompensa",
                     buttonColor = cs.surface.copy(alpha = 0.5f), // Cor de estado desativado
                     textColor = cs.onSurfaceVariant.copy(alpha = 0.5f)
                 )

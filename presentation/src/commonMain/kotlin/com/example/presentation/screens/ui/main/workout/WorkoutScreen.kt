@@ -55,6 +55,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.domain.model.workout.WorkoutCategory
 
 @Composable
 fun WorkoutScreenV2(
@@ -522,9 +523,7 @@ fun StartWorkoutCard(onStart: () -> Unit) {
     }
 }
 
-enum class WorkoutCategory {
-    STRENGTH, CARDIO, HIIT, STRETCH
-}
+
 
 data class WorkoutItem(
     val id: Int,

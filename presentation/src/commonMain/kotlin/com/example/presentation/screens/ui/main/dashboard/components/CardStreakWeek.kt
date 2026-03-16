@@ -28,12 +28,14 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.HelpOutline
 import androidx.compose.material.icons.rounded.LocalFireDepartment
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -68,98 +70,104 @@ import kotlinx.coroutines.launch
 val dayLabels = listOf("SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT")
 
 data class StreakState(
-    val checkedDays: Set<Int> = emptySet(),
-    val consecutiveGoal: Int = 7
+    val totalStreakCount: Int = 0, // Contador total (ex: 8, 15, 42...)
+    val isTodayChecked: Boolean = false,
+    val goal: Int = 7
 ) {
-    // Pegamos o índice baseado na String que vem da plataforma
-    val todayIndex: Int = dayLabels.indexOf(getDayOfWeek()).coerceAtLeast(0)
+    // Retorna quantos bloquinhos devem estar preenchidos no ciclo atual (1 a 7)
+    // Se o total é 8, o progresso no ciclo é 1. Se é 7, o progresso é 7.
+    val currentCycleProgress: Int
+        get() = if (totalStreakCount == 0) 0 else ((totalStreakCount - 1) % goal) + 1
 
-    fun isChecked(dayIndex: Int) = checkedDays.contains(dayIndex)
-
-    fun consecutiveCount(): Int {
-        var count = 0
-        // Lógica de ofensiva para trás a partir do índice detectado
-        for (i in todayIndex downTo 0) {
-            if (isChecked(i)) count++ else break
-        }
-        return count
+    // Verifica se um bloquinho específico (0 a 6) deve estar marcado
+    fun isBlockChecked(blockIndex: Int): Boolean {
+        // blockIndex vai de 0 a 6.
+        // Se currentCycleProgress for 3, os blocos 0, 1 e 2 estarão marcados.
+        return blockIndex < currentCycleProgress
     }
 }
 
 @Composable
 fun CardStreakWeek(
     state: StreakState,
-    onCheckInClick: (Int) -> Unit,
-    onClaimPremium: () -> Unit // Novo callback para resgate
+    onCheckInClick: () -> Unit,
+    onClaimPremium: () -> Unit
 ) {
     val cs = MaterialTheme.colorScheme
-    val streak = state.consecutiveCount()
-    val isTodayChecked = state.isChecked(state.todayIndex)
-
-    // Lógica principal: Semana completa?
-    val isWeekFull = streak >= 7
-
-    // O botão fica habilitado se: não fez check-in HOJE OU se já completou a semana (para resgatar)
-    val buttonEnabled = !isTodayChecked || isWeekFull
+    val isWeekFull = state.currentCycleProgress == 7 && state.isTodayChecked
+    val buttonEnabled = !state.isTodayChecked || isWeekFull
 
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
         color = cs.surface,
         border = BorderStroke(1.dp, if (isWeekFull) cs.tertiary.copy(alpha = 0.5f) else cs.outline.copy(alpha = 0.1f)),
-        tonalElevation = if (isWeekFull) 8.dp else 2.dp // Brilha mais quando pronto para resgate
+        tonalElevation = if (isWeekFull) 8.dp else 2.dp
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            // Cabeçalho (Simplificado para o exemplo)
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column {
-                    Text("Weekly Streak", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.ExtraBold)
+                    Text("Daily Streak", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.ExtraBold)
                     Text(
-                        text = if (isWeekFull) "Goal Reached! 🏆" else "Complete 7 days for +200 pts",
+                        text = if (isWeekFull) "Goal Reached! 🏆" else "Keep it up for 7 days!",
                         style = MaterialTheme.typography.labelSmall,
                         color = if (isWeekFull) cs.tertiary else cs.onSurfaceVariant
                     )
                 }
 
-                // Badge de Progresso
-                Surface(
-                    color = if (isWeekFull) cs.tertiary else cs.primary,
-                    shape = CircleShape
-                ) {
-                    Text(
-                        text = "$streak/7",
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
-                        color = if (isWeekFull) cs.onTertiary else cs.onPrimary,
-                        style = MaterialTheme.typography.labelLarge,
-                        fontWeight = FontWeight.Black
-                    )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ){
+                    Surface(
+                        color = if (isWeekFull) cs.tertiary else cs.primary,
+                        shape = CircleShape
+                    ) {
+                        // Aqui mostramos o total real (ex: 8 days)
+                        Text(
+                            text = "${state.totalStreakCount} Days",
+                            modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
+                            color = if (isWeekFull) cs.onTertiary else cs.onPrimary,
+                            style = MaterialTheme.typography.labelLarge,
+                            fontWeight = FontWeight.Black
+                        )
+                    }
+                    IconButton(
+                        onClick = { /* Ação de ajuda */ },
+                        modifier = Modifier
+                            .size(40.dp)
+                            .background(cs.surface.copy(alpha = 0.5f), CircleShape)
+                    ) {
+                        Icon(
+                            Icons.Rounded.HelpOutline,
+                            contentDescription = "Ajuda",
+                            tint = cs.onSurfaceVariant
+                        )
+                    }
+
                 }
             }
 
             Spacer(Modifier.height(20.dp))
-            StreakWeek(state = state, onToggleCheckIn = onCheckInClick)
+
+            // Passamos o progresso do ciclo para a UI
+            StreakCycleRow(state = state)
+
             Spacer(Modifier.height(24.dp))
 
-            // BOTÃO DINÂMICO (Check-in ou Resgate)
             Button(
-                onClick = {
-                    if (isWeekFull) onClaimPremium() else onCheckInClick(state.todayIndex)
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
+                onClick = { if (isWeekFull) onClaimPremium() else onCheckInClick() },
+                modifier = Modifier.fillMaxWidth().height(56.dp),
                 enabled = buttonEnabled,
                 shape = RoundedCornerShape(16.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = if (isWeekFull) cs.tertiary else cs.primary,
-                    contentColor = if (isWeekFull) cs.onTertiary else cs.onPrimary,
                     disabledContainerColor = cs.outline.copy(alpha = 0.12f)
-                ),
-                elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
+                )
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Icon(
@@ -169,42 +177,37 @@ fun CardStreakWeek(
                     Spacer(Modifier.width(12.dp))
                     Text(
                         text = when {
-                            isWeekFull -> "CLAIM PREMIUM +200 PTS"
-                            isTodayChecked -> "TODAY COMPLETED"
-                            else -> "DAILY CHECK-IN"
+                            isWeekFull -> "CLAIM REWARD"
+                            state.isTodayChecked -> "TOMORROW FOR DAY ${state.totalStreakCount + 1}"
+                            else -> "CHECK-IN DAY ${state.totalStreakCount + 1}"
                         },
-                        fontWeight = FontWeight.ExtraBold,
-                        letterSpacing = 1.sp
+                        fontWeight = FontWeight.ExtraBold
                     )
                 }
             }
         }
     }
 }
-
 @Composable
-fun StreakWeek(
-    state: StreakState,
-    onToggleCheckIn: (Int) -> Unit
-) {
-    // Invocamos a função expect diretamente
-    val currentDayString = getDayOfWeek()
-
+fun StreakCycleRow(state: StreakState) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        dayLabels.forEachIndexed { index, label ->
-            // Comparação direta de String conforme solicitado
-            val isToday = label == currentDayString
+        // Sempre renderiza 7 blocos
+        repeat(7) { index ->
+            // O número exibido dentro do círculo (ex: no dia 8, mostra 8, 9, 10...)
+            // Calculamos o base do ciclo (0, 7, 14...) e somamos o índice atual + 1
+            val baseCycle = ((state.totalStreakCount.coerceAtLeast(1) - 1) / 7) * 7
+            val displayDayNumber = baseCycle + index + 1
 
             DayRing(
-                dayLabel = label.take(1), // Exibe apenas "S", "M", "T" na UI para economizar espaço
-                dayNumber = (index + 1).toString(),
-                checked = state.isChecked(index),
-                isToday = isToday,
-                onClick = { onToggleCheckIn(index) }
+                dayLabel = "D$displayDayNumber", // Ex: D1, D8, D15...
+                dayNumber = displayDayNumber.toString(),
+                checked = state.isBlockChecked(index),
+                isToday = !state.isTodayChecked && index == state.currentCycleProgress,
+                onClick = { /* Ação disparada pelo botão principal */ }
             )
         }
     }

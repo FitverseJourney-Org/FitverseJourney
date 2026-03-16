@@ -25,13 +25,16 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun AppSplashScreen(
-    onFinish: () -> Unit,
+    toLogin: () -> Unit,
+    toTrial: () -> Unit,
+    toHome: () -> Unit,
+    toOnboarding: () -> Unit
 ) {
     val colors = MaterialTheme.colorScheme
 
     LaunchedEffect(Unit) {
         delay(1500)
-        onFinish()
+        toLogin()
     }
 
     Box(
