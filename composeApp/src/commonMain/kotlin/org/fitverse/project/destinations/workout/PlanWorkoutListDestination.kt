@@ -7,7 +7,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import com.example.presentation.screens.ui.modal.planWorkout.WorkoutPlanDashboardScreen
+import com.example.presentation.screens.ui.planWorkout.WorkoutPlanDashboardScreen
 
 @Composable
 fun PlanWorkoutListDestination(
@@ -17,11 +17,10 @@ fun PlanWorkoutListDestination(
     val cs = MaterialTheme.colorScheme
 
     Box(modifier = Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(cs.surface, cs.background)))){
-        WorkoutPlanDashboardScreen(
-            toNewWorkout = toNewWorkout,
-            onEditWorkout = { /* Lógica de edição */ },
-            toBack = toBack
-
+        com.example.presentation.screens.ui.planWorkout.WorkoutPlanDashboardScreen(
+            toBack = toBack,
+            onEditWorkout = {},
+            toNewWorkout = toNewWorkout
         )
     }
 }

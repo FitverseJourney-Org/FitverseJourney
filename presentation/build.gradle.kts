@@ -57,6 +57,13 @@ kotlin {
             implementation(libs.kotlinx.datetime)
 
 
+            // vico
+            implementation(libs.vico.compose)
+            implementation(libs.vico.compose.m3)
+
+
+            // charts
+            implementation ("io.github.ehsannarmani:compose-charts:0.2.5")
 
         }
         iosMain.dependencies {

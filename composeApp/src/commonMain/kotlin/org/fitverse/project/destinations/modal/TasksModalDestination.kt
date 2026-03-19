@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.navigation3.runtime.NavKey
-import com.example.presentation.screens.ui.modal.achievements.AchievementsScreen
+import com.example.presentation.screens.ui.achievements.AchievementsScreen
 
 @Composable
 fun TasksModalDestination(
@@ -17,7 +17,7 @@ fun TasksModalDestination(
     val cs = MaterialTheme.colorScheme
 
     Box(modifier = Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(cs.surface, cs.background)))){
-        AchievementsScreen(
+        com.example.presentation.screens.ui.achievements.AchievementsScreen(
             navigateBack = navigateBack
         )
     }

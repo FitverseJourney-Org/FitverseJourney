@@ -15,7 +15,7 @@ import com.example.presentation.components.snackbar.AppSnackbarHost
 import com.example.presentation.components.snackbar.SnackbarType
 import com.example.presentation.screens.ui.authentication.login.components.AnimatedLoginBackground
 import com.example.presentation.screens.ui.authentication.resetPassword.ResetPasswordScreen
-import com.example.presentation.screens.ui.authentication.resetPassword.ResetPasswordViewModel
+import com.example.presentation.screens.ui.authentication.resetPassword.viewmodel.ResetPasswordViewModel
 import org.koin.compose.koinInject
 
 @Composable

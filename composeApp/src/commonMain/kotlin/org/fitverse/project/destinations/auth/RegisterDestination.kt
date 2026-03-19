@@ -20,7 +20,7 @@ import com.example.presentation.components.snackbar.SnackbarType
 import com.example.presentation.navigationState.RegisterNavigation
 import com.example.presentation.screens.ui.authentication.login.components.AnimatedLoginBackground
 import com.example.presentation.screens.ui.authentication.register.RegisterScreen
-import com.example.presentation.screens.ui.authentication.register.RegisterViewModel
+import com.example.presentation.screens.ui.authentication.register.viewmodel.RegisterViewModel
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.koinInject
 

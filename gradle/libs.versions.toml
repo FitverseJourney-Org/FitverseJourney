@@ -113,6 +113,8 @@ material3 = "1.9.0"
 # ----------------------------------------------------
 google-services-plugin = "4.4.4"
 
+vico = "3.0.3"
+
 [libraries]
 
 ## ---------------------------------------------------------------------------------------------------------
@@ -272,6 +274,8 @@ ktor-server-cors-jvm = { module = "io.ktor:ktor-server-cors-jvm", version.ref = 
 ktor-server-status-pages-jvm = { module = "io.ktor:ktor-server-status-pages-jvm", version.ref = "ktorServerStatusPagesJvm" }
 
 
+vico-compose = { group = "com.patrykandpatrick.vico", name = "compose", version.ref = "vico" }
+vico-compose-m3 = { group = "com.patrykandpatrick.vico", name = "compose-m3", version.ref = "vico" }
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }

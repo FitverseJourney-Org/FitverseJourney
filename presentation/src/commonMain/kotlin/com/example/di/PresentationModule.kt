@@ -1,9 +1,10 @@
 package com.example.di
 
-import com.example.presentation.screens.ui.authentication.login.LoginViewModel
-import com.example.presentation.screens.ui.authentication.register.RegisterViewModel
-import com.example.presentation.screens.ui.authentication.resetPassword.ResetPasswordViewModel
-import com.example.presentation.screens.ui.onboarding.OnboardingViewModel
+import com.example.presentation.screens.ui.authentication.login.viewmodel.LoginViewModel
+import com.example.presentation.screens.ui.authentication.register.viewmodel.RegisterViewModel
+import com.example.presentation.screens.ui.authentication.resetPassword.viewmodel.ResetPasswordViewModel
+import com.example.presentation.screens.ui.community.viewmodel.CommunityViewModel
+import com.example.presentation.screens.ui.onboarding.viewmodel.OnboardingViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
@@ -13,4 +14,5 @@ val presentationModule = module {
     viewModel<RegisterViewModel> { RegisterViewModel(registerUseCase = get()) }
     viewModel<ResetPasswordViewModel> { ResetPasswordViewModel(resetPasswordUseCase = get()) }
     viewModel<OnboardingViewModel> { OnboardingViewModel() }
+    viewModel<CommunityViewModel>{ CommunityViewModel() }
 }

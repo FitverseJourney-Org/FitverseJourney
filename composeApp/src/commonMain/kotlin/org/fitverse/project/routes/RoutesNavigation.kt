@@ -25,6 +25,12 @@ sealed interface NavRoutes : NavKey {
         @Serializable
         data object Meals : NavKey, NavRoutes
         @Serializable
+        data object Community : NavKey, NavRoutes
+
+        @Serializable
+        data object AddPost : NavKey, NavRoutes
+
+        @Serializable
         data object Workout : NavKey, NavRoutes
         @Serializable
         data object Profile : NavKey, NavRoutes
@@ -39,19 +45,33 @@ sealed interface NavRoutes : NavKey {
     @Serializable
     data object PlanWorkoutFlow : NavKey, NavRoutes {
         @Serializable
+        data object List : NavKey, NavRoutes
+        @Serializable
+        data object Builder : NavKey, NavRoutes
+
+        @Serializable
+        data object Exercises : NavKey, NavRoutes
+
+    }
+
+    @Serializable
+    data object TasksFlow : NavKey, NavRoutes {
+        @Serializable
+        data object TasksList : NavKey, NavRoutes
+        @Serializable
+        data object TasksLibrary : NavKey, NavRoutes
+    }
+
+    @Serializable
+    data object PlanMealsFlow : NavKey, NavRoutes {
+        @Serializable
         data object PlanList : NavKey, NavRoutes
         @Serializable
         data object PlanBuilder : NavKey, NavRoutes
 
         @Serializable
-        data object PlanExercises : NavKey, NavRoutes
+        data object ListMeals : NavKey, NavRoutes
 
-    }
-
-    @Serializable
-    data object MealsFlow : NavKey, NavRoutes {
-        @Serializable
-        data object WorkoutSession : NavKey, NavRoutes
     }
 
 
@@ -65,8 +85,10 @@ sealed interface NavRoutes : NavKey {
     @Serializable object ActionsWorkout : NavRoutes
     @Serializable object ActionsNutrition : NavRoutes
     @Serializable object ActionsTasks : NavRoutes
-    @Serializable object ActionsFriends : NavRoutes
-    @Serializable object ActionsLeaderboards : NavRoutes
+    @Serializable object Friends : NavRoutes
+    @Serializable object Leaderboards : NavRoutes
+    @Serializable object Historic : NavRoutes
+    @Serializable object Progress : NavRoutes
     @Serializable object ActionsHistoric : NavRoutes
     @Serializable object ActionsAchievements : NavRoutes
     @Serializable object PreferencesDevicesConnect : NavRoutes

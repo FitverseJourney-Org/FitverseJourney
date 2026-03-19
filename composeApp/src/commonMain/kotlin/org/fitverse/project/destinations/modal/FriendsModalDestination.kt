@@ -8,8 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.navigation3.runtime.NavKey
-import com.example.presentation.screens.ui.modal.device.DeviceSettingsScreenPro
-import com.example.presentation.screens.ui.modal.friends.FriendsScreen
+import com.example.presentation.screens.ui.device.DeviceSettingsScreenPro
+import com.example.presentation.screens.ui.friends.FriendsScreen
 
 @Composable
 fun FriendsModalDestination(
@@ -17,7 +17,12 @@ fun FriendsModalDestination(
 ) {
     val cs = MaterialTheme.colorScheme
 
-    Box(modifier = Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(cs.surface, cs.background)))){
+    Box(
+        modifier = Modifier.fillMaxSize()
+            .background(
+                Brush.verticalGradient(listOf(cs.surface, cs.background))
+            )
+    ) {
         FriendsScreen(
             navigateBack = navigateBack
         )

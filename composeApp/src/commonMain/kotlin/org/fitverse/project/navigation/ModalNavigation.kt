@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Analytics
 import androidx.compose.material.icons.filled.Assignment
 import androidx.compose.material.icons.filled.Devices
 import androidx.compose.material.icons.filled.EmojiEvents
@@ -70,8 +71,7 @@ fun ModalDrawerSheetMainScreen(
                 drawerContainerColor = cs.surfaceVariant
             ) {
                 Column(
-                    modifier = Modifier
-                        .padding(16.dp)
+                    modifier = Modifier.padding(16.dp)
                         .verticalScroll(rememberScrollState())
                         .navigationBarsPadding()
                 ) {
@@ -93,39 +93,39 @@ fun ModalDrawerSheetMainScreen(
                             onClick = { onNavigate(NavRoutes.PlanWorkoutFlow) } // Lembre de atualizar as rotas depois!
                         )
                         ActionRow(
-                            label = "Plan Nutrition",
-                            icon = Icons.Default.LocalDining,
-                            onClick = { onNavigate(NavRoutes.ActionsNutrition) }
-                        )
-                        ActionRow(
                             label = "Tasks",
                             icon = Icons.Default.Assignment, // Ícone de prancheta/lista de tarefas
-                            onClick = { onNavigate(NavRoutes.ActionsTasks) }
+                            onClick = { onNavigate(NavRoutes.TasksFlow) }
                         )
                         ActionRow(
                             label = "Friends",
                             icon = Icons.Default.People, // Ícone de grupo de pessoas
-                            onClick = { onNavigate(NavRoutes.ActionsFriends) }
+                            onClick = { onNavigate(NavRoutes.Friends) }
                         )
                         ActionRow(
                             label = "Leaderboards",
                             icon = Icons.Default.Leaderboard, // Ícone de pódio com gráfico
-                            onClick = { onNavigate(NavRoutes.ActionsLeaderboards) }
+                            onClick = { onNavigate(NavRoutes.Leaderboards) }
                         )
                         ActionRow(
                             label = "Historic",
                             icon = Icons.Default.History, // Ícone de relógio voltando no tempo
-                            onClick = { onNavigate(NavRoutes.ActionsHistoric) }
+                            onClick = { onNavigate(NavRoutes.Historic) }
+                        )
+                        ActionRow(
+                            label = "Progress",
+                            icon = Icons.Default.Analytics, // Ícone de troféu (mais imersivo que a estrela)
+                            onClick = { onNavigate(NavRoutes.Progress) }
                         )
                         ActionRow(
                             label = "Achievements",
                             icon = Icons.Default.EmojiEvents, // Ícone de troféu (mais imersivo que a estrela)
-                            onClick = { onNavigate(NavRoutes.ActionsAchievements) }
+                            onClick = { onNavigate(NavRoutes.Progress) }
                         )
                         ActionRow(
-                            label = "Account",
+                            label = "Devices",
                             icon = Icons.Default.Devices, // Ícone de celular/tablet (ou use Icons.Default.Watch para smartwatches)
-                            onClick = { onNavigate(NavRoutes.PreferencesDevicesConnect) }
+                            onClick = { onNavigate(NavRoutes.TasksFlow) }
                         )
                     }
 
@@ -133,19 +133,19 @@ fun ModalDrawerSheetMainScreen(
 
                     DrawerSection(title = "Preferences") {
                         ActionRow(
-                            label = "Unidades",
+                            label = "Units",
                             icon = Icons.Default.Devices, // Ícone de celular/tablet (ou use Icons.Default.Watch para smartwatches)
-                            onClick = { onNavigate(NavRoutes.PreferencesDevicesConnect) }
+                            onClick = { onNavigate(NavRoutes.TasksFlow) }
                         )
                         ActionRow(
-                            label = "Idiomas",
+                            label = "Language",
                             icon = Icons.Default.Devices, // Ícone de celular/tablet (ou use Icons.Default.Watch para smartwatches)
-                            onClick = { onNavigate(NavRoutes.PreferencesDevicesConnect) }
+                            onClick = { onNavigate(NavRoutes.TasksFlow) }
                         )
                         ActionRow(
                             label = "Medidores e Dispositivos",
                             icon = Icons.Default.Devices, // Ícone de celular/tablet (ou use Icons.Default.Watch para smartwatches)
-                            onClick = { onNavigate(NavRoutes.PreferencesDevicesConnect) }
+                            onClick = { onNavigate(NavRoutes.TasksFlow) }
                         )
 
                     }
@@ -156,12 +156,12 @@ fun ModalDrawerSheetMainScreen(
                         ActionRow(
                             label = "Contact Us",
                             icon = Icons.Default.Help,
-                            onClick = { onNavigate(NavRoutes.PreferencesHelpSupport) }
+                            onClick = { onNavigate(NavRoutes.TasksFlow) }
                         )
                         ActionRow(
                             label = "Perguntas Frequentes",
                             icon = Icons.Default.Help,
-                            onClick = { onNavigate(NavRoutes.PreferencesHelpSupport) }
+                            onClick = { onNavigate(NavRoutes.TasksFlow) }
                         )
                     }
 

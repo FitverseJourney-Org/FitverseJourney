@@ -24,12 +24,12 @@ fun PlanWorkoutNavigation(
         SavedStateConfiguration {
             serializersModule = SerializersModule {
                 polymorphic(NavKey::class) {
-                    subclass(NavRoutes.PlanWorkoutFlow.PlanList::class, NavRoutes.PlanWorkoutFlow.PlanList.serializer())
-                    subclass(NavRoutes.PlanWorkoutFlow.PlanBuilder::class, NavRoutes.PlanWorkoutFlow.PlanBuilder.serializer())
+                    subclass(NavRoutes.PlanWorkoutFlow.List::class, NavRoutes.PlanWorkoutFlow.List.serializer())
+                    subclass(NavRoutes.PlanWorkoutFlow.Builder::class, NavRoutes.PlanWorkoutFlow.Builder.serializer())
                 }
             }
         },
-        NavRoutes.PlanWorkoutFlow.PlanList
+        NavRoutes.PlanWorkoutFlow.List
     )
 
 
@@ -41,27 +41,27 @@ fun PlanWorkoutNavigation(
             rememberViewModelStoreNavEntryDecorator()
         ),
         entryProvider = entryProvider {
-            entry<NavRoutes.PlanWorkoutFlow.PlanList> {
+            entry<NavRoutes.PlanWorkoutFlow.List> {
                 PlanWorkoutListDestination(
                     toBack = {
                         toBack()
                     },
                     toNewWorkout = {
-                        rootBackStack.add(NavRoutes.PlanWorkoutFlow.PlanBuilder)
+                        rootBackStack.add(NavRoutes.PlanWorkoutFlow.Builder)
                     }
                 )
             }
-            entry<NavRoutes.PlanWorkoutFlow.PlanBuilder>{
+            entry<NavRoutes.PlanWorkoutFlow.Builder>{
                 PlanWorkoutBuilderDestination(
                     onBack = {
                         rootBackStack.removeLastOrNull()
                     },
                     toAddExercises = {
-                        rootBackStack.add(NavRoutes.PlanWorkoutFlow.PlanExercises)
+                        rootBackStack.add(NavRoutes.PlanWorkoutFlow.Exercises)
                     }
                 )
             }
-            entry<NavRoutes.PlanWorkoutFlow.PlanExercises>{
+            entry<NavRoutes.PlanWorkoutFlow.Exercises>{
                 PlanWorkoutExercisesDestination(
                     onBack = {
                         rootBackStack.removeLastOrNull()

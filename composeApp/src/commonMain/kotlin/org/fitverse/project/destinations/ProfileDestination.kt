@@ -5,14 +5,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.presentation.components.background.PremiumGamifiedBackground
-import com.example.presentation.screens.ui.main.profile.ProfileScreenPro
+import com.example.presentation.screens.ui.profile.ProfileScreenPro
 
 
 @Composable
 fun ProfileDestination(toPlans: () -> Unit) {
     Box(modifier = Modifier.fillMaxSize()){
         PremiumGamifiedBackground()
-        ProfileScreenPro(
+        com.example.presentation.screens.ui.profile.ProfileScreenPro(
             navigateToPlans = {
                 toPlans()
             },

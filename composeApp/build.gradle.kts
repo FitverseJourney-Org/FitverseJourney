@@ -91,6 +91,9 @@ kotlin {
             // RESOURCES
             // -----------------------------------------------------------------------------------------
             implementation(libs.components.resources)
+
+
+
         }
 
         commonTest.dependencies {

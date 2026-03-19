@@ -7,14 +7,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import com.example.presentation.screens.ui.modal.helpSupport.HelpSupportScreen
-import com.example.presentation.screens.ui.modal.historic.HistoricScreen
+import com.example.presentation.screens.ui.helpSupport.HelpSupportScreen
+import com.example.presentation.screens.ui.historic.HistoricScreen
 
 @Composable
 fun HelpSupportModalDestination(){
     val cs = MaterialTheme.colorScheme
 
     Box(modifier = Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(cs.surface, cs.background)))){
-        HelpSupportScreen()
+        com.example.presentation.screens.ui.helpSupport.HelpSupportScreen()
     }
 }

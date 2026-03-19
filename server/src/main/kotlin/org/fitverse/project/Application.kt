@@ -4,6 +4,8 @@ import io.ktor.server.application.Application
 import io.ktor.server.engine.connector
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
+import org.fitverse.project.di.appModule
+import org.fitverse.project.di.authModule
 import org.fitverse.project.plugins.configurePlugins
 
 fun main() {

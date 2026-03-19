@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.presentation.components.background.PremiumGamifiedBackground
-import com.example.presentation.screens.ui.main.workout.WorkoutScreenV2
+import com.example.presentation.screens.ui.workout.WorkoutScreenV2
 
 @Composable
 fun WorkoutDestination(
@@ -13,7 +13,7 @@ fun WorkoutDestination(
 ) {
     Box(modifier = Modifier.fillMaxSize()){
         PremiumGamifiedBackground()
-        WorkoutScreenV2(
+        com.example.presentation.screens.ui.workout.WorkoutScreenV2(
             onStart = {
                 toWorkoutSession()
             }

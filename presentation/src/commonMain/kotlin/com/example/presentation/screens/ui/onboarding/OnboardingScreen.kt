@@ -29,6 +29,7 @@ import com.example.domain.model.onboarding.OnboardingPage
 import com.example.expect.FitnessLottieAnimation
 import com.example.presentation.screens.ui.onboarding.components.OnboardingControls
 import com.example.presentation.screens.ui.onboarding.components.UltraFitnessOnboardingBackground
+import com.example.presentation.screens.ui.onboarding.viewmodel.OnboardingViewModel
 import com.example.presentation.states.onboarding.OnboardingState
 import fitversejourneyapp.presentation.generated.resources.Res
 import fitversejourneyapp.presentation.generated.resources.onboarding_description_1

@@ -27,7 +27,7 @@ import com.example.presentation.components.snackbar.AppSnackbarHost
 import com.example.presentation.components.snackbar.SnackbarType
 import com.example.presentation.navigationState.LoginNavigation
 import com.example.presentation.screens.ui.authentication.login.LoginScreen
-import com.example.presentation.screens.ui.authentication.login.LoginViewModel
+import com.example.presentation.screens.ui.authentication.login.viewmodel.LoginViewModel
 import com.example.presentation.screens.ui.authentication.login.components.AnimatedLoginBackground
 import com.example.presentation.screens.ui.setupLanguage.SetupLanguageScreen
 import kotlinx.coroutines.flow.collectLatest

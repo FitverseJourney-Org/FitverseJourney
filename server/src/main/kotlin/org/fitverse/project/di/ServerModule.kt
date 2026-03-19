@@ -11,4 +11,5 @@ val authModule = module {
     // Define o Controller (quem recebe as chamadas das rotas)
     single { AuthController(get()) }
 }
+
 val appModule = listOf(authModule)

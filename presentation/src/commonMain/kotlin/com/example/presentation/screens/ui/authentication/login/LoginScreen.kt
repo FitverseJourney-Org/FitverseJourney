@@ -26,6 +26,7 @@ import com.example.presentation.screens.ui.authentication.login.components.Heade
 import com.example.presentation.screens.ui.authentication.login.components.LoginFooter
 import com.example.presentation.screens.ui.authentication.login.components.LoginForm
 import com.example.presentation.screens.ui.authentication.login.state.LoginState
+import com.example.presentation.screens.ui.authentication.login.viewmodel.LoginViewModel
 import fitversejourneyapp.presentation.generated.resources.Res
 import fitversejourneyapp.presentation.generated.resources.locale_ru
 import fitversejourneyapp.presentation.generated.resources.login_subtitle

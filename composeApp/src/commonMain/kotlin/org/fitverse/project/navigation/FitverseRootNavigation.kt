@@ -19,6 +19,7 @@ import kotlinx.serialization.modules.polymorphic
 import org.fitverse.project.destinations.OnboardingDestination
 import org.fitverse.project.destinations.SplashDestination
 import org.fitverse.project.destinations.TrialDestination
+import org.fitverse.project.destinations.workout.WorkoutDestination
 import org.fitverse.project.routes.NavRoutes
 import kotlin.collections.listOf
 
@@ -33,7 +34,6 @@ fun FitverseRootNavigation() {
                     subclass(NavRoutes.TrialScreen::class, NavRoutes.TrialScreen.serializer())
                     subclass(NavRoutes.AuthFlow::class, NavRoutes.AuthFlow.serializer())
                     subclass(NavRoutes.HomeFlow::class, NavRoutes.HomeFlow.serializer())
-                    subclass(NavRoutes.MealsFlow::class, NavRoutes.MealsFlow.serializer())
                     subclass(NavRoutes.WorkoutFlow::class, NavRoutes.WorkoutFlow.serializer())
                 }
             }
@@ -105,12 +105,6 @@ fun FitverseRootNavigation() {
             }
             entry<NavRoutes.HomeFlow>{
                 HomeNavigation()
-            }
-            entry<NavRoutes.MealsFlow>{
-                MealsNavigation()
-            }
-            entry<NavRoutes.WorkoutFlow>{
-                WorkoutNavigation()
             }
         }
     )
