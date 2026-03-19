@@ -59,24 +59,3 @@ object DarkGamifiedColors {
     val Divider = Color(0xFF2E2442)
     val Outline = Color(0xFF3F2E5E)
 }
-
-object GamifiedBackgroundBrushes {
-
-    /** Versão levemente mais clara — ideal para dashboard e hero areas */
-    val SoftDepth: Brush = Brush.verticalGradient(
-        colorStops = arrayOf(
-            0.0f to DarkGamifiedColors.Background,
-            0.55f to DarkGamifiedColors.Surface,
-            1.0f to DarkGamifiedColors.Card
-        )
-    )
-
-    /** Versão mais escura — ideal para listas e telas densas */
-    val DeepContrast: Brush = Brush.verticalGradient(
-        colorStops = arrayOf(
-            0.0f to DarkGamifiedColors.Background,
-            0.75f to DarkGamifiedColors.Surface,
-            1.0f to DarkGamifiedColors.Surface
-        )
-    )
-}

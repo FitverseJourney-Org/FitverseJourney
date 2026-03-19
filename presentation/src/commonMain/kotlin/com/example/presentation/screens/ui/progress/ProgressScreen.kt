@@ -2,7 +2,6 @@ package com.example.presentation.screens.ui.progress
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,7 +20,6 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -47,7 +45,6 @@ import ir.ehsannarmani.compose_charts.models.LabelHelperProperties
 import ir.ehsannarmani.compose_charts.models.LabelProperties
 import ir.ehsannarmani.compose_charts.models.Line
 import ir.ehsannarmani.compose_charts.models.PopupProperties
-import ir.ehsannarmani.compose_charts.models.StrokeStyle
 import ir.ehsannarmani.compose_charts.models.ZeroLineProperties
 
 
@@ -190,9 +187,19 @@ fun ProgressScreen(
                                     icon = Icons.Default.ListAlt,
                                     onClick = { splitDropdownOpen = true }
                                 )
-                                DropdownMenu(modifier = Modifier.fillMaxWidth(.30f), expanded = splitDropdownOpen, onDismissRequest = { splitDropdownOpen = false }) {
+                                // Definindo altura máxima de 250.dp para forçar o scroll se necessário
+                                DropdownMenu(
+                                    modifier = Modifier
+                                        .width(150.dp) // Largura fixa para manter consistência
+                                        .heightIn(max = 250.dp),
+                                    expanded = splitDropdownOpen,
+                                    onDismissRequest = { splitDropdownOpen = false }
+                                ) {
                                     availableSplits.forEach { split ->
-                                        DropdownMenuItem(text = { Text(split) }, onClick = { selectedSplit = split; splitDropdownOpen = false })
+                                        DropdownMenuItem(
+                                            text = { Text(split) },
+                                            onClick = { selectedSplit = split; splitDropdownOpen = false }
+                                        )
                                     }
                                 }
                             }
@@ -204,9 +211,18 @@ fun ProgressScreen(
                                     icon = Icons.Default.FitnessCenter,
                                     onClick = { exerciseDropdownOpen = true }
                                 )
-                                DropdownMenu(modifier = Modifier.fillMaxWidth(.60f), expanded = exerciseDropdownOpen, onDismissRequest = { exerciseDropdownOpen = false }) {
+                                DropdownMenu(
+                                    modifier = Modifier
+                                        .width(220.dp)
+                                        .heightIn(max = 250.dp), // Altura fixa com scroll
+                                    expanded = exerciseDropdownOpen,
+                                    onDismissRequest = { exerciseDropdownOpen = false }
+                                ) {
                                     filteredExercises.forEach { ex ->
-                                        DropdownMenuItem(text = { Text(ex.name) }, onClick = { selectedExercise = ex; exerciseDropdownOpen = false })
+                                        DropdownMenuItem(
+                                            text = { Text(ex.name) },
+                                            onClick = { selectedExercise = ex; exerciseDropdownOpen = false }
+                                        )
                                     }
                                 }
                             }
@@ -225,7 +241,13 @@ fun ProgressScreen(
                                     icon = Icons.Default.CalendarMonth,
                                     onClick = { startDropdownOpen = true }
                                 )
-                                DropdownMenu(modifier = Modifier.fillMaxWidth(.45f), expanded = startDropdownOpen, onDismissRequest = { startDropdownOpen = false }) {
+                                DropdownMenu(
+                                    modifier = Modifier
+                                        .width(180.dp)
+                                        .heightIn(max = 280.dp), // Perfeito para os 12 meses
+                                    expanded = startDropdownOpen,
+                                    onDismissRequest = { startDropdownOpen = false }
+                                ) {
                                     availableMonths.forEach { month ->
                                         DropdownMenuItem(
                                             text = { Text(getMonthName(month.toString())) },
@@ -242,12 +264,18 @@ fun ProgressScreen(
                                     icon = Icons.Default.Event,
                                     onClick = { endDropdownOpen = true }
                                 )
-                                DropdownMenu(modifier = Modifier.fillMaxWidth(.45f), expanded = endDropdownOpen, onDismissRequest = { endDropdownOpen = false }) {
+                                DropdownMenu(
+                                    modifier = Modifier
+                                        .width(180.dp)
+                                        .heightIn(max = 280.dp),
+                                    expanded = endDropdownOpen,
+                                    onDismissRequest = { endDropdownOpen = false }
+                                ) {
                                     availableMonths.forEach { month ->
                                         DropdownMenuItem(
                                             text = { Text(getMonthName(month.toString())) },
                                             onClick = { endMonth = month; endDropdownOpen = false },
-                                            enabled = month >= startMonth // Impede selecionar fim menor que início
+                                            enabled = month >= startMonth
                                         )
                                     }
                                 }
@@ -268,9 +296,11 @@ fun ProgressScreen(
                         } else {
                             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                                 ProgressChartCard(
-                                    // Atenção: Certifique-se de que o chart receba os dados filtrados (displayData) se desejar que o gráfico obedeça o filtro
                                     progressionData = displayData,
-                                    monthbeforeProgression = displayDataBefore
+                                    monthBeforeProgression = displayDataBefore,
+                                    // Passamos os nomes formatados para o componente
+                                    currentPeriodLabel = getMonthName(endMonth.toString()),
+                                    previousPeriodLabel = getMonthName(startMonth.toString())
                                 )
                                 KeyStatsRow(progressionData = displayData)
                                 InsightsCard(progressionData = displayData)
@@ -330,7 +360,9 @@ fun EmptyDataState() {
 @Composable
 fun ProgressChartCard(
     progressionData: List<LoadProgressionPoint>,
-    monthbeforeProgression: List<LoadProgressionPoint>
+    monthBeforeProgression: List<LoadProgressionPoint>,
+    currentPeriodLabel: String,
+    previousPeriodLabel: String
 ) {
     val labelColor = Color.White
 
@@ -405,18 +437,18 @@ fun ProgressChartCard(
                     textStyle = MaterialTheme.typography.labelMedium,
                     containerColor = Color.White,
                 ),
-                data = remember(progressionData, monthbeforeProgression) {
+                data = remember(progressionData, monthBeforeProgression) {
                     listOf(
                         Line(
-                            label = "Mês Anterior",
-                            values = monthbeforeProgression.map { it.weight },
+                            label = previousPeriodLabel,
+                            values = monthBeforeProgression.map { it.weight },
                             color = SolidColor(Color.White),
                             curvedEdges = true,
                             drawStyle = DrawStyle.Stroke(2.dp),
                             dotProperties = DotProperties(enabled = false)
                         ),
                         Line(
-                            label = "Carga Atual",
+                            label = currentPeriodLabel,
                             values = progressionData.map { it.weight },
                             color = SolidColor(Color.Yellow),
                             drawStyle = DrawStyle.Stroke(2.dp),

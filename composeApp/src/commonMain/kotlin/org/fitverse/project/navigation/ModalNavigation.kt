@@ -120,12 +120,12 @@ fun ModalDrawerSheetMainScreen(
                         ActionRow(
                             label = "Achievements",
                             icon = Icons.Default.EmojiEvents, // Ícone de troféu (mais imersivo que a estrela)
-                            onClick = { onNavigate(NavRoutes.Progress) }
+                            onClick = { onNavigate(NavRoutes.Achievements) }
                         )
                         ActionRow(
                             label = "Devices",
                             icon = Icons.Default.Devices, // Ícone de celular/tablet (ou use Icons.Default.Watch para smartwatches)
-                            onClick = { onNavigate(NavRoutes.TasksFlow) }
+                            onClick = { onNavigate(NavRoutes.Devices) }
                         )
                     }
 
@@ -145,7 +145,7 @@ fun ModalDrawerSheetMainScreen(
                         ActionRow(
                             label = "Medidores e Dispositivos",
                             icon = Icons.Default.Devices, // Ícone de celular/tablet (ou use Icons.Default.Watch para smartwatches)
-                            onClick = { onNavigate(NavRoutes.TasksFlow) }
+                            onClick = { onNavigate(NavRoutes.Devices) }
                         )
 
                     }

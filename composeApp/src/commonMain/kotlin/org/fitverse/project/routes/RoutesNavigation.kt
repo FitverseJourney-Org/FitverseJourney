@@ -90,7 +90,7 @@ sealed interface NavRoutes : NavKey {
     @Serializable object Historic : NavRoutes
     @Serializable object Progress : NavRoutes
     @Serializable object ActionsHistoric : NavRoutes
-    @Serializable object ActionsAchievements : NavRoutes
+    @Serializable object Achievements : NavRoutes
     @Serializable object PreferencesDevicesConnect : NavRoutes
     @Serializable object PreferencesHelpSupport : NavRoutes
 }

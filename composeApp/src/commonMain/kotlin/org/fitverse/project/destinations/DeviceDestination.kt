@@ -1,4 +1,4 @@
-package org.fitverse.project.destinations.modal
+package org.fitverse.project.destinations
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -11,10 +11,10 @@ import androidx.navigation3.runtime.NavKey
 import com.example.presentation.screens.ui.device.DeviceSettingsScreenPro
 
 @Composable
-fun DevicesModalDestination(navigateBack: () -> NavKey?) {
+fun DevicesDestination(toBack: () -> NavKey?) {
     val cs = MaterialTheme.colorScheme
 
     Box(modifier = Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(cs.surface, cs.background)))){
-        com.example.presentation.screens.ui.device.DeviceSettingsScreenPro(navigateBack = { navigateBack() })
+        DeviceSettingsScreenPro(navigateBack = { toBack() })
     }
 }

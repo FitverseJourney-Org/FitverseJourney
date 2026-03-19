@@ -56,7 +56,7 @@ fun DeviceSettingsScreenPro(
     val cs = MaterialTheme.colorScheme
     val metrics = remember {
         mutableStateListOf(
-            _root_ide_package_.com.example.presentation.screens.ui.device.MetricUi(
+            MetricUi(
                 "steps",
                 "Passos Diários",
                 true,

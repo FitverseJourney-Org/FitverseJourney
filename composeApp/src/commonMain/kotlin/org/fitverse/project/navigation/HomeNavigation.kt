@@ -33,9 +33,11 @@ import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
+import org.fitverse.project.destinations.AchievementDestination
 import org.fitverse.project.destinations.AddPostDestination
 import org.fitverse.project.destinations.CommunityDestination
 import org.fitverse.project.destinations.DashboardDestination
+import org.fitverse.project.destinations.DevicesDestination
 import org.fitverse.project.destinations.MealsDestination
 import org.fitverse.project.destinations.NotificationDestination
 import org.fitverse.project.destinations.ProfileDestination
@@ -215,7 +217,16 @@ fun HomeNavigation() {
                                 toBack = { rootBackStack.removeLastOrNull() }
                             )
                         }
-
+                        entry<NavRoutes.Achievements>{
+                            AchievementDestination(
+                                toBack = { rootBackStack.removeLastOrNull() }
+                            )
+                        }
+                        entry<NavRoutes.Devices>{
+                            DevicesDestination(
+                                toBack = { rootBackStack.removeLastOrNull() }
+                            )
+                        }
                     }
                 )
             }
