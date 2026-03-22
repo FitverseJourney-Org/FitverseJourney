@@ -16,10 +16,9 @@ import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
-import org.fitverse.project.destinations.OnboardingDestination
-import org.fitverse.project.destinations.SplashDestination
-import org.fitverse.project.destinations.TrialDestination
-import org.fitverse.project.destinations.workout.WorkoutDestination
+import org.fitverse.project.destinations.onboading.OnboardingDestination
+import org.fitverse.project.destinations.splash.SplashDestination
+import org.fitverse.project.destinations.trial.TrialDestination
 import org.fitverse.project.routes.NavRoutes
 import kotlin.collections.listOf
 
@@ -38,7 +37,7 @@ fun FitverseRootNavigation() {
                 }
             }
         },
-        NavRoutes.HomeFlow
+        NavRoutes.SplashScreen
     )
 
     NavDisplay(
@@ -68,13 +67,14 @@ fun FitverseRootNavigation() {
                         rootBackStack.add(NavRoutes.AuthFlow)
                     },
                     toTrial = {
-
+                        rootBackStack.add(NavRoutes.TrialScreen)
                     },
                     toHome = {
-
+                        rootBackStack.clear()
+                        rootBackStack.add(NavRoutes.HomeFlow)
                     },
                     toOnboarding = {
-
+                        rootBackStack.add(NavRoutes.OnboardingScreen)
                     }
                 )
             }
@@ -104,7 +104,12 @@ fun FitverseRootNavigation() {
                 )
             }
             entry<NavRoutes.HomeFlow>{
-                HomeNavigation()
+                HomeNavigation(
+                    onLogout = {
+                        rootBackStack.clear()
+                        rootBackStack.add(NavRoutes.AuthFlow)
+                    }
+                )
             }
         }
     )

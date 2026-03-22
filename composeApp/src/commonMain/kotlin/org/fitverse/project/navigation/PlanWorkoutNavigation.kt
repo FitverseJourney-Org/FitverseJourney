@@ -11,9 +11,9 @@ import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
-import org.fitverse.project.destinations.workout.PlanWorkoutBuilderDestination
-import org.fitverse.project.destinations.workout.PlanWorkoutExercisesDestination
-import org.fitverse.project.destinations.workout.PlanWorkoutListDestination
+import org.fitverse.project.destinations.homepage.workout.PlanWorkoutBuilderDestination
+import org.fitverse.project.destinations.homepage.workout.PlanWorkoutExercisesDestination
+import org.fitverse.project.destinations.homepage.workout.PlanWorkoutListDestination
 import org.fitverse.project.routes.NavRoutes
 
 @Composable

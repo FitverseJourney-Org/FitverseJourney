@@ -11,4 +11,5 @@ plugins {
     alias(libs.plugins.android.kotlin.multiplatform.library) apply false
     alias(libs.plugins.googleServices) apply false
     alias(libs.plugins.android.lint) apply false
+    id("com.gradleup.shadow") version "9.4.0" apply false
 }

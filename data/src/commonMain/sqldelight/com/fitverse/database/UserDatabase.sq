@@ -1,0 +1,16 @@
+CREATE TABLE userTable (
+  user_id INTEGER NOT NULL PRIMARY KEY,
+  id INTEGER NOT NULL,
+  name TEXT NOT NULL
+);
+
+selectAll:
+SELECT * FROM userTable;
+
+insertUser:
+INSERT INTO userTable(user_id, id, name)
+VALUES (?,?,?);
+
+removeAllUser:
+DELETE FROM userTale;
+

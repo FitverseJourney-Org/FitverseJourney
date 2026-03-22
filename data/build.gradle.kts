@@ -111,7 +111,7 @@ kotlin {
 
 sqldelight {
     databases {
-        create("FitverseDatabase") {
+        create("UserDatabase") {
             packageName.set("com.fitverse.database")
             verifyMigrations.set(false)
         }

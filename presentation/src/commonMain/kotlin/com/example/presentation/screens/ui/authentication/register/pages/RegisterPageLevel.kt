@@ -141,6 +141,7 @@ fun TrainingLevelItem(
 
     // border / accent
     val accent = when (level) {
+        FitnessLevel.SEDENTARY -> colors.tertiary
         FitnessLevel.BEGINNER -> colors.primary.copy(alpha = 0.95f)
         FitnessLevel.INTERMEDIATE -> colors.secondary
         FitnessLevel.ADVANCED -> colors.tertiary
@@ -233,6 +234,7 @@ fun TrainingLevelItem(
 /** Mapeia icon + tint por nível — usa colorScheme para garantir contraste. */
 private fun levelToIcon(level: FitnessLevel, colors: androidx.compose.material3.ColorScheme, accent: Color): Pair<ImageVector, Color> {
     return when (level) {
+        FitnessLevel.SEDENTARY -> Icons.Default.AccessibilityNew to colors.onSurface
         FitnessLevel.BEGINNER -> Icons.Default.AccessibilityNew to accent
         FitnessLevel.INTERMEDIATE -> Icons.Default.DirectionsRun to accent
         FitnessLevel.ADVANCED -> Icons.Default.FitnessCenter to accent

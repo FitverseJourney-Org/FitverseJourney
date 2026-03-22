@@ -1,9 +1,13 @@
 plugins {
     alias(libs.plugins.kotlinJvm) // Add this plugin
     alias(libs.plugins.ktor)
-    application // Add this plugin
-}
+    id("com.gradleup.shadow")
 
+}
+application {
+    // Forma correta para Gradle 7+ / 8+ / 9+
+    mainClass.set("com.example.ApplicationKt")
+}
 group = "org.fitverse.project"
 version = "1.0.0"
 application {

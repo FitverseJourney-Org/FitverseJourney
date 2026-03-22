@@ -15,9 +15,19 @@ data class RegisterState(
     val age: String = "",
     val height: Int = 170,
     val weight: Int = 70,
+    val selectedAvatarId: String? = null,
+
+    // --- NOVOS CAMPOS DE MACROS ---
+    val targetCalories: Int = 2000,
+    val targetProteins: Int = 150,
+    val targetFats: Int = 70,
+    val targetCarbs: Int = 200, // Opcional, mas útil para fechar a conta
+    // ------------------------------
+
     val gender: Gender = Gender.OTHER,
     val fitnessGoal: FitnessGoal? = null,
     val trainingLevel: FitnessLevel = FitnessLevel.BEGINNER,
+
     // List Errors
     val ageErrors: List<String> = emptyList(),
     val nameErrors: List<String> = emptyList(),

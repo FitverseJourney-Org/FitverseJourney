@@ -70,11 +70,26 @@ class RegisterViewModel(
             is RegisterAction.TrainingLevelChanged -> {
                 _state.update {
                     it.copy(
-                        trainingLevel = it.trainingLevel,
+                        trainingLevel = action.level, // Corrigido para usar o valor da action
                         trainingLevelErrors = emptyList()
                     )
                 }
             }
+
+            // --- NOVAS ACTIONS DE MACROS ---
+            is RegisterAction.UpdateCalories -> {
+                _state.update { it.copy(targetCalories = action.value) }
+            }
+            is RegisterAction.UpdateProteins -> {
+                _state.update { it.copy(targetProteins = action.value) }
+            }
+            is RegisterAction.UpdateFats -> {
+                _state.update { it.copy(targetFats = action.value) }
+            }
+            is RegisterAction.UpdateCarbs -> {
+                _state.update { it.copy(targetCarbs = action.value) }
+            }
+            // -------------------------------
 
             is RegisterAction.Next -> {
                 validateAndNext()
@@ -100,16 +115,20 @@ class RegisterViewModel(
                     _navigationState.emit(RegisterNavigation.ToLogin)
                 }
             }
+            is RegisterAction.UpdateLevel -> {
+                _state.update {
+                    it.copy(trainingLevel = action.level) // Corrigido para usar o valor da action
+                }
+            }
+            is RegisterAction.UpdateAvatar -> {
+                _state.update {
+                    it.copy(selectedAvatarId = action.avatarId)
+                }
+            }
         }
     }
     private fun validateAndNext() {
-        when (_state.value.page) {
-            RegisterPage.Profile -> validateProfile()
-            RegisterPage.Goals -> validateGoals()
-            RegisterPage.Level -> validateLevel()
-            RegisterPage.Credentials -> validateCredentials()
-            else -> nextPage()
-        }
+        nextPage()
     }
     private fun validateProfile() {
         val errors = ValidateProfilePageUseCase(

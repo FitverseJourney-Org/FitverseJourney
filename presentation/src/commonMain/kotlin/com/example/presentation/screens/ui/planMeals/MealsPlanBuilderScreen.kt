@@ -47,7 +47,7 @@ data class FoodEntry(
 data class MealGroup(
     val id: String,
     val name: String, // Ex: "Café da Manhã"
-    val foods: List<FoodEntry> = emptyList()
+    val foods: List<FoodEntry>
 ) {
     val totalCalories: Int get() = foods.sumOf { it.calories }
     val totalProtein: Int get() = foods.sumOf { it.protein }

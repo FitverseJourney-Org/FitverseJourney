@@ -24,6 +24,7 @@ sealed interface NavRoutes : NavKey {
         data object Dashboard : NavKey, NavRoutes
         @Serializable
         data object Meals : NavKey, NavRoutes
+
         @Serializable
         data object Community : NavKey, NavRoutes
 
@@ -79,7 +80,7 @@ sealed interface NavRoutes : NavKey {
 
 
 
-    @Serializable object PlanScreen : NavRoutes
+    @Serializable object PlanPaymentScreen : NavRoutes
     @Serializable object Devices : NavRoutes
     @Serializable object WorkoutSession : NavRoutes
     @Serializable object ActionsWorkout : NavRoutes
@@ -91,6 +92,5 @@ sealed interface NavRoutes : NavKey {
     @Serializable object Progress : NavRoutes
     @Serializable object ActionsHistoric : NavRoutes
     @Serializable object Achievements : NavRoutes
-    @Serializable object PreferencesDevicesConnect : NavRoutes
-    @Serializable object PreferencesHelpSupport : NavRoutes
+    @Serializable object HelpSupport : NavRoutes
 }

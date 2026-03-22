@@ -12,21 +12,20 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.time.Clock
 
 class CommunityViewModel : ViewModel() {
 
     private val _uiState = MutableStateFlow<CommunityUiState>(CommunityUiState.Loading)
     val uiState: StateFlow<CommunityUiState> = _uiState.asStateFlow()
 
-    // ---------------------------------------------------------
-    // MOCK DO BACKEND (Simulando o banco de dados do servidor)
-    // ---------------------------------------------------------
-    private val availableGroups = listOf(
+    // Simulando o Banco de Dados que agora permite escrita
+    private val availableGroups = mutableListOf(
         CommunityGroup(
             id = "grp_001",
             name = "Elite Hipertrofia - Divisão ABCD",
-            accessCode = "FITVERSE-ABCD", // <-- O CÓDIGO ÚNICO AQUI
-            description = "Foco total em ganho de massa muscular, estruturação de treinos e rotina de suplementação.",
+            accessCode = "FITVERSE-ABCD",
+            description = "Foco total em ganho de massa muscular.",
             memberCount = 12
         )
     )
@@ -38,28 +37,20 @@ class CommunityViewModel : ViewModel() {
     private fun checkUserGroupStatus() {
         viewModelScope.launch {
             delay(800)
-            // Inicia a tela pedindo o código
             _uiState.update { CommunityUiState.NotInGroup }
         }
     }
 
-    // Função chamada quando o usuário clica em "Entrar no Grupo"
+    // --- LOGICA DE ENTRAR ---
     fun joinGroup(enteredCode: String) {
         viewModelScope.launch {
-            // Coloca a tela em estado de carregamento
             _uiState.update { CommunityUiState.Loading }
+            delay(1200)
 
-            // Simula o tempo de requisição para o servidor Ktor
-            delay(1500)
-
-            // Remove espaços e ignora maiúsculas/minúsculas para facilitar para o usuário
             val sanitizedCode = enteredCode.trim().uppercase()
-
-            // Busca no "banco de dados" se o código existe
             val foundGroup = availableGroups.find { it.accessCode == sanitizedCode }
 
             if (foundGroup != null) {
-                // Sucesso! Usuário entrou no grupo. Atualiza o estado com os dados do grupo.
                 _uiState.update {
                     CommunityUiState.InGroup(
                         squadName = foundGroup.name,
@@ -67,45 +58,68 @@ class CommunityViewModel : ViewModel() {
                     )
                 }
             } else {
-                // Erro: Código não encontrado
                 _uiState.update {
-                    CommunityUiState.Error("O código '$enteredCode' é inválido ou expirou. Verifique e tente novamente.")
+                    CommunityUiState.Error("O código '$enteredCode' é inválido ou expirou.")
                 }
             }
         }
     }
 
-    // Simula a busca do feed de postagens baseado no ID do grupo
-    private fun getPostsForGroup(groupId: String): List<WorkoutPost> {
-        return if (groupId == "grp_001") {
-            listOf(
-                WorkoutPost(
-                    id = "p1",
-                    userName = "Marcos",
-                    imageUrl = "",
-                    description = "Treino A (Peito e Ombro) finalizado! Pump absurdo hoje. 💪",
-                    timestamp = DateTimeManager.nowMillis()
-                ),
-                WorkoutPost(
-                    id = "p2",
-                    userName = "Juliana",
-                    imageUrl = "",
-                    description = "Testando aquele EAA novo intra-treino no dia de braço, o rendimento bateu no teto! 🔥",
-                    timestamp = DateTimeManager.nowMillis() // 1 hora atrás
-                )
+    // --- NOVA LOGICA DE CRIAR ---
+    fun createGroup(name: String, description: String) {
+        viewModelScope.launch {
+            _uiState.update { CommunityUiState.Loading }
+
+            // Simula o tempo de processamento no servidor (Ktor/Firebase)
+            delay(1500)
+
+            // 1. Gera um código único estilo FIT-1234
+            val generatedCode = "FIT-${(1000..9999).random()}"
+            val newId = "grp_${DateTimeManager.nowMillis()}"
+
+            // 2. Cria o novo objeto de grupo
+            val newSquad = CommunityGroup(
+                id = newId,
+                name = name,
+                accessCode = generatedCode,
+                description = description,
+                memberCount = 1 // O criador é o primeiro membro
             )
-        } else {
-            emptyList()
+
+            // 3. "Salva" no nosso mock de banco de dados
+            availableGroups.add(newSquad)
+
+            // 4. Coloca o usuário direto dentro do novo Squad
+            _uiState.update {
+                CommunityUiState.InGroup(
+                    squadName = newSquad.name,
+                    posts = emptyList() // Squad novo não tem posts ainda
+                )
+            }
+
+            // TODO: No futuro, disparar um evento para mostrar o código gerado ao usuário
+            println("Squad Criado com Sucesso! Código: $generatedCode")
+        }
+    }
+
+    private fun getPostsForGroup(groupId: String): List<WorkoutPost> {
+        return when (groupId) {
+            "grp_001" -> listOf(
+                WorkoutPost("p1", "Marcos", "", "Treino A (Peito e Ombro) finalizado! 💪", DateTimeManager.nowMillis()),
+                WorkoutPost("p2", "Juliana", "", "EAA novo aprovado! 🔥", DateTimeManager.nowMillis() - 3600000)
+            )
+            else -> emptyList() // Grupos novos ou outros IDs começam vazios
         }
     }
 
     fun resetToJoin() {
         _uiState.update { CommunityUiState.NotInGroup }
     }
+
     fun leaveGroup() {
         viewModelScope.launch {
             _uiState.update { CommunityUiState.Loading }
-            delay(500) // Simulação de rede
+            delay(500)
             _uiState.update { CommunityUiState.NotInGroup }
         }
     }

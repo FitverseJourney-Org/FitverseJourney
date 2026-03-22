@@ -6,13 +6,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.expect.LocalAppLocale
-import com.example.presentation.theme.GamifiedTheme
+import com.example.presentation.theme.FitVerseJourneyTheme
 import org.fitverse.project.navigation.FitverseRootNavigation
-import org.koin.compose.koinInject
 
 
 class MainActivity : ComponentActivity() {
@@ -28,7 +23,7 @@ class MainActivity : ComponentActivity() {
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun App() {
-    GamifiedTheme {
+    FitVerseJourneyTheme {
 
         FitverseRootNavigation()
 //        CompositionLocalProvider(

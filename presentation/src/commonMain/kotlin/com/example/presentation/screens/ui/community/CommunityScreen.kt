@@ -5,6 +5,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,9 +22,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.AddAPhoto
+import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.SearchOff
@@ -121,7 +124,11 @@ fun CommunityScreen(
 
                 is CommunityUiState.NotInGroup -> {
                     JoinGroupContent(
-                        onJoinClick = { code -> viewModel.joinGroup(code) }
+                        onJoinClick = { code -> viewModel.joinGroup(code) },
+                        onCreateClick = { name, desc ->
+                            // Chame a função de criação no seu ViewModel
+                            viewModel.createGroup(name, desc)
+                        }
                     )
                 }
 
@@ -144,12 +151,51 @@ fun CommunityScreen(
         }
     }
 }
-
+@Composable
+fun SquadCreatedDialog(
+    accessCode: String,
+    onConfirm: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = { },
+        title = { Text("Squad Fundado! 🛡️", fontWeight = FontWeight.Black) },
+        text = {
+            Column {
+                Text("Compartilhe o código abaixo com seus parceiros de treino:")
+                Spacer(Modifier.height(16.dp))
+                Surface(
+                    color = MaterialTheme.colorScheme.primaryContainer,
+                    shape = RoundedCornerShape(8.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = accessCode,
+                        modifier = Modifier.padding(16.dp),
+                        style = MaterialTheme.typography.headlineMedium,
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.Black,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                }
+            }
+        },
+        confirmButton = {
+            Button(onClick = onConfirm) { Text("BORA TREINAR") }
+        }
+    )
+}
 @Composable
 private fun JoinGroupContent(
-    onJoinClick: (String) -> Unit
+    onJoinClick: (String) -> Unit,
+    onCreateClick: (String, String) -> Unit // Nome e Descrição
 ) {
     var groupCode by remember { mutableStateOf("") }
+    var isCreating by remember { mutableStateOf(false) } // Toggle entre entrar/criar
+
+    var newSquadName by remember { mutableStateOf("") }
+    var newSquadDesc by remember { mutableStateOf("") }
+
+    val cs = MaterialTheme.colorScheme
 
     Column(
         modifier = Modifier
@@ -158,35 +204,111 @@ private fun JoinGroupContent(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text(
-            text = "Junte-se ao seu Squad",
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.Bold
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = "Insira o código do grupo para compartilhar seus treinos diários e acompanhar a evolução dos seus parceiros.",
-            style = MaterialTheme.typography.bodyMedium,
-            textAlign = TextAlign.Center
-        )
-        Spacer(modifier = Modifier.height(24.dp))
-
-        OutlinedTextField(
-            value = groupCode,
-            onValueChange = { groupCode = it },
-            label = { Text("Código do Grupo") },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true
+        // Ícone de Comunidade Estilizado
+        Icon(
+            imageVector = Icons.Default.Groups, // Adicione essa importação
+            contentDescription = null,
+            modifier = Modifier.size(64.dp),
+            tint = cs.primary
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Button(
-            onClick = { onJoinClick(groupCode) },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = groupCode.isNotBlank()
+        Text(
+            text = if (isCreating) "Lidere seu Squad" else "Junte-se à Elite",
+            style = MaterialTheme.typography.headlineSmall,
+            fontWeight = FontWeight.Black,
+            letterSpacing = 1.sp
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // Seletor de Modo (Entrar vs Criar)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(12.dp))
+                .background(cs.surfaceVariant.copy(alpha = 0.3f))
+                .padding(4.dp)
         ) {
-            Text("Entrar no Grupo")
+            val modes = listOf("ENTRAR", "CRIAR")
+            modes.forEachIndexed { index, title ->
+                val selected = (index == 1 && isCreating) || (index == 0 && !isCreating)
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(if (selected) cs.primary else Color.Transparent)
+                        .clickable { isCreating = index == 1 }
+                        .padding(vertical = 8.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = title,
+                        fontWeight = FontWeight.Bold,
+                        color = if (selected) Color.Black else cs.onSurfaceVariant,
+                        style = MaterialTheme.typography.labelLarge
+                    )
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        // Conteúdo Dinâmico baseado no modo
+        if (!isCreating) {
+            // MODO ENTRAR
+            OutlinedTextField(
+                value = groupCode,
+                onValueChange = { groupCode = it.uppercase() },
+                label = { Text("Código do Squad") },
+                placeholder = { Text("Ex: FIT-2024") },
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(16.dp),
+                singleLine = true
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Button(
+                onClick = { onJoinClick(groupCode) },
+                modifier = Modifier.fillMaxWidth().height(56.dp),
+                enabled = groupCode.length >= 4,
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Text("ENTRAR NO GRUPO", fontWeight = FontWeight.Black)
+            }
+        } else {
+            // MODO CRIAR
+            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                OutlinedTextField(
+                    value = newSquadName,
+                    onValueChange = { newSquadName = it },
+                    label = { Text("Nome do Squad") },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(16.dp)
+                )
+
+                OutlinedTextField(
+                    value = newSquadDesc,
+                    onValueChange = { newSquadDesc = it },
+                    label = { Text("Objetivo (Ex: Rumo aos 100kg)") },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(16.dp)
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Button(
+                    onClick = { onCreateClick(newSquadName, newSquadDesc) },
+                    modifier = Modifier.fillMaxWidth().height(56.dp),
+                    enabled = newSquadName.isNotBlank(),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = cs.secondary)
+                ) {
+                    Text("FUNDAR SQUAD", fontWeight = FontWeight.Black)
+                }
+            }
         }
     }
 }

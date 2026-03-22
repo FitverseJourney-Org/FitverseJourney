@@ -128,8 +128,8 @@ fun FitnessGoalsSelector(
                         when (goal.code) {
                             "LOSE_WEIGHT" -> FitnessGoal.LOSE_WEIGHT
                             "BUILD_MUSCLE" -> FitnessGoal.GAIN_MUSCLE
-                            "IMPROVE_ENDURANCE" -> FitnessGoal.IMPROVE_ENDURANCE
-                            "STAY_HEALTHY" -> FitnessGoal.MAINTAIN
+                            "IMPROVE_ENDURANCE" -> FitnessGoal.HEALTH
+                            "STAY_HEALTHY" -> FitnessGoal.MAINTENANCE
                             else -> throw IllegalArgumentException("Invalid goal code")
                         }
                     )

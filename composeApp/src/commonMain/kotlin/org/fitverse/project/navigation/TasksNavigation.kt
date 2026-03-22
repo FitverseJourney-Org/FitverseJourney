@@ -13,8 +13,8 @@ import com.example.domain.model.dashboard.TaskIcon
 import com.example.domain.model.dashboard.TaskItem
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
-import org.fitverse.project.destinations.TasksDestination
-import org.fitverse.project.destinations.TasksLibraryDestination
+import org.fitverse.project.destinations.modal_destinations.tasks.TasksDestination
+import org.fitverse.project.destinations.modal_destinations.tasks.TasksLibraryDestination
 import org.fitverse.project.routes.NavRoutes
 
 @Composable

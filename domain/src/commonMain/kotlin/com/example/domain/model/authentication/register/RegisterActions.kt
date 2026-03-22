@@ -10,8 +10,16 @@ sealed class RegisterAction {
     data class GenderChanged(val value: Gender) : RegisterAction()
     data class GoalsChanged(val value: FitnessGoal) : RegisterAction()
     data class TrainingLevelChanged(val level: FitnessLevel) : RegisterAction()
-
     object GoalsClean : RegisterAction()
+    data class UpdateLevel(val level: FitnessLevel) : RegisterAction() // Ajustado para FitnessLevel conforme seu State
+    data class UpdateAvatar(val avatarId: String) : RegisterAction()
+
+    // --- NOVAS ACTIONS PARA MACROS ---
+    data class UpdateCalories(val value: Int) : RegisterAction()
+    data class UpdateProteins(val value: Int) : RegisterAction()
+    data class UpdateFats(val value: Int) : RegisterAction()
+    data class UpdateCarbs(val value: Int) : RegisterAction()
+    // ---------------------------------
 
     object Next : RegisterAction()
     object Exit : RegisterAction()

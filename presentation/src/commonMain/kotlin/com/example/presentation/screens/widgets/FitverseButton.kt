@@ -19,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -30,9 +31,10 @@ fun FitVerseButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    topColor: Color = Color(0xFF55C6BA),
-    edgeColor: Color = Color(0xFF297980),
-    textColor: Color = Color(0xFF3A9F96),
+    // Cores padrão ajustadas para contraste em fundo branco
+    topColor: Color = Color(0xFFF7F8FA),    // Cinza Superfície (FitverseTheme.Surface)
+    edgeColor: Color = Color(0xFFE2E8F0),   // Cinza Borda/Sombra (FitverseTheme.Outline)
+    textColor: Color = Color(0xFF6366F1),   // Roxo Elétrico para o texto (Destaque)
     isLoading: Boolean = false,
     enabled: Boolean = true,
     textStyle: TextStyle = TextStyle(
@@ -41,9 +43,7 @@ fun FitVerseButton(
         letterSpacing = 1.5.sp
     )
 ) {
-    // Definições fixas solicitadas
-    val buttonHeight = 52.dp
-    val depth = 8.dp
+    val depth = 6.dp
     val pressedDepth = 2.dp
     val cornerRadius = 16.dp
 
@@ -55,45 +55,50 @@ fun FitVerseButton(
         label = "ButtonAnimation"
     )
 
-    // O Modifier externo define o tamanho total (ex: fillMaxWidth)
     Box(
         modifier = modifier
-            .padding(bottom = depth) // Espaço para a base 3D
-            .clickable(
-                interactionSource = interactionSource,
-                indication = null,
-                onClick = onClick,
-                enabled = enabled
-            )
+            .padding(bottom = depth)
+            .alpha(if (enabled) 1f else 0.5f) // Feedback visual de desabilitado
     ) {
-        // 1. Base (Sombra/Borda 3D)
-        // matchParentSize garante que a base tenha EXATAMENTE a mesma largura da face
+        // 1. Base (A "Sombra" 3D em cinza mais escuro)
         Box(
             modifier = Modifier
                 .matchParentSize()
                 .offset(y = depth)
-                .background(edgeColor, RoundedCornerShape(cornerRadius))
+                .background(
+                    color = if (enabled) edgeColor else Color(0xFFD1D5DB),
+                    shape = RoundedCornerShape(cornerRadius)
+                )
         )
 
-        // 2. Face do Botão
+        // 2. Face do Botão (Onde o usuário clica)
         Box(
             modifier = Modifier
-                .fillMaxWidth() // Faz com que a face preencha o modifier do pai
-                .height(buttonHeight)
+                .fillMaxWidth()
+                .height(52.dp)
                 .offset(y = yOffset)
-                .background(topColor, RoundedCornerShape(cornerRadius)),
+                .background(
+                    color = if (enabled) topColor else Color(0xFFF3F4F6),
+                    shape = RoundedCornerShape(cornerRadius)
+                )
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = null,
+                    onClick = { if (!isLoading && enabled) onClick() },
+                    enabled = enabled
+                ),
             contentAlignment = Alignment.Center
         ) {
-            if(isLoading){
+            if (isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(24.dp),
                     color = textColor,
                     strokeWidth = 2.dp
                 )
-            }else {
+            } else {
                 Text(
-                    text = text,
-                    color = textColor,
+                    text = text.uppercase(), // Uppercase combina com o estilo ExtraBold
+                    color = if (enabled) textColor else Color(0xFF9CA3AF),
                     style = textStyle
                 )
             }

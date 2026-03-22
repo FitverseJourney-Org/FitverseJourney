@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,6 +29,7 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.rounded.AddCircleOutline
 import androidx.compose.material.icons.rounded.ArrowForwardIos
 import androidx.compose.material.icons.rounded.Bolt
+import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material.icons.rounded.Timer
 import androidx.compose.material3.AssistChip
@@ -35,6 +37,7 @@ import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -52,6 +55,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -64,35 +68,32 @@ fun WorkoutScreenV2(
     onCreatePlan: () -> Unit = {}
 ) {
     var selectedCategory by remember { mutableStateOf(WorkoutCategory.STRENGTH) }
+    val cs = MaterialTheme.colorScheme
 
     LazyColumn(
         contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(24.dp) // Respiro maior entre blocos
     ) {
 
         item {
-            _root_ide_package_.com.example.presentation.screens.ui.workout.WorkoutHeader(
-                stamina = 78,
-                xp = 90
-            )
+            WorkoutHeader(stamina = 78, xp = 90)
         }
 
-        // Lógica de apresentação baseada no status do usuário
         item {
             if (hasActivePlan) {
-                _root_ide_package_.com.example.presentation.screens.ui.workout.ActiveWorkoutCard(
-                    planName = "Hypertrophy A", // Isso viria do seu banco de dados
+                ActiveWorkoutCard(
+                    planName = "Hypertrophy A",
                     onStart = onStart
                 )
             } else {
-                _root_ide_package_.com.example.presentation.screens.ui.workout.CreatePlanCard(
+                CreatePlanCard(
                     onCreate = onCreatePlan
                 )
             }
         }
 
         item {
-            _root_ide_package_.com.example.presentation.screens.ui.workout.WorkoutCategorySelector(
+            WorkoutCategorySelector(
                 selected = selectedCategory,
                 onSelect = { selectedCategory = it }
             )
@@ -102,19 +103,21 @@ fun WorkoutScreenV2(
             Text(
                 text = "Recommended for you",
                 fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
+                fontWeight = FontWeight.ExtraBold,
+                color = cs.onBackground, // Branco Puro
+                letterSpacing = (-0.5).sp
             )
         }
 
         items(
-            _root_ide_package_.com.example.presentation.screens.ui.workout.workoutList.filter { it.category == selectedCategory },
+            workoutList.filter { it.category == selectedCategory },
             key = { it.id }
         ) { workout ->
-            _root_ide_package_.com.example.presentation.screens.ui.workout.WorkoutItemCard(
+            WorkoutItemCard(
                 workout = workout,
                 onClick = {}
             )
+            Spacer(Modifier.height(12.dp)) // Espaço sutil entre os cards da lista
         }
     }
 }
@@ -126,86 +129,79 @@ fun WorkoutCategorySelector(
 ) {
     val cs = MaterialTheme.colorScheme
 
-    Row(
+    // Scroll horizontal caso adicione mais categorias
+    LazyRow(
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         modifier = Modifier.fillMaxWidth()
     ) {
-        WorkoutCategory.entries.forEach { category ->
+        items(WorkoutCategory.entries.toTypedArray()) { category ->
             val isSelected = category == selected
 
-            AssistChip(
+            Surface(
                 onClick = { onSelect(category) },
-                label = {
-                    Text(
-                        text = category.name.lowercase()
-                            .replaceFirstChar { it.uppercase() },
-                        fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                        color = if (isSelected) cs.onPrimary else cs.onSurface
-                    )
-                },
-                colors = AssistChipDefaults.assistChipColors(
-                    containerColor = if (isSelected) cs.primary else cs.surfaceVariant,
-                    labelColor = if (isSelected) cs.onPrimary else cs.onSurface
+                shape = RoundedCornerShape(12.dp),
+                color = if (isSelected) cs.primary else cs.surface,
+                border = BorderStroke(1.dp, if (isSelected) cs.primary else cs.outline.copy(alpha = 0.2f))
+            ) {
+                Text(
+                    text = category.name.lowercase().replaceFirstChar { it.uppercase() },
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
+                    fontWeight = if (isSelected) FontWeight.Black else FontWeight.Bold,
+                    color = if (isSelected) Color.Black else cs.onSurface,
+                    fontSize = 14.sp
                 )
-            )
+            }
         }
     }
 }
 
 @Composable
 fun WorkoutItemCard(
-    workout: com.example.presentation.screens.ui.workout.WorkoutItem,
+    workout: WorkoutItem,
     onClick: () -> Unit
 ) {
     val cs = MaterialTheme.colorScheme
 
     Surface(
         modifier = Modifier.fillMaxWidth(),
-        onClick = {
-            onClick()
-        },
-        shape = RoundedCornerShape(20.dp), // Arredondamento moderno
+        onClick = onClick,
+        shape = RoundedCornerShape(20.dp),
         color = cs.surface,
-        border = BorderStroke(1.dp, cs.onSurface.copy(alpha = 0.08f)), // Borda quase invisível mas presente
-        tonalElevation = 1.dp
+        border = BorderStroke(1.dp, cs.outline.copy(alpha = 0.15f))
     ) {
         Row(
-            modifier = Modifier
-                .padding(12.dp), // Padding interno equilibrado
+            modifier = Modifier.padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // 1. Ícone de Ação com Estilo "Glass"
             Box(
                 modifier = Modifier
                     .size(52.dp)
                     .clip(RoundedCornerShape(14.dp))
-                    .background(cs.primary.copy(alpha = 0.1f)),
+                    .background(cs.secondary.copy(alpha = 0.1f)), // Fundo roxo suave
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = Icons.Rounded.PlayArrow,
                     contentDescription = null,
-                    tint = cs.primary,
+                    tint = cs.secondary, // Ícone roxo elétrico
                     modifier = Modifier.size(28.dp)
                 )
             }
 
             Spacer(Modifier.width(16.dp))
 
-            // 2. Informações Principais
             Column(Modifier.weight(1f)) {
                 Text(
                     text = workout.title,
-                    style = MaterialTheme.typography.titleMedium,
+                    fontSize = 16.sp,
                     fontWeight = FontWeight.ExtraBold,
-                    color = cs.onSurface,
-                    maxLines = 1 // Evita quebra de layout
+                    color = cs.onBackground,
+                    maxLines = 1
                 )
 
                 Spacer(Modifier.height(4.dp))
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    // Ícone pequeno de tempo
                     Icon(
                         imageVector = Icons.Rounded.Timer,
                         contentDescription = null,
@@ -215,43 +211,36 @@ fun WorkoutItemCard(
                     Spacer(Modifier.width(4.dp))
                     Text(
                         text = workout.duration,
-                        style = MaterialTheme.typography.bodySmall,
+                        style = MaterialTheme.typography.labelMedium,
                         color = cs.onSurfaceVariant
                     )
 
                     Text(
-                        text = " • ",
-                        color = cs.onSurfaceVariant.copy(alpha = 0.5f)
+                        text = "  •  ",
+                        color = cs.outline
                     )
 
-                    // Destaque para o XP
+                    // XP em Dourado
                     Text(
                         text = "+${workout.xp} XP",
-                        style = MaterialTheme.typography.labelSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = cs.secondary // Cor diferente para gamificação
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Black,
+                        color = cs.tertiary
                     )
                 }
             }
 
-            // 3. Tag de Intensidade (O raio estilizado)
+            // Tag de Intensidade
             Surface(
-                color = cs.secondaryContainer.copy(alpha = 0.4f),
+                color = cs.surfaceVariant,
                 shape = RoundedCornerShape(8.dp)
             ) {
-                Row(
-                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Rounded.Bolt,
-                        contentDescription = null,
-                        tint = cs.secondary,
-                        modifier = Modifier.size(16.dp)
-                    )
-                    // Se o seu WorkoutItem tiver um nível de intensidade (ex: "Hard")
-                    // Text(text = "Hard", style = MaterialTheme.typography.labelSmall)
-                }
+                Icon(
+                    imageVector = Icons.Rounded.Bolt,
+                    contentDescription = null,
+                    tint = cs.primary, // Raio Neon
+                    modifier = Modifier.padding(8.dp).size(16.dp)
+                )
             }
         }
     }
@@ -260,7 +249,7 @@ fun WorkoutItemCard(
 // --- 1. Card para quando o usuário JÁ TEM um treino ---
 @Composable
 fun ActiveWorkoutCard(
-    planName: String = "Today's Plan", // Dar contexto do que ele vai treinar melhora a UX
+    planName: String = "Today's Plan",
     onStart: () -> Unit
 ) {
     val cs = MaterialTheme.colorScheme
@@ -269,44 +258,44 @@ fun ActiveWorkoutCard(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onStart() },
-        colors = CardDefaults.cardColors(containerColor = cs.primary),
-        shape = RoundedCornerShape(20.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp) // Dá um leve destaque na tela
+        colors = CardDefaults.cardColors(containerColor = cs.primary), // Neon Volt
+        shape = RoundedCornerShape(24.dp)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(20.dp),
+                .padding(24.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "Start Workout",
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 22.sp,
-                    color = cs.onPrimary
+                    text = "START WORKOUT",
+                    fontWeight = FontWeight.Black,
+                    fontSize = 20.sp,
+                    color = Color.Black, // Contraste máximo no Neon
+                    letterSpacing = 1.sp
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = "$planName • Gain XP",
                     fontSize = 14.sp,
-                    color = cs.onPrimary.copy(alpha = 0.85f),
-                    fontWeight = FontWeight.Medium
+                    color = Color.Black.copy(alpha = 0.7f),
+                    fontWeight = FontWeight.Bold
                 )
             }
 
-            // Botão de Play mais robusto e "clicável" visualmente
+            // Botão "Recortado" escuro com ícone Neon
             Surface(
                 shape = CircleShape,
-                color = cs.onPrimary,
+                color = cs.surface, // Fundo escuro
                 modifier = Modifier.size(56.dp)
             ) {
                 Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
                     Icon(
                         imageVector = Icons.Filled.PlayArrow,
                         contentDescription = "Start",
-                        tint = cs.primary,
+                        tint = cs.primary, // Ícone Neon
                         modifier = Modifier.size(32.dp)
                     )
                 }
@@ -320,33 +309,22 @@ fun ActiveWorkoutCard(
 fun CreatePlanCard(onCreate: () -> Unit) {
     val cs = MaterialTheme.colorScheme
 
-    // Usamos um Surface para controle total de elevação e forma
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .height(110.dp), // Um pouco mais alto para respirar melhor
+            .height(110.dp),
         shape = RoundedCornerShape(24.dp),
         color = cs.surface,
-        onClick = {
-            onCreate()
-        },
-        border = BorderStroke(
-            width = 1.5.dp,
-            // Usamos um gradiente na borda para um ar mais Premium
-            brush = Brush.linearGradient(
-                colors = listOf(cs.primary.copy(alpha = 0.5f), cs.primary.copy(alpha = 0.05f))
-            )
-        ),
-        tonalElevation = 2.dp
+        onClick = onCreate,
+        border = BorderStroke(1.5.dp, cs.primary.copy(alpha = 0.3f)) // Borda Neon sutil
     ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                // Gradiente sutil de fundo para não ser uma cor "morta"
                 .background(
-                    Brush.verticalGradient(
+                    Brush.horizontalGradient(
                         colors = listOf(
-                            cs.primary.copy(alpha = 0.08f),
+                            cs.primary.copy(alpha = 0.05f), // Glow no início do card
                             Color.Transparent
                         )
                     )
@@ -358,16 +336,15 @@ fun CreatePlanCard(onCreate: () -> Unit) {
                     .padding(horizontal = 20.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // 1. Ícone com Estilo "Glass"
                 Box(
                     modifier = Modifier
                         .size(56.dp)
                         .clip(RoundedCornerShape(16.dp))
-                        .background(cs.primary.copy(alpha = 0.15f)),
+                        .background(cs.primary.copy(alpha = 0.1f)),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        imageVector = Icons.Rounded.AddCircleOutline, // Ícone mais moderno
+                        imageVector = Icons.Rounded.AddCircleOutline,
                         contentDescription = null,
                         tint = cs.primary,
                         modifier = Modifier.size(30.dp)
@@ -376,34 +353,32 @@ fun CreatePlanCard(onCreate: () -> Unit) {
 
                 Spacer(modifier = Modifier.width(16.dp))
 
-                // 2. Textos com Hierarquia Clara
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = "No active plan",
-                        style = MaterialTheme.typography.labelLarge,
+                        text = "NO ACTIVE PLAN",
+                        style = MaterialTheme.typography.labelSmall,
                         color = cs.primary,
-                        fontWeight = FontWeight.SemiBold,
-                        letterSpacing = 0.5.sp
+                        fontWeight = FontWeight.Black,
+                        letterSpacing = 1.sp
                     )
                     Text(
                         text = "Create Workout Plan",
-                        style = MaterialTheme.typography.titleMedium,
+                        fontSize = 18.sp,
                         fontWeight = FontWeight.ExtraBold,
-                        color = cs.onSurface
+                        color = cs.onBackground
                     )
                     Text(
                         text = "Build a routine & track progress",
                         style = MaterialTheme.typography.bodySmall,
-                        color = cs.onSurfaceVariant.copy(alpha = 0.8f)
+                        color = cs.onSurfaceVariant
                     )
                 }
 
-                // 3. Botão de ação minimalista
                 Icon(
-                    imageVector = Icons.Rounded.ArrowForwardIos,
+                    imageVector = Icons.Rounded.ChevronRight,
                     contentDescription = null,
-                    tint = cs.onSurfaceVariant.copy(alpha = 0.4f),
-                    modifier = Modifier.size(16.dp)
+                    tint = cs.outline,
+                    modifier = Modifier.size(24.dp)
                 )
             }
         }
@@ -421,55 +396,49 @@ fun WorkoutHeader(stamina: Int, xp: Int) {
         ) {
             Column {
                 Text(
-                    text = "Workout",
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = cs.onSurface
+                    text = "WORKOUT",
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Black,
+                    color = cs.onBackground,
+                    letterSpacing = 1.sp
                 )
                 Text(
                     text = "Ready to train today?",
                     fontSize = 13.sp,
-                    color = cs.onSurface.copy(alpha = 0.6f)
+                    color = cs.onSurfaceVariant
                 )
             }
 
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(Icons.Default.Star, null, tint = cs.primary)
-                    Spacer(Modifier.width(6.dp))
-                    Text("$xp%", color = cs.primary, fontWeight = FontWeight.Bold)
+                // XP = Dourado (Tertiary)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Default.Star, null, tint = cs.tertiary, modifier = Modifier.size(18.dp))
+                    Spacer(Modifier.width(4.dp))
+                    Text("$xp XP", color = cs.onBackground, fontWeight = FontWeight.Bold)
                 }
-                Spacer(modifier = Modifier.width(10.dp))
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(Icons.Filled.Bolt, null, tint = cs.secondary)
-                    Spacer(Modifier.width(6.dp))
-                    Text("$stamina%", color = cs.secondary, fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.width(12.dp))
+                // Stamina = Neon Volt (Primary)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(Icons.Filled.Bolt, null, tint = cs.primary, modifier = Modifier.size(18.dp))
+                    Spacer(Modifier.width(4.dp))
+                    Text("$stamina%", color = cs.onBackground, fontWeight = FontWeight.Bold)
                 }
             }
         }
 
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(16.dp))
 
-        // Barra simples de stamina — fundo = surfaceVariant, fill = secondary
-        Card(
+        // Barra de Stamina Minimalista
+        LinearProgressIndicator(
+            progress = { stamina / 100f },
             modifier = Modifier
                 .fillMaxWidth()
-                .height(6.dp),
-            colors = CardDefaults.cardColors(containerColor = cs.surfaceVariant),
-            shape = RoundedCornerShape(6.dp)
-        ) {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth(stamina / 100f)
-                    .height(6.dp),
-                colors = CardDefaults.cardColors(containerColor = cs.secondary),
-                shape = RoundedCornerShape(6.dp)
-            ) {}
-        }
+                .height(6.dp)
+                .clip(CircleShape),
+            color = cs.primary,
+            trackColor = cs.primary.copy(alpha = 0.1f),
+            strokeCap = StrokeCap.Round
+        )
     }
 }
 
@@ -522,8 +491,6 @@ fun StartWorkoutCard(onStart: () -> Unit) {
         }
     }
 }
-
-
 
 data class WorkoutItem(
     val id: Int,

@@ -57,7 +57,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.domain.model.dashboard.TaskIcon
 import com.example.domain.model.dashboard.TaskItem
-import com.example.presentation.screens.ui.dashboard.components.DailyTaskItemAvatar
+import com.example.presentation.screens.ui.dashboard.DailyTaskItemAvatar
 
 // --- Mocks e Enums necessários para o código compilar ---
 enum class AvatarState { IDLE, HAPPY } // Apenas para preencher a sua chamada
@@ -109,7 +109,7 @@ fun TasksScreen(
         LazyColumn(
             modifier = Modifier.fillMaxSize().padding(paddingValues),
             contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             item {
                 SwapStatusHeader(swapsRemaining = swapsRemaining, cs = cs)
@@ -126,7 +126,7 @@ fun TasksScreen(
 
             items(currentTasks, key = { it.id }) { task ->
                 // Chamada do componente sem o Box externo para evitar conflitos de clique
-                _root_ide_package_.com.example.presentation.screens.ui.dashboard.components.DailyTaskItemAvatar(
+                DailyTaskItemAvatar(
                     task = task,
                     isSelected = selectedTaskForSwap?.id == task.id,
                     onSelect = {

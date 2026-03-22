@@ -1,50 +1,25 @@
 package org.fitverse.project.navigation
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Analytics
-import androidx.compose.material.icons.filled.Assignment
-import androidx.compose.material.icons.filled.Devices
-import androidx.compose.material.icons.filled.EmojiEvents
-import androidx.compose.material.icons.filled.FitnessCenter
-import androidx.compose.material.icons.filled.Help
-import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.Leaderboard
-import androidx.compose.material.icons.filled.LocalDining
-import androidx.compose.material.icons.filled.Logout
-import androidx.compose.material.icons.filled.People
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DrawerState
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalDrawerSheet
-import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.rounded.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -57,124 +32,182 @@ import org.fitverse.project.routes.NavRoutes
 fun ModalDrawerSheetMainScreen(
     drawerState: DrawerState,
     content: @Composable () -> Unit,
-    gesturesEnabled: Boolean = true,
+    gesturesEnabled: Boolean = false,
     onNavigate: (backStackEntry: NavKey) -> Unit = {},
     onLogout: () -> Unit = {}
 ) {
     val cs = MaterialTheme.colorScheme
+    val scope = rememberCoroutineScope()
 
     ModalNavigationDrawer(
         drawerState = drawerState,
         gesturesEnabled = gesturesEnabled,
+        // Scrim mais denso para focar totalmente no menu
+        scrimColor = Color.Black.copy(alpha = 0.85f),
         drawerContent = {
             ModalDrawerSheet(
-                drawerContainerColor = cs.surfaceVariant
+                modifier = Modifier.fillMaxWidth(0.85f), // Reduzi levemente para ver o fundo
+                drawerContainerColor = cs.background, // Fundo ultra escuro (#0A0A0E)
+                drawerShape = RoundedCornerShape(topEnd = 32.dp, bottomEnd = 32.dp) // Cantos modernos
             ) {
                 Column(
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 24.dp)
                         .verticalScroll(rememberScrollState())
+                        .statusBarsPadding()
                         .navigationBarsPadding()
                 ) {
+                    // --- HEADER: IDENTIDADE ---
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 40.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Box(
+                            contentAlignment = Alignment.Center
+                        ) {
+                            // Círculo de brilho externo (Glow sutil)
+                            Box(
+                                modifier = Modifier
+                                    .size(92.dp)
+                                    .background(cs.primary.copy(alpha = 0.05f), CircleShape)
+                            )
 
-                    // Header
-                    FitVerseDrawerHeader(
-                        userName = "Alex Journey",
-                        level = "Level 14",
-                        xpProgress = 0.65f
+                            // Avatar
+                            Surface(
+                                modifier = Modifier.size(80.dp),
+                                shape = CircleShape,
+                                color = cs.surface,
+                                border = BorderStroke(2.dp, cs.primary) // Neon Volt
+                            ) {
+                                Box(contentAlignment = Alignment.Center) {
+                                    Icon(
+                                        Icons.Rounded.Person,
+                                        contentDescription = null,
+                                        tint = cs.onSurface,
+                                        modifier = Modifier.size(40.dp)
+                                    )
+                                }
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(18.dp))
+
+                        Text(
+                            text = "ALEX JOURNEY",
+                            color = cs.onBackground,
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Black,
+                            letterSpacing = 1.sp
+                        )
+
+                        // Badge de Nível (Roxo Elétrico para contraste com o Neon)
+                        Surface(
+                            modifier = Modifier.padding(top = 8.dp),
+                            color = cs.secondary.copy(alpha = 0.15f),
+                            shape = RoundedCornerShape(8.dp),
+                            border = BorderStroke(1.dp, cs.secondary.copy(alpha = 0.4f))
+                        ) {
+                            Text(
+                                text = "LEVEL 14",
+                                modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
+                                color = cs.secondary,
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.ExtraBold,
+                                letterSpacing = 0.5.sp
+                            )
+                        }
+                    }
+
+                    // --- WIDGETS RÁPIDOS ---
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        QuickActionWidget(
+                            modifier = Modifier.weight(1f),
+                            icon = Icons.Rounded.CreditCard,
+                            title = "Free Plan",
+                            subtitle = "Upgrade",
+                            accentColor = cs.primary,
+                            onClick = {
+                                onNavigate(NavRoutes.PlanPaymentScreen)
+                            }
+                        )
+                        QuickActionWidget(
+                            modifier = Modifier.weight(1f),
+                            icon = Icons.Rounded.PersonAdd,
+                            title = "Referrals",
+                            subtitle = "Earn Pts",
+                            accentColor = cs.tertiary, // Dourado
+                            onClick = {
+                                onNavigate(NavRoutes.PlanPaymentScreen)
+                            }
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(32.dp))
+
+                    // --- MENU PRINCIPAL ---
+                    Text(
+                        text = "EXPLORE",
+                        color = cs.onSurface.copy(alpha = 0.5f),
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.Black,
+                        letterSpacing = 1.5.sp,
+                        modifier = Modifier.padding(start = 12.dp, bottom = 12.dp)
                     )
 
-                    Spacer(modifier = Modifier.height(6.dp))
-
-                    // Navigation section (primary)
-                    DrawerSection(title = "Usuário") {
-                        ActionRow(
-                            label = "Plan Workout",
-                            icon = Icons.Default.FitnessCenter,
-                            onClick = { onNavigate(NavRoutes.PlanWorkoutFlow) } // Lembre de atualizar as rotas depois!
-                        )
-                        ActionRow(
-                            label = "Tasks",
-                            icon = Icons.Default.Assignment, // Ícone de prancheta/lista de tarefas
-                            onClick = { onNavigate(NavRoutes.TasksFlow) }
-                        )
-                        ActionRow(
-                            label = "Friends",
-                            icon = Icons.Default.People, // Ícone de grupo de pessoas
-                            onClick = { onNavigate(NavRoutes.Friends) }
-                        )
-                        ActionRow(
-                            label = "Leaderboards",
-                            icon = Icons.Default.Leaderboard, // Ícone de pódio com gráfico
-                            onClick = { onNavigate(NavRoutes.Leaderboards) }
-                        )
-                        ActionRow(
-                            label = "Historic",
-                            icon = Icons.Default.History, // Ícone de relógio voltando no tempo
-                            onClick = { onNavigate(NavRoutes.Historic) }
-                        )
-                        ActionRow(
-                            label = "Progress",
-                            icon = Icons.Default.Analytics, // Ícone de troféu (mais imersivo que a estrela)
-                            onClick = { onNavigate(NavRoutes.Progress) }
-                        )
-                        ActionRow(
-                            label = "Achievements",
-                            icon = Icons.Default.EmojiEvents, // Ícone de troféu (mais imersivo que a estrela)
-                            onClick = { onNavigate(NavRoutes.Achievements) }
-                        )
-                        ActionRow(
-                            label = "Devices",
-                            icon = Icons.Default.Devices, // Ícone de celular/tablet (ou use Icons.Default.Watch para smartwatches)
-                            onClick = { onNavigate(NavRoutes.Devices) }
-                        )
+                    // Lista de Itens do Menu
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(cs.surface.copy(alpha = 0.5f), RoundedCornerShape(24.dp))
+                            .padding(vertical = 8.dp)
+                    ) {
+                        ActionRow("Workout Plan", Icons.Rounded.FitnessCenter) { onNavigate(NavRoutes.PlanWorkoutFlow) }
+                        ActionRow("Meals Plan", Icons.Rounded.Fastfood) { onNavigate(NavRoutes.PlanMealsFlow) }
+                        ActionRow("Historic", Icons.Rounded.History) { onNavigate(NavRoutes.Historic) }
+                        ActionRow("Leaderboards", Icons.Rounded.Leaderboard) { onNavigate(NavRoutes.Leaderboards) }
+                        ActionRow("Tasks Flow", Icons.Rounded.Assignment) { onNavigate(NavRoutes.TasksFlow) }
+                        ActionRow("Friends", Icons.Rounded.People) { onNavigate(NavRoutes.Friends) }
+                        ActionRow("Progress", Icons.Rounded.Analytics) { onNavigate(NavRoutes.Progress) }
+                        ActionRow("Achievements", Icons.Rounded.Star) { onNavigate(NavRoutes.Achievements) }
                     }
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Text(
+                        text = "SETTINGS",
+                        color = cs.onSurface.copy(alpha = 0.5f),
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.Black,
+                        letterSpacing = 1.5.sp,
+                        modifier = Modifier.padding(start = 12.dp, bottom = 12.dp)
+                    )
 
-                    DrawerSection(title = "Preferences") {
-                        ActionRow(
-                            label = "Units",
-                            icon = Icons.Default.Devices, // Ícone de celular/tablet (ou use Icons.Default.Watch para smartwatches)
-                            onClick = { onNavigate(NavRoutes.TasksFlow) }
-                        )
-                        ActionRow(
-                            label = "Language",
-                            icon = Icons.Default.Devices, // Ícone de celular/tablet (ou use Icons.Default.Watch para smartwatches)
-                            onClick = { onNavigate(NavRoutes.TasksFlow) }
-                        )
-                        ActionRow(
-                            label = "Medidores e Dispositivos",
-                            icon = Icons.Default.Devices, // Ícone de celular/tablet (ou use Icons.Default.Watch para smartwatches)
-                            onClick = { onNavigate(NavRoutes.Devices) }
-                        )
-
+                    // Lista de Itens do Menu
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(cs.surface.copy(alpha = 0.5f), RoundedCornerShape(24.dp))
+                            .padding(vertical = 8.dp)
+                    ) {
+                        ActionRow("Devices", Icons.Rounded.Devices) { onNavigate(NavRoutes.Devices) }
+                        ActionRow("Help & Support", Icons.Rounded.Help) { onNavigate(NavRoutes.HelpSupport) }
                     }
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(24.dp))
 
-                    DrawerSection(title = "Support") {
-                        ActionRow(
-                            label = "Contact Us",
-                            icon = Icons.Default.Help,
-                            onClick = { onNavigate(NavRoutes.TasksFlow) }
-                        )
-                        ActionRow(
-                            label = "Perguntas Frequentes",
-                            icon = Icons.Default.Help,
-                            onClick = { onNavigate(NavRoutes.TasksFlow) }
-                        )
-                    }
+                    // --- FOOTER / LOGOUT ---
+                    ActionRow(
+                        label = "Logout",
+                        icon = Icons.Rounded.Logout,
+                        isDanger = true,
+                        onClick = onLogout
+                    )
 
-                    DrawerSection(title = "Account") {
-                        ActionRow(
-                            label = "Logout",
-                            icon = Icons.Default.Logout,
-                            danger = true,
-                            onClick = onLogout
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(40.dp))
                 }
             }
         },
@@ -183,158 +216,72 @@ fun ModalDrawerSheetMainScreen(
 }
 
 @Composable
+fun QuickActionWidget(
+    modifier: Modifier,
+    icon: ImageVector,
+    title: String,
+    subtitle: String,
+    accentColor: Color,
+    onClick: () -> Unit
+) {
+    val cs = MaterialTheme.colorScheme
+    Surface(
+        onClick = onClick,
+        modifier = modifier.height(100.dp),
+        shape = RoundedCornerShape(20.dp),
+        color = cs.surface,
+        border = BorderStroke(1.dp, cs.outline.copy(alpha = 0.2f))
+    ) {
+        Column(
+            modifier = Modifier.padding(12.dp),
+            verticalArrangement = Arrangement.Center
+        ) {
+            Icon(icon, null, tint = accentColor, modifier = Modifier.size(24.dp))
+            Spacer(Modifier.height(8.dp))
+            Text(title, color = cs.onBackground, fontSize = 13.sp, fontWeight = FontWeight.Bold)
+            Text(subtitle, color = accentColor, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+        }
+    }
+}
+
+@Composable
 fun ActionRow(
     label: String,
     icon: ImageVector,
-    onClick: () -> Unit,
-    danger: Boolean = false,
-    modifier: Modifier = Modifier
-) {
-
-    val cs = MaterialTheme.colorScheme
-    val textColor = if (danger) cs.error else cs.onSurface
-    val iconTint = if (danger) cs.error else cs.primary
-
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = cs.surfaceVariant),
-        shape = RoundedCornerShape(14.dp),
-        onClick = onClick
-    ) {
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 12.dp, vertical = 14.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            Card(
-                shape = RoundedCornerShape(8.dp),
-                colors = CardDefaults.cardColors(containerColor = cs.onSurface.copy(alpha = 0.03f)),
-                modifier = Modifier.size(40.dp)
-            ) {
-
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Icon(
-                        imageVector = icon,
-                        contentDescription = label,
-                        tint = iconTint,
-                        modifier = Modifier.size(18.dp)
-                    )
-
-                }
-
-            }
-
-            Spacer(modifier = Modifier.width(12.dp))
-
-            Column(modifier = Modifier.weight(1f)) {
-                Text(text = label, color = textColor, fontSize = 15.sp)
-            }
-
-            Icon(
-                imageVector = Icons.Default.KeyboardArrowRight,
-                contentDescription = "open",
-                tint = cs.onSurface.copy(alpha = 0.5f),
-                modifier = Modifier.size(20.dp)
-
-            )
-
-        }
-
-    }
-
-}
-
-@Composable
-fun FitVerseDrawerHeader(
-    userName: String,
-    level: String,
-    xpProgress: Float
+    isDanger: Boolean = false,
+    onClick: () -> Unit
 ) {
     val cs = MaterialTheme.colorScheme
+    val contentColor = if (isDanger) cs.error else cs.onBackground
 
-    Column(
+    Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+            .clickable { onClick() }
+            .padding(horizontal = 20.dp, vertical = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            // Avatar Placeholder
-            Box(
-                modifier = Modifier
-                    .size(52.dp)
-                    .clip(CircleShape)
-                    .background(cs.primary.copy(alpha = 0.1f)),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(Icons.Default.Person, contentDescription = null, tint = cs.primary)
-            }
-
-            Spacer(modifier = Modifier.width(16.dp))
-
-            Column {
-                Text(
-                    text = userName,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = cs.onSurface
-                )
-                Text(
-                    text = level,
-                    style = MaterialTheme.typography.labelMedium,
-                    color = cs.primary
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        // Barra de XP
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            LinearProgressIndicator(
-                progress = { xpProgress },
-                modifier = Modifier
-                    .weight(1f)
-                    .height(6.dp)
-                    .clip(CircleShape),
-                color = cs.primary,
-                trackColor = cs.onSurfaceVariant.copy(alpha = 0.1f)
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = if (isDanger) cs.error else cs.primary, // Ícones sempre Neon para guiar o olho
+            modifier = Modifier.size(22.dp)
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+        Text(
+            text = label,
+            color = contentColor,
+            fontSize = 15.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.weight(1f)
+        )
+        if (!isDanger) {
+            Icon(
+                Icons.Rounded.ChevronRight,
+                contentDescription = null,
+                tint = cs.outline,
+                modifier = Modifier.size(18.dp)
             )
-            Spacer(modifier = Modifier.width(12.dp))
-            Text(
-                text = "${(xpProgress * 100).toInt()}%",
-                style = MaterialTheme.typography.labelSmall,
-                color = cs.onSurfaceVariant
-            )
-        }
-    }
-}
-
-@Composable
-fun DrawerSection(
-    title: String,
-    content: @Composable ColumnScope.() -> Unit,
-) {
-    val cs = MaterialTheme.colorScheme
-    Column {
-        if (title.isNotBlank()) {
-            Text(
-                text = title.uppercase(),
-                color = cs.onSurface.copy(alpha = 0.7f),
-                fontSize = 12.sp,
-                modifier = Modifier.padding(start = 12.dp, top = 18.dp, bottom = 8.dp)
-            )
-        }
-
-        Card(
-            colors = CardDefaults.cardColors(containerColor = cs.surfaceVariant),
-            shape = RoundedCornerShape(14.dp),
-        ) {
-            Column {
-                content()
-            }
         }
     }
 }

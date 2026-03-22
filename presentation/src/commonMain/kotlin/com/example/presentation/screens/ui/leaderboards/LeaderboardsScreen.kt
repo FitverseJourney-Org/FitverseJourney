@@ -1,8 +1,11 @@
 package com.example.presentation.screens.ui.leaderboards
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -10,6 +13,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.runtime.*
@@ -62,65 +66,105 @@ fun LeaderboardsScreen(
     navigateBack: () -> Unit
 ) {
     var selectedTabIndex by remember { mutableIntStateOf(0) }
-    val tabs = listOf("Global","Amigos")
+    val cs = MaterialTheme.colorScheme
 
-    // Define qual lista mostrar baseada na aba
     val currentList = if (selectedTabIndex == 0) mockGlobalLeaderboard else mockFriendsLeaderboard
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Leaderboard", fontWeight = FontWeight.Bold) },
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        "Leaderboards",
+                        fontWeight = FontWeight.Black,
+                    )
+                },
+                windowInsets = WindowInsets(0,0,0,0),
                 navigationIcon = {
                     IconButton(onClick = navigateBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Voltar")
+                        Icon(Icons.Rounded.ArrowBack, contentDescription = "Voltar", tint = cs.onBackground)
                     }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.Transparent
-                ),
-                windowInsets = WindowInsets(0,0,0,0)
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = cs.background
+                )
             )
-        }
+        },
+        containerColor = cs.background
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(MaterialTheme.colorScheme.background)
         ) {
-            // Custom TabRow para transição suave
-            TabRow(
+            // O novo menu de abas aqui
+            LeaderboardToggle(
                 selectedTabIndex = selectedTabIndex,
-                containerColor = Color.Transparent,
-                indicator = { tabPositions ->
-                    TabRowDefaults.SecondaryIndicator(
-                        Modifier.tabIndicatorOffset(tabPositions[selectedTabIndex]),
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
-            ) {
-                tabs.forEachIndexed { index, title ->
-                    Tab(
-                        selected = selectedTabIndex == index,
-                        onClick = { selectedTabIndex = index },
-                        text = {
-                            Text(
-                                text = title,
-                                fontWeight = if (selectedTabIndex == index) FontWeight.Bold else FontWeight.Normal
-                            )
-                        }
-                    )
-                }
-            }
+                onTabSelected = { selectedTabIndex = it }
+            )
 
-            // Conteúdo Principal
             LeaderboardContent(users = currentList)
         }
     }
 }
 
+@Composable
+fun LeaderboardToggle(
+    selectedTabIndex: Int,
+    onTabSelected: (Int) -> Unit
+) {
+    val cs = MaterialTheme.colorScheme
 
+    // Container da "Pílula"
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp, vertical = 16.dp)
+            .height(50.dp),
+        shape = RoundedCornerShape(25.dp),
+        color = cs.surface,
+        border = BorderStroke(1.dp, cs.outline.copy(alpha = 0.15f))
+    ) {
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            val tabs = listOf("GLOBAL", "AMIGOS")
+            tabs.forEachIndexed { index, title ->
+                val isSelected = selectedTabIndex == index
+
+                // Animação suave de cor de fundo
+                val backgroundColor by animateColorAsState(
+                    targetValue = if (isSelected) cs.primary else Color.Transparent,
+                    label = "tabBackground"
+                )
+                val contentColor by animateColorAsState(
+                    targetValue = if (isSelected) Color.Black else cs.onSurfaceVariant,
+                    label = "tabContent"
+                )
+
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxHeight()
+                        .padding(4.dp) // Respiro interno para a pílula selecionada
+                        .clip(RoundedCornerShape(21.dp))
+                        .background(backgroundColor)
+                        .clickable { onTabSelected(index) },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.labelLarge,
+                        fontWeight = FontWeight.Black,
+                        color = contentColor,
+                        letterSpacing = 1.sp
+                    )
+                }
+            }
+        }
+    }
+}
 @Composable
 fun LeaderboardContent(users: List<LeaderboardUser>) {
     val top3 = users.take(3)
@@ -261,62 +305,70 @@ fun PodiumItem(user: LeaderboardUser, modifier: Modifier = Modifier) {
 
 @Composable
 fun LeaderboardListItem(user: LeaderboardUser) {
-    val backgroundColor = if (user.isCurrentUser) {
-        MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f)
+    val cs = MaterialTheme.colorScheme
+
+    val itemBackground = if (user.isCurrentUser) {
+        Brush.horizontalGradient(
+            colors = listOf(cs.primary.copy(alpha = 0.15f), Color.Transparent)
+        )
     } else {
-        Color.Transparent
+        Brush.linearGradient(colors = listOf(Color.Transparent, Color.Transparent))
     }
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(backgroundColor)
-            .padding(horizontal = 16.dp, vertical = 12.dp),
+            .background(itemBackground)
+            .padding(horizontal = 20.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Rank
+        // Rank com cor especial se for o usuário
         Text(
             text = "${user.rank}",
             style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.width(32.dp),
-            textAlign = TextAlign.Center
+            fontWeight = FontWeight.Black,
+            color = if (user.isCurrentUser) cs.primary else cs.onSurfaceVariant,
+            modifier = Modifier.width(40.dp)
         )
 
-        Spacer(modifier = Modifier.width(12.dp))
-
-        // Avatar
+        // Avatar Circular Minimalista
         Box(
             modifier = Modifier
-                .size(40.dp)
+                .size(44.dp)
                 .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.secondaryContainer),
+                .background(if (user.isCurrentUser) cs.primary else cs.surfaceVariant),
             contentAlignment = Alignment.Center
         ) {
             Text(
                 text = user.name.take(1).uppercase(),
-                color = MaterialTheme.colorScheme.onSecondaryContainer,
-                fontWeight = FontWeight.Bold
+                color = if (user.isCurrentUser) Color.Black else cs.onSurfaceVariant,
+                fontWeight = FontWeight.Black
             )
         }
 
         Spacer(modifier = Modifier.width(16.dp))
 
-        // Nome
         Text(
-            text = user.name,
-            style = MaterialTheme.typography.bodyLarge,
-            fontWeight = if (user.isCurrentUser) FontWeight.Bold else FontWeight.Normal,
-            modifier = Modifier.weight(1f)
+            text = if (user.isCurrentUser) "VOCÊ" else user.name.uppercase(),
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = FontWeight.ExtraBold,
+            color = cs.onBackground,
+            modifier = Modifier.weight(1f),
+            letterSpacing = 0.5.sp
         )
 
-        // XP
+        // XP com a cor Dourada/XP (tertiary)
         Text(
-            text = "${user.xp} XP",
+            text = "${user.xp}",
             style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary
+            fontWeight = FontWeight.Black,
+            color = cs.tertiary
+        )
+        Text(
+            text = " XP",
+            style = MaterialTheme.typography.labelSmall,
+            color = cs.onSurfaceVariant,
+            modifier = Modifier.padding(top = 4.dp)
         )
     }
 }

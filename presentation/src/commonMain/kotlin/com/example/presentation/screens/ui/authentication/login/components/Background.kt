@@ -89,7 +89,7 @@ fun AnimatedLoginBackground(
                 colors = listOf(
                     cs.primaryContainer.copy(alpha = 0.10f),
                     cs.primaryContainer.copy(alpha = 0.02f),
-                    androidx.compose.ui.graphics.Color.Transparent
+                    Color.Transparent
                 )
             )
         )
@@ -99,7 +99,7 @@ fun AnimatedLoginBackground(
             brush = Brush.radialGradient(
                 colors = listOf(
                     cs.secondary.copy(alpha = glowAlpha),
-                    androidx.compose.ui.graphics.Color.Transparent
+                    Color.Transparent
                 )
             ),
             radius = w * 0.9f,
@@ -111,7 +111,7 @@ fun AnimatedLoginBackground(
             brush = Brush.radialGradient(
                 colors = listOf(
                     cs.primary.copy(alpha = 0.03f),
-                    androidx.compose.ui.graphics.Color.Transparent
+                    Color.Transparent
                 )
             ),
             radius = w * 0.6f,

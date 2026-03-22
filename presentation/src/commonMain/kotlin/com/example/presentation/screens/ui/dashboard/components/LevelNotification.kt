@@ -43,17 +43,20 @@ import com.example.presentation.theme.CardBgDefaultColor
 
 enum class LevelNotification(
     val icon: ImageVector,
+    val color: @Composable () -> Color
 ){
     INFO(
-        icon = Icons.Default.Info
+        icon = Icons.Default.Info,
+        color = { Color(0xFF7D53FF) } // Roxo Elétrico para Informação/Tecnologia
     ),
     WARNING(
-        icon = Icons.Default.Warning
+        icon = Icons.Default.Warning,
+        color = { Color(0xFFB6FF00) } // Amarelo Neon para Alertas/Atenção
     )
 }
 
 data class Notification(
-    val level: com.example.presentation.screens.ui.dashboard.components.LevelNotification = _root_ide_package_.com.example.presentation.screens.ui.dashboard.components.LevelNotification.INFO,
+    val level: LevelNotification = LevelNotification.INFO,
     val title: String,
     val description: String,
     val date: String,
@@ -61,143 +64,111 @@ data class Notification(
 )
 
 @Composable
-fun NotificationCard(data: com.example.presentation.screens.ui.dashboard.components.Notification) {
-
+fun NotificationCard(data: Notification) {
     val cs = MaterialTheme.colorScheme
-
     var isExpanded by remember { mutableStateOf(false) }
     var isClickable by remember { mutableStateOf(false) }
 
-    val levelColor = when (data.level) {
-        _root_ide_package_.com.example.presentation.screens.ui.dashboard.components.LevelNotification.INFO -> cs.primary
-        _root_ide_package_.com.example.presentation.screens.ui.dashboard.components.LevelNotification.WARNING -> cs.error
-    }
+    val levelColor = data.level.color()
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .animateContentSize(),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(20.dp),
         onClick = { if (isClickable) isExpanded = !isExpanded },
         colors = CardDefaults.cardColors(
-            containerColor = cs.surfaceVariant
+            containerColor = cs.surfaceVariant.copy(alpha = 0.5f) // Fundo semi-transparente frio
         ),
         border = BorderStroke(
-            1.dp,
-            cs.primary.copy(alpha = 0.08f)
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            0.5.dp,
+            if (isExpanded) levelColor.copy(alpha = 0.5f) else cs.outline.copy(alpha = 0.2f)
+        )
     ) {
-
-        Column(
-            modifier = Modifier.padding(
-                top = 5.dp,
-                bottom = 10.dp,
-                start = 10.dp,
-                end = 10.dp
-            )
-        ) {
-
-            // ───────────────── HEADER ─────────────────
-
+        Column(modifier = Modifier.padding(16.dp)) {
+            // HEADER: Nível, Título e Delete
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-
-                Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-
-                    Text(
-                        text = data.date,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = cs.onSurfaceVariant
-                    )
-
-                    Text(
-                        text = data.time,
-                        style = MaterialTheme.typography.bodySmall,
-                        color = cs.onSurfaceVariant.copy(alpha = 0.8f)
-                    )
-                }
-                IconButton(onClick = { }) {
-                    Icon(
-                        modifier = Modifier.size(20.dp),
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = null,
-                        tint = cs.error
-                    )
-                }
-            }
-
-            Spacer(Modifier.height(3.dp))
-
-            Divider(
-                color = cs.outline.copy(alpha = 0.1f)
-            )
-
-            Spacer(Modifier.height(5.dp))
-
-            // ───────────── TITLE + ICON ─────────────
-
-            Row(
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    // Ícone com Glow sutil
+                    Box(
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clip(CircleShape)
+                            .background(levelColor.copy(alpha = 0.1f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = data.level.icon,
+                            contentDescription = null,
+                            tint = levelColor,
+                            modifier = Modifier.size(16.dp)
+                        )
+                    }
 
-                Box(
-                    modifier = Modifier
-                        .size(36.dp)
-                        .clip(CircleShape)
-                        .background(levelColor.copy(alpha = 0.15f)),
-                    contentAlignment = Alignment.Center
+                    Text(
+                        text = data.title,
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
+                    )
+                }
+
+                IconButton(
+                    onClick = { /* Lógica de deletar */ },
+                    modifier = Modifier.size(24.dp)
                 ) {
                     Icon(
-                        imageVector = data.level.icon,
+                        imageVector = Icons.Default.Delete,
                         contentDescription = null,
-                        tint = levelColor,
+                        tint = cs.error.copy(alpha = 0.6f),
                         modifier = Modifier.size(18.dp)
                     )
                 }
-
-                Text(
-                    text = data.title,
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        fontWeight = FontWeight.SemiBold
-                    ),
-                    color = cs.onSurface
-                )
             }
 
             Spacer(Modifier.height(12.dp))
 
-            // ───────────── DESCRIPTION ─────────────
-
+            // DESCRIÇÃO
             Text(
                 text = data.description,
-                maxLines = if (isExpanded) Int.MAX_VALUE else 3,
+                maxLines = if (isExpanded) Int.MAX_VALUE else 2,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.bodyMedium,
                 color = cs.onSurfaceVariant,
                 onTextLayout = { layout ->
-                    if (!isExpanded) {
-                        isClickable = layout.didOverflowHeight
-                    }
+                    if (!isExpanded) isClickable = layout.didOverflowHeight
                 }
             )
 
-            if (isClickable) {
-
-                Spacer(Modifier.height(8.dp))
-
+            // FOOTER: Data/Hora e Botão "Ver mais"
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 12.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Text(
-                    text = if (isExpanded) "Ver menos" else "Ler mais",
-                    style = MaterialTheme.typography.labelMedium.copy(
-                        fontWeight = FontWeight.SemiBold
-                    ),
-                    color = cs.primary,
-                    modifier = Modifier.align(Alignment.End)
+                    text = "${data.date} • ${data.time}",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = cs.onSurfaceVariant.copy(alpha = 0.5f)
                 )
+
+                if (isClickable) {
+                    Text(
+                        text = if (isExpanded) "Ver menos" else "Ler mais",
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.ExtraBold,
+                        color = levelColor // Usa a cor do nível para o link
+                    )
+                }
             }
         }
     }
