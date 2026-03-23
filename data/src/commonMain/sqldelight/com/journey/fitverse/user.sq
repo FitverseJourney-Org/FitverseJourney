@@ -1,0 +1,20 @@
+CREATE TABLE User(
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    price REAL NOT NULL
+);
+
+
+selectAllUsers:
+SELECT * FROM User;
+
+
+selectUserById:
+SELECT * FROM User WHERE id = ?;
+
+insertUser:
+INSERT INTO User (name, price) VALUES (?,?);
+
+deleteUser:
+DELETE FROM User WHERE id = ?;
+

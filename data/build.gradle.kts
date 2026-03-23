@@ -71,8 +71,8 @@ kotlin {
         }
         iosMain.dependencies {
 
-            // sqlDelight
             implementation(libs.ktor.client.darwin)
+            // sqlDelight
             implementation(libs.sqldelight.native.driver)
         }
         androidMain.dependencies {
@@ -86,9 +86,9 @@ kotlin {
             // engine ktor
             implementation(libs.ktor.client.okhttp)
             implementation(libs.ktor.client.logging)
+            implementation(libs.ktor.client.android)
 
             // sqlDelight
-            implementation(libs.ktor.client.android)
             implementation(libs.sqldelight.android.driver)
 
 
@@ -111,9 +111,10 @@ kotlin {
 
 sqldelight {
     databases {
-        create("UserDatabase") {
-            packageName.set("com.fitverse.database")
-            verifyMigrations.set(false)
+        create("fitverse_db") {
+            packageName.set("com.journey.fitverse")
+            generateAsync.set(true)
         }
     }
+    linkSqlite.set(true)
 }

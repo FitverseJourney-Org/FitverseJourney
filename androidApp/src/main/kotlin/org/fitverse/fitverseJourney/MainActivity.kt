@@ -6,6 +6,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
+import com.example.DatabaseDriverFactory
 import com.example.presentation.theme.FitVerseJourneyTheme
 import org.fitverse.project.navigation.FitverseRootNavigation
 
@@ -24,8 +26,13 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun App() {
     FitVerseJourneyTheme {
+        val context = LocalContext.current
 
-        FitverseRootNavigation()
+        FitverseRootNavigation(
+            dbDriverFactory = DatabaseDriverFactory(context)
+        )
+
+
 //        CompositionLocalProvider(
 //            LocalAppLocale provides language.iso
 //        ) {
