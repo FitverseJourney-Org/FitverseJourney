@@ -26,7 +26,6 @@ jobs:
         run: chmod +x gradlew
 
       - name: Run Build and Tests
-        # Criamos a pasta temp dentro do projeto para evitar erros de permissão no SO
         run: |
           mkdir -p ${{ github.workspace }}/gradle-temp
-          ./gradlew build -Djava.io.tmpdir=${{ github.workspace }}/gradle-temp
+          ./gradlew build --info --stacktrace -Djava.io.tmpdir=${{ github.workspace }}/gradle-temp
