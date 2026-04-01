@@ -33,29 +33,40 @@ val TrialTextSecondary = Color(0xFFBFCFC0)
 
 
 object DarkGamifiedColors {
+    // --- BACKGROUNDS & SURFACES ---
 
-    // Backgrounds
-    val Background = Color(0xFF0E0B16)
-    val Surface = Color(0xFF17121E)
-    val Card = Color(0xFF1C1626)
+    // Fundo principal do app (OLED Black)
+    val Background = Color(0xFF0A0B0F)
 
-    // Text
-    val Title = Color(0xFFF5F3FF)
-    val Body = Color(0xFFEDE9FE)
-    val Subtitle = Color(0xFFBDB4E6)
-    val Disabled = Color(0xFF7C77A6)
+    // Ideal para Cards, Bottom Sheets e Navigation Bars
+    val Surface = Color(0xFF16171D)
 
-    // Primary / Accent
-    val Primary = Color(0xFFA78BFA)        // roxo premium
-    val PrimarySoft = Color(0xFF4C1D95)
-    val Accent = Color(0xFF22D3EE)         // contraste moderno
+    // --- BRAND COLORS (Ações e Gamificação) ---
 
-    // Status
-    val Health = Color(0xFFF87171)
-    val Stamina = Color(0xFF6EE7B7)
-    val Xp = Color(0xFFFACC15)             // XP dourado acessível
+    // Logo, Splash Screen, Botão Primário e ícone de "Home"
+    val Primary = Color(0xFF7C3AED)
 
-    // UI helpers
-    val Divider = Color(0xFF2E2442)
-    val Outline = Color(0xFF3F2E5E)
+    // Containers de seleção, hover states e fundo de "Quick Commands"
+    val PrimarySoft = Color(0xFF2D1B59)
+
+    // Plano Trial, Barra de Hidratação e progresso secundário
+    val Secondary = Color(0xFF2563EB)
+
+    // Plano Pro, Botão "Become a Pro" e indicadores de Saúde/Stamina
+    val Tertiary = Color(0xFF10B981)
+
+    // --- TEXTO & DETALHES ---
+
+    // Títulos de Cards e Headlines principais
+    val OnBackground = Color(0xFFFFFFFF)
+
+    val NeutralMuted = Color(0xFF94A3B8)
+
+    val DeepNeutral = Color(0xFF0A0B0F)
+
+    // Legendas, unidades (BPM, kg) e textos de apoio "muted"
+    val OnSurfaceVariant = Color(0xFF71717A)
+
+    // Divisores de seção e bordas de inputs
+    val Outline = Color(0xFF2C2C2E)
 }

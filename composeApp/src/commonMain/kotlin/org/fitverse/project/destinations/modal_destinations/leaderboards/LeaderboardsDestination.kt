@@ -19,7 +19,7 @@ fun LeaderboardsDestination(
             .background(Brush.verticalGradient(listOf(cs.surface, cs.background)))
     ) {
         LeaderboardsScreen(
-            navigateBack = navigateBack
+            onBack = navigateBack
         )
     }
 }

@@ -2,23 +2,12 @@ package com.example.presentation.screens.ui.authentication.register.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.model.authentication.register.RegisterAction
 import com.example.domain.model.authentication.register.RegisterPage
-import com.example.domain.usecase.authentication.authValidations.ValidateAge
-import com.example.domain.usecase.authentication.authValidations.ValidateEmail
-import com.example.domain.usecase.authentication.authValidations.ValidateGender
-import com.example.domain.usecase.authentication.authValidations.ValidateGoals
-import com.example.domain.usecase.authentication.authValidations.ValidateName
-import com.example.domain.usecase.authentication.authValidations.ValidatePassword
-import com.example.domain.usecase.authentication.authValidations.ValidateTrainingLevel
 import com.example.domain.usecase.authentication.register.RegisterUseCase
-import com.example.domain.usecase.authentication.registerPages.ValidateCredentialsPageUseCase
-import com.example.domain.usecase.authentication.registerPages.ValidateGoalsPageUseCase
-import com.example.domain.usecase.authentication.registerPages.ValidateProfilePageUseCase
-import com.example.domain.usecase.authentication.registerPages.ValidateTrainingLevelUseCase
 import com.example.presentation.components.snackbar.SnackBarData
 import com.example.presentation.components.snackbar.SnackbarType
 import com.example.presentation.navigationState.RegisterNavigation
+import com.example.presentation.screens.ui.authentication.register.actions.RegisterAction
 import com.example.presentation.screens.ui.authentication.register.state.RegisterState
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -43,8 +32,11 @@ class RegisterViewModel(
 
     fun onAction(action: RegisterAction) {
         when (action) {
-            is RegisterAction.NameChanged -> {
-                _state.update { it.copy(name = action.value, nameErrors = emptyList()) }
+            is RegisterAction.FirstName -> {
+                _state.update { it.copy(firstName = action.value, nameErrors = emptyList()) }
+            }
+            is RegisterAction.LastName -> {
+                _state.update { it.copy(lastName = action.value, nameErrors = emptyList()) }
             }
             is RegisterAction.EmailChanged -> {
                 _state.update { it.copy(email = action.value, emailErrors = emptyList()) }
@@ -89,6 +81,9 @@ class RegisterViewModel(
             is RegisterAction.UpdateCarbs -> {
                 _state.update { it.copy(targetCarbs = action.value) }
             }
+            is RegisterAction.UpdateWater -> {
+                _state.update { it.copy(targetWater = action.value) }
+            }
             // -------------------------------
 
             is RegisterAction.Next -> {
@@ -117,7 +112,7 @@ class RegisterViewModel(
             }
             is RegisterAction.UpdateLevel -> {
                 _state.update {
-                    it.copy(trainingLevel = action.level) // Corrigido para usar o valor da action
+                    it.copy(trainingLevel = action.level)
                 }
             }
             is RegisterAction.UpdateAvatar -> {
@@ -125,91 +120,13 @@ class RegisterViewModel(
                     it.copy(selectedAvatarId = action.avatarId)
                 }
             }
+            else -> {
+
+            }
         }
     }
     private fun validateAndNext() {
         nextPage()
-    }
-    private fun validateProfile() {
-        val errors = ValidateProfilePageUseCase(
-            validateName = ValidateName(),
-            validateAge = ValidateAge(),
-            validateGender = ValidateGender(),
-        ).execute(
-            name = _state.value.name,
-            gender = _state.value.gender!!.name,
-            age = _state.value.age.toIntOrNull(),
-        )
-
-        if (errors.isEmpty()) {
-            nextPage()
-        } else {
-            _state.update {
-                it.copy(
-                    nameErrors = errors["name"] ?: emptyList(),
-                    ageErrors = errors["age"] ?: emptyList(),
-                    genderErrors = errors["gender"] ?: emptyList()
-                )
-            }
-        }
-    }
-    private fun validateGoals() {
-        val errors = ValidateGoalsPageUseCase(
-            validateGoals = ValidateGoals()
-        ).execute(goal = _state.value.fitnessGoal)
-
-        if(errors.isEmpty()){
-            nextPage()
-        } else {
-            _state.update {
-                it.copy(
-                    goalsErrors = errors,
-                    snackBarData = SnackBarData(
-                        message = "Please select a goal",
-                        type = SnackbarType.ERROR
-                    )
-                )
-            }
-        }
-    }
-    private fun validateLevel() {
-        val errors = ValidateTrainingLevelUseCase(
-            validateLevel = ValidateTrainingLevel()
-        ).execute(fitnessLevel = _state.value.trainingLevel)
-
-        if(errors.isEmpty()){
-            nextPage()
-        } else {
-            _state.update {
-                it.copy(
-                    trainingLevelErrors = errors,
-                    snackBarData = SnackBarData(
-                        message = "Please select a your training level",
-                        type = SnackbarType.ERROR
-                    )
-                )
-            }
-        }
-    }
-    private fun validateCredentials() {
-        val errors = ValidateCredentialsPageUseCase(
-            validateEmail = ValidateEmail(),
-            validatePassword = ValidatePassword()
-        ).execute(
-            email = _state.value.email,
-            password = _state.value.password
-        )
-
-        if (errors.isEmpty()) {
-            nextPage()
-        } else {
-            _state.update {
-                it.copy(
-                    emailErrors = errors["email"] ?: emptyList(),
-                    passwordErrors = errors["password"] ?: emptyList(),
-                )
-            }
-        }
     }
     fun nextPage() {
         _state.update {
@@ -237,7 +154,7 @@ class RegisterViewModel(
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
             val result = registerUseCase.invoke(
-                nickname = _state.value.name,
+                nickname = _state.value.firstName,
                 email = _state.value.email,
                 age = _state.value.age.toInt(),
                 height = _state.value.height,

@@ -1,6 +1,7 @@
 package com.example.expect
 
 import java.time.LocalDate
+import java.util.Calendar
 
 
 actual object DateTimeManager {
@@ -18,5 +19,9 @@ actual object DateTimeManager {
     }
     actual fun nowMillis(): Long {
         return System.currentTimeMillis()
+    }
+
+    actual fun getCurrentYear(): Int {
+        return Calendar.getInstance().get(Calendar.YEAR)
     }
 }

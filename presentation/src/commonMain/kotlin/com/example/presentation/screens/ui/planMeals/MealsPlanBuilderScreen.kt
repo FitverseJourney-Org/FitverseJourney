@@ -5,6 +5,7 @@ import FoodEntryRow
 import MacroProgressHeader
 import MealGroup
 import MealGroupCard
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -26,11 +27,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.presentation.screens.widgets.FitverseTopAppBar
 
 // --- 1. ESTADOS DA TELA (Em Memória) ---
 
@@ -95,38 +98,24 @@ fun MealsPlanBuilderScreen(
 
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("Montar Plano", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.ExtraBold)
-                        Surface(
-                            color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f),
-                            shape = CircleShape
-                        ) {
-                            Text(
-                                text = state.planName,
-                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
-                                style = MaterialTheme.typography.labelSmall,
-                                color = MaterialTheme.colorScheme.primary
-                            )
-                        }
-                    }
-                },
-                windowInsets = WindowInsets(0, 0, 0, 0),
-                navigationIcon = {
-                    IconButton(onClick = onBackClick) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
-                    }
-                },
-                actions = {
-                    Button(
-                        onClick = onSavePlan,
-                        contentPadding = PaddingValues(horizontal = 16.dp),
-                        modifier = Modifier.padding(end = 8.dp)
+            FitverseTopAppBar(
+                title = "MONTAR PLANO",
+                subtitle = {
+                    Surface(
+                        color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f),
+                        shape = CircleShape
                     ) {
-                        Text("Salvar", fontWeight = FontWeight.Bold)
+                        Text(
+                            text = state.planName.uppercase(),
+                            modifier = Modifier.padding(vertical = 2.dp),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.primary
+                        )
                     }
-                }
+                },
+                onBack = {
+                    onBackClick()
+                },
             )
         }
     ) { paddingValues ->
@@ -192,7 +181,7 @@ fun MacroProgressHeader(state: BuilderScreenState) {
                         modifier = Modifier.fillMaxSize(),
                         strokeWidth = 8.dp,
                         trackColor = MaterialTheme.colorScheme.surfaceVariant,
-                        strokeCap = androidx.compose.ui.graphics.StrokeCap.Round
+                        strokeCap = StrokeCap.Round
                     )
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
@@ -293,7 +282,7 @@ fun MealGroupCard(mealGroup: MealGroup, icon: ImageVector, onAddFoodClick: () ->
             shape = RoundedCornerShape(20.dp),
             color = MaterialTheme.colorScheme.surface,
             tonalElevation = 2.dp,
-            border = if (mealGroup.foods.isEmpty()) androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant) else null
+            border = if (mealGroup.foods.isEmpty()) BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant) else null
         ) {
             Column {
                 if (mealGroup.foods.isEmpty()) {

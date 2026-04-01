@@ -2,6 +2,7 @@ package com.example.presentation.screens.ui.planWorkout
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -14,14 +15,18 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.presentation.screens.ui.modal.planWorkout.EmptySearchState
+import com.example.presentation.screens.widgets.FitverseIconBack
+import com.example.presentation.screens.widgets.FitverseTopAppBar
+import com.example.presentation.theme.DarkGamifiedColors
 
-// --- Modelos ---
+// --- MODELOS ---
 
 data class ExerciseLibraryItem(
     val id: String,
@@ -30,257 +35,222 @@ data class ExerciseLibraryItem(
     val icon: ImageVector = Icons.Rounded.FitnessCenter
 )
 
-// --- Mocks ---
+// --- MOCKS (Limpados e Tipados) ---
 
 val muscleGroups = listOf("Todos", "Peito", "Costas", "Pernas", "Braços", "Ombros")
 
 val libraryExercises = listOf(
-    _root_ide_package_.com.example.presentation.screens.ui.planWorkout.ExerciseLibraryItem(
-        "1",
-        "Supino Reto",
-        "Peito"
-    ),
-    _root_ide_package_.com.example.presentation.screens.ui.planWorkout.ExerciseLibraryItem(
-        "2",
-        "Puxada Alta",
-        "Costas"
-    ),
-    _root_ide_package_.com.example.presentation.screens.ui.planWorkout.ExerciseLibraryItem(
-        "3",
-        "Agachamento Livre",
-        "Pernas"
-    ),
-    _root_ide_package_.com.example.presentation.screens.ui.planWorkout.ExerciseLibraryItem(
-        "4",
-        "Rosca Direta",
-        "Braços"
-    ),
-    _root_ide_package_.com.example.presentation.screens.ui.planWorkout.ExerciseLibraryItem(
-        "5",
-        "Elevação Lateral",
-        "Ombros"
-    ),
-    _root_ide_package_.com.example.presentation.screens.ui.planWorkout.ExerciseLibraryItem(
-        "6",
-        "Leg Press 45",
-        "Pernas"
-    ),
-    _root_ide_package_.com.example.presentation.screens.ui.planWorkout.ExerciseLibraryItem(
-        "7",
-        "Tríceps Pulley",
-        "Braços"
-    ),
-    _root_ide_package_.com.example.presentation.screens.ui.planWorkout.ExerciseLibraryItem(
-        "8",
-        "Cadeira Extensora",
-        "Costas"
-    ),
-    _root_ide_package_.com.example.presentation.screens.ui.planWorkout.ExerciseLibraryItem(
-        "9",
-        "Rosca Inversa",
-        "Braços"
-    ),
-    _root_ide_package_.com.example.presentation.screens.ui.planWorkout.ExerciseLibraryItem(
-        "10",
-        "Abdominal",
-        "Ombros"
-    ),
-    _root_ide_package_.com.example.presentation.screens.ui.planWorkout.ExerciseLibraryItem(
-        "11",
-        "Crucifixo",
-        "Peito"
-    ),
-    _root_ide_package_.com.example.presentation.screens.ui.planWorkout.ExerciseLibraryItem(
-        "12",
-        "Remada Baixa",
-        "Costas"
-    ),
-    _root_ide_package_.com.example.presentation.screens.ui.planWorkout.ExerciseLibraryItem(
-        "13",
-        "Mesa Flexora",
-        "Braços"
-    ),
-    _root_ide_package_.com.example.presentation.screens.ui.planWorkout.ExerciseLibraryItem(
-        "14",
-        "Elevação Frontal",
-        "Ombros"
-    ),
-    _root_ide_package_.com.example.presentation.screens.ui.planWorkout.ExerciseLibraryItem(
-        "15",
-        "Leg Curl",
-        "Pernas"
-    ),
+    ExerciseLibraryItem("1", "Supino Reto", "Peito"),
+    ExerciseLibraryItem("2", "Puxada Alta", "Costas"),
+    ExerciseLibraryItem("3", "Agachamento Livre", "Pernas"),
+    ExerciseLibraryItem("4", "Rosca Direta", "Braços"),
+    ExerciseLibraryItem("5", "Elevação Lateral", "Ombros"),
+    ExerciseLibraryItem("6", "Leg Press 45", "Pernas"),
+    ExerciseLibraryItem("7", "Tríceps Pulley", "Braços"),
+    ExerciseLibraryItem("8", "Cadeira Extensora", "Pernas"),
+    ExerciseLibraryItem("9", "Rosca Inversa", "Braços"),
+    ExerciseLibraryItem("10", "Abdominal Infra", "Core"),
+    ExerciseLibraryItem("11", "Crucifixo", "Peito"),
+    ExerciseLibraryItem("12", "Remada Baixa", "Costas"),
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WorkoutPlanExercisesScreen(
     onBack: () -> Unit,
-    onAddExercise: (com.example.presentation.screens.ui.planWorkout.ExerciseLibraryItem) -> Unit
+    onAddExercise: (ExerciseLibraryItem) -> Unit
 ) {
-    val cs = MaterialTheme.colorScheme
+    val colors = MaterialTheme.colorScheme
     var searchQuery by remember { mutableStateOf("") }
     var selectedFilter by remember { mutableStateOf("Todos") }
 
+    // Fundo padrão: Deep Neutral (#0A0B0F)
+    val screenGradient = Brush.verticalGradient(
+        colors = listOf(colors.surface, colors.background)
+    )
+
     Scaffold(
+        modifier = Modifier.background(screenGradient),
+        containerColor = colors.background,
         topBar = {
-            Column(modifier = Modifier.background(cs.surface)) {
-                CenterAlignedTopAppBar(
-                    title = { Text("Biblioteca", fontWeight = FontWeight.Black) },
-                    navigationIcon = {
-                        IconButton(onClick = onBack) {
-                            Icon(Icons.Rounded.ArrowBack, contentDescription = "Voltar")
-                        }
-                    },
-                    windowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
-                    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                        containerColor = Color.Transparent
-                    )
-                )
-
-                // Barra de Busca
-                OutlinedTextField(
-                    value = searchQuery,
-                    onValueChange = { searchQuery = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
-                    placeholder = { Text("Pesquisar exercício...") },
-                    leadingIcon = { Icon(Icons.Rounded.Search, null, tint = cs.primary) },
-                    trailingIcon = {
-                        if (searchQuery.isNotEmpty()) {
-                            IconButton(onClick = { searchQuery = "" }) {
-                                Icon(Icons.Rounded.Close, null)
-                            }
-                        }
-                    },
-                    shape = RoundedCornerShape(16.dp),
-                    singleLine = true,
-                    colors = OutlinedTextFieldDefaults.colors(
-                        focusedBorderColor = cs.primary,
-                        unfocusedBorderColor = cs.outlineVariant
-                    )
-                )
-
-                // Filtros Horizontais
-                LazyRow(
-                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    items(_root_ide_package_.com.example.presentation.screens.ui.planWorkout.muscleGroups) { group ->
-                        val isSelected = selectedFilter == group
-                        FilterChip(
-                            selected = isSelected,
-                            onClick = { selectedFilter = group },
-                            label = { Text(group) },
-                            shape = RoundedCornerShape(12.dp),
-                            colors = FilterChipDefaults.filterChipColors(
-                                selectedContainerColor = cs.primary,
-                                selectedLabelColor = cs.onPrimary
-                            )
-                        )
-                    }
-                }
-            }
+            FitverseTopAppBar(
+                title = "BIBLIOTECA",
+                onBack = onBack,
+            )
         }
     ) { padding ->
-        val filteredList = _root_ide_package_.com.example.presentation.screens.ui.planWorkout.libraryExercises.filter {
+        val filteredList = libraryExercises.filter {
             (selectedFilter == "Todos" || it.muscleGroup == selectedFilter) &&
                     it.name.contains(searchQuery, ignoreCase = true)
         }
 
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding),
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            if (filteredList.isEmpty()) {
-                item {
-                    _root_ide_package_.com.example.presentation.screens.ui.planWorkout.EmptySearchState(
-                        cs
-                    )
-                }
-            } else {
-                items(filteredList, key = { it.id }) { exercise ->
-                    _root_ide_package_.com.example.presentation.screens.ui.planWorkout.ExerciseSelectionCard(
-                        exercise,
-                        cs
+        Column(
+            modifier = Modifier.padding(padding).padding(vertical = 20.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ){
+            OutlinedTextField(
+                value = searchQuery,
+                onValueChange = { searchQuery = it },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 8.dp),
+                placeholder = {
+                    Text("BUSCAR EXERCÍCIO...", color = colors.onSurfaceVariant.copy(alpha = 0.5f), fontWeight = FontWeight.Bold)
+                },
+                leadingIcon = { Icon(Icons.Rounded.Search, null, tint = colors.secondary) },
+                trailingIcon = {
+                    if (searchQuery.isNotEmpty()) {
+                        IconButton(onClick = { searchQuery = "" }) {
+                            Icon(Icons.Rounded.Close, null, tint = colors.onSurfaceVariant)
+                        }
+                    }
+                },
+                shape = RoundedCornerShape(16.dp),
+                singleLine = true,
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedTextColor = colors.onSurface,
+                    unfocusedTextColor = colors.onSurface,
+                    focusedContainerColor = colors.surfaceVariant.copy(alpha = 0.5f),
+                    unfocusedContainerColor = colors.surfaceVariant.copy(alpha = 0.3f),
+                    focusedBorderColor = colors.secondary, // Azul ao buscar
+                    unfocusedBorderColor = colors.outline.copy(alpha = 0.5f)
+                )
+            )
+            LazyRow(
+                contentPadding = PaddingValues(horizontal = 20.dp, vertical = 12.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                items(muscleGroups) { group ->
+                    val isSelected = selectedFilter == group
+                    Surface(
+                        modifier = Modifier.clickable { selectedFilter = group },
+                        shape = RoundedCornerShape(12.dp),
+                        // Se selecionado, brilha em Azul (Secondary)
+                        color = if (isSelected) colors.secondary else colors.surfaceVariant.copy(alpha = 0.5f),
+                        border = BorderStroke(
+                            1.dp,
+                            if (isSelected) colors.secondary else colors.outline.copy(alpha = 0.3f)
+                        )
                     ) {
-                        onAddExercise(exercise)
+                        Text(
+                            text = group.uppercase(),
+                            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                            fontSize = 11.sp,
+                            fontWeight = FontWeight.Black,
+                            color = if (isSelected) colors.onSecondary else colors.onSurfaceVariant
+                        )
+                    }
+                }
+            }
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(horizontal = 20.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                if (filteredList.isEmpty()) {
+                    item { EmptySearchState(colors) }
+                } else {
+                    if (filteredList.isEmpty()) {
+                        item {
+                            // Aqui é onde a função é utilizada
+                            EmptySearchState(colors = colors)
+                        }
+                    }
+                    else {
+                        items(filteredList, key = { it.id }) { exercise ->
+                            ExerciseSelectionCard(exercise, colors) { onAddExercise(exercise) }
+                        }
                     }
                 }
             }
         }
+
     }
 }
 
 @Composable
 fun ExerciseSelectionCard(
-    exercise: com.example.presentation.screens.ui.planWorkout.ExerciseLibraryItem,
-    cs: ColorScheme,
+    exercise: ExerciseLibraryItem,
+    colors: ColorScheme,
     onAdd: () -> Unit
 ) {
-    Card(
+    Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = cs.surfaceVariant.copy(alpha = 0.3f)),
-        border = BorderStroke(1.dp, cs.outlineVariant.copy(alpha = 0.5f))
+        color = colors.surfaceVariant.copy(alpha = 0.6f), // Card background (#16171D)
+        border = BorderStroke(1.dp, colors.outline.copy(alpha = 0.2f))
     ) {
         Row(
-            modifier = Modifier
-                .padding(12.dp)
-                .fillMaxWidth(),
+            modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Ícone Representativo
+            // Ícone com Aura em Azul (Secondary)
             Box(
                 modifier = Modifier
                     .size(48.dp)
-                    .background(cs.primary.copy(alpha = 0.1f), CircleShape),
+                    .background(colors.secondary.copy(alpha = 0.1f), CircleShape),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(exercise.icon, null, tint = cs.primary, modifier = Modifier.size(24.dp))
+                Icon(
+                    exercise.icon,
+                    null,
+                    tint = colors.secondary,
+                    modifier = Modifier.size(24.dp)
+                )
             }
 
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 16.dp)
-            ) {
+            Column(modifier = Modifier.weight(1f).padding(horizontal = 16.dp)) {
                 Text(
-                    text = exercise.name,
+                    text = exercise.name.uppercase(),
+                    fontWeight = FontWeight.Black,
+                    fontSize = 15.sp,
+                    color = colors.onSurface
+                )
+                Text(
+                    text = exercise.muscleGroup.uppercase(),
+                    fontSize = 11.sp,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp,
-                    color = cs.onSurface
-                )
-                Text(
-                    text = exercise.muscleGroup,
-                    fontSize = 12.sp,
-                    color = cs.onSurfaceVariant
+                    color = colors.onSurfaceVariant // Cinza Muted
                 )
             }
 
-            // Botão Adicionar
+            // Botão "Adicionar": Roxo (Primary) para combinar com a FAB da tela anterior
             IconButton(
                 onClick = onAdd,
-                modifier = Modifier.background(cs.primary, CircleShape).size(36.dp)
+                modifier = Modifier
+                    .background(colors.primary, RoundedCornerShape(12.dp))
+                    .size(40.dp)
             ) {
-                Icon(Icons.Rounded.Add, null, tint = cs.onPrimary, modifier = Modifier.size(20.dp))
+                Icon(
+                    Icons.Rounded.Add,
+                    null,
+                    tint = colors.onPrimary,
+                    modifier = Modifier.size(24.dp)
+                )
             }
         }
     }
 }
 
 @Composable
-fun EmptySearchState(cs: ColorScheme) {
+fun EmptySearchState(colors: ColorScheme) {
     Column(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 64.dp),
+        modifier = Modifier.fillMaxWidth().padding(vertical = 80.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Icon(Icons.Rounded.History, null, modifier = Modifier.size(48.dp), tint = cs.outline)
-        Spacer(Modifier.height(12.dp))
-        Text("Nenhum exercício encontrado", color = cs.onSurfaceVariant)
+        Icon(
+            Icons.Rounded.SearchOff,
+            null,
+            modifier = Modifier.size(64.dp),
+            tint = colors.onSurfaceVariant.copy(alpha = 0.1f)
+        )
+        Spacer(Modifier.height(16.dp))
+        Text(
+            "NENHUMA HABILIDADE ENCONTRADA",
+            fontWeight = FontWeight.Black,
+            fontSize = 14.sp,
+            color = colors.onSurfaceVariant.copy(alpha = 0.3f)
+        )
     }
 }

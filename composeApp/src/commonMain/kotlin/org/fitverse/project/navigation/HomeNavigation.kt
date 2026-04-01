@@ -2,19 +2,23 @@ package org.fitverse.project.navigation
 
 import HistoricDestination
 import LeaderboardsDestination
+import MealsPlanBuilderScreen
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Block
 import androidx.compose.material.icons.rounded.FitnessCenter
 import androidx.compose.material.icons.rounded.Groups
 import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Restaurant
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
@@ -28,6 +32,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -42,7 +47,9 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
-import com.example.presentation.screens.ui.plans.AppPlansScreen
+import com.example.presentation.screens.ui.planMeals.MealPlanScreenState
+import com.example.presentation.screens.ui.planMeals.PlanMealsListScreen
+import com.example.presentation.theme.DarkGamifiedColors
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import org.fitverse.project.destinations.modal_destinations.achievement.AchievementDestination
@@ -53,6 +60,7 @@ import org.fitverse.project.destinations.modal_destinations.device.DevicesDestin
 import org.fitverse.project.destinations.modal_destinations.helpSupport.HelpSupportDestination
 import org.fitverse.project.destinations.homepage.meals.MealsDestination
 import org.fitverse.project.destinations.homepage.dashboad.NotificationDestination
+import org.fitverse.project.destinations.homepage.profile.ProfileDestination
 import org.fitverse.project.destinations.homepage.workout.WorkoutDestination
 import org.fitverse.project.destinations.modal_destinations.friends.FriendsDestination
 import org.fitverse.project.destinations.modal_destinations.progress.ProgressDestination
@@ -73,6 +81,7 @@ fun HomeNavigation(
                     subclass(NavRoutes.PlanWorkoutFlow::class, NavRoutes.PlanWorkoutFlow.serializer())
                     subclass(NavRoutes.TasksFlow::class, NavRoutes.TasksFlow.serializer())
                     subclass(NavRoutes.PlanPaymentScreen::class, NavRoutes.PlanPaymentScreen.serializer())
+                    subclass(NavRoutes.HomeFlow.Profile::class, NavRoutes.HomeFlow.Profile.serializer())
                 }
             }
         },
@@ -83,7 +92,8 @@ fun HomeNavigation(
         NavRoutes.HomeFlow.Dashboard,
         NavRoutes.HomeFlow.Workout,
         NavRoutes.HomeFlow.Community,
-        NavRoutes.HomeFlow.Meals
+        NavRoutes.HomeFlow.Meals,
+        NavRoutes.HomeFlow.Profile,
     )
 
 
@@ -92,7 +102,8 @@ fun HomeNavigation(
         is NavRoutes.HomeFlow.Dashboard,
         is NavRoutes.HomeFlow.Workout,
         is NavRoutes.HomeFlow.Community,
-        is NavRoutes.HomeFlow.Meals -> true
+        is NavRoutes.HomeFlow.Meals,
+        is NavRoutes.HomeFlow.Profile -> true
         else -> false
     }
 
@@ -115,8 +126,9 @@ fun HomeNavigation(
                     val showBottomBar = when (currentKey) {
                         is NavRoutes.HomeFlow.Dashboard,
                         is NavRoutes.HomeFlow.Workout,
+                        is NavRoutes.HomeFlow.Community,
                         is NavRoutes.HomeFlow.Meals,
-                        is NavRoutes.HomeFlow.Community -> true
+                        is NavRoutes.HomeFlow.Profile-> true
                         else -> false
                     }
 
@@ -175,16 +187,19 @@ fun HomeNavigation(
                                 }
                             )
                         }
-                        entry<NavRoutes.HomeFlow.AddPost> {
-                            AddPostDestination(
-                                toBack = { rootBackStack.removeLastOrNull() }
-                            )
-                        }
                         entry<NavRoutes.HomeFlow.Meals> {
                             MealsDestination(
                                 toAddMeal = {
                                     rootBackStack.add(NavRoutes.PlanMealsFlow.ListMeals)
                                 }
+                            )
+                        }
+                        entry<NavRoutes.HomeFlow.Profile>{
+                            ProfileDestination()
+                        }
+                        entry<NavRoutes.HomeFlow.AddPost> {
+                            AddPostDestination(
+                                toBack = { rootBackStack.removeLastOrNull() }
                             )
                         }
                         entry<NavRoutes.HomeFlow.NotificationScreen> {
@@ -247,6 +262,29 @@ fun HomeNavigation(
                                 toBack = { rootBackStack.removeLastOrNull() }
                             )
                         }
+                        entry<NavRoutes.PlanMealsFlow.PlanList>{
+                            PlanMealsListScreen(
+                                state = MealPlanScreenState(),
+                                onBack = {
+                                    rootBackStack.removeLastOrNull()
+                                },
+                                onNewPlanClick = {
+                                    rootBackStack.add(NavRoutes.PlanMealsFlow.PlanBuilder)
+                                },
+                                onPlanClick = {
+                                    rootBackStack.add(NavRoutes.PlanMealsFlow.PlanBuilder)
+                                }
+                            )
+                        }
+                        entry<NavRoutes.PlanMealsFlow.PlanBuilder>{
+                            MealsPlanBuilderScreen(
+                                onBackClick = { rootBackStack.removeLastOrNull() },
+                                onSavePlan = { rootBackStack.removeLastOrNull() },
+                                onAddFoodClick = {
+
+                                },
+                            )
+                        }
 
                     }
                 )
@@ -283,44 +321,53 @@ fun FitVerseBottomBar(
     items: List<NavKey>,
     backStack: NavBackStack<NavKey>
 ) {
-    val cs = MaterialTheme.colorScheme
     val currentDestination = backStack.lastOrNull()
     val haptic = LocalHapticFeedback.current
-    // Container com fundo Deep e borda superior sutil para separação
+
+    // Container com efeito de "Vidro Fumê"
     Surface(
-        color = cs.background,
-        border = BorderStroke(0.5.dp, cs.outline.copy(alpha = 0.2f)),
-        shadowElevation = 16.dp
+        // Cor de fundo levemente translúcida para deixar o gradiente do fundo passar
+        color = DarkGamifiedColors.Surface.copy(alpha = 0.92f),
+        // Borda superior sutil usando PrimarySoft para o efeito de "linha de energia"
+        border = BorderStroke(
+            width = 0.5.dp,
+            brush = Brush.horizontalGradient(
+                listOf(
+                    Color.Transparent,
+                    DarkGamifiedColors.PrimarySoft.copy(alpha = 0.3f),
+                    Color.Transparent
+                )
+            )
+        ),
+        shadowElevation = 20.dp
     ) {
         NavigationBar(
-            containerColor = Color.Transparent, // O Surface já provê a cor
+            containerColor = Color.Transparent, // O fundo do Scaffold ou do Background controla
             tonalElevation = 0.dp,
-            modifier = Modifier.navigationBarsPadding() // Respeita a área do sistema
+            modifier = Modifier
+                .navigationBarsPadding()
+                .height(80.dp)
         ) {
+            val colors = MaterialTheme.colorScheme
+
             items.forEach { item ->
                 val isSelected = currentDestination == item
 
-                val label = when (item) {
-                    is NavRoutes.HomeFlow.Dashboard -> "Home"
-                    is NavRoutes.HomeFlow.Workout -> "Treino"
-                    is NavRoutes.HomeFlow.Community -> "Social"
-                    is NavRoutes.HomeFlow.Meals -> "Dieta"
-                    else -> ""
-                }
-
-                val icon = when (item) {
-                    is NavRoutes.HomeFlow.Dashboard -> Icons.Rounded.Home
-                    is NavRoutes.HomeFlow.Workout -> Icons.Rounded.FitnessCenter
-                    is NavRoutes.HomeFlow.Community -> Icons.Rounded.Groups
-                    is NavRoutes.HomeFlow.Meals -> Icons.Rounded.Restaurant
-                    else -> Icons.Rounded.Home
+                // Mapeamento de Cores e Identidade por Seção
+                val (label, icon, activeColor) = when (item) {
+                    is NavRoutes.HomeFlow.Dashboard -> Triple("Home", Icons.Rounded.Home, colors.secondary) // Azul: Dados/Visão Geral
+                    is NavRoutes.HomeFlow.Workout -> Triple("Treino", Icons.Rounded.FitnessCenter, colors.primary) // Roxo: Força/Ação
+                    is NavRoutes.HomeFlow.Community -> Triple("Social", Icons.Rounded.Groups, colors.primary) // Roxo: Clã/Equipe
+                    is NavRoutes.HomeFlow.Meals -> Triple("Dieta", Icons.Rounded.Restaurant, colors.tertiary) // Verde: Nutrição/Saúde
+                    is NavRoutes.HomeFlow.Profile -> Triple("Perfil", Icons.Rounded.Person, colors.secondary) // Azul: Atributos
+                    else -> Triple("", Icons.Rounded.Block, colors.outline)
                 }
 
                 NavigationBarItem(
                     selected = isSelected,
                     onClick = {
                         if (!isSelected) {
-                            haptic.performHapticFeedback(HapticFeedbackType.LongPress) // Vibração curta e seca
+                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
                             backStack.add(item)
                         }
                     },
@@ -328,27 +375,26 @@ fun FitVerseBottomBar(
                         Icon(
                             imageVector = icon,
                             contentDescription = label,
-                            modifier = Modifier.size(26.dp)
+                            modifier = Modifier.size(24.dp)
                         )
                     },
                     label = {
                         Text(
-                            text = label,
+                            text = label.uppercase(), // Uppercase para estilo Gamer
                             style = MaterialTheme.typography.labelSmall,
-                            fontWeight = if (isSelected) FontWeight.Black else FontWeight.Medium,
-                            letterSpacing = 0.5.sp
+                            fontWeight = if (isSelected) FontWeight.Black else FontWeight.Bold,
+                            letterSpacing = 1.sp
                         )
                     },
-                    // Customização de Cores M3
                     colors = NavigationBarItemDefaults.colors(
-                        // Quando selecionado: Ícone e Texto em Neon Volt
-                        selectedIconColor = cs.primary,
-                        selectedTextColor = cs.primary,
-                        // O "Pill" (indicador) atrás do ícone
-                        indicatorColor = cs.primary.copy(alpha = 0.1f),
-                        // Quando não selecionado: Cinza Muted
-                        unselectedIconColor = cs.onSurface.copy(alpha = 0.5f),
-                        unselectedTextColor = cs.onSurface.copy(alpha = 0.5f)
+                        // O ícone selecionado brilha com a cor do domínio
+                        selectedIconColor = activeColor,
+                        selectedTextColor = activeColor,
+                        // Indicador (Pill): Sutil para manter o efeito de "vidro" do fundo
+                        indicatorColor = activeColor.copy(alpha = 0.1f),
+                        // Não selecionado: OnSurfaceVariant (Cinza Muted)
+                        unselectedIconColor = colors.onSurfaceVariant.copy(alpha = 0.5f),
+                        unselectedTextColor = colors.onSurfaceVariant.copy(alpha = 0.5f)
                     )
                 )
             }

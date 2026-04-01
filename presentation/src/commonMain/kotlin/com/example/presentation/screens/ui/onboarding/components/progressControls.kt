@@ -29,6 +29,7 @@ fun OnboardingControls(
 
     val cs = MaterialTheme.colorScheme
     val buttonText = if (currentPage == totalPages - 1) "Get Started" else "Next"
+    val buttonOnClick = if (currentPage == totalPages - 1) onFinish else onNext
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -46,13 +47,7 @@ fun OnboardingControls(
         FitVerseButton(
             text = buttonText,
             // Lógica de clique transferida para cá
-            onClick = {
-                if (currentPage == totalPages - 1) {
-                    onFinish()
-                } else {
-                    onNext()
-                }
-            },
+            onClick = buttonOnClick,
             modifier = Modifier.fillMaxWidth(), // Agora funciona sem conflito
             // Mapeamento de cores do seu sistema (cs)
             topColor = cs.primary,

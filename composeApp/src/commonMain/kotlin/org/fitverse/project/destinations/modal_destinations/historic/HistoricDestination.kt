@@ -16,7 +16,7 @@ fun HistoricDestination(
 
     Box(modifier = Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(cs.surface, cs.background)))){
         HistoricScreen(
-            navigateBack = navigateBack
+            onBack = navigateBack
         )
     }
 }

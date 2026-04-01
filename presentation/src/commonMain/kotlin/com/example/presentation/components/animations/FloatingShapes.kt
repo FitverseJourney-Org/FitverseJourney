@@ -13,7 +13,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.lerp
-import com.example.presentation.theme.DarkGamifiedColors
 
 @Composable
 fun FloatingShapes(

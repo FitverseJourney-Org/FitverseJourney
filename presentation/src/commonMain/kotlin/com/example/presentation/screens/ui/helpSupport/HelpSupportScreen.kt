@@ -58,6 +58,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.presentation.screens.widgets.FitVerseSpacer
+import com.example.presentation.screens.widgets.FitverseIconBack
+import com.example.presentation.screens.widgets.FitverseTopAppBar
 
 data class SupportCategory(
     val title: String,
@@ -109,17 +111,9 @@ fun HelpSupportScreen(onBack: () -> Unit) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Centro de Ajuda", fontWeight = FontWeight.Bold) },
-                navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Voltar")
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.Transparent
-                ),
-                windowInsets = WindowInsets(0, 0, 0, 0)
+            FitverseTopAppBar(
+                title = "CENTRO DE AJUDA",
+                onBack = onBack
             )
         }
     ) { padding ->

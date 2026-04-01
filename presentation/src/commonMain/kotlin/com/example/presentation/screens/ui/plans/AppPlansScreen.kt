@@ -2,333 +2,316 @@ package com.example.presentation.screens.ui.plans
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ChevronLeft
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
-import androidx.compose.material3.TabRowDefaults
-import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.presentation.screens.widgets.FitVerseButton
+import com.example.presentation.screens.widgets.FitverseIconBack
+import com.example.presentation.screens.widgets.FitverseTopAppBar
 
-// --- Dados de exemplo ---
 data class Plan(
     val title: String,
-    val monthlyLabel: String,
-    val detail: String,
-    val monthly: Double,
-    val yearly: Double
+    val priceLabel: String,
+    val isTrial: Boolean = false,
+    val isCurrent: Boolean = false,
+    val isPremium: Boolean = false,
+    val isFree: Boolean = false,
+    val features: List<String>
 )
 
-data class PointPackage(
-    val title: String,
-    val points: Int,
-    val price: Double
-)
-
-// --- Screen principal com tabs ---
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppPlansScreen(
-    navigateToProfile: () -> Unit = {},
-    userPoints: Int = 1200 // exemplo de saldo
+    onBack: () -> Unit = {}
 ) {
-    val cs = MaterialTheme.colorScheme
+    val colors = MaterialTheme.colorScheme
 
-    val tabs = listOf("Plans", "Points")
-    var selectedTab by rememberSaveable { mutableStateOf(0) }
+    var selectedPlanTitle by remember { mutableStateOf("Fitverse Pro") }
+    val hasUsedTrial by remember { mutableStateOf(false) }
 
-    val plans = remember {
-        listOf(
-            _root_ide_package_.com.example.presentation.screens.ui.plans.Plan(
-                "Basic",
-                "$5.99 / month",
-                "Save 15% • +150 pts monthly",
-                monthly = 5.99,
-                yearly = 4.99
-            ),
-            _root_ide_package_.com.example.presentation.screens.ui.plans.Plan(
-                "Performance",
-                "$12.99 / month",
-                "Save 15% • +400 pts monthly",
-                monthly = 12.99,
-                yearly = 9.99
-            ),
-            _root_ide_package_.com.example.presentation.screens.ui.plans.Plan(
-                "Elite",
-                "$24.99 / month",
-                "Save 30% • +1500 pts monthly",
-                monthly = 24.99,
-                yearly = 19.99
-            )
-        )
+    val plans = remember(hasUsedTrial) {
+        buildList {
+            add(Plan(
+                title = "Noob Lifter",
+                priceLabel = "Free",
+                isCurrent = true,
+                isPremium = false,
+                isFree = true,
+                features = listOf(
+                    "Access to basic workout tracking",
+                    "Limited meal plan templates",
+                    "Join up to 1 community challenge"
+                )
+            ))
+
+            if (!hasUsedTrial) {
+                add(Plan(
+                    title = "Fitverse Trial",
+                    priceLabel = "7 Days Free",
+                    isCurrent = false,
+                    isPremium = false,
+                    isTrial = true,
+                    features = listOf(
+                        "Try ALL Pro features for 7 days",
+                        "AI workout generation included",
+                        "No credit card required"
+                    )
+                ))
+            }
+
+            add(Plan(
+                title = "Fitverse Pro",
+                priceLabel = "$12/month",
+                isCurrent = false,
+                isPremium = true,
+                features = listOf(
+                    "Unlimited AI workout generation",
+                    "Custom macro & meal planning",
+                    "Detailed analytics and 1RM tracking",
+                    "Earn +400 XP points monthly"
+                )
+            ))
+        }
     }
-
-    val pointPackages = remember {
-        listOf(
-            _root_ide_package_.com.example.presentation.screens.ui.plans.PointPackage(
-                "Bronze Pack",
-                500,
-                4.99
-            ),
-            _root_ide_package_.com.example.presentation.screens.ui.plans.PointPackage(
-                "Silver Pack",
-                1200,
-                9.99
-            ),
-            _root_ide_package_.com.example.presentation.screens.ui.plans.PointPackage(
-                "Gold Pack",
-                3000,
-                19.99
-            )
-        )
-    }
-    var selectedTitle by rememberSaveable { mutableStateOf<String?>(null) }
 
     Scaffold(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Brush.verticalGradient(listOf(cs.background, cs.surface))),
-        containerColor = cs.background,
+        modifier = Modifier.fillMaxSize(),
+        containerColor = colors.background,
         topBar = {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(12.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                IconButton(onClick = { navigateToProfile() }) {
-                    Icon(imageVector = Icons.Default.ChevronLeft, contentDescription = "Back", tint = cs.onSurface)
-                }
-                Spacer(Modifier.width(6.dp))
-                Text(
-                    "Upgrade to unlock everything",
-                    color = cs.onSurface,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
-                )
-            }
+            FitverseTopAppBar(
+                title = "FITVERSE PLANS",
+                onBack = onBack,
+            )
         },
         bottomBar = {
-            if (selectedTab == 0) {
-                // Variável para checar se temos um plano selecionado
-                val isButtonEnabled = selectedTitle != null
-
-                FitVerseButton(
-                    modifier = Modifier.padding(16.dp),
-                    text = "Confirm Selection",
-                    // Se habilitado, usa as cores normais. Se não, aplica uma opacidade (alpha) para escurecer/apagar
-                    topColor = if (isButtonEnabled) cs.primary else cs.primary.copy(alpha = 0.4f),
-                    edgeColor = if (isButtonEnabled) cs.outline else cs.outline.copy(alpha = 0.4f),
-                    textColor = if (isButtonEnabled) cs.onPrimary else cs.onSurface.copy(alpha = 0.5f),
-                    enabled = isButtonEnabled,
-                    onClick = {
-                        // Ação ao confirmar
-                    }
-                )
+            // Lógica atualizada para usar cores frias (Primary e Secondary)
+            val bottomBarBg = when (selectedPlanTitle) {
+                "Fitverse Pro" -> colors.primary // Azul/Roxo principal
+                "Fitverse Trial" -> colors.secondary // Azul claro/Ciano
+                else -> colors.surface
             }
-        },
-        content = { padding ->
-            Column(modifier = Modifier.padding(padding).padding(16.dp)) {
-                // TabRow
-                TabRow(
-                    selectedTabIndex = selectedTab,
-                    containerColor = androidx.compose.ui.graphics.Color.Transparent,
-                    indicator = { tabPositions ->
-                        TabRowDefaults.Indicator(
-                            Modifier.tabIndicatorOffset(tabPositions[selectedTab]),
-                            color = cs.primary
-                        )
-                    }
-                ) {
-                    tabs.forEachIndexed { i, t ->
-                        Tab(
-                            selected = selectedTab == i,
-                            onClick = { selectedTab = i },
-                            text = {
-                                Text(
-                                    t,
-                                    color = if (selectedTab == i) cs.primary else cs.onSurface.copy(alpha = 0.75f)
-                                )
-                            }
-                        )
-                    }
-                }
 
-                Spacer(Modifier.height(16.dp))
-
-                // Conteúdo condicional por aba
-                when (selectedTab) {
-                    0 -> _root_ide_package_.com.example.presentation.screens.ui.plans.PlansContent(
-                        plans = plans,
-                        onSelect = { /* disparar fluxo compra/seleção */ },
-                        selectedTitle = selectedTitle, // Passa o valor atual do estado (String?)
-                        onSelectedTitleChange = { title ->
-                            selectedTitle = title // Atualiza o estado
-                        }
-                    )
-                    1 -> _root_ide_package_.com.example.presentation.screens.ui.plans.PointsContent(
-                        userPoints = userPoints,
-                        packages = pointPackages,
-                        onBuy = { pkg ->
-                            /* fluxo de compra de pts */
-                        })
-                }
+            val btnTopColor = when (selectedPlanTitle) {
+                "Fitverse Pro" -> colors.onPrimary
+                "Fitverse Trial" -> colors.onSecondary
+                else -> colors.primary
             }
-        }
-    )
-}
 
-// --- Conteúdo da aba "Plans" ---
-@Composable
-fun PlansContent(
-    plans: List<com.example.presentation.screens.ui.plans.Plan>,
-    onSelect: (com.example.presentation.screens.ui.plans.Plan) -> Unit,
-    selectedTitle: String?, // Alterado para receber a String (ou null)
-    onSelectedTitleChange: (String) -> Unit // Novo parâmetro para o callback
-) {
-    LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        item {
-            // features / bullets summarizadas
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                listOf(
-                    "Level & XP System with Daily Goals",
-                    "Custom Meal Planning",
-                    "Custom Workout Planning",
-                    "Missions to Earn Points",
-                    "Timed Progress Tracking",
-                    "Goal Setting Builder"
-                ).forEach { feat ->
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Default.Star, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(18.dp))
-                        Spacer(Modifier.width(8.dp))
-                        Text(feat, color = MaterialTheme.colorScheme.onSurface)
-                    }
-                }
+            val btnEdgeColor = when (selectedPlanTitle) {
+                "Fitverse Pro" -> colors.onPrimary.copy(alpha = 0.8f)
+                "Fitverse Trial" -> colors.onSecondary.copy(alpha = 0.8f)
+                else -> colors.primary.copy(alpha = 0.6f)
             }
-            Spacer(Modifier.height(12.dp))
-        }
 
-        items(plans) { plan ->
-            _root_ide_package_.com.example.presentation.screens.ui.plans.PlanCard(
-                plan = plan,
-                isSelected = selectedTitle == plan.title, // Agora a comparação de Strings funciona!
-                onSelect = {
-                    onSelectedTitleChange(plan.title) // Aciona a mudança de estado
-                    onSelect(plan)
-                }
-            )
-        }
+            val btnTextColor = when (selectedPlanTitle) {
+                "Fitverse Pro" -> colors.primary
+                "Fitverse Trial" -> colors.secondary
+                else -> colors.onPrimary
+            }
 
-        item {
-            Spacer(Modifier.height(80.dp)) // para dar espaço com o bottom bar
-        }
-    }
-}
+            val btnText = when (selectedPlanTitle) {
+                "Fitverse Pro" -> "Become a Pro today!"
+                "Fitverse Trial" -> "Get your trial!"
+                else -> "Keep Current Plan"
+            }
 
-// --- Conteúdo da aba "Points" ---
-@Composable
-fun PointsContent(userPoints: Int, packages: List<com.example.presentation.screens.ui.plans.PointPackage>, onBuy: (com.example.presentation.screens.ui.plans.PointPackage) -> Unit) {
-    val cs = MaterialTheme.colorScheme
-
-    LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        item {
-            Text("Your balance", fontWeight = FontWeight.Bold)
-            Spacer(Modifier.height(6.dp))
-            Text("$userPoints pts", color = cs.primary, fontWeight = FontWeight.SemiBold, fontSize = 20.sp)
-            Spacer(Modifier.height(12.dp))
-            Text("Buy more points to unlock features and boosts.")
-            Spacer(Modifier.height(12.dp))
-        }
-
-        items(packages) { pkg ->
-            Card(
-                colors = CardDefaults.cardColors(containerColor = cs.surfaceVariant),
-                shape = RoundedCornerShape(10.dp),
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { onBuy(pkg) }
+                    .background(bottomBarBg)
+                    .navigationBarsPadding()
+                    .padding(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(pkg.title, fontWeight = FontWeight.Bold, color = cs.onSurface)
-                        Spacer(Modifier.height(6.dp))
-                        Text("${pkg.points} pts", color = cs.onSurface.copy(alpha = 0.8f))
-                    }
-                    Column(horizontalAlignment = Alignment.End) {
-                        Text("$${pkg.price}", fontWeight = FontWeight.SemiBold, color = cs.onSurface)
-                        Spacer(Modifier.height(6.dp))
-                        Button(onClick = { onBuy(pkg) }, shape = RoundedCornerShape(6.dp)) {
-                            Text("Buy")
+                Text(
+                    text = "Cancel anytime without any frustrations.\nYearly plans and more features will be coming soon.",
+                    color = when (selectedPlanTitle) {
+                        "Fitverse Pro" -> colors.onPrimary.copy(alpha = 0.7f)
+                        "Fitverse Trial" -> colors.onSecondary.copy(alpha = 0.7f)
+                        else -> colors.onSurfaceVariant
+                    },
+                    fontSize = 12.sp,
+                    textAlign = TextAlign.Center,
+                    lineHeight = 16.sp,
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+
+                FitVerseButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                    text = btnText,
+                    topColor = btnTopColor,
+                    edgeColor = btnEdgeColor,
+                    textColor = btnTextColor,
+                    onClick = { /* Fluxo de assinatura */ }
+                )
+            }
+        }
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .padding(padding)
+                .padding(horizontal = 24.dp)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Spacer(modifier = Modifier.height(8.dp))
+
+            plans.forEach { plan ->
+                PlanCardClean(
+                    plan = plan,
+                    isSelected = selectedPlanTitle == plan.title,
+                    onClick = { selectedPlanTitle = plan.title }
+                )
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+        }
+    }
+}
+
+@Composable
+fun PlanCardClean(
+    plan: Plan,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
+    val colors = MaterialTheme.colorScheme
+
+    // Substituição do tertiary pelo primary para garantir o espectro de cores frias
+    val containerColor = when {
+        plan.isPremium && isSelected -> colors.primary // Cor fria principal para Premium
+        plan.isTrial && isSelected -> colors.secondary // Cor fria secundária para Trial
+        else -> colors.surface
+    }
+
+    val contentColor = when {
+        plan.isPremium && isSelected -> colors.onPrimary
+        plan.isTrial && isSelected -> colors.onSecondary
+        plan.isFree && isSelected -> colors.onSurface
+        else -> colors.onSurfaceVariant.copy(alpha = 0.6f)
+    }
+
+    val mutedColor = when {
+        plan.isPremium && isSelected -> colors.onPrimary.copy(alpha = 0.8f)
+        plan.isTrial && isSelected -> colors.onSecondary.copy(alpha = 0.8f)
+        plan.isFree && isSelected -> colors.onSurface.copy(alpha = 0.8f)
+        else -> colors.onSurfaceVariant
+    }
+
+    val enableBtn = plan.isPremium || plan.isTrial
+
+    Box(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 12.dp)
+                .clip(RoundedCornerShape(32.dp))
+                .background(containerColor)
+                .clickable(enabled = enableBtn) { onClick() }
+                .padding(24.dp)
+        ) {
+            Column {
+                if (plan.isTrial) {
+                    Text(
+                        text = "LIMITED OFFER",
+                        color = contentColor.copy(alpha = 0.7f),
+                        fontSize = 10.sp,
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 2.sp
+                    )
+                    Spacer(Modifier.height(4.dp))
+                }
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Box(
+                            modifier = Modifier
+                                .size(32.dp)
+                                .background(
+                                    if (plan.isPremium) colors.onPrimary.copy(alpha = 0.2f)
+                                    else colors.primary.copy(alpha = 0.2f),
+                                    RoundedCornerShape(8.dp)
+                                ),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(if (plan.isPremium) "👑" else "🛡️", fontSize = 16.sp)
                         }
+
+                        Spacer(modifier = Modifier.width(12.dp))
+
+                        Text(
+                            text = plan.title,
+                            color = contentColor,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 20.sp
+                        )
+                    }
+
+                    Text(
+                        text = plan.priceLabel,
+                        color = contentColor,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                plan.features.forEach { feature ->
+                    Row(
+                        modifier = Modifier.padding(bottom = 12.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = "Check",
+                            tint = contentColor,
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Text(
+                            text = feature,
+                            color = mutedColor,
+                            fontSize = 14.sp
+                        )
                     }
                 }
             }
         }
 
-        item {
-            Spacer(Modifier.height(80.dp))
-        }
-    }
-}
-
-// --- Card do plano (apresenta seleção visual) ---
-@Composable
-fun PlanCard(plan: com.example.presentation.screens.ui.plans.Plan, isSelected: Boolean = false, onSelect: (com.example.presentation.screens.ui.plans.Plan) -> Unit) {
-    val cs = MaterialTheme.colorScheme
-    val container = if (isSelected) cs.primary.copy(alpha = 0.12f) else cs.surfaceVariant
-
-    Card(
-        colors = CardDefaults.cardColors(containerColor = container),
-        shape = RoundedCornerShape(12.dp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onSelect(plan) }
-    ) {
-        Row(modifier = Modifier.padding(14.dp), verticalAlignment = Alignment.CenterVertically) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(plan.title, color = cs.onSurface, fontWeight = FontWeight.Bold)
-                Spacer(Modifier.height(6.dp))
-                Text(plan.monthlyLabel, color = cs.primary, fontWeight = FontWeight.Bold)
-                Spacer(Modifier.height(6.dp))
-                Text(plan.detail, color = cs.onSurface.copy(alpha = 0.75f))
-            }
-            Column(horizontalAlignment = Alignment.End) {
-                Text("${plan.yearly} / year", color = cs.onSurface, fontWeight = FontWeight.SemiBold)
-                Spacer(Modifier.height(6.dp))
-                Text("${plan.monthly} / month", color = cs.onSurface.copy(alpha = 0.75f))
+        if (plan.isCurrent) {
+            Box(
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .background(colors.secondary, RoundedCornerShape(8.dp))
+                    .padding(horizontal = 12.dp, vertical = 4.dp)
+            ) {
+                Text(
+                    text = "Current",
+                    color = colors.onSecondary,
+                    fontSize = 10.sp,
+                    fontWeight = FontWeight.Bold
+                )
             }
         }
     }

@@ -7,27 +7,23 @@ import androidx.compose.runtime.getValue
 import com.example.presentation.navigationState.OnboardingNavigation
 import com.example.presentation.screens.ui.onboarding.OnboardingScreen
 import com.example.presentation.screens.ui.onboarding.viewmodel.OnboardingViewModel
+import com.example.presentation.states.onboarding.OnboardingState
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.koinInject
 
 @Composable
 fun OnboardingDestination(
+    state : OnboardingState,
+    viewmodel: OnboardingViewModel,
     toTrial: () -> Unit,
-    toLogin: () -> Unit,
+
 ) {
-    val viewmodel = koinInject<OnboardingViewModel>()
-    val state by viewmodel.state.collectAsState()
-
-
 
     LaunchedEffect(true){
         viewmodel.navigationState.collectLatest {
             when(it) {
                 is OnboardingNavigation.ToTrial -> {
                     toTrial()
-                }
-                is OnboardingNavigation.ToLogin -> {
-                    toLogin()
                 }
             }
         }
@@ -36,10 +32,10 @@ fun OnboardingDestination(
 
     OnboardingScreen(
         state = state,
-        onFinish = {
-            viewmodel.emitToTrial()
-        },
         viewmodel = viewmodel,
+        emitToTrial = {
+            viewmodel.emitToTrial()
+        }
     )
 }
 

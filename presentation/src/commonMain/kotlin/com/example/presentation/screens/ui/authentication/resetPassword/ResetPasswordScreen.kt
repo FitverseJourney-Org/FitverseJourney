@@ -1,14 +1,19 @@
 package com.example.presentation.screens.ui.authentication.resetPassword
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material3.Icon
@@ -27,6 +32,10 @@ import com.example.presentation.screens.ui.authentication.login.components.Fitve
 import com.example.presentation.screens.ui.authentication.resetPassword.components.ResetPasswordTopBar
 import com.example.presentation.screens.ui.authentication.resetPassword.state.ResetPasswordState
 import com.example.presentation.screens.widgets.FitVerseButton
+import com.example.presentation.screens.widgets.FitverseTopAppBar
+import fitversejourneyapp.presentation.generated.resources.Res
+import fitversejourneyapp.presentation.generated.resources.ico_reset
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun ResetPasswordScreen(
@@ -39,40 +48,38 @@ fun ResetPasswordScreen(
     onBackClick: () -> Unit,
     onNavigateToLogin: () -> Unit
 ) {
+    val colors = MaterialTheme.colorScheme
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        containerColor = Color.Transparent,
+        containerColor = Color.Transparent, // Fundo amarrado ao tema (geralmente preto ou um azul/cinza muito escuro)
         snackbarHost = snackBarHostState,
         topBar = {
-            ResetPasswordTopBar(onBackClick)
+            ResetPasswordTopBar(onBackClick = onBackClick)
         }
     ) { padding ->
 
         Column(
             modifier = Modifier
                 .padding(padding)
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = 24.dp)
                 .fillMaxSize(),
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Top
         ) {
+            Image(
+                painter = painterResource(Res.drawable.ico_reset),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(200.dp)
+                    .align(Alignment.Start)
+            )
 
-            Spacer(Modifier.height(32.dp))
-
-//            Image(
-//                painter = painterResource(Res.drawable.),
-//                contentDescription = null,
-//                modifier = Modifier
-//                    .size(140.dp)
-//                    .align(Alignment.Start)
-//            )
-
-            Spacer(Modifier.height(32.dp))
 
             Text(
                 text = "Reset your password",
                 style = MaterialTheme.typography.headlineSmall.copy(
-                    color = Color.White,
+                    color = colors.onBackground, // Adapta-se automaticamente se você tiver Dark/Light mode
                     fontWeight = FontWeight.SemiBold
                 )
             )
@@ -82,7 +89,7 @@ fun ResetPasswordScreen(
             Text(
                 text = "Enter your email and we’ll send you a secure link to reset your password.",
                 style = MaterialTheme.typography.bodyMedium.copy(
-                    color = Color.Gray
+                    color = colors.onSurfaceVariant // Tom acinzentado frio, melhor que o Color.Gray direto
                 )
             )
 
@@ -96,7 +103,8 @@ fun ResetPasswordScreen(
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Outlined.Email,
-                        contentDescription = null
+                        contentDescription = null,
+                        tint = colors.primary // Ícone ganha a cor fria principal para dar destaque
                     )
                 },
                 keyboardOptions = KeyboardOptions(
@@ -113,9 +121,15 @@ fun ResetPasswordScreen(
             Spacer(Modifier.height(24.dp))
 
             FitVerseButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
                 text = "Send reset link",
+                topColor = colors.primary, // O botão principal leva a cor fria de destaque
+                edgeColor = colors.primary.copy(alpha = 0.8f),
+                textColor = colors.onPrimary,
                 onClick = onSendResetLink,
-                enabled = emailErrors.isEmpty(),
+                enabled = emailErrors.isEmpty() && state.email.isNotBlank(), // Evita clique com e-mail vazio
             )
 
             Spacer(Modifier.height(24.dp))
@@ -124,14 +138,13 @@ fun ResetPasswordScreen(
                 text = "Remembered your password? Sign in",
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .clickable { onNavigateToLogin() },
+                    .clickable { onNavigateToLogin() }
+                    .padding(8.dp), // Melhora a área de toque (touch target)
                 style = MaterialTheme.typography.bodyMedium.copy(
-                    color = Color.White,
-                    fontWeight = FontWeight.SemiBold
+                    color = colors.primary, // Indica que é um texto clicável (link) usando a cor do app
+                    fontWeight = FontWeight.Bold
                 )
             )
         }
     }
 }
-
-

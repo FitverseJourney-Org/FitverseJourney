@@ -21,13 +21,15 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.domain.model.dbLocal.language.Language
+import com.example.domain.model.local.language.Language
 import com.example.presentation.screens.ui.authentication.login.components.HeaderContainerLoginScreen
 import com.example.presentation.screens.ui.authentication.login.components.LoginFooter
 import com.example.presentation.screens.ui.authentication.login.components.LoginForm
 import com.example.presentation.screens.ui.authentication.login.state.LoginState
 import com.example.presentation.screens.ui.authentication.login.viewmodel.LoginViewModel
+import com.example.presentation.screens.widgets.FitVerseSpacer
 import fitversejourneyapp.presentation.generated.resources.Res
+import fitversejourneyapp.presentation.generated.resources.ico_logo
 import fitversejourneyapp.presentation.generated.resources.locale_ru
 import fitversejourneyapp.presentation.generated.resources.login_subtitle
 import fitversejourneyapp.presentation.generated.resources.login_title
@@ -97,10 +99,10 @@ fun LoginScreen(
 
                     Image(
                         modifier = Modifier.size(80.dp),
-                        painter = painterResource(Res.drawable.locale_ru),
+                        painter = painterResource(Res.drawable.ico_logo),
                         contentDescription = null
                     )
-
+                    FitVerseSpacer(vertical = true, value = 10.dp)
                     Text(
                         text = stringResource(Res.string.login_title),
                         style = MaterialTheme.typography.headlineMedium.copy(

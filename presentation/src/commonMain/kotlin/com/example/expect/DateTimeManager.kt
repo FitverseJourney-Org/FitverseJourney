@@ -5,6 +5,7 @@ expect object DateTimeManager {
     fun formatMillisToDate(millis: Long): String
     fun create(day: Int, month: Int, year: Int): PlatformDate
     fun nowMillis(): Long
+    fun getCurrentYear(): Int
 }
 
 data class PlatformDate(

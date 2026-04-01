@@ -2,6 +2,9 @@ package com.example.presentation.screens.ui.device
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -30,11 +33,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.presentation.screens.ui.device.onSurfaceVariant
+import com.example.presentation.screens.widgets.FitverseIconBack
+import com.example.presentation.screens.widgets.FitverseTopAppBar
 import kotlin.math.roundToInt
 
 /* ===================== MODELS ===================== */
@@ -65,7 +71,7 @@ fun DeviceSettingsScreenPro(
                 "phone",
                 Icons.Rounded.DirectionsWalk
             ),
-            _root_ide_package_.com.example.presentation.screens.ui.device.MetricUi(
+            MetricUi(
                 "heart",
                 "Frequência Cardíaca",
                 false,
@@ -106,13 +112,9 @@ fun DeviceSettingsScreenPro(
 
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
-                title = { Text("Dispositivos e Saúde", fontWeight = FontWeight.Black, fontSize = 16.sp) },
-                windowInsets = WindowInsets(0.dp),
-                navigationIcon = {
-                    IconButton(onClick = navigateBack) { Icon(Icons.Rounded.ChevronLeft, null) }
-                },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = cs.background)
+            FitverseTopAppBar(
+                title = "DISPOSITIVOS E SAÚDE",
+                onBack = navigateBack
             )
         }
     ) { padding ->
@@ -124,16 +126,6 @@ fun DeviceSettingsScreenPro(
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // 1. Hero Section (Agora como item da lista para melhor UX)
-            item {
-                _root_ide_package_.com.example.presentation.screens.ui.device.SettingsHero(
-                    steps = 8420,
-                    goal = 10000,
-                    calories = 450,
-                    activeMinutes = 32
-                )
-            }
-
             // 2. Título da Seção
             item {
                 Column(Modifier.padding(top = 8.dp, start = 4.dp)) {
@@ -144,7 +136,7 @@ fun DeviceSettingsScreenPro(
 
             // 3. Lista de Métricas
             items(metrics) { metric ->
-                _root_ide_package_.com.example.presentation.screens.ui.device.MetricCardPro(
+                MetricCardPro(
                     metric = metric,
                     onToggle = { metric.enabled = it },
                     onConnectAction = { /* Simular conexão */ },
@@ -152,7 +144,7 @@ fun DeviceSettingsScreenPro(
                 )
             }
 
-            item { _root_ide_package_.com.example.presentation.screens.ui.device.FooterLinks() }
+            item { FooterLinks() }
         }
     }
 }
@@ -191,101 +183,12 @@ fun FooterLinks() {
 }
 /* ===================== HERO (AJUSTES) ===================== */
 
-@Composable
-fun SettingsHero(
-    steps: Int,
-    goal: Int,
-    calories: Int,
-    activeMinutes: Int
-) {
-    val cs = MaterialTheme.colorScheme
-    val progress = (steps.toFloat() / goal).coerceIn(0f, 1f)
-
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = cs.surfaceVariant),
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-        shape = RoundedCornerShape(20.dp)
-    ) {
-        Row(
-            modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(Modifier.size(88.dp), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(
-                    progress = progress,
-                    color = cs.primary,
-                    strokeWidth = 10.dp,
-                    modifier = Modifier.matchParentSize()
-                )
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(
-                        "${(progress * 100).roundToInt()}%",
-                        color = cs.onSurface,
-                        fontWeight = FontWeight.SemiBold,
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                    Text(
-                        "da meta",
-                        color = cs.onSurface.copy(alpha = 0.75f),
-                        style = MaterialTheme.typography.labelSmall
-                    )
-                }
-            }
-
-            Spacer(Modifier.width(14.dp))
-
-            Column {
-                Text(
-                    "Hoje",
-                    color = cs.onSurface,
-                    style = MaterialTheme.typography.labelMedium
-                )
-                Spacer(Modifier.height(6.dp))
-                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    _root_ide_package_.com.example.presentation.screens.ui.device.MiniMetric(
-                        "Passos",
-                        steps.toString(),
-                        Icons.Default.DirectionsWalk
-                    )
-                    _root_ide_package_.com.example.presentation.screens.ui.device.MiniMetric(
-                        "Cal",
-                        calories.toString(),
-                        Icons.Default.LocalFireDepartment
-                    )
-                    _root_ide_package_.com.example.presentation.screens.ui.device.MiniMetric(
-                        "Min",
-                        activeMinutes.toString(),
-                        Icons.Default.Timer
-                    )
-                }
-                Spacer(Modifier.height(6.dp))
-                Text(
-                    "Toque para ver detalhes da atividade",
-                    color = cs.onSurface.copy(alpha = 0.7f),
-                    style = MaterialTheme.typography.bodySmall
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun MiniMetric(label: String, value: String, icon: ImageVector) {
-    val cs = MaterialTheme.colorScheme
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Icon(icon, contentDescription = null, tint = cs.primary, modifier = Modifier.size(16.dp))
-        Spacer(Modifier.height(4.dp))
-        Text(value, color = cs.onSurface, style = MaterialTheme.typography.bodySmall)
-        Text(label, color = cs.onSurface.copy(alpha = 0.8f), style = MaterialTheme.typography.labelSmall)
-    }
-}
 
 /* ===================== METRIC CARD ===================== */
 
 @Composable
 fun MetricCardPro(
-    metric: com.example.presentation.screens.ui.device.MetricUi,
+    metric: MetricUi,
     onToggle: (Boolean) -> Unit,
     onConnectAction: () -> Unit,
     onSourceSelect: (String) -> Unit

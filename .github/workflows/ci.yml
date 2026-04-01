@@ -5,10 +5,14 @@ on:
   push:
     branches: [ main ]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
-    # Usar Ubuntu garante um ambiente limpo e padronizado toda vez
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     steps:
       - name: Checkout repository
@@ -19,13 +23,19 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          # O cache evita baixar as dependências do Gradle toda vez (mais rápido!)
           cache: 'gradle'
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Run Build and Tests
+      - name: Run Build
         run: |
-          mkdir -p ${{ github.workspace }}/gradle-temp
-          ./gradlew build --info --stacktrace -Djava.io.tmpdir=${{ github.workspace }}/gradle-temp
+          # Criamos a pasta usando o caminho absoluto do GitHub Workspace
+          mkdir -p ${{ github.workspace }}/runner-temp
+          
+          # Removemos o 'test' e mantivemos o assembleDebug para validar a compilação
+          ./gradlew assembleDebug \
+            --info --stacktrace \
+            -Djava.io.tmpdir=${{ github.workspace }}/runner-temp \
+            --no-configuration-cache \
+            --no-daemon

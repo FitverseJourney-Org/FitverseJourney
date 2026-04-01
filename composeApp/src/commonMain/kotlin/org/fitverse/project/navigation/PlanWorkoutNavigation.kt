@@ -43,7 +43,7 @@ fun PlanWorkoutNavigation(
         entryProvider = entryProvider {
             entry<NavRoutes.PlanWorkoutFlow.List> {
                 PlanWorkoutListDestination(
-                    toBack = {
+                    onBack = {
                         toBack()
                     },
                     toNewWorkout = {

@@ -110,7 +110,7 @@ fun ProgressDestination(toBack: () -> Unit) {
         exercises = mockExercises,
         currentProgression = mockSupinoProgression,
         monthbeforeProgression = mockSupinoProgressionBefore,
-        toBack = toBack
+        onBack = toBack
     )
 }
 

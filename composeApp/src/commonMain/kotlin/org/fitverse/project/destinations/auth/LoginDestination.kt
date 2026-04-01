@@ -21,8 +21,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import com.example.domain.model.authentication.login.LoginAction
-import com.example.domain.model.dbLocal.language.Language
+import com.example.presentation.screens.ui.authentication.login.actions.LoginAction
+import com.example.domain.model.local.language.Language
 import com.example.presentation.components.snackbar.AppSnackbarHost
 import com.example.presentation.components.snackbar.SnackbarType
 import com.example.presentation.navigationState.LoginNavigation

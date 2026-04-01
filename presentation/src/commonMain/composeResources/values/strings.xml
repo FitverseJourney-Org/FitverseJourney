@@ -35,6 +35,14 @@
     <string name="trial_footer_text">Try everything free for 7 days — cancel anytime.</string>
 
     <!-- Authentication Resources Strings -->
+    <string name="home_auth_title">Train like a hero.\nLog your journey</string>
+    <string name="home_auth_btn_signUp">SIGN UP FREE</string>
+    <string name="home_auth_btn_google">Continue with Google</string>
+    <string name="home_auth_btn_facebook">Continue with Facebook</string>
+    <string name="home_auth_btn_apple">Continue with Apple</string>
+    <string name="home_auth_btn_loginIn">Log in</string>
+
+
     <string name="login_title">Start your journey!</string>
     <string name="login_subtitle">Train at your own pace.</string>
     <string name="login_email_label">Email</string>

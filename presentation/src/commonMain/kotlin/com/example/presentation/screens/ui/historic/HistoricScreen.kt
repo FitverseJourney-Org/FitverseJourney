@@ -20,9 +20,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.CalendarMonth
-import androidx.compose.material.icons.rounded.ChevronLeft
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.FilterAltOff
 import androidx.compose.material.icons.rounded.FitnessCenter
@@ -46,6 +44,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
@@ -63,6 +62,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.expect.DateTimeManager
+import com.example.presentation.screens.widgets.FitverseIconBack
+import com.example.presentation.screens.widgets.FitverseTopAppBar
+import com.example.presentation.theme.PADDING_TOPAPPBAR_DEFAULT_HORIZONTAL
+import com.example.presentation.theme.PADDING_TOPAPPBAR_DEFAULT_VERTICAL
 
 data class WorkoutHistory(
     val id: String,
@@ -129,7 +132,7 @@ val mockHistory = listOf(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HistoricScreen(
-    navigateBack: () -> Unit,
+    onBack: () -> Unit,
     allHistory: List<WorkoutHistory> = mockHistory
 ) {
     val cs = MaterialTheme.colorScheme
@@ -179,25 +182,9 @@ fun HistoricScreen(
 
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
-                title = {
-                    Text(
-                        text = "Histórico",
-                        fontWeight = FontWeight.Black,
-                        letterSpacing = 1.sp,
-                        color = cs.onBackground
-                    )
-                },
-                windowInsets = WindowInsets(0,0,0,0),
-                navigationIcon = {
-                    IconButton(onClick = navigateBack) {
-                        Icon(
-                            imageVector = Icons.Rounded.ChevronLeft,
-                            contentDescription = null,
-                            tint = cs.onBackground
-                        )
-                    }
-                },
+            FitverseTopAppBar(
+                title = "HISTÓRICO",
+                onBack = onBack,
                 actions = {
                     // Ícone ganha destaque Neon quando há um filtro ativo
                     IconButton(onClick = { showDatePicker = true }) {
@@ -208,10 +195,6 @@ fun HistoricScreen(
                         )
                     }
                 },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = cs.background, // Fundo ultra escuro
-                    scrolledContainerColor = cs.background
-                )
             )
         },
         containerColor = cs.background

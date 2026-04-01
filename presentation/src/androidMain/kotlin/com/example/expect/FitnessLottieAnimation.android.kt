@@ -20,6 +20,7 @@ actual fun FitnessLottieAnimation(
         OnboardingAnimationTopics.NUTRITION -> "cooking.json"
         OnboardingAnimationTopics.AI -> "ai_robot.json"
         OnboardingAnimationTopics.COMMUNITY -> "network_friend.json"
+        OnboardingAnimationTopics.REGISTER_SUCCESS -> "ani_confetti.json"
     }
     val composition by rememberLottieComposition(
         LottieCompositionSpec.Asset(file)

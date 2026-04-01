@@ -3,59 +3,28 @@ package com.example.presentation.screens.ui.planWorkout
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.DragHandle
-import androidx.compose.material.icons.rounded.FitnessCenter
-import androidx.compose.material.icons.rounded.Spa
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ColorScheme
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateMapOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.rounded.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlin.collections.set
+import com.example.presentation.screens.widgets.FitverseIconBack
+import com.example.presentation.screens.widgets.FitverseTopAppBar
 
-// DATA MODELS
+// --- MODELOS ---
+
 enum class DayOfWeek(val shortName: String, val fullName: String) {
     MON("S", "Segunda"), TUE("T", "Terça"), WED("Q", "Quarta"),
     THU("Q", "Quinta"), FRI("S", "Sexta"), SAT("S", "Sábado"), SUN("D", "Domingo")
@@ -69,11 +38,7 @@ data class Exercise(
     val rest: String = "60s"
 )
 
-data class DailyWorkout(
-    val day: com.example.presentation.screens.ui.planWorkout.DayOfWeek,
-    val exercises: List<com.example.presentation.screens.ui.planWorkout.Exercise> = emptyList(),
-    val isRestDay: Boolean = false
-)
+// --- TELA PRINCIPAL ---
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -82,44 +47,42 @@ fun WorkoutPlanBuilderScreen(
     onSave: () -> Unit,
     toAddExercises: () -> Unit
 ) {
-    val cs = MaterialTheme.colorScheme
-
-    // ESTADOS GLOBAIS DA TELA
+    val colors = MaterialTheme.colorScheme
     var planName by remember { mutableStateOf("") }
-    var selectedDay by remember { mutableStateOf(_root_ide_package_.com.example.presentation.screens.ui.planWorkout.DayOfWeek.MON) }
+    var selectedDay by remember { mutableStateOf(DayOfWeek.MON) }
 
-    // Mapeia quais dias são de descanso
-    val restDaysMap = remember { mutableStateMapOf<com.example.presentation.screens.ui.planWorkout.DayOfWeek, Boolean>() }
-    // Mock de exercícios
-    val workoutMap = remember { mutableStateMapOf<com.example.presentation.screens.ui.planWorkout.DayOfWeek, List<com.example.presentation.screens.ui.planWorkout.Exercise>>() }
-
-    // Lógica para saber se o dia atual selecionado é descanso
+    val restDaysMap = remember { mutableStateMapOf<DayOfWeek, Boolean>() }
+    val workoutMap = remember { mutableStateMapOf<DayOfWeek, List<Exercise>>() }
     val isCurrentDayRest = restDaysMap[selectedDay] ?: false
 
+    // Gradiente dinâmico: Surface (#16171D) para Background (#0A0B0F)
+    val screenGradient = Brush.verticalGradient(
+        colors = listOf(colors.surface, colors.background)
+    )
+
     Scaffold(
+        containerColor = Color.Transparent,
         topBar = {
-            CenterAlignedTopAppBar(
-                title = { Text("Novo Plano", fontWeight = FontWeight.Bold) },
-                windowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
-                navigationIcon = {
-                    IconButton(onClick = onBack) { Icon(Icons.Rounded.ArrowBack, null) }
-                },
+            FitverseTopAppBar(
+                title = "MONTAR MISSÃO",
+                onBack = onBack,
                 actions = {
                     TextButton(onClick = onSave) {
-                        Text("Concluir", color = cs.primary, fontWeight = FontWeight.Bold)
+                        // Action principal em Secondary (Azul)
+                        Text("SALVAR", color = colors.secondary, fontWeight = FontWeight.Black)
                     }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+                }
             )
         },
         floatingActionButton = {
-            // SÓ EXIBE OU ATIVA O FAB SE NÃO FOR DIA DE DESCANSO
             if (!isCurrentDayRest) {
                 ExtendedFloatingActionButton(
                     onClick = toAddExercises,
-                    containerColor = cs.primary,
+                    containerColor = colors.primary, // Roxo Vibrante para ação principal
+                    contentColor = Color.White,
+                    shape = RoundedCornerShape(16.dp),
                     icon = { Icon(Icons.Rounded.Add, null) },
-                    text = { Text("Adicionar Exercício") }
+                    text = { Text("ADICIONAR EXERCÍCIO", fontWeight = FontWeight.Black) }
                 )
             }
         }
@@ -130,65 +93,60 @@ fun WorkoutPlanBuilderScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-            _root_ide_package_.com.example.presentation.screens.ui.planWorkout.PlanHeaderSection(
-                planName
-            ) { planName = it }
+            PlanHeaderSection(planName, colors) { planName = it }
 
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(
-                "Cronograma Semanal",
-                style = MaterialTheme.typography.titleMedium,
+                "CRONOGRAMA SEMANAL",
+                style = MaterialTheme.typography.labelLarge,
+                color = colors.secondary, // Azul para subtítulos de seção
                 modifier = Modifier.padding(horizontal = 20.dp),
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Black,
+                letterSpacing = 1.sp
             )
 
-            _root_ide_package_.com.example.presentation.screens.ui.planWorkout.DaySelector(
-                selectedDay
-            ) { selectedDay = it }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            val exercisesForDay = workoutMap[selectedDay] ?: emptyList()
+            DaySelector(selectedDay, colors) { selectedDay = it }
 
             ExerciseListSection(
                 dayName = selectedDay.fullName,
-                exercises = exercisesForDay,
-                isRestDay = isCurrentDayRest, // Passa o estado atual
-                onToggleRestDay = {
-
-                }
+                exercises = workoutMap[selectedDay] ?: emptyList(),
+                isRestDay = isCurrentDayRest,
+                onToggleRestDay = { restDaysMap[selectedDay] = it },
+                colors = colors
             )
+
+            Spacer(modifier = Modifier.height(100.dp))
         }
     }
 }
 
+// --- COMPONENTES ---
+
 @Composable
-fun DaySelector(selectedDay: DayOfWeek, onDaySelected: (DayOfWeek) -> Unit) {
+fun DaySelector(selectedDay: DayOfWeek, colors: ColorScheme, onDaySelected: (DayOfWeek) -> Unit) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
+        modifier = Modifier.fillMaxWidth().padding(16.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         DayOfWeek.entries.forEach { day ->
             val isSelected = day == selectedDay
-            val cs = MaterialTheme.colorScheme
 
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .clip(RoundedCornerShape(12.dp))
                     .clickable { onDaySelected(day) }
-                    .background(if (isSelected) cs.primary else cs.surfaceVariant.copy(alpha = 0.3f))
+                    // PrimarySoft (#2D1B59) para estados de seleção
+                    .background(if (isSelected) colors.primaryContainer else Color.Transparent)
                     .padding(vertical = 12.dp, horizontal = 10.dp)
-                    .width(32.dp)
+                    .width(36.dp)
             ) {
                 Text(
                     text = day.shortName,
-                    color = if (isSelected) cs.onPrimary else cs.onSurfaceVariant,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 12.sp
+                    color = if (isSelected) colors.primary else colors.onSurfaceVariant,
+                    fontWeight = FontWeight.Black,
+                    fontSize = 14.sp
                 )
             }
         }
@@ -196,98 +154,73 @@ fun DaySelector(selectedDay: DayOfWeek, onDaySelected: (DayOfWeek) -> Unit) {
 }
 
 @Composable
-fun ExerciseItem(exercise: com.example.presentation.screens.ui.planWorkout.Exercise, onRemove: () -> Unit = {}) {
-    val cs = MaterialTheme.colorScheme
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 6.dp),
-        colors = CardDefaults.cardColors(containerColor = cs.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.5.dp),
-        border = BorderStroke(1.dp, cs.outlineVariant.copy(alpha = 0.3f)),
-        shape = RoundedCornerShape(20.dp)
+fun ExerciseItem(exercise: Exercise, colors: ColorScheme) {
+    Surface(
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 6.dp),
+        color = colors.surfaceVariant.copy(alpha = 0.5f), // Card background (#16171D)
+        shape = RoundedCornerShape(20.dp),
+        border = BorderStroke(1.dp, colors.outline.copy(alpha = 0.1f))
     ) {
-        Row(
-            modifier = Modifier.padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // Container do Ícone
+        Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(
                 modifier = Modifier
                     .size(44.dp)
-                    .background(cs.primary.copy(alpha = 0.1f), RoundedCornerShape(12.dp)),
+                    .background(colors.primary.copy(alpha = 0.1f), RoundedCornerShape(12.dp)),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    Icons.Rounded.FitnessCenter,
-                    null,
-                    tint = cs.primary,
-                    modifier = Modifier.size(22.dp)
-                )
+                Icon(Icons.Rounded.FitnessCenter, null, tint = colors.primary, modifier = Modifier.size(22.dp))
             }
 
             Column(modifier = Modifier.weight(1f).padding(horizontal = 16.dp)) {
-                Text(
-                    exercise.name,
-                    fontWeight = FontWeight.ExtraBold,
-                    fontSize = 15.sp,
-                    color = cs.onSurface
-                )
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    _root_ide_package_.com.example.presentation.screens.ui.planWorkout.ParamChip(
-                        value = "${exercise.sets} séries",
-                        cs
-                    )
-                    Text("•", color = cs.outline, fontSize = 10.sp)
-                    _root_ide_package_.com.example.presentation.screens.ui.planWorkout.ParamChip(
-                        value = exercise.reps,
-                        cs
-                    )
+                Text(exercise.name.uppercase(), fontWeight = FontWeight.Black, fontSize = 14.sp, color = colors.onSurface)
+                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    // Padrão de status: Primary para Sets, Secondary para Reps
+                    Text("${exercise.sets} SETS", color = colors.primary, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                    Text(exercise.reps, color = colors.secondary, fontSize = 11.sp, fontWeight = FontWeight.Bold)
                 }
             }
-
-            Icon(
-                Icons.Rounded.DragHandle,
-                contentDescription = "Reordenar",
-                tint = cs.outlineVariant
-            )
+            Icon(Icons.Rounded.DragHandle, null, tint = colors.onSurfaceVariant.copy(alpha = 0.3f))
         }
     }
 }
-@Composable
-fun ParamChip(value: String, cs: ColorScheme) {
-    Text(
-        text = value,
-        fontSize = 12.sp,
-        color = cs.onSurfaceVariant,
-        fontWeight = FontWeight.Medium
-    )
-}
 
 @Composable
-fun PlanHeaderSection(planName: String, onNameChange: (String) -> Unit) {
-    val cs = MaterialTheme.colorScheme
+fun PlanHeaderSection(
+    planName: String,
+    colors: ColorScheme,
+    onNameChange: (String) -> Unit
+) {
     Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 16.dp)) {
         Text(
-            text = "Identificação",
-            style = MaterialTheme.typography.labelMedium,
-            color = cs.primary,
-            fontWeight = FontWeight.Bold
+            text = "NOME DO PLANO",
+            style = MaterialTheme.typography.labelSmall,
+            // Texto secundário: Cinza Muted
+            color = colors.onSurfaceVariant,
+            fontWeight = FontWeight.Black,
+            letterSpacing = 1.sp
         )
         Spacer(Modifier.height(8.dp))
         OutlinedTextField(
             value = planName,
             onValueChange = onNameChange,
             modifier = Modifier.fillMaxWidth(),
-            placeholder = { Text("Ex: Hipertrofia Avançada", color = cs.onSurfaceVariant.copy(alpha = 0.5f)) },
+            placeholder = {
+                Text(
+                    "Ex: PROTOCOLO TITÃ",
+                    color = colors.onSurfaceVariant.copy(alpha = 0.4f)
+                )
+            },
             shape = RoundedCornerShape(16.dp),
             singleLine = true,
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = cs.primary,
-                unfocusedBorderColor = cs.outlineVariant
+                focusedTextColor = colors.onSurface,
+                unfocusedTextColor = colors.onSurface,
+                // Surface escuro para o container
+                focusedContainerColor = colors.surfaceVariant.copy(alpha = 0.4f),
+                unfocusedContainerColor = colors.surfaceVariant.copy(alpha = 0.2f),
+                // Brilho Neon ao focar: Roxo Primary
+                focusedBorderColor = colors.primary,
+                unfocusedBorderColor = colors.outline.copy(alpha = 0.5f)
             )
         )
     }
@@ -297,11 +230,10 @@ fun PlanHeaderSection(planName: String, onNameChange: (String) -> Unit) {
 fun ExerciseListSection(
     dayName: String,
     exercises: List<Exercise>,
-    isRestDay: Boolean, // Recebe do pai
-    onToggleRestDay: (Boolean) -> Unit
+    isRestDay: Boolean,
+    onToggleRestDay: (Boolean) -> Unit,
+    colors: ColorScheme
 ) {
-    val cs = MaterialTheme.colorScheme
-
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier
@@ -311,110 +243,104 @@ fun ExerciseListSection(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Treino de $dayName",
+                text = dayName.uppercase(),
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.ExtraBold
+                fontWeight = FontWeight.Black,
+                color = colors.onSurface // Branco Puro
             )
 
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text("Descanso", style = MaterialTheme.typography.labelMedium)
+                Text(
+                    "DESCANSO",
+                    style = MaterialTheme.typography.labelSmall,
+                    fontWeight = FontWeight.Bold,
+                    // Verde Neon para descanso ativo
+                    color = if(isRestDay) colors.tertiary else colors.onSurfaceVariant
+                )
                 Spacer(Modifier.width(8.dp))
-                androidx.compose.material3.Switch(
+                Switch(
                     checked = isRestDay,
-                    onCheckedChange = onToggleRestDay
+                    onCheckedChange = onToggleRestDay,
+                    colors = SwitchDefaults.colors(
+                        checkedThumbColor = colors.tertiary,
+                        checkedTrackColor = colors.tertiary.copy(alpha = 0.2f),
+                        uncheckedThumbColor = colors.onSurfaceVariant,
+                        uncheckedTrackColor = colors.outline.copy(alpha = 0.2f)
+                    )
                 )
             }
         }
 
+        Spacer(Modifier.height(12.dp))
+
         if (isRestDay) {
-            _root_ide_package_.com.example.presentation.screens.ui.planWorkout.RestDayPlaceholder()
+            // Certifique-se que o RestDayPlaceholder agora aceita 'colors'
+            RestDayPlaceholder(colors = colors)
         } else if (exercises.isEmpty()) {
-            _root_ide_package_.com.example.presentation.screens.ui.planWorkout.EmptyExercisesPlaceholder(
-                cs
-            )
+            EmptyExercisesPlaceholder(colors = colors)
         } else {
-            exercises.forEach { exercise ->
-                _root_ide_package_.com.example.presentation.screens.ui.planWorkout.ExerciseItem(
-                    exercise
-                )
-            }
+            exercises.forEach { ExerciseItem(it, colors) }
         }
     }
 }
+
 @Composable
-fun EmptyExercisesPlaceholder(cs: ColorScheme) {
+fun EmptyExercisesPlaceholder(colors: ColorScheme) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 40.dp, bottom = 80.dp), // Espaço extra para não bater no FAB
+            .padding(vertical = 60.dp), // Aumentei o respiro para destacar o vazio
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        // Ícone Ilustrativo
-        Box(
-            modifier = Modifier
-                .size(100.dp)
-                .background(cs.surfaceVariant.copy(alpha = 0.4f), CircleShape),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                imageVector = Icons.Rounded.FitnessCenter,
-                contentDescription = null,
-                modifier = Modifier.size(48.dp),
-                tint = cs.onSurfaceVariant.copy(alpha = 0.3f)
-            )
-        }
+        // Ícone com a cor de contorno/variante para parecer um "ghost" element
+        Icon(
+            imageVector = Icons.Rounded.FitnessCenter,
+            contentDescription = null,
+            modifier = Modifier.size(56.dp),
+            tint = colors.onSurfaceVariant.copy(alpha = 0.15f)
+        )
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // Textos de Apoio
         Text(
-            text = "Nenhum exercício ainda",
-            style = MaterialTheme.typography.titleSmall,
-            fontWeight = FontWeight.Bold,
-            color = cs.onSurface
+            text = "NENHUMA ATIVIDADE",
+            style = MaterialTheme.typography.labelLarge,
+            fontWeight = FontWeight.Black,
+            // Texto sutil para indicar que o slot está disponível
+            color = colors.onSurfaceVariant.copy(alpha = 0.3f),
+            letterSpacing = 2.sp
         )
 
         Text(
-            text = "Toque no botão abaixo para montar\no treino deste dia.",
+            text = "Aguardando definição da missão",
             style = MaterialTheme.typography.bodySmall,
-            color = cs.onSurfaceVariant,
-            textAlign = androidx.compose.ui.text.style.TextAlign.Center,
-            lineHeight = 18.sp,
-            modifier = Modifier.padding(top = 8.dp)
+            color = colors.onSurfaceVariant.copy(alpha = 0.2f),
+            textAlign = TextAlign.Center
         )
     }
 }
+
 @Composable
-fun RestDayPlaceholder() {
-    val cs = MaterialTheme.colorScheme
-    Card(
+fun RestDayPlaceholder(colors: ColorScheme) {
+    Surface(
         modifier = Modifier.fillMaxWidth().padding(16.dp),
-        colors = CardDefaults.cardColors(containerColor = cs.secondaryContainer.copy(alpha = 0.3f)),
-        shape = RoundedCornerShape(24.dp)
+        color = colors.tertiary.copy(alpha = 0.05f), // Verde Neon suave para descanso
+        shape = RoundedCornerShape(24.dp),
+        border = BorderStroke(1.dp, colors.tertiary.copy(alpha = 0.2f))
     ) {
         Column(
             modifier = Modifier.fillMaxWidth().padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Icon(
-                imageVector = Icons.Rounded.Spa, // Ícone de relaxamento
-                contentDescription = null,
-                tint = cs.secondary,
-                modifier = Modifier.size(40.dp)
-            )
+            Icon(Icons.Rounded.Spa, null, tint = colors.tertiary, modifier = Modifier.size(40.dp))
             Spacer(Modifier.height(12.dp))
+            Text("RECUPERAÇÃO ATIVA", fontWeight = FontWeight.Black, color = colors.tertiary)
             Text(
-                "Dia de Recuperação",
-                fontWeight = FontWeight.Bold,
-                color = cs.onSecondaryContainer
-            )
-            Text(
-                "O descanso é essencial para o crescimento muscular.",
+                "O descanso é onde o músculo realmente cresce.",
                 style = MaterialTheme.typography.bodySmall,
-                color = cs.onSecondaryContainer.copy(alpha = 0.7f),
-                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                color = colors.onSurfaceVariant,
+                textAlign = TextAlign.Center
             )
         }
     }

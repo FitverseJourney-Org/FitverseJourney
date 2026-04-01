@@ -1,5 +1,3 @@
-import LibraryTaskCard
-import SwapStatusHeader
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -57,7 +55,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.domain.model.dashboard.TaskIcon
 import com.example.domain.model.dashboard.TaskItem
-import com.example.presentation.screens.ui.dashboard.DailyTaskItemAvatar
+import com.example.presentation.screens.widgets.FitverseTaskItem
+import com.example.presentation.screens.widgets.FitverseTopAppBar
 
 // --- Mocks e Enums necessários para o código compilar ---
 enum class AvatarState { IDLE, HAPPY } // Apenas para preencher a sua chamada
@@ -68,7 +67,7 @@ enum class AvatarState { IDLE, HAPPY } // Apenas para preencher a sua chamada
 fun TasksScreen(
     currentTasks: List<TaskItem>,
     swapsRemaining: Int,
-    toBack: () -> Unit,
+    onBack: () -> Unit,
     onToggleTask: (TaskItem) -> Unit,
     onNavigateToLibrary: (TaskItem) -> Unit
 ) {
@@ -78,13 +77,9 @@ fun TasksScreen(
 
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
-                title = { Text("Minhas Missões", fontWeight = FontWeight.ExtraBold, fontSize = 18.sp) },
-                navigationIcon = {
-                    IconButton(onClick = toBack) { Icon(Icons.Rounded.ArrowBack, null) }
-                },
-                windowInsets = WindowInsets(0, 0, 0, 0),
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color.Transparent)
+            FitverseTopAppBar(
+                title = "MINHAS TASKS",
+                onBack = onBack,
             )
         },
         floatingActionButton = {
@@ -126,7 +121,7 @@ fun TasksScreen(
 
             items(currentTasks, key = { it.id }) { task ->
                 // Chamada do componente sem o Box externo para evitar conflitos de clique
-                DailyTaskItemAvatar(
+                FitverseTaskItem(
                     task = task,
                     isSelected = selectedTaskForSwap?.id == task.id,
                     onSelect = {

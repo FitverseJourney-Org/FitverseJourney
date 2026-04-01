@@ -4,5 +4,6 @@ enum class OnboardingAnimationTopics {
     WORKOUT,
     NUTRITION,
     AI,
-    COMMUNITY
+    COMMUNITY,
+    REGISTER_SUCCESS
 }

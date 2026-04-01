@@ -2,6 +2,7 @@ package com.example.domain.model.authentication.register
 
 enum class RegisterPage {
     Profile,
+    Metrics,
     Gender,
     Goals,
     Level,
@@ -12,14 +13,15 @@ enum class RegisterPage {
 
     fun next(): RegisterPage {
         return when (this) {
-            Profile     -> Gender
+            Profile     -> Metrics
+            Metrics     -> Gender
             Gender      -> Goals
             Goals       -> Level
             Level       -> Avatar
-            Avatar      -> Macros      // Agora o Avatar leva para os Macros
-            Macros      -> Credentials // E os Macros levam para as Credenciais
+            Avatar      -> Macros
+            Macros      -> Credentials
             Credentials -> Success
-            Success     -> Success // Evita exceção se já estiver no fim
+            Success     -> Success // Evita exceção se já estiver no final
         }
     }
 
@@ -31,7 +33,8 @@ enum class RegisterPage {
             Avatar      -> Level
             Level       -> Goals
             Goals       -> Gender
-            Gender      -> Profile
+            Gender      -> Metrics
+            Metrics     -> Profile
             Profile     -> Profile // Evita exceção se já estiver no início
         }
     }

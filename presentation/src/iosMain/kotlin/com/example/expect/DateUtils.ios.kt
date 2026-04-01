@@ -1,6 +1,7 @@
 package com.example.expect
 
 import platform.Foundation.NSCalendar
+import platform.Foundation.NSCalendarUnitYear
 import platform.Foundation.NSDate
 import platform.Foundation.NSDateComponents
 import platform.Foundation.dateWithTimeIntervalSince1970
@@ -35,5 +36,11 @@ actual object DateTimeManager {
 
     actual fun nowMillis(): Long {
         return (NSDate().timeIntervalSince1970 * 1000).toLong()
+    }
+
+    actual fun getCurrentYear(): Int {
+        val calendar = NSCalendar.currentCalendar
+        val components = calendar.components(NSCalendarUnitYear, fromDate = NSDate())
+        return components.year.toInt()
     }
 }

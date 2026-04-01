@@ -47,8 +47,9 @@ import org.jetbrains.compose.resources.stringResource
 fun OnboardingScreen(
     state: OnboardingState,
     viewmodel: OnboardingViewModel,
-    onFinish: () -> Unit,
+    emitToTrial: () -> Unit
 ) {
+    val cs = MaterialTheme.colorScheme
     val onboardingPages = listOf(
         OnboardingPage(
             title = stringResource(Res.string.onboarding_title_1),
@@ -90,12 +91,12 @@ fun OnboardingScreen(
         content = {
             Box(modifier = Modifier.fillMaxSize()) {
                 UltraFitnessOnboardingBackground(
-                    step = pagerState.currentPage
+                    step = pagerState.currentPage,
+                    colors = cs
                 )
                 OnboardingContent(
                     modifier = Modifier.padding(it),
                     pagerState = pagerState,
-                    onFinish = onFinish,
                     nextPage = {
                         viewmodel.nextPage(lastIndex)
                     },
@@ -103,7 +104,11 @@ fun OnboardingScreen(
                         viewmodel.skipToLastPage(lastIndex)
                     },
                     onboardingPages = onboardingPages,
-                    viewmodel = viewmodel
+                    viewmodel = viewmodel,
+                    onFinish = {
+                        emitToTrial()
+                    }
+
                 )
             }
         }

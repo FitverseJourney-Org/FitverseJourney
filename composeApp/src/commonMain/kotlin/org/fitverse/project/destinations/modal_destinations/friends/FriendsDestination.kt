@@ -22,7 +22,7 @@ fun FriendsDestination(
             )
     ) {
         FriendsScreen(
-            navigateBack = navigateBack
+            onBack = navigateBack
         )
     }
 }

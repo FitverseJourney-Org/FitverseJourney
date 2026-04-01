@@ -6,8 +6,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalContext
-import com.example.DatabaseDriverFactory
+import com.example.expect.AppDataStoreDb
+import com.example.expect.DatabaseDriverFactory
+import com.example.expect.LocalAppLocale
 import com.example.presentation.theme.FitVerseJourneyTheme
 import org.fitverse.project.navigation.FitverseRootNavigation
 
@@ -17,20 +20,27 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContent {
-            App()
+
+            // 1. Inicializa o contexto do seu AppDataStoreDb
+            AppDataStoreDb.context = this
+
+
+            App(dbHelper = DatabaseDriverFactory(this))
         }
     }
 }
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
-fun App() {
+fun App(
+    dbHelper: DatabaseDriverFactory,
+) {
     FitVerseJourneyTheme {
-        val context = LocalContext.current
 
         FitverseRootNavigation(
-            dbDriverFactory = DatabaseDriverFactory(context)
+            dbHelper = dbHelper,
         )
+
 
 
 //        CompositionLocalProvider(

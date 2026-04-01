@@ -7,6 +7,6 @@ import com.example.presentation.screens.ui.plans.AppPlansScreen
 @Composable
 fun PlanDestination(toBack: () -> Unit) {
     AppPlansScreen(
-        navigateToProfile = { toBack() }
+        onBack = { toBack() }
     )
 }

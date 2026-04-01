@@ -11,14 +11,14 @@ import com.example.presentation.screens.ui.planWorkout.WorkoutPlanDashboardScree
 
 @Composable
 fun PlanWorkoutListDestination(
-    toBack: () -> Unit,
+    onBack: () -> Unit,
     toNewWorkout: () -> Unit
 )  {
     val cs = MaterialTheme.colorScheme
 
-    Box(modifier = Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(cs.surface, cs.background)))){
+    Box(modifier = Modifier.fillMaxSize()){
         WorkoutPlanDashboardScreen(
-            toBack = toBack,
+            onBack = onBack,
             onEditWorkout = {},
             toNewWorkout = toNewWorkout
         )

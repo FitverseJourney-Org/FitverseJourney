@@ -41,10 +41,6 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.presentation.theme.AccentGreen
-import com.example.presentation.theme.DarkGamifiedColors.Divider
-import com.example.presentation.theme.OnSurfaceText
-import com.example.presentation.theme.SurfaceGreen
 
 @Composable
 fun PointsGainCard(

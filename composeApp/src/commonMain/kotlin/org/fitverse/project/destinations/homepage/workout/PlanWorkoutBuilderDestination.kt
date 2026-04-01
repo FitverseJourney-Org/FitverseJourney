@@ -16,7 +16,7 @@ fun PlanWorkoutBuilderDestination(
 )  {
     val cs = MaterialTheme.colorScheme
 
-    Box(modifier = Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(cs.surface, cs.background)))){
+    Box(modifier = Modifier.fillMaxSize()){
         WorkoutPlanBuilderScreen(
             onBack = onBack,
             onSave = {},

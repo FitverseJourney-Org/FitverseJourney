@@ -1,31 +1,15 @@
 package com.example.presentation.screens.ui.dashboard
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -45,20 +29,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Bolt
+import androidx.compose.material.icons.filled.WaterDrop
 import androidx.compose.material.icons.rounded.Check
-import androidx.compose.material.icons.rounded.CheckCircle
-import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material.icons.rounded.Favorite
-import androidx.compose.material.icons.rounded.FitnessCenter
-import androidx.compose.material.icons.rounded.GeneratingTokens
 import androidx.compose.material.icons.rounded.HelpOutline
-import androidx.compose.material.icons.rounded.LocalDining
 import androidx.compose.material.icons.rounded.LocalFireDepartment
-import androidx.compose.material.icons.rounded.NotificationsNone
-import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material.icons.rounded.SentimentVeryDissatisfied
-import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -68,15 +42,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -84,19 +56,14 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -106,6 +73,13 @@ import com.example.domain.model.dashboard.TaskItem
 import com.example.expect.getHourOfDay
 import com.example.presentation.core.utils.Dashboard.levelFromXp
 import com.example.presentation.screens.ui.dashboard.components.ContainerLevel
+import com.example.presentation.screens.widgets.FitverseAvatarCard
+import com.example.presentation.screens.widgets.FitverseIconNotifications
+import com.example.presentation.screens.widgets.FitverseIconStreak
+import com.example.presentation.screens.widgets.FitverseProfileImage
+import com.example.presentation.screens.widgets.FitverseTaskItem
+import com.example.presentation.theme.PADDING_TOPAPPBAR_DEFAULT_HORIZONTAL
+import com.example.presentation.theme.PADDING_TOPAPPBAR_DEFAULT_VERTICAL
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
@@ -227,9 +201,10 @@ fun DashboardScreen(
             }
         )
     }
-
     LazyColumn(
-        modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
         contentPadding = PaddingValues(vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp) // Espaço respirável
     ) {
@@ -243,21 +218,20 @@ fun DashboardScreen(
             )
         }
         item { ContainerLevel(state = avatarState, modifier = Modifier.fillMaxWidth()) }
-        item { AvatarCard(state = avatarState) }
-
+        item { FitverseAvatarCard(state = avatarState) }
+        item { HydrationTrackerCard() }
         item {
             Text(
                 modifier = Modifier.padding(top = 8.dp, bottom = 4.dp),
-                text = "Daily Tasks",
-                color = cs.onBackground, // Branco Puro do seu tema
-                fontSize = 20.sp,
-                fontWeight = FontWeight.ExtraBold,
+                text = "DAILY TASKS",
+                color = cs.onBackground,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
                 letterSpacing = (-0.5).sp
             )
         }
-
         items(items = tasks, key = { it.id }) { task ->
-            DailyTaskItemAvatar(
+            FitverseTaskItem(
                 task = task,
                 isSelected = task.completed,
                 onToggle = { onToggleTask(task) },
@@ -265,6 +239,112 @@ fun DashboardScreen(
                     tasks = tasks.map { if (it.id == task.id) it.copy(completed = !it.completed) else it }
                 }
             )
+        }
+    }
+}
+// Definição manual das cores exatas do Design System
+private val ColorSecondaryBlue = Color(0xFF2563EB) // Azul Neon
+private val ColorPureBlack = Color(0xFF181818)    // Preto Puro
+private val ColorSurfaceDark = Color(0xFF16171D)   // Trilho da barra
+private val ColorTextMuted = Color(0xFF71717A)    // Texto /3.5L
+
+@Composable
+fun HydrationTrackerCard(
+    currentLiters: Float = 2.4f,
+    goalLiters: Float = 3.5f
+) {
+    val progress = (currentLiters / goalLiters).coerceIn(0f, 1f)
+
+    val backgroundBrush = Brush.linearGradient(
+        colors = listOf(
+            ColorSecondaryBlue.copy(alpha = 0.15f), // Início: Azul suave (Wash)
+            Color.Transparent,
+            ColorPureBlack                          // Fim: Preto Puro
+        ),
+        start = Offset.Zero,
+        end = Offset.Infinite
+    )
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.Transparent
+        ),
+        border = BorderStroke(
+            width = 1.dp,
+            color = ColorSecondaryBlue.copy(alpha = 0.25f)
+        )
+    ) {
+        // Colocamos o fundo no gradiente aqui dentro
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(backgroundBrush) // Aplica o Brush solicitado
+                .padding(horizontal = 24.dp, vertical = 24.dp)
+        ) {
+            // Título em Azul Secundário puro conforme a imagem
+            Text(
+                text = "HYDRATION GOAL",
+                color = ColorSecondaryBlue, // #2563EB
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 1.2.sp
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                // Sessão Numérica e Ícone
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Default.WaterDrop,
+                        contentDescription = null,
+                        tint = ColorSecondaryBlue, // #2563EB
+                        modifier = Modifier.size(28.dp)
+                    )
+
+                    Spacer(modifier = Modifier.width(12.dp))
+
+                    // Valor Principal em Branco Puro para contraste contra o Preto do gradiente
+                    Text(
+                        text = "$currentLiters",
+                        color = Color.White,
+                        fontSize = 32.sp,
+                        fontWeight = FontWeight.Black
+                    )
+
+                    // Meta em Cinza Mudo
+                    Text(
+                        text = "/$goalLiters L",
+                        color = ColorTextMuted,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(bottom = 4.dp, start = 2.dp)
+                    )
+                }
+
+                // Barra de Progresso Estilizada
+                Box(
+                    modifier = Modifier
+                        .width(130.dp)
+                        .height(8.dp)
+                        .clip(CircleShape)
+                        .background(ColorSurfaceDark) // #16171D
+                ) {
+                    LinearProgressIndicator(
+                        progress = { progress },
+                        modifier = Modifier.fillMaxSize(),
+                        color = ColorSecondaryBlue, // #2563EB Ativo
+                        trackColor = Color.Transparent, // O Box externo é o track
+                        strokeCap = StrokeCap.Round
+                    )
+                }
+            }
         }
     }
 }
@@ -278,6 +358,7 @@ fun getGreeting(): String {
         else -> "Good night"          // 23:00 - 04:59 (Madrugada/Noite tardia)
     }
 }
+
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AnimatedStreakDialog(
@@ -344,11 +425,9 @@ fun AnimatedStreakDialog(
         }
     }
 }
-// Lista de referência global no seu package de UI/Utils
-val dayLabels = listOf("SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT")
 
 data class StreakState(
-    val totalStreakCount: Int = 0, // Contador total (ex: 8, 15, 42...)
+    val totalStreakCount: Int = 0,
     val isTodayChecked: Boolean = false,
     val goal: Int = 7
 ) {
@@ -610,29 +689,15 @@ fun HeaderRow(
     val greeting = getGreeting()
 
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 12.dp),
+        modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             // Avatar Elevado
-            Surface(
-                modifier = Modifier.size(54.dp),
-                shape = CircleShape,
-                color = cs.surfaceVariant, // Fundo mais escuro que a superfície normal
-                border = BorderStroke(1.dp, cs.primary.copy(alpha = 0.5f)) // Borda Neon sutil
-            ) {
-                Box(contentAlignment = Alignment.Center) {
-                    Text(
-                        text = avatarInitials,
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Black,
-                        color = cs.primary // Texto da inicial em Neon
-                    )
-                }
-            }
+            FitverseProfileImage(
+                avatarInitials = avatarInitials,
+            )
             Spacer(modifier = Modifier.width(16.dp))
             Column {
                 Text(
@@ -654,409 +719,13 @@ fun HeaderRow(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            // ÍCONE DE STREAK
-            Surface(
-                onClick = onStreakClick,
-                shape = RoundedCornerShape(16.dp),
-                color = cs.surface,
-                border = BorderStroke(1.dp, cs.outline),
-                modifier = Modifier.height(48.dp)
-            ) {
-                Row(
-                    modifier = Modifier.padding(horizontal = 14.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Rounded.LocalFireDepartment,
-                        contentDescription = "Streaks",
-                        tint = cs.tertiary, // Dourado (XP) do FitverseTheme
-                        modifier = Modifier.size(22.dp)
-                    )
-                    if (streakCount > 0) {
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text(
-                            text = "$streakCount",
-                            style = MaterialTheme.typography.labelLarge,
-                            fontWeight = FontWeight.Bold,
-                            color = cs.onBackground // Branco para contraste na label
-                        )
-                    }
-                }
-            }
-
-            // ÍCONE DE NOTIFICAÇÃO
-            Surface(
-                onClick = onNotificationsClick,
-                shape = RoundedCornerShape(16.dp),
-                color = cs.surface,
-                border = BorderStroke(1.dp, cs.outline),
-                modifier = Modifier.size(48.dp)
-            ) {
-                Box(contentAlignment = Alignment.Center) {
-                    Icon(
-                        imageVector = Icons.Rounded.NotificationsNone,
-                        contentDescription = "Notifications",
-                        tint = cs.onBackground, // Branco
-                        modifier = Modifier.size(24.dp)
-                    )
-                    // Bolinha de Notificação
-                    Box(
-                        modifier = Modifier
-                            .align(Alignment.TopEnd)
-                            .padding(12.dp)
-                            .size(8.dp)
-                            .background(cs.error, CircleShape) // Danger Red do FitverseTheme
-                            .border(1.5.dp, cs.surface, CircleShape) // Borda da mesma cor do card para "recortar"
-                    )
-                }
-            }
-        }
-    }
-}
-
-@OptIn(ExperimentalAnimationApi::class)
-@Composable
-fun DailyTaskItemAvatar(
-    task: TaskItem,
-    isSelected: Boolean,
-    onToggle: () -> Unit,
-    onSelect: () -> Unit
-) {
-    val cs = MaterialTheme.colorScheme
-
-    // Animação de cor baseada no estado de completado
-    val containerColor by animateColorAsState(
-        targetValue = if (isSelected) cs.surfaceVariant else cs.surface,
-        label = "containerColor"
-    )
-
-    Surface(
-        modifier = Modifier.fillMaxWidth(),
-        onClick = onToggle,
-        shape = RoundedCornerShape(20.dp),
-        color = containerColor,
-        border = BorderStroke(
-            width = 1.dp,
-            color = if (isSelected) cs.primary.copy(alpha = 0.5f) else cs.outline.copy(alpha = 0.2f)
-        )
-    ) {
-        Row(
-            modifier = Modifier.padding(14.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // Container do Ícone: Neon quando inativo, Sólido quando concluído
-            Box(
-                modifier = Modifier
-                    .size(48.dp)
-                    .background(
-                        color = if (isSelected) cs.primary else cs.primary.copy(alpha = 0.1f),
-                        shape = RoundedCornerShape(12.dp)
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = if (isSelected) Icons.Rounded.Check else Icons.Rounded.Bolt,
-                    contentDescription = null,
-                    tint = if (isSelected) Color.Black else cs.primary,
-                    modifier = Modifier.size(24.dp)
-                )
-            }
-
-            Spacer(Modifier.width(16.dp))
-
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = task.title,
-                    color = cs.onBackground,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
-                )
-                Text(
-                    text = task.description,
-                    color = cs.onSurfaceVariant,
-                    style = MaterialTheme.typography.labelMedium
-                )
-            }
-
-            // Badge de XP Dinâmico
-            Text(
-                text = "+${task.xp} XP",
-                color = if (isSelected) cs.primary else cs.tertiary,
-                fontWeight = FontWeight.Black,
-                fontSize = 13.sp
+            FitverseIconStreak(
+                streakCount = streakCount,
+                onStreakClick = onStreakClick
             )
-        }
-    }
-}
-
-
-
-
-@Composable
-fun AvatarCard(
-    state: AvatarState,
-    modifier: Modifier = Modifier
-) {
-    val cs = MaterialTheme.colorScheme
-
-    val isAlive = state.health > 0
-    val healthProgress by animateFloatAsState(targetValue = state.health / 100f, label = "hp")
-    val foodProgress by animateFloatAsState(targetValue = state.food / 100f, label = "food")
-
-    Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .animateContentSize(),
-        shape = RoundedCornerShape(28.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = cs.surface // #2A2E3C
-        ),
-        border = BorderStroke(1.dp, cs.outline.copy(alpha = 0.3f)) // Borda sutil para profundidade
-    ) {
-        Column(modifier = Modifier.padding(20.dp)) {
-            if (isAlive) {
-                AvatarAlive(state, healthProgress, foodProgress)
-            } else {
-                AvatarDead(onCreateNew = {}, onRestore = {})
-            }
-        }
-    }
-}
-
-@Composable
-fun AvatarAlive(
-    state: AvatarState,
-    healthProgress: Float,
-    foodProgress: Float
-) {
-    val cs = MaterialTheme.colorScheme
-
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        // Avatar Circle com Gradiente do Tema
-        Box(
-            modifier = Modifier
-                .size(64.dp)
-                .clip(CircleShape)
-                .background(cs.surfaceVariant)
-                .border(
-                    2.dp,
-                    Brush.linearGradient(listOf(cs.primary, cs.secondary)), // Volt -> Roxo
-                    CircleShape
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                imageVector = Icons.Rounded.Person,
-                contentDescription = null,
-                tint = cs.onBackground, // Branco
-                modifier = Modifier.size(32.dp)
+            FitverseIconNotifications(
+                onNotificationsClick = onNotificationsClick
             )
-        }
-
-        Spacer(Modifier.width(16.dp))
-
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = state.name,
-                color = cs.onBackground, // Branco Puro
-                fontWeight = FontWeight.Black,
-                fontSize = 18.sp,
-                letterSpacing = (-0.5).sp
-            )
-
-            // Badge de Level (Roxo para Força/Progresso)
-            Surface(
-                color = cs.secondary.copy(alpha = 0.2f),
-                shape = RoundedCornerShape(6.dp),
-                border = BorderStroke(0.5.dp, cs.secondary.copy(alpha = 0.5f)),
-                modifier = Modifier.padding(top = 4.dp)
-            ) {
-                Text(
-                    text = "Lvl ${state.level}",
-                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
-                    color = cs.secondary, // Roxo Elétrico
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.ExtraBold
-                )
-            }
-        }
-
-        // Seção de Pontos (XP/Dourado)
-        Column(horizontalAlignment = Alignment.End) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = Icons.Rounded.Bolt,
-                    contentDescription = null,
-                    tint = cs.tertiary, // Dourado (XP)
-                    modifier = Modifier.size(20.dp)
-                )
-                Spacer(Modifier.width(4.dp))
-                Text(
-                    text = "${state.points}",
-                    color = cs.onBackground,
-                    fontWeight = FontWeight.Black,
-                    fontSize = 20.sp
-                )
-            }
-            Text(
-                text = "FITCOINS",
-                color = cs.onSurface.copy(alpha = 0.6f),
-                fontSize = 10.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = 1.sp
-            )
-        }
-    }
-
-    Spacer(Modifier.height(28.dp))
-
-    // Barras de Status - Minimalismo Puro
-    Column(verticalArrangement = Arrangement.spacedBy(18.dp)) {
-        PremiumStatRow(
-            label = "HEALTH",
-            value = "${state.health}%",
-            progress = healthProgress,
-            icon = Icons.Rounded.Favorite,
-            color = cs.error // Vermelho Danger
-        )
-
-        PremiumStatRow(
-            label = "ENERGY",
-            value = "${state.food}%",
-            progress = foodProgress,
-            icon = Icons.Rounded.Bolt,
-            color = cs.primary // Neon Volt
-        )
-    }
-}
-
-@Composable
-fun PremiumStatRow(
-    label: String,
-    value: String,
-    progress: Float,
-    icon: ImageVector,
-    color: Color
-) {
-    val cs = MaterialTheme.colorScheme
-
-    Column(modifier = Modifier.fillMaxWidth()) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.Bottom
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(icon, null, tint = color, modifier = Modifier.size(14.dp))
-                Spacer(Modifier.width(8.dp))
-                Text(
-                    label,
-                    color = cs.onSurface,
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    letterSpacing = 0.5.sp
-                )
-            }
-            Text(
-                value,
-                color = cs.onBackground,
-                fontSize = 13.sp,
-                fontWeight = FontWeight.Black
-            )
-        }
-
-        Spacer(Modifier.height(8.dp))
-
-        // Progress com track quase invisível para foco total na cor ativa
-        LinearProgressIndicator(
-            progress = { progress },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(8.dp)
-                .clip(CircleShape),
-            color = color,
-            trackColor = color.copy(alpha = 0.08f),
-            strokeCap = StrokeCap.Round
-        )
-    }
-}
-
-@Composable
-fun AvatarDead(onCreateNew: () -> Unit, onRestore: () -> Unit) {
-    val cs = MaterialTheme.colorScheme
-
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp)
-    ) {
-        // Ícone de alerta em vermelho sutil
-        Surface(
-            modifier = Modifier.size(80.dp),
-            shape = CircleShape,
-            color = cs.error.copy(alpha = 0.1f),
-            border = BorderStroke(2.dp, cs.error.copy(alpha = 0.3f))
-        ) {
-            Box(contentAlignment = Alignment.Center) {
-                Icon(
-                    Icons.Rounded.SentimentVeryDissatisfied,
-                    null,
-                    tint = cs.error,
-                    modifier = Modifier.size(40.dp)
-                )
-            }
-        }
-
-        Spacer(Modifier.height(20.dp))
-
-        Text(
-            "AVATAR ABATIDO",
-            color = cs.onBackground,
-            fontWeight = FontWeight.Black,
-            fontSize = 20.sp,
-            letterSpacing = 1.sp
-        )
-
-        Text(
-            "Sua jornada parou. Recupere suas energias para continuar.",
-            color = cs.onSurface,
-            fontSize = 14.sp,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp)
-        )
-
-        Spacer(Modifier.height(28.dp))
-
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            // Botão Neon Volt - Foco Principal
-            Button(
-                onClick = onCreateNew,
-                modifier = Modifier.weight(1f).height(52.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = cs.primary,
-                    contentColor = Color.Black
-                ),
-                shape = RoundedCornerShape(16.dp)
-            ) {
-                Text("RECOMEÇAR", fontWeight = FontWeight.Black, letterSpacing = 1.sp)
-            }
-
-            // Botão Outlined Roxo - Secundário
-            OutlinedButton(
-                onClick = onRestore,
-                modifier = Modifier.weight(1f).height(52.dp),
-                shape = RoundedCornerShape(16.dp),
-                border = BorderStroke(1.5.dp, cs.secondary)
-            ) {
-                Text(
-                    "RESTAURAR",
-                    color = cs.secondary,
-                    fontWeight = FontWeight.ExtraBold
-                )
-            }
         }
     }
 }

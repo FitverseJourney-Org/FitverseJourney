@@ -1,6 +1,6 @@
 package com.example.presentation.screens.ui.authentication.login.state
 
-import com.example.domain.model.dbLocal.language.Language
+import com.example.domain.model.local.language.Language
 import com.example.presentation.components.snackbar.SnackBarData
 import com.example.presentation.core.utils.LanguageAvailableApp
 

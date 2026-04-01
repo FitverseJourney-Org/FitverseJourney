@@ -21,9 +21,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.expect.getDayOfWeek
+import com.example.presentation.screens.widgets.FitverseIconBack
+import com.example.presentation.screens.widgets.FitverseTopAppBar
+import com.example.presentation.theme.DarkGamifiedColors
+import com.example.presentation.theme.PADDING_TOPAPPBAR_DEFAULT_HORIZONTAL
+import com.example.presentation.theme.PADDING_TOPAPPBAR_DEFAULT_VERTICAL
 import kotlinx.datetime.DayOfWeek
-
-// --- MODELOS ---
 
 data class ExerciseModel(
     val id: String = "1",
@@ -36,162 +39,92 @@ data class ExerciseModel(
 
 data class WorkoutCategory(
     val id: String = "1",
-    val name: String,         // Ex: "Treino A"
-    val description: String,  // Ex: "Peito e Tríceps"
-    val exercises: List<com.example.presentation.screens.ui.planWorkout.ExerciseModel> = emptyList()
+    val name: String,
+    val description: List<ExerciseModel>,
+    val exercises: List<ExerciseModel> = emptyList()
 )
 
 data class DailyWorkoutState(
     val dayOfWeek: DayOfWeek,
     val dayNameShort: String,
-    val workoutCategory: com.example.presentation.screens.ui.planWorkout.WorkoutCategory?
+    val workoutCategory: WorkoutCategory?
 )
 
 // --- TELA PRINCIPAL ---
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WorkoutPlanDashboardScreen(
-    toBack: () -> Unit,
-    onEditWorkout: (com.example.presentation.screens.ui.planWorkout.WorkoutCategory) -> Unit,
+    onBack: () -> Unit,
+    onEditWorkout: (WorkoutCategory) -> Unit,
     toNewWorkout: () -> Unit
 ) {
-    val cs = MaterialTheme.colorScheme
-
-    // Estado do dia selecionado (Inicia no dia atual do sistema)
-    val today = getDayOfWeek() // Assume que retorna a String do nome do dia
+    val colors = MaterialTheme.colorScheme
+    val today = getDayOfWeek()
     var selectedDayName by remember { mutableStateOf(today) }
 
-    // Mock de dados para a Versão 1.0
+    // Mock atualizado para usar o estado das DailyWorkoutState
     val weekPlan = remember {
         listOf(
-            _root_ide_package_.com.example.presentation.screens.ui.planWorkout.DailyWorkoutState(
-                dayOfWeek = DayOfWeek.MONDAY,
-                dayNameShort = "Seg",
-                workoutCategory = _root_ide_package_.com.example.presentation.screens.ui.planWorkout.WorkoutCategory(
-                    name = "Treino A",
-                    description = "Peito e Tríceps",
-                    exercises = _root_ide_package_.com.example.presentation.screens.ui.planWorkout.getMockExercises(
-                        1
-                    )
-                )
-            ),
-            _root_ide_package_.com.example.presentation.screens.ui.planWorkout.DailyWorkoutState(
-                dayOfWeek = DayOfWeek.TUESDAY,
-                dayNameShort = "Ter",
-                workoutCategory = _root_ide_package_.com.example.presentation.screens.ui.planWorkout.WorkoutCategory(
-                    name = "Treino B",
-                    description = "Costas e Bíceps",
-                    exercises = _root_ide_package_.com.example.presentation.screens.ui.planWorkout.getMockExercises(
-                        2
-                    )
-                )
-            ),
-            _root_ide_package_.com.example.presentation.screens.ui.planWorkout.DailyWorkoutState(
-                dayOfWeek = DayOfWeek.WEDNESDAY,
-                dayNameShort = "Qua",
-                workoutCategory = null // Dia de Descanso
-            ),
-            _root_ide_package_.com.example.presentation.screens.ui.planWorkout.DailyWorkoutState(
-                dayOfWeek = DayOfWeek.THURSDAY,
-                dayNameShort = "Qui",
-                workoutCategory = _root_ide_package_.com.example.presentation.screens.ui.planWorkout.WorkoutCategory(
-                    name = "Treino C",
-                    description = "Pernas Completas",
-                    exercises = _root_ide_package_.com.example.presentation.screens.ui.planWorkout.getMockExercises(
-                        3
-                    )
-                )
-            ),
-            _root_ide_package_.com.example.presentation.screens.ui.planWorkout.DailyWorkoutState(
-                dayOfWeek = DayOfWeek.FRIDAY,
-                dayNameShort = "Sex",
-                workoutCategory = _root_ide_package_.com.example.presentation.screens.ui.planWorkout.WorkoutCategory(
-                    name = "Treino D",
-                    description = "Ombros e Abdômen",
-                    exercises = _root_ide_package_.com.example.presentation.screens.ui.planWorkout.getMockExercises(
-                        4
-                    )
-                )
-            ),
-            _root_ide_package_.com.example.presentation.screens.ui.planWorkout.DailyWorkoutState(
-                dayOfWeek = DayOfWeek.SATURDAY,
-                dayNameShort = "Sáb",
-                workoutCategory = null
-            ),
-            _root_ide_package_.com.example.presentation.screens.ui.planWorkout.DailyWorkoutState(
-                dayOfWeek = DayOfWeek.SUNDAY,
-                dayNameShort = "Dom",
-                workoutCategory = null
-            )
+            DailyWorkoutState(DayOfWeek.MONDAY, "Seg", WorkoutCategory("Treino A", "Peito e Tríceps", getMockExercises(1))),
+            DailyWorkoutState(DayOfWeek.TUESDAY, "Ter", WorkoutCategory("Treino B", "Costas e Bíceps", getMockExercises(2))),
+            DailyWorkoutState(DayOfWeek.WEDNESDAY, "Qua", null),
+            DailyWorkoutState(DayOfWeek.THURSDAY, "Qui", WorkoutCategory("Treino C", "Pernas Completas", getMockExercises(3))),
+            DailyWorkoutState(DayOfWeek.FRIDAY, "Sex", WorkoutCategory("Treino D", "Ombros e Abdômen", getMockExercises(4))),
+            DailyWorkoutState(DayOfWeek.SATURDAY, "Sáb", null),
+            DailyWorkoutState(DayOfWeek.SUNDAY, "Dom", null)
         )
     }
-
     val selectedWorkoutState = weekPlan.find { it.dayOfWeek.name == selectedDayName }
-
     Scaffold(
+        containerColor = colors.background, // Deep Neutral (#0A0B0F)
         topBar = {
-            TopAppBar(
-                title = {
-                    Column {
-                        Text("Meu Plano Atual", fontWeight = FontWeight.Black, fontSize = 20.sp)
-                        Text(
-                            "Foco: Hipertrofia Masculina",
-                            fontSize = 12.sp,
-                            color = cs.onSurfaceVariant
-                        )
-                    }
+            FitverseTopAppBar(
+                title = "MEU PLANO",
+                subtitle = {
+                    Text(
+                        text = "FOCO: HIPERTROFIA",
+                        fontSize = 12.sp,
+                        color = colors.secondary,
+                        fontWeight = FontWeight.Bold
+                    )
                 },
-                navigationIcon = {
-                    IconButton(onClick = {
-                        toBack()
-                    }) { Icon(Icons.Rounded.ArrowBack, null) }
-                },
-                windowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+                onBack = onBack,
             )
         },
         floatingActionButton = {
-            // criar condição caso nao exita planilha de treino para o dia atual
             ExtendedFloatingActionButton(
                 onClick = toNewWorkout,
-                containerColor = cs.primary,
-                contentColor = cs.onPrimary,
-                icon = { Icon(Icons.Rounded.Add, null) },
-                text = { Text("Editar Plano", fontWeight = FontWeight.Bold) }
+                containerColor = colors.primary, // Roxo Vibrante para ação de edição
+                contentColor = Color.White,
+                icon = { Icon(Icons.Rounded.Edit, null) },
+                text = { Text("EDITAR PLANO", fontWeight = FontWeight.Black) }
             )
         }
     ) { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-        ) {
-            // 1. Seletor de Dias
-            _root_ide_package_.com.example.presentation.screens.ui.planWorkout.WeekDaySelector(
+        Column(modifier = Modifier.fillMaxSize().padding(padding)) {
+            WeekDaySelector(
                 weekDays = weekPlan,
                 selectedDayName = selectedDayName,
                 onDaySelected = { selectedDayName = it },
-                cs = cs
+                colors = colors
             )
 
             HorizontalDivider(
                 modifier = Modifier.padding(vertical = 8.dp),
-                color = cs.outlineVariant.copy(alpha = 0.4f)
+                color = colors.outline.copy(alpha = 0.2f)
             )
 
-            // 2. Área de Conteúdo Dinâmica
             Box(modifier = Modifier.fillMaxSize()) {
                 if (selectedWorkoutState?.workoutCategory != null) {
-                    _root_ide_package_.com.example.presentation.screens.ui.planWorkout.ActiveWorkoutView(
+                    ActiveWorkoutView(
                         workout = selectedWorkoutState.workoutCategory,
-                        cs = cs,
-                        onEditClick = { onEditWorkout(selectedWorkoutState.workoutCategory) }
+                        onEditClick = { onEditWorkout(selectedWorkoutState.workoutCategory) },
+                        colors = colors
                     )
                 } else {
-                    _root_ide_package_.com.example.presentation.screens.ui.planWorkout.RestDayView(
-                        cs = cs
-                    )
+                    RestDayView(colors = colors)
                 }
             }
         }
@@ -199,47 +132,42 @@ fun WorkoutPlanDashboardScreen(
 }
 
 // --- COMPONENTES ---
-
 @Composable
 fun WeekDaySelector(
-    weekDays: List<com.example.presentation.screens.ui.planWorkout.DailyWorkoutState>,
+    weekDays: List<DailyWorkoutState>,
     selectedDayName: String,
     onDaySelected: (String) -> Unit,
-    cs: ColorScheme
+    colors: ColorScheme
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 8.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         weekDays.forEach { state ->
             val isSelected = state.dayOfWeek.name == selectedDayName
             val hasWorkout = state.workoutCategory != null
-
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .clip(RoundedCornerShape(12.dp))
                     .clickable { onDaySelected(state.dayOfWeek.name) }
-                    .background(if (isSelected) cs.primaryContainer else Color.Transparent)
+                    // Fundo Roxo Profundo para seleção (#2D1B59)
+                    .background(if (isSelected) colors.primaryContainer.copy(alpha = 0.5f) else Color.Transparent)
                     .padding(vertical = 8.dp, horizontal = 10.dp)
             ) {
                 Text(
                     text = state.dayNameShort,
                     fontSize = 12.sp,
-                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                    color = if (isSelected) cs.onPrimaryContainer else cs.onSurfaceVariant
+                    fontWeight = if (isSelected) FontWeight.Black else FontWeight.Normal,
+                    color = if (isSelected) colors.primary else colors.onSurfaceVariant
                 )
                 Spacer(modifier = Modifier.height(4.dp))
-                // Indicador de treino
+                // Dot indicador: Roxo se tiver treino, cinza se não
                 Box(
-                    modifier = Modifier
-                        .size(6.dp)
-                        .background(
-                            color = if (hasWorkout) cs.primary else cs.outlineVariant.copy(alpha = 0.3f),
-                            shape = CircleShape
-                        )
+                    modifier = Modifier.size(6.dp).background(
+                        color = if (hasWorkout) colors.primary else colors.outline.copy(alpha = 0.4f),
+                        shape = CircleShape
+                    )
                 )
             }
         }
@@ -248,9 +176,9 @@ fun WeekDaySelector(
 
 @Composable
 fun ActiveWorkoutView(
-    workout: com.example.presentation.screens.ui.planWorkout.WorkoutCategory,
-    cs: ColorScheme,
-    onEditClick: () -> Unit
+    workout: WorkoutCategory,
+    onEditClick: () -> Unit,
+    colors: ColorScheme
 ) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -264,88 +192,85 @@ fun ActiveWorkoutView(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column {
+                    // Nome do Treino: Roxo Neon (#7C3AED)
                     Text(
-                        workout.name,
-                        color = cs.primary,
-                        fontWeight = FontWeight.ExtraBold,
-                        fontSize = 18.sp
+                        text = workout.name,
+                        color = colors.primary,
+                        fontWeight = FontWeight.Black,
+                        fontSize = 20.sp,
+                        letterSpacing = 0.5.sp
                     )
-                    Text(workout.description, color = cs.onSurfaceVariant, fontSize = 14.sp)
+                    // Descrição/Músculos: Cinza Muted
+                    Text(
+                        text = workout.name, // Ajustado para exibir o nome/descrição real
+                        color = colors.onSurfaceVariant,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium
+                    )
                 }
+
+                // Botão de Edição Rápida
                 IconButton(
                     onClick = onEditClick,
-                    modifier = Modifier.background(cs.secondaryContainer, CircleShape)
+                    modifier = Modifier
+                        .size(44.dp)
+                        .background(colors.surfaceVariant, CircleShape) // Fundo Cinza Escuro
                 ) {
                     Icon(
-                        Icons.Rounded.Edit,
-                        "Editar",
-                        tint = cs.onSecondaryContainer,
-                        modifier = Modifier.size(20.dp)
+                        imageVector = Icons.Rounded.Edit,
+                        contentDescription = "Editar Treino",
+                        tint = colors.onSurface, // Ícone em Branco Puro
+                        modifier = Modifier.size(18.dp)
                     )
                 }
             }
             Spacer(modifier = Modifier.height(8.dp))
         }
 
+        // Lista de Exercícios: Certifique-se de passar o 'colors' aqui
         items(workout.exercises, key = { it.id }) { exercise ->
-            _root_ide_package_.com.example.presentation.screens.ui.planWorkout.ExerciseViewerCard(
-                exercise,
-                cs
-            )
+            ExerciseViewerCard(exercise = exercise, colors = colors)
         }
 
-        item { Spacer(modifier = Modifier.height(80.dp)) } // Espaço pro FAB
+        item { Spacer(modifier = Modifier.height(80.dp)) }
     }
 }
 
+
 @Composable
-fun ExerciseViewerCard(exercise: com.example.presentation.screens.ui.planWorkout.ExerciseModel, cs: ColorScheme) {
+fun ExerciseViewerCard(exercise: ExerciseModel, colors: ColorScheme) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = cs.surface),
-        border = BorderStroke(1.dp, cs.outlineVariant.copy(alpha = 0.3f)),
-        shape = RoundedCornerShape(24.dp)
+        colors = CardDefaults.cardColors(containerColor = colors.surfaceVariant.copy(alpha = 0.5f)),
+        border = BorderStroke(1.dp, colors.outline.copy(alpha = 0.1f)),
+        shape = RoundedCornerShape(20.dp)
     ) {
-        Row(
-            modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+        Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(
                 modifier = Modifier
-                    .size(48.dp)
-                    .background(cs.primary.copy(alpha = 0.1f), RoundedCornerShape(12.dp)),
+                    .size(44.dp)
+                    .background(colors.secondary.copy(alpha = 0.1f), RoundedCornerShape(12.dp)),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    Icons.Rounded.FitnessCenter,
-                    null,
-                    tint = cs.primary,
-                    modifier = Modifier.size(22.dp)
-                )
+                Icon(Icons.Rounded.FitnessCenter, null, tint = colors.secondary, modifier = Modifier.size(20.dp))
             }
 
             Spacer(modifier = Modifier.width(16.dp))
 
             Column(modifier = Modifier.weight(1f)) {
-                Text(exercise.name, fontWeight = FontWeight.ExtraBold, fontSize = 15.sp)
+                Text(exercise.name.uppercase(), fontWeight = FontWeight.Black, fontSize = 14.sp, color = colors.onSurface)
                 Spacer(modifier = Modifier.height(6.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    _root_ide_package_.com.example.presentation.screens.ui.planWorkout.ExerciseTag(
-                        "${exercise.sets} séries",
-                        cs.secondaryContainer,
-                        cs.onSecondaryContainer
-                    )
-                    _root_ide_package_.com.example.presentation.screens.ui.planWorkout.ExerciseTag(
-                        exercise.reps,
-                        cs.tertiaryContainer,
-                        cs.onTertiaryContainer
-                    )
+                    // Séries em Roxo (Esforço) e Reps em Azul (Metodologia)
+                    ExerciseTag("${exercise.sets} séries", colors.primaryContainer.copy(alpha = 0.3f), colors.primary)
+                    ExerciseTag(exercise.reps, colors.secondaryContainer.copy(alpha = 0.3f), colors.secondary)
                 }
             }
-            Icon(Icons.Rounded.ChevronRight, null, tint = cs.outlineVariant)
+            Icon(Icons.Rounded.ChevronRight, null, tint = colors.onSurfaceVariant.copy(alpha = 0.3f))
         }
     }
 }
+
 
 @Composable
 fun ExerciseTag(label: String, bgColor: Color, txtColor: Color) {
@@ -354,47 +279,39 @@ fun ExerciseTag(label: String, bgColor: Color, txtColor: Color) {
             text = label,
             modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
             fontSize = 11.sp,
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.Black,
             color = txtColor
         )
     }
 }
 
+
 @Composable
-fun RestDayView(cs: ColorScheme) {
+fun RestDayView(colors: ColorScheme) {
     Column(
         modifier = Modifier.fillMaxSize().padding(32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Icon(
-            Icons.Rounded.SelfImprovement,
-            null,
-            modifier = Modifier.size(64.dp),
-            tint = cs.tertiary
-        )
+        // Ícone em Verde Neon (Tertiary) para representar saúde/recuperação
+        Icon(Icons.Rounded.Spa, null, modifier = Modifier.size(64.dp), tint = colors.tertiary)
         Spacer(modifier = Modifier.height(16.dp))
-        Text("Dia de Descanso", fontWeight = FontWeight.Bold, fontSize = 20.sp)
+        Text("DIA DE DESCANSO", fontWeight = FontWeight.Black, fontSize = 20.sp, color = colors.onBackground)
         Text(
-            "Seus músculos crescem durante o repouso. Hidrate-se e recupere suas energias!",
+            "Seus músculos crescem durante o repouso. Hidrate-se e recupere seu vigor!",
             textAlign = TextAlign.Center,
             fontSize = 14.sp,
-            color = cs.onSurfaceVariant,
+            color = colors.onSurfaceVariant,
             modifier = Modifier.padding(top = 8.dp)
         )
     }
 }
 
+
 // --- MOCKS ---
-fun getMockExercises(variation: Int): List<com.example.presentation.screens.ui.planWorkout.ExerciseModel> {
-    val names =
-        listOf("Supino", "Agachamento", "Remada", "Rosca Direta", "Leg Press", "Desenvolvimento")
+fun getMockExercises(variation: Int): List<ExerciseModel> {
+    val names = listOf("Supino", "Agachamento", "Remada", "Rosca Direta", "Leg Press", "Desenvolvimento")
     return List(4) { i ->
-        _root_ide_package_.com.example.presentation.screens.ui.planWorkout.ExerciseModel(
-            id = "$variation$i",
-            name = names.random(),
-            sets = 4,
-            reps = "10-12"
-        )
+        ExerciseModel(id = "$variation$i", name = names.random(), sets = 4, reps = "10-12")
     }
 }

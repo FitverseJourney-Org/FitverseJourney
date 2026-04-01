@@ -2,7 +2,7 @@ package com.example.presentation.screens.ui.authentication.login.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.model.authentication.login.LoginAction
+import com.example.presentation.screens.ui.authentication.login.actions.LoginAction
 import com.example.domain.usecase.authentication.login.LoginUseCase
 import com.example.presentation.components.snackbar.SnackBarData
 import com.example.presentation.components.snackbar.SnackbarType

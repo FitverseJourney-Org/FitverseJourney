@@ -49,6 +49,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.example.presentation.screens.ui.dashboard.AvatarState
+import com.example.presentation.theme.DarkGamifiedColors
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -92,7 +93,8 @@ fun ContainerLevel(
     Surface(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
-        color = cs.surfaceVariant.copy(alpha = 0.5f),
+        color = cs.surface.copy(alpha = 0.75f),
+        border = BorderStroke(1.dp, DarkGamifiedColors.PrimarySoft.copy(alpha = 0.2f)),
         tonalElevation = 2.dp
     ) {
         Column(modifier = Modifier.padding(20.dp)) {

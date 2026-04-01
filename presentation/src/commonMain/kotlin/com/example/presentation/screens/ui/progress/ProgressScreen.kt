@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.expect.DateTimeManager
 import com.example.expect.PlatformDate
+import com.example.presentation.screens.widgets.FitverseTopAppBar
 import com.patrykandpatrick.vico.compose.cartesian.marker.CartesianMarker
 import com.patrykandpatrick.vico.compose.cartesian.marker.DefaultCartesianMarker
 import com.patrykandpatrick.vico.compose.cartesian.marker.rememberDefaultCartesianMarker
@@ -116,7 +117,7 @@ fun ProgressScreen(
     exercises: List<Exercise>,
     currentProgression: List<LoadProgressionPoint>,
     monthbeforeProgression: List<LoadProgressionPoint>,
-    toBack: () -> Unit
+    onBack: () -> Unit
 ) {
     // --- 1. Lógica de Filtro: Treino e Exercício ---
     val availableSplits = remember(exercises) {
@@ -155,13 +156,9 @@ fun ProgressScreen(
 
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
-                title = { Text("Progressão", fontWeight = FontWeight.Bold) },
-                navigationIcon = {
-                    IconButton(onClick = toBack) { Icon(Icons.Default.ChevronLeft, null) }
-                },
-                windowInsets = WindowInsets(0, 0, 0, 0),
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
+            FitverseTopAppBar(
+                title = "PROGRESSÃO",
+                onBack = onBack
             )
         }
     ) { padding ->

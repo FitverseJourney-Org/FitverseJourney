@@ -57,7 +57,7 @@ fun TasksDestination(toBack: () -> Unit, toLibrary: () -> Unit) {
     var tasks by remember { mutableStateOf(mockCurrentTasks) }
 
     TasksScreen(
-        toBack = toBack,
+        onBack = toBack,
         currentTasks = tasks,
         swapsRemaining = 1,
         onToggleTask = { toggledTask ->

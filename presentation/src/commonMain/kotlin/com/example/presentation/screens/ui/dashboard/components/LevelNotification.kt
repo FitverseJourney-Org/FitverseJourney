@@ -3,6 +3,7 @@ package com.example.presentation.screens.ui.dashboard.components
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,12 +19,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.ErrorOutline
+import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -38,20 +44,28 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.presentation.theme.CardBgDefaultColor
+import com.example.presentation.theme.DangerRed
+import com.example.presentation.theme.DarkGamifiedColors
+import com.example.presentation.theme.StaminaYellow
 
 
 enum class LevelNotification(
     val icon: ImageVector,
-    val color: @Composable () -> Color
+    val color: Color
 ){
     INFO(
-        icon = Icons.Default.Info,
-        color = { Color(0xFF7D53FF) } // Roxo Elétrico para Informação/Tecnologia
+        icon = Icons.Rounded.Info,
+        color = DarkGamifiedColors.Primary // Roxo Premium para logs normais
     ),
     WARNING(
-        icon = Icons.Default.Warning,
-        color = { Color(0xFFB6FF00) } // Amarelo Neon para Alertas/Atenção
+        icon = Icons.Rounded.Warning,
+        color = StaminaYellow      // Dourado para alertas/atenção
+    ),
+    URGENT(
+        icon = Icons.Rounded.ErrorOutline,
+        color = DangerRed // Vermelho para perigo/falhas
     )
 }
 
@@ -65,28 +79,30 @@ data class Notification(
 
 @Composable
 fun NotificationCard(data: Notification) {
+
     val cs = MaterialTheme.colorScheme
     var isExpanded by remember { mutableStateOf(false) }
     var isClickable by remember { mutableStateOf(false) }
 
-    val levelColor = data.level.color()
+    // Pegamos a cor direto da propriedade que mudamos no enum
+    val levelColor = data.level.color
 
-    Card(
+    Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .animateContentSize(),
+            .animateContentSize()
+            .clickable(enabled = isClickable) { isExpanded = !isExpanded },
         shape = RoundedCornerShape(20.dp),
-        onClick = { if (isClickable) isExpanded = !isExpanded },
-        colors = CardDefaults.cardColors(
-            containerColor = cs.surfaceVariant.copy(alpha = 0.5f) // Fundo semi-transparente frio
-        ),
+        // Fundo translucido padrão do Glassmorphism
+        color = cs.surface.copy(alpha = 0.6f),
+        // Borda reage ao estado: Brilha na cor do nível se expandido
         border = BorderStroke(
-            0.5.dp,
-            if (isExpanded) levelColor.copy(alpha = 0.5f) else cs.outline.copy(alpha = 0.2f)
+            width = if (isExpanded) 1.5.dp else 1.dp,
+            color = if (isExpanded) levelColor.copy(alpha = 0.6f) else DarkGamifiedColors.Outline.copy(alpha = 0.3f)
         )
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            // HEADER: Nível, Título e Delete
+            // --- HEADER ---
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -94,79 +110,82 @@ fun NotificationCard(data: Notification) {
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    // Ícone com Glow sutil
+                    // Ícone com Glow baseado no nível (INFO/WARNING/URGENT)
                     Box(
                         modifier = Modifier
-                            .size(32.dp)
-                            .clip(CircleShape)
-                            .background(levelColor.copy(alpha = 0.1f)),
+                            .size(36.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(levelColor.copy(alpha = 0.15f)),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
                             imageVector = data.level.icon,
                             contentDescription = null,
                             tint = levelColor,
-                            modifier = Modifier.size(16.dp)
+                            modifier = Modifier.size(20.dp)
                         )
                     }
 
                     Text(
                         text = data.title,
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Black,
                         color = Color.White
                     )
                 }
 
                 IconButton(
                     onClick = { /* Lógica de deletar */ },
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(32.dp)
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = null,
-                        tint = cs.error.copy(alpha = 0.6f),
-                        modifier = Modifier.size(18.dp)
+                        imageVector = Icons.Rounded.Close,
+                        contentDescription = "Delete",
+                        tint = Color.White.copy(alpha = 0.3f),
+                        modifier = Modifier.size(20.dp)
                     )
                 }
             }
 
             Spacer(Modifier.height(12.dp))
 
-            // DESCRIÇÃO
+            // --- DESCRIÇÃO ---
             Text(
                 text = data.description,
                 maxLines = if (isExpanded) Int.MAX_VALUE else 2,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.bodyMedium,
-                color = cs.onSurfaceVariant,
+                color = Color.White.copy(alpha = 0.7f),
+                lineHeight = 20.sp,
                 onTextLayout = { layout ->
                     if (!isExpanded) isClickable = layout.didOverflowHeight
                 }
             )
 
-            // FOOTER: Data/Hora e Botão "Ver mais"
+            // --- FOOTER ---
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 12.dp),
+                    .padding(top = 16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = "${data.date} • ${data.time}",
                     style = MaterialTheme.typography.labelSmall,
-                    color = cs.onSurfaceVariant.copy(alpha = 0.5f)
+                    color = Color.White.copy(alpha = 0.4f),
+                    fontWeight = FontWeight.Bold
                 )
 
                 if (isClickable) {
                     Text(
-                        text = if (isExpanded) "Ver menos" else "Ler mais",
+                        text = if (isExpanded) "VER MENOS" else "LER MAIS",
                         style = MaterialTheme.typography.labelMedium,
-                        fontWeight = FontWeight.ExtraBold,
-                        color = levelColor // Usa a cor do nível para o link
+                        fontWeight = FontWeight.Black,
+                        color = levelColor, // Link usa a cor de destaque da notificação
+                        letterSpacing = 0.5.sp
                     )
                 }
             }

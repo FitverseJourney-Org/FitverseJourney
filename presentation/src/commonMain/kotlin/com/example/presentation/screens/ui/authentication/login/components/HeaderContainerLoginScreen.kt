@@ -13,10 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.domain.model.dbLocal.language.Language
+import com.example.domain.model.local.language.Language
 import com.example.presentation.core.utils.LanguageAvailableApp.availableLanguages
-import com.example.presentation.theme.CardBgDefaultColor
-import com.example.presentation.theme.transparent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

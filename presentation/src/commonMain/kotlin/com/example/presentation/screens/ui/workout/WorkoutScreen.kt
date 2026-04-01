@@ -21,28 +21,18 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddBox
 import androidx.compose.material.icons.filled.Bolt
-import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.rounded.AddCircleOutline
-import androidx.compose.material.icons.rounded.ArrowForwardIos
-import androidx.compose.material.icons.rounded.Bolt
 import androidx.compose.material.icons.rounded.ChevronRight
-import androidx.compose.material.icons.rounded.PlayArrow
-import androidx.compose.material.icons.rounded.Timer
-import androidx.compose.material3.AssistChip
-import androidx.compose.material3.AssistChipDefaults
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.OutlinedCard
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -55,15 +45,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.domain.model.workout.WorkoutCategory
+import com.example.presentation.screens.widgets.FitverseCardRecommended
+import com.example.presentation.screens.widgets.FitverseHeader
+import com.example.presentation.theme.DarkGamifiedColors
 
 @Composable
 fun WorkoutScreenV2(
-    hasActivePlan: Boolean = false,
+    hasActivePlan: Boolean = true,
     onStart: () -> Unit,
     onCreatePlan: () -> Unit = {}
 ) {
@@ -76,7 +69,10 @@ fun WorkoutScreenV2(
     ) {
 
         item {
-            WorkoutHeader(stamina = 78, xp = 90)
+            FitverseHeader(
+                level = 23,
+                xp = 340
+            )
         }
 
         item {
@@ -113,20 +109,16 @@ fun WorkoutScreenV2(
             workoutList.filter { it.category == selectedCategory },
             key = { it.id }
         ) { workout ->
-            WorkoutItemCard(
+            FitverseCardRecommended(
                 workout = workout,
                 onClick = {}
             )
-            Spacer(Modifier.height(12.dp)) // Espaço sutil entre os cards da lista
         }
     }
 }
 
 @Composable
-fun WorkoutCategorySelector(
-    selected: WorkoutCategory,
-    onSelect: (WorkoutCategory) -> Unit
-) {
+fun WorkoutCategorySelector(selected: WorkoutCategory,onSelect: (WorkoutCategory) -> Unit) {
     val cs = MaterialTheme.colorScheme
 
     // Scroll horizontal caso adicione mais categorias
@@ -156,163 +148,112 @@ fun WorkoutCategorySelector(
 }
 
 @Composable
-fun WorkoutItemCard(
-    workout: WorkoutItem,
-    onClick: () -> Unit
-) {
-    val cs = MaterialTheme.colorScheme
-
-    Surface(
-        modifier = Modifier.fillMaxWidth(),
-        onClick = onClick,
-        shape = RoundedCornerShape(20.dp),
-        color = cs.surface,
-        border = BorderStroke(1.dp, cs.outline.copy(alpha = 0.15f))
-    ) {
-        Row(
-            modifier = Modifier.padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(52.dp)
-                    .clip(RoundedCornerShape(14.dp))
-                    .background(cs.secondary.copy(alpha = 0.1f)), // Fundo roxo suave
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.PlayArrow,
-                    contentDescription = null,
-                    tint = cs.secondary, // Ícone roxo elétrico
-                    modifier = Modifier.size(28.dp)
-                )
-            }
-
-            Spacer(Modifier.width(16.dp))
-
-            Column(Modifier.weight(1f)) {
-                Text(
-                    text = workout.title,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    color = cs.onBackground,
-                    maxLines = 1
-                )
-
-                Spacer(Modifier.height(4.dp))
-
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        imageVector = Icons.Rounded.Timer,
-                        contentDescription = null,
-                        modifier = Modifier.size(14.dp),
-                        tint = cs.onSurfaceVariant
-                    )
-                    Spacer(Modifier.width(4.dp))
-                    Text(
-                        text = workout.duration,
-                        style = MaterialTheme.typography.labelMedium,
-                        color = cs.onSurfaceVariant
-                    )
-
-                    Text(
-                        text = "  •  ",
-                        color = cs.outline
-                    )
-
-                    // XP em Dourado
-                    Text(
-                        text = "+${workout.xp} XP",
-                        style = MaterialTheme.typography.labelMedium,
-                        fontWeight = FontWeight.Black,
-                        color = cs.tertiary
-                    )
-                }
-            }
-
-            // Tag de Intensidade
-            Surface(
-                color = cs.surfaceVariant,
-                shape = RoundedCornerShape(8.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.Bolt,
-                    contentDescription = null,
-                    tint = cs.primary, // Raio Neon
-                    modifier = Modifier.padding(8.dp).size(16.dp)
-                )
-            }
-        }
-    }
-}
-
-// --- 1. Card para quando o usuário JÁ TEM um treino ---
-@Composable
 fun ActiveWorkoutCard(
-    planName: String = "Today's Plan",
+    planName: String = "CHEST DAY ALPHA",
+    subtitle: String = "Hypertrophy Session • Phase 2",
+    time: String = "00:42:15",
+    volume: String = "8,420",
+    setsCompleted: String = "12",
+    setsTotal: String = "18",
+    bpm: String = "134",
     onStart: () -> Unit
 ) {
-    val cs = MaterialTheme.colorScheme
-
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onStart() },
-        colors = CardDefaults.cardColors(containerColor = cs.primary), // Neon Volt
-        shape = RoundedCornerShape(24.dp)
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface), // Fundo Cinza Escuro
+        shape = RoundedCornerShape(16.dp),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.2f)) // Borda Roda Sutil
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(24.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = "START WORKOUT",
-                    fontWeight = FontWeight.Black,
-                    fontSize = 20.sp,
-                    color = Color.Black, // Contraste máximo no Neon
-                    letterSpacing = 1.sp
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = "$planName • Gain XP",
-                    fontSize = 14.sp,
-                    color = Color.Black.copy(alpha = 0.7f),
-                    fontWeight = FontWeight.Bold
-                )
-            }
-
-            // Botão "Recortado" escuro com ícone Neon
-            Surface(
-                shape = CircleShape,
-                color = cs.surface, // Fundo escuro
-                modifier = Modifier.size(56.dp)
+        Column(modifier = Modifier.padding(20.dp)) {
+            // Top Row (Título e Tempo)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Top
             ) {
-                Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                    Icon(
-                        imageVector = Icons.Filled.PlayArrow,
-                        contentDescription = "Start",
-                        tint = cs.primary, // Ícone Neon
-                        modifier = Modifier.size(32.dp)
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = planName.uppercase(),
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Black,
+                        lineHeight = 28.sp
+                    )
+                    Spacer(modifier = Modifier.height(6.dp))
+                    Text(
+                        text = subtitle,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium
                     )
                 }
+
+                Column(horizontalAlignment = Alignment.End) {
+                    Text(
+                        text = time,
+                        color = MaterialTheme.colorScheme.tertiary, // Verde Neon
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = FontFamily.Monospace // Dá o aspecto digital do relógio
+                    )
+                    Spacer(modifier = Modifier.height(2.dp))
+                    Text(
+                        text = "DURATION",
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontSize = 10.sp,
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 1.sp
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Stats Row (As 3 caixinhas na base)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                WorkoutStatBox(label = "VOLUME", value = volume, unit = "kg", modifier = Modifier.weight(1f))
+                WorkoutStatBox(label = "SETS", value = setsCompleted, unit = "/$setsTotal", modifier = Modifier.weight(1f))
+                WorkoutStatBox(label = "BPM", value = bpm, unit = "", modifier = Modifier.weight(1f))
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Botão de Iniciar/Retomar Treino (Bottom Center)
+            Button(
+                onClick = onStart,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(54.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+                shape = RoundedCornerShape(12.dp) // Botão no estilo "Pill/Rounded" do seu Design System
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.PlayArrow,
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier.size(24.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "RESUME SESSION",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    letterSpacing = 1.sp,
+                    fontSize = 14.sp
+                )
             }
         }
     }
 }
-
-// --- 2. Card para quando o usuário NÃO TEM um treino (Empty State) ---
 @Composable
 fun CreatePlanCard(onCreate: () -> Unit) {
     val cs = MaterialTheme.colorScheme
 
     Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(110.dp),
+        modifier = Modifier.fillMaxWidth().height(110.dp),
         shape = RoundedCornerShape(24.dp),
         color = cs.surface,
         onClick = onCreate,
@@ -385,113 +326,45 @@ fun CreatePlanCard(onCreate: () -> Unit) {
     }
 }
 @Composable
-fun WorkoutHeader(stamina: Int, xp: Int) {
-    val cs = MaterialTheme.colorScheme
+fun WorkoutHeader(level: Int, xp: Int) {
 
-    Column {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Column {
-                Text(
-                    text = "WORKOUT",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Black,
-                    color = cs.onBackground,
-                    letterSpacing = 1.sp
-                )
-                Text(
-                    text = "Ready to train today?",
-                    fontSize = 13.sp,
-                    color = cs.onSurfaceVariant
-                )
-            }
-
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                // XP = Dourado (Tertiary)
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Default.Star, null, tint = cs.tertiary, modifier = Modifier.size(18.dp))
-                    Spacer(Modifier.width(4.dp))
-                    Text("$xp XP", color = cs.onBackground, fontWeight = FontWeight.Bold)
-                }
-                Spacer(modifier = Modifier.width(12.dp))
-                // Stamina = Neon Volt (Primary)
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(Icons.Filled.Bolt, null, tint = cs.primary, modifier = Modifier.size(18.dp))
-                    Spacer(Modifier.width(4.dp))
-                    Text("$stamina%", color = cs.onBackground, fontWeight = FontWeight.Bold)
-                }
-            }
-        }
-
-        Spacer(Modifier.height(16.dp))
-
-        // Barra de Stamina Minimalista
-        LinearProgressIndicator(
-            progress = { stamina / 100f },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(6.dp)
-                .clip(CircleShape),
-            color = cs.primary,
-            trackColor = cs.primary.copy(alpha = 0.1f),
-            strokeCap = StrokeCap.Round
-        )
-    }
 }
-
 @Composable
-fun StartWorkoutCard(onStart: () -> Unit) {
-    val cs = MaterialTheme.colorScheme
-
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(96.dp)
-            .clickable { onStart() },
-        colors = CardDefaults.cardColors(containerColor = cs.primary),
-        shape = RoundedCornerShape(20.dp)
+fun WorkoutStatBox(label: String, value: String, unit: String, modifier: Modifier = Modifier) {
+    Surface(
+        modifier = modifier,
+        color = MaterialTheme.colorScheme.background, // Fundo ainda mais escuro que o Card
+        shape = RoundedCornerShape(12.dp)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 20.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column {
+        Column(modifier = Modifier.padding(12.dp)) {
+            Text(
+                text = label,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontSize = 10.sp,
+                fontWeight = FontWeight.Bold,
+                letterSpacing = 0.5.sp
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(verticalAlignment = Alignment.Bottom) {
                 Text(
-                    "Start Workout",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    color = cs.onPrimary
+                    text = value,
+                    color = MaterialTheme.colorScheme.tertiary,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Black
                 )
-                Text(
-                    "Burn calories • Gain XP",
-                    fontSize = 13.sp,
-                    color = cs.onPrimary.copy(alpha = 0.85f)
-                )
-            }
-
-            Card(
-                shape = RoundedCornerShape(50),
-                colors = CardDefaults.cardColors(containerColor = cs.onSurface.copy(alpha = 0.12f))
-            ) {
-                Icon(
-                    Icons.Filled.PlayArrow,
-                    null,
-                    tint = cs.onPrimary,
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .size(24.dp)
-                )
+                if (unit.isNotEmpty()) {
+                    Text(
+                        text = " $unit",
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(bottom = 2.dp) // Alinha a base da fonte menor
+                    )
+                }
             }
         }
     }
 }
-
 data class WorkoutItem(
     val id: Int,
     val title: String,
@@ -499,7 +372,6 @@ data class WorkoutItem(
     val xp: Int,
     val category: WorkoutCategory
 )
-
 val workoutList = listOf(
     _root_ide_package_.com.example.presentation.screens.ui.workout.WorkoutItem(
         1,

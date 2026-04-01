@@ -10,6 +10,7 @@ import com.example.presentation.screens.ui.meals.MealGroup
 import com.example.presentation.screens.ui.meals.MealPeriod
 import com.example.presentation.screens.ui.meals.PlanMealsListScreenPro
 import com.example.presentation.screens.ui.planMeals.MealPlanScreenState
+import org.fitverse.project.destinations.homepage.dashboad.DarkGamifiedDashboardBackground
 
 @Composable
 fun MealsDestination(
@@ -58,6 +59,7 @@ fun MealsDestination(
     )
 
     Box(modifier = Modifier.fillMaxSize()){
+        DarkGamifiedDashboardBackground()
         PlanMealsListScreenPro(
             state = MealPlanScreenState(),
             onBackClick = {},

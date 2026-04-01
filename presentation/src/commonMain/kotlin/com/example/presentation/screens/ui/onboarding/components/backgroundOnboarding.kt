@@ -4,6 +4,7 @@ package com.example.presentation.screens.ui.onboarding.components
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -31,16 +32,17 @@ private data class OnboardingParticle(
 @Composable
 fun UltraFitnessOnboardingBackground(
     step: Int,
+    colors: ColorScheme, // Injetando o ColorScheme Neon Circuit
     modifier: Modifier = Modifier
 ) {
-    val infinite = rememberInfiniteTransition()
+    val infinite = rememberInfiniteTransition(label = "onboarding_anim")
 
     val time by infinite.animateFloat(
         initialValue = 0f,
         targetValue = 360f,
         animationSpec = infiniteRepeatable(
             animation = tween(26_000, easing = LinearEasing)
-        )
+        ), label = "time_float"
     )
 
     val onboardingParticles = remember {
@@ -61,71 +63,59 @@ fun UltraFitnessOnboardingBackground(
         val w = size.width
         val h = size.height
 
-        // Fundo principal: gradiente escuro usando Background -> Surface -> Card
+        // Fundo principal: Gradiente do Deep Neutral (#0A0B0F) para Surface (#16171D)
         drawRect(
             brush = Brush.verticalGradient(
                 colors = listOf(
-                    DarkGamifiedColors.Background,
-                    DarkGamifiedColors.Surface,
-                    DarkGamifiedColors.Card
-                ),
-                startY = 0f,
-                endY = h
+                    colors.background,
+                    colors.surface,
+                    colors.surfaceVariant
+                )
             )
         )
 
-        // Ondas sutis — usando PrimarySoft numa opacidade bem baixa para não brilhar demais
+        // Ondas sutis — usando o PrimaryContainer (seu Roxo de profundidade #2D1B59)
+        // Mantemos a opacidade baixíssima (0.03f) para um efeito de "fumaça neon"
         drawWave(
             time = time,
             amplitude = 26f,
-            color = DarkGamifiedColors.PrimarySoft.copy(alpha = 0.035f),
+            color = colors.primaryContainer.copy(alpha = 0.035f),
             heightFactor = 0.30f
         )
 
         drawWave(
             time = time * 1.35f,
             amplitude = 40f,
-            color = DarkGamifiedColors.PrimarySoft.copy(alpha = 0.028f),
+            color = colors.primaryContainer.copy(alpha = 0.028f),
             heightFactor = 0.52f
         )
 
-        drawWave(
-            time = time * 1.75f,
-            amplitude = 54f,
-            color = DarkGamifiedColors.PrimarySoft.copy(alpha = 0.022f),
-            heightFactor = 0.70f
-        )
-
-        // Partículas discretas — ainda usando Accent, porém muito sutis
+        // Partículas discretas — Usando o Secondary (Azul Elétrico) para brilhos sutis
         onboardingParticles.forEach { p ->
             val progress = ((time + p.phase) * p.speed) % 360f / 360f
             val y = (p.y - progress).mod(1f) * h
-            val x = (
-                    p.x +
-                            sin((time + p.phase).toRad()) * p.drift * 0.02f
-                    ).mod(1f) * w
+            val x = (p.x + sin((time + p.phase).toRad()) * p.drift * 0.02f).mod(1f) * w
 
             drawCircle(
-                color = DarkGamifiedColors.Accent.copy(alpha = p.alpha * 0.9f),
+                color = colors.secondary.copy(alpha = p.alpha * 0.6f),
                 radius = p.radius,
                 center = Offset(x, y)
             )
         }
 
-        // Glow central sutil usando PrimarySoft (escuro) para não competir com conteúdo
+        // Glow central — PrimaryContainer para criar o foco atrás da ilustração do onboarding
         drawCircle(
             brush = Brush.radialGradient(
                 colors = listOf(
-                    DarkGamifiedColors.PrimarySoft.copy(alpha = 0.10f),
+                    colors.primaryContainer.copy(alpha = 0.15f),
                     Color.Transparent
                 )
             ),
-            radius = w * 0.48f,
-            center = Offset(w / 2f, h * 0.36f)
+            radius = w * 0.55f,
+            center = Offset(w / 2f, h * 0.40f)
         )
     }
 }
-
 /** Wave drawer (path) — amostragem otimizada para performance */
 private fun DrawScope.drawWave(
     time: Float,

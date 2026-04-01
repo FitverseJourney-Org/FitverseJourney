@@ -25,6 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation3.runtime.NavKey
+import com.example.presentation.theme.DarkGamifiedColors
 import org.fitverse.project.routes.NavRoutes
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,182 +37,144 @@ fun ModalDrawerSheetMainScreen(
     onNavigate: (backStackEntry: NavKey) -> Unit = {},
     onLogout: () -> Unit = {}
 ) {
-    val cs = MaterialTheme.colorScheme
-    val scope = rememberCoroutineScope()
+    val colors = MaterialTheme.colorScheme
 
     ModalNavigationDrawer(
         drawerState = drawerState,
         gesturesEnabled = gesturesEnabled,
-        // Scrim mais denso para focar totalmente no menu
-        scrimColor = Color.Black.copy(alpha = 0.85f),
+        scrimColor = Color.Black.copy(alpha = 0.85f), // Scrim denso para foco no menu
         drawerContent = {
             ModalDrawerSheet(
-                modifier = Modifier.fillMaxWidth(0.85f), // Reduzi levemente para ver o fundo
-                drawerContainerColor = cs.background, // Fundo ultra escuro (#0A0A0E)
-                drawerShape = RoundedCornerShape(topEnd = 32.dp, bottomEnd = 32.dp) // Cantos modernos
+                modifier = Modifier.fillMaxWidth(0.82f),
+                // Usando o fundo absoluto do app (#0A0B0F)
+                drawerContainerColor = colors.background,
+                drawerShape = RoundedCornerShape(topEnd = 32.dp, bottomEnd = 32.dp),
+                drawerTonalElevation = 0.dp
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(horizontal = 24.dp)
+                        .padding(horizontal = 20.dp)
                         .verticalScroll(rememberScrollState())
                         .statusBarsPadding()
                         .navigationBarsPadding()
                 ) {
-                    // --- HEADER: IDENTIDADE ---
+                    // --- HEADER: STATUS DO AVATAR ---
                     Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 40.dp),
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 32.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Box(
-                            contentAlignment = Alignment.Center
-                        ) {
-                            // Círculo de brilho externo (Glow sutil)
-                            Box(
-                                modifier = Modifier
-                                    .size(92.dp)
-                                    .background(cs.primary.copy(alpha = 0.05f), CircleShape)
-                            )
+                        Box(contentAlignment = Alignment.Center) {
+                            // Aura Neon Roxo (Primary)
+                            Box(modifier = Modifier.size(90.dp).background(colors.primary.copy(alpha = 0.1f), CircleShape))
 
-                            // Avatar
                             Surface(
-                                modifier = Modifier.size(80.dp),
+                                modifier = Modifier.size(76.dp),
                                 shape = CircleShape,
-                                color = cs.surface,
-                                border = BorderStroke(2.dp, cs.primary) // Neon Volt
+                                color = colors.surface,
+                                border = BorderStroke(2.dp, colors.primary)
                             ) {
                                 Box(contentAlignment = Alignment.Center) {
-                                    Icon(
-                                        Icons.Rounded.Person,
-                                        contentDescription = null,
-                                        tint = cs.onSurface,
-                                        modifier = Modifier.size(40.dp)
-                                    )
+                                    Icon(Icons.Rounded.Person, null, tint = colors.onSurface, modifier = Modifier.size(36.dp))
                                 }
                             }
                         }
 
-                        Spacer(modifier = Modifier.height(18.dp))
+                        Spacer(modifier = Modifier.height(16.dp))
 
                         Text(
                             text = "ALEX JOURNEY",
-                            color = cs.onBackground,
-                            style = MaterialTheme.typography.titleLarge,
+                            color = colors.onBackground,
+                            style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Black,
                             letterSpacing = 1.sp
                         )
 
-                        // Badge de Nível (Roxo Elétrico para contraste com o Neon)
+                        // Nível com Badge Azul (Secondary) para clareza técnica
                         Surface(
                             modifier = Modifier.padding(top = 8.dp),
-                            color = cs.secondary.copy(alpha = 0.15f),
+                            color = colors.secondary.copy(alpha = 0.15f),
                             shape = RoundedCornerShape(8.dp),
-                            border = BorderStroke(1.dp, cs.secondary.copy(alpha = 0.4f))
+                            border = BorderStroke(1.dp, colors.secondary.copy(alpha = 0.4f))
                         ) {
                             Text(
                                 text = "LEVEL 14",
                                 modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp),
-                                color = cs.secondary,
-                                fontSize = 11.sp,
-                                fontWeight = FontWeight.ExtraBold,
-                                letterSpacing = 0.5.sp
+                                color = colors.secondary,
+                                fontSize = 10.sp,
+                                fontWeight = FontWeight.Black
                             )
                         }
                     }
 
-                    // --- WIDGETS RÁPIDOS ---
+                    // --- WIDGETS RÁPIDOS (ESTILO GLASS) ---
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         QuickActionWidget(
                             modifier = Modifier.weight(1f),
-                            icon = Icons.Rounded.CreditCard,
+                            icon = Icons.Rounded.Bolt,
                             title = "Free Plan",
                             subtitle = "Upgrade",
-                            accentColor = cs.primary,
-                            onClick = {
-                                onNavigate(NavRoutes.PlanPaymentScreen)
-                            }
+                            accentColor = colors.primary, // Roxo para ações de "Energia/Upgrade"
+                            onClick = { onNavigate(NavRoutes.PlanPaymentScreen) }
                         )
                         QuickActionWidget(
                             modifier = Modifier.weight(1f),
-                            icon = Icons.Rounded.PersonAdd,
+                            icon = Icons.Rounded.GeneratingTokens,
                             title = "Referrals",
                             subtitle = "Earn Pts",
-                            accentColor = cs.tertiary, // Dourado
-                            onClick = {
-                                onNavigate(NavRoutes.PlanPaymentScreen)
-                            }
+                            accentColor = colors.secondary, // Azul para utilitários
+                            onClick = { onNavigate(NavRoutes.PlanPaymentScreen) }
                         )
                     }
 
                     Spacer(modifier = Modifier.height(32.dp))
 
-                    // --- MENU PRINCIPAL ---
-                    Text(
-                        text = "EXPLORE",
-                        color = cs.onSurface.copy(alpha = 0.5f),
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.Black,
-                        letterSpacing = 1.5.sp,
-                        modifier = Modifier.padding(start = 12.dp, bottom = 12.dp)
-                    )
-
-                    // Lista de Itens do Menu
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(cs.surface.copy(alpha = 0.5f), RoundedCornerShape(24.dp))
-                            .padding(vertical = 8.dp)
-                    ) {
-                        ActionRow("Workout Plan", Icons.Rounded.FitnessCenter) { onNavigate(NavRoutes.PlanWorkoutFlow) }
-                        ActionRow("Meals Plan", Icons.Rounded.Fastfood) { onNavigate(NavRoutes.PlanMealsFlow) }
-                        ActionRow("Historic", Icons.Rounded.History) { onNavigate(NavRoutes.Historic) }
-                        ActionRow("Leaderboards", Icons.Rounded.Leaderboard) { onNavigate(NavRoutes.Leaderboards) }
-                        ActionRow("Tasks Flow", Icons.Rounded.Assignment) { onNavigate(NavRoutes.TasksFlow) }
-                        ActionRow("Friends", Icons.Rounded.People) { onNavigate(NavRoutes.Friends) }
-                        ActionRow("Progress", Icons.Rounded.Analytics) { onNavigate(NavRoutes.Progress) }
-                        ActionRow("Achievements", Icons.Rounded.Star) { onNavigate(NavRoutes.Achievements) }
+                    // --- SEÇÕES DE MENU ---
+                    MenuSectionTitle("EXPLORE")
+                    MenuCardContainer {
+                        ActionRow("Workout Plan", Icons.Rounded.FitnessCenter, colors) { onNavigate(NavRoutes.PlanWorkoutFlow) }
+                        ActionRow("Meals Plan", Icons.Rounded.LocalDining, colors) { onNavigate(NavRoutes.PlanMealsFlow.PlanList) }
+                        ActionRow("Historic", Icons.Rounded.History, colors) { onNavigate(NavRoutes.Historic) }
+                        ActionRow("Achievements", Icons.Rounded.Star, colors) { onNavigate(NavRoutes.Achievements) }
+                        ActionRow("Progress", Icons.Rounded.Timeline, colors) { onNavigate(NavRoutes.Progress) }
+                        ActionRow("Leaderboards", Icons.Rounded.EmojiEvents, colors) { onNavigate(NavRoutes.Leaderboards) }
+                        ActionRow("Friends", Icons.Rounded.Group, colors) { onNavigate(NavRoutes.Friends) }
+                        ActionRow("Tasks", Icons.Rounded.Assignment, colors) { onNavigate(NavRoutes.TasksFlow) }
                     }
 
-                    Text(
-                        text = "SETTINGS",
-                        color = cs.onSurface.copy(alpha = 0.5f),
-                        fontSize = 11.sp,
-                        fontWeight = FontWeight.Black,
-                        letterSpacing = 1.5.sp,
-                        modifier = Modifier.padding(start = 12.dp, bottom = 12.dp)
-                    )
-
-                    // Lista de Itens do Menu
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(cs.surface.copy(alpha = 0.5f), RoundedCornerShape(24.dp))
-                            .padding(vertical = 8.dp)
-                    ) {
-                        ActionRow("Devices", Icons.Rounded.Devices) { onNavigate(NavRoutes.Devices) }
-                        ActionRow("Help & Support", Icons.Rounded.Help) { onNavigate(NavRoutes.HelpSupport) }
+                    Spacer(modifier = Modifier.height(16.dp))
+                    MenuSectionTitle("SETTINGS")
+                    MenuCardContainer {
+                        ActionRow("Devices", Icons.Rounded.Devices, colors) { onNavigate(NavRoutes.Devices) }
+                        ActionRow("Help", Icons.Rounded.Help, colors) { onNavigate(NavRoutes.HelpSupport) }
                     }
 
                     Spacer(modifier = Modifier.height(24.dp))
 
-                    // --- FOOTER / LOGOUT ---
-                    ActionRow(
-                        label = "Logout",
-                        icon = Icons.Rounded.Logout,
-                        isDanger = true,
-                        onClick = onLogout
-                    )
+                    // Logout em Vermelho (Error)
+                    ActionRow("Logout", Icons.Rounded.Logout, colors, isDanger = true, onClick = onLogout)
 
                     Spacer(modifier = Modifier.height(40.dp))
                 }
             }
         },
         content = content
+    )
+}
+
+@Composable
+private fun MenuSectionTitle(title: String) {
+    val colors = MaterialTheme.colorScheme
+    Text(
+        text = title.uppercase(),
+        color = colors.onSurfaceVariant.copy(alpha = 0.6f),
+        fontSize = 11.sp,
+        fontWeight = FontWeight.Black,
+        letterSpacing = 1.5.sp,
+        modifier = Modifier.padding(start = 12.dp, top = 24.dp, bottom = 8.dp)
     )
 }
 
@@ -224,64 +187,77 @@ fun QuickActionWidget(
     accentColor: Color,
     onClick: () -> Unit
 ) {
-    val cs = MaterialTheme.colorScheme
+    val colors = MaterialTheme.colorScheme
     Surface(
         onClick = onClick,
         modifier = modifier.height(100.dp),
         shape = RoundedCornerShape(20.dp),
-        color = cs.surface,
-        border = BorderStroke(1.dp, cs.outline.copy(alpha = 0.2f))
+        // SurfaceVariant (#16171D) com transparência para o efeito de profundidade
+        color = colors.surfaceVariant.copy(alpha = 0.6f),
+        border = BorderStroke(1.dp, accentColor.copy(alpha = 0.15f))
     ) {
         Column(
-            modifier = Modifier.padding(12.dp),
+            modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.Center
         ) {
-            Icon(icon, null, tint = accentColor, modifier = Modifier.size(24.dp))
+            Icon(icon, null, tint = accentColor, modifier = Modifier.size(22.dp))
             Spacer(Modifier.height(8.dp))
-            Text(title, color = cs.onBackground, fontSize = 13.sp, fontWeight = FontWeight.Bold)
-            Text(subtitle, color = accentColor, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+            Text(
+                text = title,
+                color = colors.onSurface,
+                fontSize = 13.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = subtitle.uppercase(),
+                color = accentColor,
+                fontSize = 10.sp,
+                fontWeight = FontWeight.Black,
+                letterSpacing = 0.5.sp
+            )
         }
     }
+}
+@Composable
+fun MenuCardContainer(content: @Composable ColumnScope.() -> Unit) {
+    val colors = MaterialTheme.colorScheme
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(colors.surface.copy(alpha = 0.5f), RoundedCornerShape(24.dp))
+            .border(0.5.dp, colors.outline.copy(alpha = 0.1f), RoundedCornerShape(24.dp))
+            .padding(vertical = 4.dp),
+        content = content
+    )
 }
 
 @Composable
 fun ActionRow(
     label: String,
     icon: ImageVector,
+    colors: ColorScheme,
     isDanger: Boolean = false,
     onClick: () -> Unit
 ) {
-    val cs = MaterialTheme.colorScheme
-    val contentColor = if (isDanger) cs.error else cs.onBackground
+    val contentColor = if (isDanger) colors.error else colors.onSurface
+    val iconColor = if (isDanger) colors.error else colors.primary // Ícones em Roxo para destaque
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick() }
-            .padding(horizontal = 20.dp, vertical = 16.dp),
+            .padding(horizontal = 20.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            tint = if (isDanger) cs.error else cs.primary, // Ícones sempre Neon para guiar o olho
-            modifier = Modifier.size(22.dp)
-        )
+        Icon(icon, null, tint = iconColor, modifier = Modifier.size(20.dp))
         Spacer(modifier = Modifier.width(16.dp))
         Text(
             text = label,
             color = contentColor,
-            fontSize = 15.sp,
+            fontSize = 14.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier.weight(1f)
         )
-        if (!isDanger) {
-            Icon(
-                Icons.Rounded.ChevronRight,
-                contentDescription = null,
-                tint = cs.outline,
-                modifier = Modifier.size(18.dp)
-            )
-        }
+        Icon(Icons.Rounded.ChevronRight, null, tint = colors.onSurfaceVariant.copy(alpha = 0.3f), modifier = Modifier.size(16.dp))
     }
 }

@@ -23,6 +23,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.presentation.screens.widgets.FitverseIconBack
+import com.example.presentation.screens.widgets.FitverseTopAppBar
+import com.example.presentation.theme.PADDING_TOPAPPBAR_DEFAULT_HORIZONTAL
+import com.example.presentation.theme.PADDING_TOPAPPBAR_DEFAULT_VERTICAL
 
 // --- 1. Modelagem ---
 enum class AchievementSaga(val title: String, val color: Color, val icon: ImageVector) {
@@ -48,22 +52,15 @@ data class Achievement(
 fun AchievementsScreen(
     navigateBack: () -> Unit
 ) {
+    val cs = MaterialTheme.colorScheme
     val achievements = remember { getFullAchievementList() }
     val unlockedCount = achievements.count { it.isUnlocked }
 
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
-                title = { Text("Galeria de Troféus", fontWeight = FontWeight.Bold) },
-                navigationIcon = {
-                    IconButton(onClick = navigateBack) {
-                        Icon(Icons.Default.ChevronLeft, contentDescription = "Voltar")
-                    }
-                },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background
-                ),
-                windowInsets = WindowInsets(0,0,0,0)
+            FitverseTopAppBar(
+                title = "GALERIA DE TROFÉUS",
+                onBack = navigateBack
             )
         }
     ) { padding ->

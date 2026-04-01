@@ -1,12 +1,14 @@
 package com.example.presentation.screens.ui.planMeals
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
@@ -17,12 +19,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
+import com.example.presentation.screens.widgets.FitverseTopAppBar
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import org.koin.compose.viewmodel.koinViewModel
 
+// --- DOMAIN / STATE ---
 data class Macros(val protein: Int, val carbs: Int, val fat: Int)
 
 data class MealPlanItem(
@@ -38,61 +42,47 @@ data class MealPlanScreenState(
     val currentWeight: Double = 85.0,
     val targetWeight: Double = 78.0,
     val dailyCaloriesTarget: Int = 2100,
-    val dailyMacros: com.example.presentation.screens.ui.planMeals.Macros = _root_ide_package_.com.example.presentation.screens.ui.planMeals.Macros(
-        protein = 160,
-        carbs = 200,
-        fat = 73
-    ),
-    val activePlans: List<com.example.presentation.screens.ui.planMeals.MealPlanItem> = emptyList()
+    val dailyMacros: Macros = Macros(protein = 160, carbs = 200, fat = 73),
+    val activePlans: List<MealPlanItem> = emptyList()
 )
 
-// Exemplo de ViewModel (Clean Architecture)
 class MealPlanViewModel : ViewModel() {
-    private val _state = MutableStateFlow(_root_ide_package_.com.example.presentation.screens.ui.planMeals.MealPlanScreenState())
-    val state: StateFlow<com.example.presentation.screens.ui.planMeals.MealPlanScreenState> = _state.asStateFlow()
-
-    // Aqui você chamaria seus UseCases para carregar os dados do banco/API
+    private val _state = MutableStateFlow(MealPlanScreenState())
+    val state: StateFlow<MealPlanScreenState> = _state.asStateFlow()
 }
 
-// --- TELA BURRA (Stateless) ---
+// --- TELA PRINCIPAL ---
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlanMealsListScreen(
-    state: com.example.presentation.screens.ui.planMeals.MealPlanScreenState,
-    onBackClick: () -> Unit,
-    onNewPlanClick: () -> Unit
+    state: MealPlanScreenState,
+    onBack: () -> Unit,
+    onNewPlanClick: () -> Unit,
+    onPlanClick: (MealPlanItem) -> Unit // Nova ação para alterar/ver o plano
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Planos Alimentares") },
-                navigationIcon = {
-                    IconButton(onClick = onBackClick) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Voltar")
-                    }
-                },
-                windowInsets = WindowInsets(0, 0, 0, 0),
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.background
-                ),
+            FitverseTopAppBar(
+                title = "Planos Alimentares", // Em title case para um visual mais limpo
+                onBack = onBack,
                 actions = {
-                    //edit
-                    IconButton(onClick = { /* Lógica para editar */ }) {
-                        Icon(Icons.Filled.Edit, contentDescription = "Editar")
+                    IconButton(onClick = { /* Lógica para editar perfil/metas */ }) {
+                        Icon(Icons.Filled.Edit, contentDescription = "Editar Metas")
                     }
                 }
             )
         },
         floatingActionButton = {
             ExtendedFloatingActionButton(
-                onClick = {
-                    onNewPlanClick()
-                },
+                onClick = onNewPlanClick,
                 icon = { Icon(Icons.Filled.Add, contentDescription = "Criar Plano") },
                 text = { Text("Novo Plano") },
-                containerColor = MaterialTheme.colorScheme.primary
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 0.dp) // Flat FAB
             )
-        }
+        },
+        containerColor = MaterialTheme.colorScheme.background
     ) { paddingValues ->
         if (state.isLoading) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -102,27 +92,26 @@ fun PlanMealsListScreen(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(paddingValues)
-                    .padding(horizontal = 16.dp),
-                contentPadding = PaddingValues(bottom = 80.dp)
+                    .padding(paddingValues),
+                contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 16.dp, bottom = 100.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp) // Espaçamento automático entre os itens
             ) {
                 item {
-                    _root_ide_package_.com.example.presentation.screens.ui.planMeals.GoalSummaryCard(
-                        state = state
-                    )
-                    Spacer(modifier = Modifier.height(24.dp))
-                    Text(
-                        text = "Planos Salvos",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(bottom = 8.dp)
-                    )
+                    SectionHeader(title = "Visão Geral")
+                    Spacer(modifier = Modifier.height(8.dp))
+                    GoalSummaryCard(state = state)
                 }
+
+                item {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    SectionHeader(title = "Seus Planos")
+                }
+
                 items(state.activePlans, key = { it.id }) { plan ->
-                    _root_ide_package_.com.example.presentation.screens.ui.planMeals.MealPlanCard(
-                        plan = plan
+                    MealPlanCard(
+                        plan = plan,
+                        onClick = { onPlanClick(plan) }
                     )
-                    Spacer(modifier = Modifier.height(12.dp))
                 }
             }
         }
@@ -130,18 +119,29 @@ fun PlanMealsListScreen(
 }
 
 // --- COMPONENTES VISUAIS ---
+
 @Composable
-fun GoalSummaryCard(state: com.example.presentation.screens.ui.planMeals.MealPlanScreenState) {
+fun SectionHeader(title: String) {
+    Text(
+        text = title.uppercase(),
+        style = MaterialTheme.typography.labelLarge,
+        color = MaterialTheme.colorScheme.primary,
+        fontWeight = FontWeight.Bold,
+        letterSpacing = 1.sp
+    )
+}
+
+@Composable
+fun GoalSummaryCard(state: MealPlanScreenState) {
     Card(
         modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(24.dp), // Cantos mais arredondados, pegada moderna
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLow
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp) // Flat design
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
+        Column(modifier = Modifier.padding(24.dp)) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -149,101 +149,83 @@ fun GoalSummaryCard(state: com.example.presentation.screens.ui.planMeals.MealPla
             ) {
                 Column {
                     Text(
-                        text = "Objetivo Atual",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.7f)
+                        text = "Objetivo atual",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
                         text = state.objective,
-                        style = MaterialTheme.typography.headlineSmall,
+                        style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSecondaryContainer
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
                 Text(
                     text = "${state.dailyCaloriesTarget} kcal",
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Black,
                     color = MaterialTheme.colorScheme.primary
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-            HorizontalDivider(color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.1f))
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             // Sessão de Peso
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceAround
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                _root_ide_package_.com.example.presentation.screens.ui.planMeals.GoalMetric(
-                    label = "Peso Atual",
-                    value = "${state.currentWeight} kg"
-                )
-                _root_ide_package_.com.example.presentation.screens.ui.planMeals.GoalMetric(
-                    label = "Meta",
-                    value = "${state.targetWeight} kg"
-                )
+                GoalMetric(label = "Peso Atual", value = "${state.currentWeight} kg")
+                GoalMetric(label = "Meta", value = "${state.targetWeight} kg")
             }
 
             Spacer(modifier = Modifier.height(24.dp))
 
             // Sessão de Macros
             Text(
-                text = "Distribuição de Macros (Diário)",
+                text = "Distribuição de Macros",
                 style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.7f),
-                modifier = Modifier.padding(bottom = 8.dp)
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(bottom = 12.dp)
             )
-            _root_ide_package_.com.example.presentation.screens.ui.planMeals.MacroBar(macros = state.dailyMacros)
+            MacroBar(macros = state.dailyMacros)
         }
     }
 }
 
 @Composable
-fun MacroBar(macros: com.example.presentation.screens.ui.planMeals.Macros) {
+fun MacroBar(macros: Macros) {
     val total = macros.protein + macros.carbs + macros.fat
-    // Evita divisão por zero
     val pWeight = if (total > 0) macros.protein.toFloat() / total else 1f
     val cWeight = if (total > 0) macros.carbs.toFloat() / total else 1f
     val fWeight = if (total > 0) macros.fat.toFloat() / total else 1f
 
+    // Usando as cores nativas do tema para harmonia perfeita
+    val colorProtein = MaterialTheme.colorScheme.primary
+    val colorCarbs = MaterialTheme.colorScheme.secondary
+    val colorFat = MaterialTheme.colorScheme.tertiary
+
     Column {
-        // Barra colorida proporcional
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(12.dp)
-                .clip(RoundedCornerShape(6.dp))
+                .height(14.dp)
+                .clip(CircleShape)
         ) {
-            Box(modifier = Modifier.weight(pWeight).fillMaxHeight().background(Color(0xFFE53935))) // Vermelho - Proteína
-            Box(modifier = Modifier.weight(cWeight).fillMaxHeight().background(Color(0xFF43A047))) // Verde - Carbo
-            Box(modifier = Modifier.weight(fWeight).fillMaxHeight().background(Color(0xFFFFB300))) // Amarelo - Gordura
+            Box(modifier = Modifier.weight(pWeight).fillMaxHeight().background(colorProtein))
+            Box(modifier = Modifier.weight(cWeight).fillMaxHeight().background(colorCarbs))
+            Box(modifier = Modifier.weight(fWeight).fillMaxHeight().background(colorFat))
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
-        // Legendas
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            _root_ide_package_.com.example.presentation.screens.ui.planMeals.MacroLegend(
-                color = Color(
-                    0xFFE53935
-                ), label = "Prot", value = "${macros.protein}g"
-            )
-            _root_ide_package_.com.example.presentation.screens.ui.planMeals.MacroLegend(
-                color = Color(
-                    0xFF43A047
-                ), label = "Carb", value = "${macros.carbs}g"
-            )
-            _root_ide_package_.com.example.presentation.screens.ui.planMeals.MacroLegend(
-                color = Color(
-                    0xFFFFB300
-                ), label = "Gord", value = "${macros.fat}g"
-            )
+            MacroLegend(color = colorProtein, label = "Proteína", value = "${macros.protein}g")
+            MacroLegend(color = colorCarbs, label = "Carbo", value = "${macros.carbs}g")
+            MacroLegend(color = colorFat, label = "Gordura", value = "${macros.fat}g")
         }
     }
 }
@@ -253,74 +235,97 @@ fun MacroLegend(color: Color, label: String, value: String) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Box(
             modifier = Modifier
-                .size(10.dp)
-                .clip(RoundedCornerShape(50))
+                .size(8.dp)
+                .clip(CircleShape)
                 .background(color)
         )
-        Spacer(modifier = Modifier.width(4.dp))
+        Spacer(modifier = Modifier.width(6.dp))
         Text(
-            text = "$label: ",
+            text = "$label ",
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.7f)
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Text(
             text = value,
-            style = MaterialTheme.typography.bodySmall,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSecondaryContainer
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.onSurface
         )
     }
 }
 
 @Composable
 fun GoalMetric(label: String, value: String) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    Column {
         Text(
             text = label,
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.8f)
+            color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Text(
             text = value,
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.SemiBold,
-            color = MaterialTheme.colorScheme.onSecondaryContainer
+            color = MaterialTheme.colorScheme.onSurface
         )
     }
 }
 
 @Composable
-fun MealPlanCard(plan: com.example.presentation.screens.ui.planMeals.MealPlanItem) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
+fun MealPlanCard(
+    plan: MealPlanItem,
+    onClick: () -> Unit
+) {
+    // OutlinedCard traz um ar mais limpo e leve do que o card preenchido
+    OutlinedCard(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() }, // Adicionado interatividade
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.outlinedCardColors(
+            containerColor = if (plan.isActive) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+        ),
+        border = CardDefaults.outlinedCardBorder(
+            plan.isActive // Destaque na borda apenas se for o plano ativo
         )
     ) {
         Row(
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = plan.title,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = plan.title,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                    if (plan.isActive) {
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Badge(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                        ) {
+                            Text("Ativo", modifier = Modifier.padding(horizontal = 4.dp))
+                        }
+                    }
+                }
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = plan.description,
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f)
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-            if (plan.isActive) {
-                Badge(containerColor = Color(0xFF4CAF50)) {
-                    Text("Ativo", modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp))
-                }
-            }
+
+            // Ícone de chevron para indicar que o usuário pode abrir para editar/ver detalhes
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                contentDescription = "Ver detalhes do plano",
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 }

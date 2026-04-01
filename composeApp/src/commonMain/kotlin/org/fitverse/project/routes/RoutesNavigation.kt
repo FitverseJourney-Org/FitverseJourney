@@ -11,6 +11,10 @@ sealed interface NavRoutes : NavKey {
 
     @Serializable
     data object AuthFlow : NavKey, NavRoutes {
+
+        @Serializable
+        data object Home : NavKey, NavRoutes
+
         @Serializable
         data object Login : NavKey, NavRoutes
         @Serializable

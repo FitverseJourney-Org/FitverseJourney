@@ -7,7 +7,7 @@ import com.example.domain.usecase.authentication.reset.ResetPasswordUseCase
 import org.koin.dsl.module
 
 val domainModule = module {
-    factory{
+    factory {
         LoginUseCase(
             authRepository = get()
         )

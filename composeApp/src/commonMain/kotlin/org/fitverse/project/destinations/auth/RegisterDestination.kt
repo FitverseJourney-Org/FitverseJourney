@@ -13,13 +13,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.domain.model.authentication.register.RegisterAction
 import com.example.domain.model.authentication.register.progress
 import com.example.presentation.components.snackbar.AppSnackbarHost
 import com.example.presentation.components.snackbar.SnackbarType
 import com.example.presentation.navigationState.RegisterNavigation
 import com.example.presentation.screens.ui.authentication.login.components.AnimatedLoginBackground
 import com.example.presentation.screens.ui.authentication.register.RegisterScreen
+import com.example.presentation.screens.ui.authentication.register.actions.RegisterAction
 import com.example.presentation.screens.ui.authentication.register.viewmodel.RegisterViewModel
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.koinInject

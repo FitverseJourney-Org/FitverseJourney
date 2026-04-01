@@ -8,27 +8,22 @@ import com.example.presentation.components.snackbar.SnackBarData
 
 data class RegisterState(
     val page: RegisterPage = RegisterPage.Profile,
-    // Values
-    val name: String = "",
+    val firstName: String = "",
+    val lastName: String = "",
     val email: String = "",
     val password: String = "",
     val age: String = "",
     val height: Int = 170,
     val weight: Int = 70,
     val selectedAvatarId: String? = null,
-
-    // --- NOVOS CAMPOS DE MACROS ---
     val targetCalories: Int = 2000,
     val targetProteins: Int = 150,
     val targetFats: Int = 70,
-    val targetCarbs: Int = 200, // Opcional, mas útil para fechar a conta
-    // ------------------------------
-
+    val targetWater: Int = 250,
+    val targetCarbs: Int = 200,
     val gender: Gender = Gender.OTHER,
     val fitnessGoal: FitnessGoal? = null,
     val trainingLevel: FitnessLevel = FitnessLevel.BEGINNER,
-
-    // List Errors
     val ageErrors: List<String> = emptyList(),
     val nameErrors: List<String> = emptyList(),
     val emailErrors: List<String> = emptyList(),
@@ -36,7 +31,6 @@ data class RegisterState(
     val genderErrors: List<String> = emptyList(),
     val passwordErrors: List<String> = emptyList(),
     val trainingLevelErrors: List<String> = emptyList(),
-
     val showGoalsDialog: Boolean = false,
     val isPasswordVisible: Boolean = false,
     val isLoading: Boolean = false,

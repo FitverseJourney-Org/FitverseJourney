@@ -19,6 +19,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.presentation.screens.widgets.FitverseIconBack
+import com.example.presentation.screens.widgets.FitverseTopAppBar
+import com.example.presentation.theme.PADDING_TOPAPPBAR_DEFAULT_HORIZONTAL
+import com.example.presentation.theme.PADDING_TOPAPPBAR_DEFAULT_VERTICAL
 
 data class UserProfile(
     val id: String,
@@ -45,7 +49,7 @@ val mockSuggestions = listOf(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FriendsScreen(
-    navigateBack: () -> Unit,
+    onBack: () -> Unit,
     friends: List<UserProfile> = mockFriends,
     suggestions: List<UserProfile> = mockSuggestions
 ) {
@@ -53,22 +57,16 @@ fun FriendsScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Friends") },
-                navigationIcon = {
-                    IconButton(onClick = navigateBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Voltar")
-                    }
-                },
+            FitverseTopAppBar(
+                title = "FRIENDS",
+                onBack = onBack,
                 actions = {
                     IconButton(onClick = {
                         /* TODO: Abrir leitor de QR Code ou Share */
                     }) {
                         Icon(Icons.Default.QrCode, contentDescription = "Meu Código")
                     }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
-                windowInsets = WindowInsets(0,0,0,0)
+                }
             )
         }
     ) { paddingValues ->
