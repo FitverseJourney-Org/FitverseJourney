@@ -3,7 +3,7 @@ package com.example.presentation.screens.ui.authentication.register.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.model.authentication.register.RegisterPage
-import com.example.domain.usecase.authentication.register.RegisterUseCase
+import com.example.domain.usecase.register.RegisterUseCase
 import com.example.presentation.components.snackbar.SnackBarData
 import com.example.presentation.components.snackbar.SnackbarType
 import com.example.presentation.navigationState.RegisterNavigation

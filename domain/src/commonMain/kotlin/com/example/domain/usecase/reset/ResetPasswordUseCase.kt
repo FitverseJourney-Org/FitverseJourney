@@ -1,4 +1,4 @@
-package com.example.domain.usecase.authentication.reset
+package com.example.domain.usecase.reset
 
 import com.example.domain.repository.authentication.AuthRepository
 

@@ -1,11 +1,9 @@
 package com.example.presentation.screens.ui.authentication.login.actions
 
-import com.example.domain.model.local.language.Language
-
 sealed class LoginAction {
     data class EmailChanged(val value: String) : LoginAction()
     data class PasswordChanged(val value: String) : LoginAction()
-    data class LanguageChanged(val value: Language) : LoginAction()
+    data class LanguageChanged(val value: String) : LoginAction()
 
     object TogglePasswordVisibility : LoginAction()
     object LoginClicked : LoginAction()

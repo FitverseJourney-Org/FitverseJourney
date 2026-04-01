@@ -3,6 +3,8 @@ package com.example.presentation.screens.ui.splash.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.repository.dbLocal.datastore.AppPreferencesRepository
+import com.example.domain.usecase.database.datastore.authentication.ObserveIsAuthenticatedUseCase
+import com.example.domain.usecase.database.datastore.onboarding.ObserveOnboardingCompletedUseCase
 import com.example.presentation.screens.ui.authentication.login.actions.LoginAction
 import com.example.presentation.navigationState.SplashNavigation
 import com.example.presentation.screens.ui.splash.actions.SplashActions
@@ -14,46 +16,41 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class SplashViewModel(
-    private val preferencesRepository: AppPreferencesRepository
+    // Removido o repositório, usamos apenas os Use Cases para manter a Clean Arch
+    private val observeIsAuthenticatedUseCase: ObserveIsAuthenticatedUseCase,
+    private val observeOnboardingCompletedUseCase: ObserveOnboardingCompletedUseCase
 ) : ViewModel() {
 
     private val _navigationState = MutableSharedFlow<SplashNavigation>()
     val navigationState = _navigationState.asSharedFlow()
 
-    // Nota rápida: Notei que a tipagem aqui é LoginAction, talvez seja um resquício de outro arquivo.
-    // Se não for usar na Splash, pode remover com segurança!
-    private val _uiAction = MutableSharedFlow<LoginAction>(replay = 0)
-    val uiAction: SharedFlow<LoginAction> = _uiAction
-
     init {
-        // Assim que o ViewModel nasce, ele decide a rota automaticamente
         decideInitialDestination()
     }
 
     private fun decideInitialDestination() {
         viewModelScope.launch {
-            // Opcional: Um pequeno delay para a splash screen não piscar muito rápido
-            // caso a leitura do DataStore seja instantânea
+            // 1. Garantimos um tempo mínimo de Splash para branding
             delay(1500)
 
-            // Usamos .first() para ler o valor apenas uma vez na inicialização,
-            // em vez de .collect() que ficaria escutando mudanças para sempre.
-            val hasCompletedOnboarding = preferencesRepository.isOnboardingCompleted.first()
-            val isAuthenticated = preferencesRepository.isAuthenticated.first()
+            try {
+                // 2. Coletamos apenas o primeiro valor emitido pelos fluxos do DataStore
+                // Assumindo que os Use Cases retornam Flow<Boolean>
+                val isOnboardingCompleted = observeOnboardingCompletedUseCase().first()
+                val isAuthenticated = observeIsAuthenticatedUseCase().first()
 
-            // Lógica de roteamento
-            when {
-                !hasCompletedOnboarding -> {
-                    _navigationState.emit(SplashNavigation.ToOnboarding)
+                // 3. Lógica de roteamento priorizando o Onboarding
+                val destination = when {
+                    !isOnboardingCompleted -> SplashNavigation.ToOnboarding
+                    !isAuthenticated -> SplashNavigation.ToAuth
+                    else -> SplashNavigation.ToHome
                 }
-                !isAuthenticated -> {
-                    // Se o usuário não está autenticado, mandamos para o fluxo de Auth.
-                    // (Aqui você também pode adaptar a regra para o Trial, se necessário)
-                    _navigationState.emit(SplashNavigation.ToAuth)
-                }
-                else -> {
-                    _navigationState.emit(SplashNavigation.ToHome)
-                }
+
+                _navigationState.emit(destination)
+
+            } catch (e: Exception) {
+                // Caso ocorra erro na leitura do DataStore, você pode decidir um fallback
+                _navigationState.emit(SplashNavigation.ToAuth)
             }
         }
     }

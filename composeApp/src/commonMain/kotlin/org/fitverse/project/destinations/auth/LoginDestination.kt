@@ -159,9 +159,8 @@ fun LoginDestination(
                 SetupLanguageScreen(
                     // agora recebe o Language selecionado
                     onConfirmLanguage = { selectedLanguage: Language ->
-                        viewmodel.onAction(LoginAction.LanguageChanged(selectedLanguage))
+                        viewmodel.onAction(LoginAction.LanguageChanged(selectedLanguage.code.iso))
                         showLanguageScreen.value = false
-//                        onConfirmLanguage(selectedLanguage)
                     },
                     currentLanguage = state.language,
                     exit = {
@@ -169,9 +168,7 @@ fun LoginDestination(
                     }
                 )
             } else {
-                Box(modifier = Modifier.fillMaxSize()) {
-
-                }
+                Box(modifier = Modifier.fillMaxSize())
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.example.domain.usecase.authentication.login
+package com.example.domain.usecase.login
 
 import com.example.domain.model.authentication.login.UserToken
 import com.example.domain.repository.authentication.AuthRepository

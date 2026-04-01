@@ -50,4 +50,15 @@ object LanguageAvailableApp {
             flagRes = Res.drawable.locale_ru
         )
     )
+
+
+    fun fromCode(code: String): Language {
+        val tag = TagLanguage.fromIso(code)
+
+        // Log para depurar
+        println("Buscando idioma para o código: $code | Tag resolvida: ${tag.name} | ISO da Tag: ${tag.iso}")
+
+        return availableLanguages.find { it.code.iso == tag.iso }
+            ?: availableLanguages.first().also { println("Idioma não encontrado, usando fallback: ${it.name}") }
+    }
 }

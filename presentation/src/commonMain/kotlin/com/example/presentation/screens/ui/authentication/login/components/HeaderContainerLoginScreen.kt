@@ -20,15 +20,9 @@ import com.example.presentation.core.utils.LanguageAvailableApp.availableLanguag
 @Composable
 fun HeaderContainerLoginScreen(
     showLanguageScreen: () -> Unit,
-    currentLanguage: Language
+    currentLanguage: Language // O ViewModel já te entrega o objeto pronto!
 ) {
     val colors = MaterialTheme.colorScheme
-
-    val normalizedDomain = currentLanguage.name.trim().lowercase()
-
-    val selected = availableLanguages.firstOrNull { avail ->
-        avail.name.trim().lowercase() == normalizedDomain
-    } ?: availableLanguages.first()
 
     TopAppBar(
         modifier = Modifier.padding(horizontal = 5.dp),
@@ -51,9 +45,10 @@ fun HeaderContainerLoginScreen(
                     pressedElevation = 6.dp
                 )
             ) {
+                // Use o currentLanguage diretamente aqui!
                 LanguageChooser(
-                    flagRes = selected.flagRes,
-                    code = selected.name
+                    flagRes = currentLanguage.flagRes,
+                    code = currentLanguage.name
                 )
             }
         }

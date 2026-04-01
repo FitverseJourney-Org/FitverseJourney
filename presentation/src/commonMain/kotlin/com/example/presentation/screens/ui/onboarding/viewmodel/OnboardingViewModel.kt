@@ -3,6 +3,8 @@ package com.example.presentation.screens.ui.onboarding.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.repository.dbLocal.datastore.AppPreferencesRepository
+import com.example.domain.usecase.database.datastore.onboarding.ObserveOnboardingCompletedUseCase
+import com.example.domain.usecase.database.datastore.onboarding.SetOnboardingCompletedUseCase
 import com.example.presentation.navigationState.OnboardingNavigation
 import com.example.presentation.states.onboarding.OnboardingState
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -15,7 +17,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class OnboardingViewModel(
-    private val preferencesRepository: AppPreferencesRepository
+    private val setOnboardingCompletedUseCase: SetOnboardingCompletedUseCase,
 ): ViewModel() {
 
     private val _navigationState = MutableSharedFlow<OnboardingNavigation>()
@@ -42,7 +44,7 @@ class OnboardingViewModel(
     }
     fun emitToTrial() {
         viewModelScope.launch {
-            preferencesRepository.setOnboardingCompleted(true)
+            setOnboardingCompletedUseCase(true)
             _navigationState.emit(OnboardingNavigation.ToTrial)
         }
     }

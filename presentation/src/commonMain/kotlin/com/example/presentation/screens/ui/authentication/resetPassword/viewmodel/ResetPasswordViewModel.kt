@@ -1,7 +1,7 @@
 package com.example.presentation.screens.ui.authentication.resetPassword.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.example.domain.usecase.authentication.reset.ResetPasswordUseCase
+import com.example.domain.usecase.reset.ResetPasswordUseCase
 import com.example.presentation.components.snackbar.SnackBarData
 import com.example.presentation.components.snackbar.SnackbarType
 import com.example.presentation.screens.ui.authentication.resetPassword.state.ResetPasswordState

@@ -1,4 +1,4 @@
-package com.example.domain.usecase.authentication.register
+package com.example.domain.usecase.register
 
 import com.example.domain.model.authentication.register.FitnessGoal
 import com.example.domain.model.authentication.register.FitnessLevel

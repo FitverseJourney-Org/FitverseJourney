@@ -11,14 +11,25 @@ import org.koin.dsl.module
 
 val presentationModule = module {
 
-    viewModel<LoginViewModel> { LoginViewModel(loginUseCase = get()) }
+    viewModel<LoginViewModel> {
+        LoginViewModel(
+            loginUseCase = get(),
+            setAppLanguageUseCase = get(),
+            observeAppLanguageUseCase = get()
+        )
+    }
     viewModel<RegisterViewModel> { RegisterViewModel(registerUseCase = get()) }
     viewModel<ResetPasswordViewModel> { ResetPasswordViewModel(resetPasswordUseCase = get()) }
-    viewModel<OnboardingViewModel> { OnboardingViewModel(
-        preferencesRepository = get()
-    ) }
+    viewModel<OnboardingViewModel> {
+        OnboardingViewModel(
+            setOnboardingCompletedUseCase = get()
+        )
+    }
     viewModel<CommunityViewModel>{ CommunityViewModel() }
-    viewModel<SplashViewModel>{ SplashViewModel(
-        preferencesRepository = get()
-    ) }
+    viewModel<SplashViewModel>{
+        SplashViewModel(
+            observeIsAuthenticatedUseCase = get(),
+            observeOnboardingCompletedUseCase = get()
+        )
+    }
 }

@@ -1,0 +1,8 @@
+package com.example.domain.repository.dbLocal.datastore
+
+import kotlinx.coroutines.flow.Flow
+
+interface AppAuthenticateRepository {
+    val isAuthenticated: Flow<Boolean>
+    suspend fun setIsAuthenticated(isAuthenticated: Boolean)
+}

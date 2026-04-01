@@ -2,15 +2,19 @@ package com.example.presentation.screens.ui.authentication.login.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.domain.model.local.language.Language
+import com.example.domain.model.local.language.TagLanguage
+import com.example.domain.usecase.database.datastore.language.ObserveAppLanguageUseCase
+import com.example.domain.usecase.database.datastore.language.SetAppLanguageUseCase
 import com.example.presentation.screens.ui.authentication.login.actions.LoginAction
-import com.example.domain.usecase.authentication.login.LoginUseCase
+import com.example.domain.usecase.login.LoginUseCase
 import com.example.presentation.components.snackbar.SnackBarData
 import com.example.presentation.components.snackbar.SnackbarType
+import com.example.presentation.core.utils.LanguageAvailableApp
 import com.example.presentation.navigationState.LoginNavigation
 import com.example.presentation.screens.ui.authentication.login.state.LoginState
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.update
@@ -18,6 +22,8 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val loginUseCase: LoginUseCase,
+    private val setAppLanguageUseCase: SetAppLanguageUseCase,
+    private val observeAppLanguageUseCase: ObserveAppLanguageUseCase
 ) : ViewModel() {
 
     private val _navigationState = MutableSharedFlow<LoginNavigation>()
@@ -26,23 +32,55 @@ class LoginViewModel(
     private val _state = MutableStateFlow(LoginState())
     val state: StateFlow<LoginState> = _state
 
-    private val _uiAction = MutableSharedFlow<LoginAction>(replay = 0)
-    val uiAction: SharedFlow<LoginAction> = _uiAction
+    init {
+        // Observamos a linguagem vinda do DataStore de forma reativa
+        observeLanguage()
+    }
 
-    fun onAction(action: LoginAction){
-        when(action){
+    fun onAction(action: LoginAction) {
+        when (action) {
             is LoginAction.EmailChanged -> _state.update { it.copy(email = action.value) }
             is LoginAction.PasswordChanged -> _state.update { it.copy(password = action.value) }
-            is LoginAction.LanguageChanged -> _state.update { it.copy(language = action.value) }
             is LoginAction.TogglePasswordVisibility -> onTogglePasswordVisibility()
             is LoginAction.LoginClicked -> onLoginClick()
-            is LoginAction.NavigateToRegister -> viewModelScope.launch { _navigationState.emit(
-                LoginNavigation.ToRegister) }
-            is LoginAction.NavigateToForgotPassword -> viewModelScope.launch { _navigationState.emit(
-                LoginNavigation.ToResetPassword) }
-            is LoginAction.NavigateToHome -> viewModelScope.launch { _navigationState.emit(
-                LoginNavigation.ToHome) }
+
+            // Quando a língua muda na UI, mandamos para o DataStore.
+            // O observeLanguage() cuidará de atualizar o _state.
+            is LoginAction.LanguageChanged -> setLanguage(action.value)
+
+            is LoginAction.NavigateToRegister -> navigateTo(LoginNavigation.ToRegister)
+            is LoginAction.NavigateToForgotPassword -> navigateTo(LoginNavigation.ToResetPassword)
+            is LoginAction.NavigateToHome -> navigateTo(LoginNavigation.ToHome)
         }
+    }
+
+    private fun observeLanguage() {
+        viewModelScope.launch {
+            observeAppLanguageUseCase().collect { language ->
+                // Usamos o helper que centraliza a lógica de normalização e fallback
+                val resolvedLanguage = LanguageAvailableApp.fromCode(language)
+                println(
+                    "Resolved Language: $resolvedLanguage"
+                )
+                _state.update {
+                    it.copy(language = resolvedLanguage)
+                }
+            }
+        }
+    }
+
+    fun setLanguage(laguage: String) {
+        viewModelScope.launch {
+            println(
+                "Setting Language: $laguage"
+            )
+            setAppLanguageUseCase(laguage)
+        }
+    }
+
+    // Encapsulando a navegação para limpar o onAction
+    private fun navigateTo(destination: LoginNavigation) {
+        viewModelScope.launch { _navigationState.emit(destination) }
     }
 
     fun onTogglePasswordVisibility() {
@@ -53,20 +91,12 @@ class LoginViewModel(
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
 
-            val result = loginUseCase(
+            loginUseCase(
                 _state.value.email,
                 _state.value.password
-            )
-
-            result.fold(
+            ).fold(
                 onSuccess = {
-                    // 1) atualizar UI
-                    _state.update { s ->
-                        s.copy(
-                            isLoading = false,
-                        )
-                    }
-                    // 2) emitir evento de navegação para a Home
+                    _state.update { it.copy(isLoading = false) }
                     _navigationState.emit(LoginNavigation.ToHome)
                 },
                 onFailure = { error ->
@@ -74,8 +104,7 @@ class LoginViewModel(
                         s.copy(
                             isLoading = false,
                             snackBarData = SnackBarData(
-                                message = error.message
-                                    ?: "Something went wrong. Please try again.",
+                                message = error.message ?: "Erro desconhecido",
                                 type = SnackbarType.ERROR
                             )
                         )

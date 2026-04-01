@@ -116,7 +116,10 @@ fun SetupLanguageScreen(
                     .padding(24.dp)
             ) {
                 Button(
-                    onClick = { onConfirmLanguage(selectedLanguage) },
+                    onClick = {
+                        println("Selected Language: $selectedLanguage")
+                        onConfirmLanguage(selectedLanguage)
+                    },
                     modifier = Modifier.fillMaxWidth().height(56.dp),
                     shape = RoundedCornerShape(16.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = colors.primary),
