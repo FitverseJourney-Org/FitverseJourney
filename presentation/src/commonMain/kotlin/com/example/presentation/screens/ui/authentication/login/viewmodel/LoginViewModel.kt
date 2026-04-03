@@ -6,7 +6,6 @@ import com.example.presentation.screens.ui.authentication.login.actions.LoginAct
 import com.example.domain.usecase.login.LoginUseCase
 import com.example.presentation.components.snackbar.SnackBarData
 import com.example.presentation.components.snackbar.SnackbarType
-import com.example.presentation.core.utils.LanguageAvailableApp
 import com.example.presentation.navigationState.LoginNavigation
 import com.example.presentation.screens.ui.authentication.login.state.LoginState
 import kotlinx.coroutines.flow.MutableSharedFlow

@@ -1,4 +1,4 @@
-package com.example.presentation.core.utils
+package com.example.presentation.utils
 
 import com.example.domain.model.local.language.AppLanguageItem
 import com.example.domain.model.local.language.TagLanguage

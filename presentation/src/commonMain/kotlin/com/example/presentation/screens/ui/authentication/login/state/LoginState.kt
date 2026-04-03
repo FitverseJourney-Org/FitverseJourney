@@ -1,8 +1,6 @@
 package com.example.presentation.screens.ui.authentication.login.state
 
-import com.example.domain.model.local.language.AppLanguageItem
 import com.example.presentation.components.snackbar.SnackBarData
-import com.example.presentation.core.utils.LanguageAvailableApp
 
 data class LoginState(
     val email: String = "",

@@ -42,7 +42,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -71,15 +70,13 @@ import androidx.compose.ui.window.DialogProperties
 import com.example.domain.model.dashboard.TaskIcon
 import com.example.domain.model.dashboard.TaskItem
 import com.example.expect.getHourOfDay
-import com.example.presentation.core.utils.Dashboard.levelFromXp
+import com.example.presentation.utils.Dashboard.levelFromXp
 import com.example.presentation.screens.ui.dashboard.components.ContainerLevel
 import com.example.presentation.screens.widgets.FitverseAvatarCard
 import com.example.presentation.screens.widgets.FitverseIconNotifications
 import com.example.presentation.screens.widgets.FitverseIconStreak
 import com.example.presentation.screens.widgets.FitverseProfileImage
 import com.example.presentation.screens.widgets.FitverseTaskItem
-import com.example.presentation.theme.PADDING_TOPAPPBAR_DEFAULT_HORIZONTAL
-import com.example.presentation.theme.PADDING_TOPAPPBAR_DEFAULT_VERTICAL
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate

@@ -18,23 +18,19 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import com.example.presentation.screens.ui.authentication.login.actions.LoginAction
-import com.example.domain.model.local.language.AppLanguageItem
 import com.example.presentation.components.snackbar.AppSnackbarHost
 import com.example.presentation.components.snackbar.SnackbarType
-import com.example.presentation.core.utils.LanguageAvailableApp
+import com.example.presentation.utils.LanguageAvailableApp
 import com.example.presentation.navigationState.LoginNavigation
 import com.example.presentation.screens.ui.LanguageViewModel
-import com.example.presentation.screens.ui.LoadingLanguageScreen
 import com.example.presentation.screens.ui.authentication.login.LoginScreen
 import com.example.presentation.screens.ui.authentication.login.viewmodel.LoginViewModel
 import com.example.presentation.screens.ui.authentication.login.components.AnimatedLoginBackground
 import com.example.presentation.screens.ui.setupLanguage.SetupLanguageScreen
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.koinInject
 
