@@ -23,12 +23,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.example.domain.model.local.language.Language
+import com.example.domain.model.local.language.AppLanguageItem
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun LanguageItem(
-    language: Language,
+    appLanguageItem: AppLanguageItem,
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
@@ -60,8 +60,8 @@ fun LanguageItem(
     ) {
 
         Image(
-            painter = painterResource(language.flagRes),
-            contentDescription = language.name,
+            painter = painterResource(appLanguageItem.flagRes),
+            contentDescription = appLanguageItem.name,
             modifier = Modifier
                 .size(30.dp)
                 .clip(CircleShape)
@@ -70,7 +70,7 @@ fun LanguageItem(
         Spacer(Modifier.width(14.dp))
 
         Text(
-            text = language.name,
+            text = appLanguageItem.name,
             style = MaterialTheme.typography.bodyLarge,
             color = colors.onSurface,
             modifier = Modifier.weight(1f)

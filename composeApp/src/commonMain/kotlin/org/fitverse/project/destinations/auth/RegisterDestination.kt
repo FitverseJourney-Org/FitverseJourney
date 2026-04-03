@@ -31,15 +31,6 @@ fun RegisterDestination(toLogin: () -> Unit) {
     val uiEvent by viewmodel.uiEvent.collectAsState(initial = null)
     val snackBarHostState = remember { SnackbarHostState() }
 
-    val animatedProgress by animateFloatAsState(
-        targetValue = state.page.progress(),
-        animationSpec = tween(
-            durationMillis = 500,
-            easing = FastOutSlowInEasing
-        ),
-        label = "register-progress"
-    )
-
     LaunchedEffect(uiEvent) {
         viewmodel.uiEvent.collect { event ->
             when(event){
@@ -86,8 +77,7 @@ fun RegisterDestination(toLogin: () -> Unit) {
         RegisterScreen(
             state = state,
             onAction = viewmodel::onAction,
-            animatedProgress = animatedProgress,
-            snackBarHostState = {
+            snackBarHost = {
                 AppSnackbarHost(
                     snackbarHostState = snackBarHostState,
                     snackbarType = state.snackBarData?.type ?: SnackbarType.INFO

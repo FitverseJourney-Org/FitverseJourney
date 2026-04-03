@@ -25,7 +25,8 @@ import kotlin.collections.listOf
 
 @Composable
 fun AuthNavigation(
-    toHomeFlow: () -> Unit
+    toHomeFlow: () -> Unit,
+    toLoadingLanguage: () -> Unit
 ) {
     val authBackStack = rememberNavBackStack(
         SavedStateConfiguration {
@@ -85,6 +86,9 @@ fun AuthNavigation(
                     },
                     toHome = {
                         toHomeFlow()
+                    },
+                    toLoadingLanguage = {
+                        toLoadingLanguage()
                     }
                 )
             }

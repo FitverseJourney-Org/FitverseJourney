@@ -120,8 +120,10 @@ class RegisterViewModel(
                     it.copy(selectedAvatarId = action.avatarId)
                 }
             }
-            else -> {
-
+            is RegisterAction.DialogStatusAvatar -> {
+                _state.update {
+                    it.copy(dialogStatusAvatar = action.value)
+                }
             }
         }
     }

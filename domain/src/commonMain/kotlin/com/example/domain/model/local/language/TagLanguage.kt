@@ -3,7 +3,6 @@ package com.example.domain.model.local.language
 enum class TagLanguage(val iso: String) {
 
     SYSTEM("system"),
-
     ENGLISH("en"),
     GERMAN("de"),
     SPANISH("es"),
@@ -23,5 +22,16 @@ enum class TagLanguage(val iso: String) {
             val normalized = iso.substringBefore("-")
             return entries.firstOrNull { it.iso == normalized } ?: SYSTEM
         }
+
+        val listOfLanguages = listOf(
+            ENGLISH.iso,
+            GERMAN.iso,
+            SPANISH.iso,
+            FRENCH.iso,
+            KOREAN.iso,
+            PORTUGUESE.iso,
+            RUSSIAN.iso,
+            SYSTEM.iso,
+        )
     }
 }

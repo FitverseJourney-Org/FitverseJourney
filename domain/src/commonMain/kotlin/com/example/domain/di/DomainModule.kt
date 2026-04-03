@@ -3,8 +3,10 @@ package com.example.domain.di
 
 import com.example.domain.usecase.database.datastore.authentication.ObserveIsAuthenticatedUseCase
 import com.example.domain.usecase.database.datastore.authentication.SetIsAuthenticatedUseCase
-import com.example.domain.usecase.database.datastore.language.ObserveAppLanguageUseCase
-import com.example.domain.usecase.database.datastore.language.SetAppLanguageUseCase
+import com.example.domain.usecase.database.datastore.language.ChangeAppLanguageUseCase
+import com.example.domain.usecase.database.datastore.language.GetAppLanguageUseCase
+import com.example.domain.usecase.database.datastore.language.GetLocaleLanguageAppUseCase
+import com.example.domain.usecase.database.datastore.language.SetNewAppLanguageUseCase
 import com.example.domain.usecase.database.datastore.onboarding.ObserveOnboardingCompletedUseCase
 import com.example.domain.usecase.database.datastore.onboarding.SetOnboardingCompletedUseCase
 import com.example.domain.usecase.login.LoginUseCase
@@ -30,11 +32,18 @@ val domainModule = module {
         )
     }
 
-    // Modules dataStore
+    // authentication
     factory { ObserveIsAuthenticatedUseCase(repository = get()) }
     factory { ObserveOnboardingCompletedUseCase(repository = get()) }
-    factory { ObserveAppLanguageUseCase(repository = get()) }
+
+    // onboarding
     factory { SetIsAuthenticatedUseCase(repository = get()) }
     factory { SetOnboardingCompletedUseCase(repository = get()) }
-    factory { SetAppLanguageUseCase(repository = get()) }
+
+    // languages
+    factory { GetAppLanguageUseCase(get()) }
+    factory { SetNewAppLanguageUseCase(get()) }
+    factory { ChangeAppLanguageUseCase(get()) }
+    factory { GetLocaleLanguageAppUseCase(get()) }
+
 }

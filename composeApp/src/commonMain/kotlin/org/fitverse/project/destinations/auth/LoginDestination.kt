@@ -18,18 +18,23 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import com.example.presentation.screens.ui.authentication.login.actions.LoginAction
-import com.example.domain.model.local.language.Language
+import com.example.domain.model.local.language.AppLanguageItem
 import com.example.presentation.components.snackbar.AppSnackbarHost
 import com.example.presentation.components.snackbar.SnackbarType
+import com.example.presentation.core.utils.LanguageAvailableApp
 import com.example.presentation.navigationState.LoginNavigation
+import com.example.presentation.screens.ui.LanguageViewModel
+import com.example.presentation.screens.ui.LoadingLanguageScreen
 import com.example.presentation.screens.ui.authentication.login.LoginScreen
 import com.example.presentation.screens.ui.authentication.login.viewmodel.LoginViewModel
 import com.example.presentation.screens.ui.authentication.login.components.AnimatedLoginBackground
 import com.example.presentation.screens.ui.setupLanguage.SetupLanguageScreen
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.koinInject
 
@@ -39,15 +44,25 @@ fun LoginDestination(
     toRegister: () -> Unit,
     toForgotPassword: () -> Unit,
     onLoginSuccess: () -> Unit,
-    toHome: () -> Unit
+    toHome: () -> Unit,
+    toLoadingLanguage: () -> Unit
 ) {
     val viewmodel = koinInject<LoginViewModel>()
+    val viewmodelLanguage = koinInject<LanguageViewModel>()
+
     val state by viewmodel.state.collectAsState()
 
+    // 1. Observe o código da linguagem globalmente
+    val currentLanguageCode by viewmodelLanguage.languageCode.collectAsState()
+
+    // 2. Converta o código para o item de UI usando remember para otimização
+    val currentAppLanguageItem = remember(currentLanguageCode) {
+        LanguageAvailableApp().fromCode(currentLanguageCode)
+    }
+
+    val isLoadingLanguage = remember { mutableStateOf(false) }
     val snackBarHostState = remember { SnackbarHostState() }
-
     val keyboardController = LocalSoftwareKeyboardController.current
-
     val showLanguageScreen = remember { mutableStateOf(false) }
 
     LaunchedEffect(state.snackBarData) {
@@ -82,93 +97,99 @@ fun LoginDestination(
         }
     }
 
+    if (isLoadingLanguage.value) {
 
+        // Efeito para voltar ao login após um tempo (ex: 1.5 segundos)
 
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        AnimatedLoginBackground()
-        LoginScreen(
-            state = state,
-            viewmodel = viewmodel,
-            currentLanguage = state.language,
-            snackBarHost = {
-                AppSnackbarHost(
-                    snackbarHostState = snackBarHostState,
-                    snackbarType = state.snackBarData?.type ?: SnackbarType.INFO
-                )
-            },
-            onEmailChanged = {
-                viewmodel.onAction(LoginAction.EmailChanged(it))
-            },
-            onPasswordChanged = {
-                viewmodel.onAction(LoginAction.PasswordChanged(it))
-            },
-            onTogglePasswordVisibility = {
-                viewmodel.onAction(LoginAction.TogglePasswordVisibility)
-            },
-            onLoginClick = {
-                keyboardController?.hide()
-                viewmodel.onAction(LoginAction.LoginClicked)
-            },
-            navigateToRegister = {
-                viewmodel.onAction(LoginAction.NavigateToRegister)
-            },
-            navigateToForgotPassword = {
-                viewmodel.onAction(LoginAction.NavigateToForgotPassword)
-            },
-            navigateToHome = {
-                viewmodel.onAction(LoginAction.NavigateToHome)
-            },
-            showLanguageScreen = {
-                showLanguageScreen.value = !showLanguageScreen.value
-            }
-        )
-
-        AnimatedContent(
-            targetState = showLanguageScreen.value,
+    } else {
+        Box(
             modifier = Modifier.fillMaxSize(),
-            transitionSpec = {
-                if (targetState) {
-                    (slideInHorizontally(
-                        initialOffsetX = { -it },
-                        animationSpec = tween(300)
-                    ) + fadeIn(animationSpec = tween(100)))
-                        .with(
-                            slideOutHorizontally(
-                                targetOffsetX = { it },
-                                animationSpec = tween(300)
-                            ) + fadeOut(animationSpec = tween(100))
-                        )
-                } else {
-                    (slideInHorizontally(
-                        initialOffsetX = { it },
-                        animationSpec = tween(700)
-                    ) + fadeIn(animationSpec = tween(500)))
-                        .with(
-                            slideOutHorizontally(
-                                targetOffsetX = { -it },
-                                animationSpec = tween(1200)
+            contentAlignment = Alignment.Center
+        ) {
+            AnimatedLoginBackground()
+
+            LoginScreen(
+                state = state,
+                viewmodel = viewmodel,
+                currentAppLanguageItem = currentAppLanguageItem,
+                snackBarHost = {
+                    AppSnackbarHost(
+                        snackbarHostState = snackBarHostState,
+                        snackbarType = state.snackBarData?.type ?: SnackbarType.INFO
+                    )
+                },
+                onEmailChanged = {
+                    viewmodel.onAction(LoginAction.EmailChanged(it))
+                },
+                onPasswordChanged = {
+                    viewmodel.onAction(LoginAction.PasswordChanged(it))
+                },
+                onTogglePasswordVisibility = {
+                    viewmodel.onAction(LoginAction.TogglePasswordVisibility)
+                },
+                onLoginClick = {
+                    keyboardController?.hide()
+                    viewmodel.onAction(LoginAction.LoginClicked)
+                },
+                navigateToRegister = {
+                    viewmodel.onAction(LoginAction.NavigateToRegister)
+                },
+                navigateToForgotPassword = {
+                    viewmodel.onAction(LoginAction.NavigateToForgotPassword)
+                },
+                navigateToHome = {
+                    viewmodel.onAction(LoginAction.NavigateToHome)
+                },
+                showLanguageScreen = {
+                    showLanguageScreen.value = !showLanguageScreen.value
+                }
+            )
+
+            AnimatedContent(
+                targetState = showLanguageScreen.value,
+                transitionSpec = {
+                    if (targetState) {
+                        (slideInHorizontally(
+                            initialOffsetX = { -it },
+                            animationSpec = tween(300)
+                        ) + fadeIn(animationSpec = tween(100)))
+                            .with(
+                                slideOutHorizontally(
+                                    targetOffsetX = { it },
+                                    animationSpec = tween(300)
+                                ) + fadeOut(animationSpec = tween(100))
                             )
-                        )
-                }.using(SizeTransform(clip = false))
-            }
-        ) { shown ->
-            if (shown) {
-                SetupLanguageScreen(
-                    // agora recebe o Language selecionado
-                    onConfirmLanguage = { selectedLanguage: Language ->
-                        viewmodel.onAction(LoginAction.LanguageChanged(selectedLanguage.code.iso))
-                        showLanguageScreen.value = false
-                    },
-                    currentLanguage = state.language,
-                    exit = {
-                        showLanguageScreen.value = false
-                    }
-                )
-            } else {
-                Box(modifier = Modifier.fillMaxSize())
+                    } else {
+                        (slideInHorizontally(
+                            initialOffsetX = { it },
+                            animationSpec = tween(700)
+                        ) + fadeIn(animationSpec = tween(500)))
+                            .with(
+                                slideOutHorizontally(
+                                    targetOffsetX = { -it },
+                                    animationSpec = tween(1200)
+                                )
+                            )
+                    }.using(SizeTransform(clip = false))
+                }
+            ) { shown ->
+                if (shown) {
+                    SetupLanguageScreen(
+                        onConfirmLanguage = { selectedItem ->
+                            isLoadingLanguage.value = true
+
+                            // Isso já está correto: usa o viewmodelLanguage!
+                            viewmodelLanguage.switchLanguage(selectedItem.code.iso)
+
+                            toLoadingLanguage()
+                            showLanguageScreen.value = false
+                        },
+                        currentAppLanguageItem = currentAppLanguageItem,
+                        exit = { showLanguageScreen.value = false }
+                    )
+                } else {
+                    Box(modifier = Modifier.fillMaxSize())
+                }
             }
         }
     }

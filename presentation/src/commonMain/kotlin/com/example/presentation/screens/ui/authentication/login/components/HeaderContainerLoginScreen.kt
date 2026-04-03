@@ -13,14 +13,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.domain.model.local.language.Language
-import com.example.presentation.core.utils.LanguageAvailableApp.availableLanguages
+import com.example.domain.model.local.language.AppLanguageItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HeaderContainerLoginScreen(
     showLanguageScreen: () -> Unit,
-    currentLanguage: Language // O ViewModel já te entrega o objeto pronto!
+    currentAppLanguageItem: AppLanguageItem // O ViewModel já te entrega o objeto pronto!
 ) {
     val colors = MaterialTheme.colorScheme
 
@@ -47,8 +46,8 @@ fun HeaderContainerLoginScreen(
             ) {
                 // Use o currentLanguage diretamente aqui!
                 LanguageChooser(
-                    flagRes = currentLanguage.flagRes,
-                    code = currentLanguage.name
+                    flagRes = currentAppLanguageItem.flagRes,
+                    code = currentAppLanguageItem.name
                 )
             }
         }

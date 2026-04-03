@@ -1,10 +1,15 @@
 package com.example.domain.repository.dbLocal.datastore
 
-import com.example.domain.model.local.language.Language
-import com.example.domain.model.local.language.TagLanguage
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
+
 
 interface AppLanguageRepository {
-    val appLanguage: Flow<String>
-    suspend fun setAppLanguage(language: String)
+    val languageCode: Flow<String>
+
+    suspend fun setLanguageCode(languageCode: String)
+    suspend fun changeLanguageCode(languageCode: String)
+    fun getLanguageNameByCode(languageCode: String): String
+    suspend fun getCurrentLanguageCode(): String
+    fun getLocale(): String
 }

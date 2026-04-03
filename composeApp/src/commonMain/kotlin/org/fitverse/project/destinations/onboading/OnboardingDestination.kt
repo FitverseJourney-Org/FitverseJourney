@@ -7,7 +7,7 @@ import androidx.compose.runtime.getValue
 import com.example.presentation.navigationState.OnboardingNavigation
 import com.example.presentation.screens.ui.onboarding.OnboardingScreen
 import com.example.presentation.screens.ui.onboarding.viewmodel.OnboardingViewModel
-import com.example.presentation.states.onboarding.OnboardingState
+import com.example.presentation.screens.ui.onboarding.state.OnboardingState
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.koinInject
 

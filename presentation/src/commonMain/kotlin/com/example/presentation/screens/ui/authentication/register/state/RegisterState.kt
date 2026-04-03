@@ -35,4 +35,5 @@ data class RegisterState(
     val isPasswordVisible: Boolean = false,
     val isLoading: Boolean = false,
     val snackBarData: SnackBarData? = null,
+    val dialogStatusAvatar: Boolean = false
 )
