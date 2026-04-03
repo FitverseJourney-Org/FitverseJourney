@@ -1,10 +1,9 @@
 package com.example.domain.usecase.register
 
-import com.example.domain.model.authentication.register.FitnessGoal
-import com.example.domain.model.authentication.register.FitnessLevel
-import com.example.domain.model.authentication.register.Gender
+import com.example.domain.model.authentication.register.RegisterExperienceLevel
+import com.example.domain.model.authentication.register.RegisterGender
+import com.example.domain.model.authentication.register.RegisterGoal
 import com.example.domain.model.authentication.register.SignUp
-import com.example.domain.model.authentication.register.TrainingLevel
 import com.example.domain.repository.authentication.AuthRepository
 
 class RegisterUseCase(
@@ -14,24 +13,24 @@ class RegisterUseCase(
         nickname: String,
         email: String,
         password: String,
-        gender: Gender,
+        registerGender: RegisterGender,
         age: Int,
         height: Int,
-        trainingLevel: FitnessLevel,
+        trainingLevel: RegisterExperienceLevel,
         weight: Int,
-        goal: FitnessGoal
+        registerGoal: RegisterGoal
     ): Result<Unit> {
         return authRepository.register(
             data = SignUp(
                 name = nickname,
                 email = email,
                 password = password,
-                gender = gender,
+                registerGender = registerGender,
                 birthDate = age.toString(),
                 heightCm = height,
                 weightKg = weight.toDouble(),
-                fitnessLevel = trainingLevel,
-                fitnessGoal = goal
+                registerExperienceLevel = trainingLevel,
+                registerGoal = registerGoal
             )
         )
     }

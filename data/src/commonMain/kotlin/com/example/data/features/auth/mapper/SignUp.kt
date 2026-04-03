@@ -1,14 +1,5 @@
 package com.example.data.features.auth.mapper
 
-import com.example.data.features.auth.model.signUp.FitnessGoalRequest
-import com.example.data.features.auth.model.signUp.FitnessLevelRequest
-import com.example.data.features.auth.model.signUp.GenderRequest
-import com.example.data.features.auth.model.signUp.SignUpRequest
-import com.example.domain.model.authentication.register.Gender
-import com.example.domain.model.authentication.register.FitnessLevel
-import com.example.domain.model.authentication.register.FitnessGoal
-import com.example.domain.model.authentication.register.SignUp
-
 //fun SignUpRequest.toDomain(): SignUp {
 //    return SignUp(
 //        name = name,

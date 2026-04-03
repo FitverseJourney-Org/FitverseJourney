@@ -32,43 +32,53 @@ class RegisterViewModel(
 
     fun onAction(action: RegisterAction) {
         when (action) {
+            // 1° Page Actions
             is RegisterAction.FirstName -> {
                 _state.update { it.copy(firstName = action.value, nameErrors = emptyList()) }
             }
             is RegisterAction.LastName -> {
                 _state.update { it.copy(lastName = action.value, nameErrors = emptyList()) }
             }
-            is RegisterAction.EmailChanged -> {
-                _state.update { it.copy(email = action.value, emailErrors = emptyList()) }
-            }
-            is RegisterAction.PasswordChanged -> {
-                _state.update { it.copy(password = action.value, passwordErrors = emptyList()) }
+
+            // 2° Page Actions
+            is RegisterAction.HeightChanged -> {
+                _state.update { it.copy(height = action.value) }
             }
             is RegisterAction.AgeChanged -> {
                 _state.update { it.copy(age = action.value, ageErrors = emptyList()) }
             }
-            is RegisterAction.HeightChanged -> {
-                _state.update { it.copy(height = action.value) }
-            }
-            is RegisterAction.GenderChanged -> {
-                _state.update { it.copy(gender = action.value, genderErrors = emptyList()) }
-            }
             is RegisterAction.WeightChanged -> {
                 _state.update { it.copy(weight = action.value) }
             }
-            is RegisterAction.GoalsChanged -> {
-                _state.update { it.copy(fitnessGoal = action.value) }
+
+            // 3° Page Actions
+            is RegisterAction.GenderChanged -> {
+                _state.update { it.copy(registerGender = action.value, genderErrors = emptyList()) }
             }
-            is RegisterAction.TrainingLevelChanged -> {
+
+            // 4° Page Actions
+            is RegisterAction.GoalChanged -> {
+                _state.update { it.copy(registerGoal = action.value) }
+            }
+
+            // 5° Page Actions
+            is RegisterAction.ExperienceLevelChanged -> {
                 _state.update {
                     it.copy(
-                        trainingLevel = action.level, // Corrigido para usar o valor da action
+                        registerExperienceLevel = action.level, // Corrigido para usar o valor da action
                         trainingLevelErrors = emptyList()
                     )
                 }
             }
 
-            // --- NOVAS ACTIONS DE MACROS ---
+            // 6° Page Actions
+            is RegisterAction.AvatarChanged -> {
+                _state.update {
+                    it.copy(selectedAvatarId = action.avatarId)
+                }
+            }
+
+            // 7° Page Actions
             is RegisterAction.UpdateCalories -> {
                 _state.update { it.copy(targetCalories = action.value) }
             }
@@ -84,19 +94,25 @@ class RegisterViewModel(
             is RegisterAction.UpdateWater -> {
                 _state.update { it.copy(targetWater = action.value) }
             }
+
+            // 8° Page Actions
+            is RegisterAction.EmailChanged -> {
+                _state.update { it.copy(email = action.value, emailErrors = emptyList()) }
+            }
+            is RegisterAction.PasswordChanged -> {
+                _state.update { it.copy(password = action.value, passwordErrors = emptyList()) }
+            }
+
+            // -------------------------------
+            // --- ACTIONS BUTTONS --------
             // -------------------------------
 
             is RegisterAction.Next -> {
                 validateAndNext()
             }
-            is RegisterAction.GoalsClean -> {
-                _state.update { it.copy(goalsErrors = emptyList()) }
-            }
-
             is RegisterAction.Back -> {
                 previousPageOrExit()
             }
-
             is RegisterAction.Submit -> {
                 submitRegistration()
             }
@@ -110,25 +126,28 @@ class RegisterViewModel(
                     _navigationState.emit(RegisterNavigation.ToLogin)
                 }
             }
-            is RegisterAction.UpdateLevel -> {
-                _state.update {
-                    it.copy(trainingLevel = action.level)
-                }
-            }
-            is RegisterAction.UpdateAvatar -> {
-                _state.update {
-                    it.copy(selectedAvatarId = action.avatarId)
-                }
-            }
+
             is RegisterAction.DialogStatusAvatar -> {
                 _state.update {
                     it.copy(dialogStatusAvatar = action.value)
+                }
+            }
+
+            is RegisterAction.UpdateMacros -> {
+                _state.update { currentState ->
+                    currentState.copy(
+                        macroGoals = action.macros
+                    )
                 }
             }
         }
     }
     private fun validateAndNext() {
         nextPage()
+    }
+
+    private fun processValidations() {
+
     }
     fun nextPage() {
         _state.update {
@@ -160,9 +179,9 @@ class RegisterViewModel(
                 email = _state.value.email,
                 age = _state.value.age.toInt(),
                 height = _state.value.height,
-                gender = _state.value.gender,
-                trainingLevel = _state.value.trainingLevel,
-                goal = _state.value.fitnessGoal!!,
+                registerGender = _state.value.registerGender,
+                trainingLevel = _state.value.registerExperienceLevel,
+                registerGoal = _state.value.registerGoal!!,
                 weight = _state.value.weight,
                 password = _state.value.password
             )

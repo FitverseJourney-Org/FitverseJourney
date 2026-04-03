@@ -32,7 +32,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.domain.model.authentication.register.Gender
+import com.example.domain.model.authentication.register.RegisterGender
 
 data class Genre(
     val icon: ImageVector,
@@ -42,7 +42,7 @@ data class Genre(
 @Composable
 fun GenreSelection(
     selectedGenre: String?, // Recebe o valor atual (ex: "MALE")
-    onGenreSelected: (Gender) -> Unit, // Callback para atualizar o ViewModel
+    onGenreSelected: (RegisterGender) -> Unit, // Callback para atualizar o ViewModel
     errorList: List<String>,
     modifier: Modifier = Modifier
 ) {
@@ -72,8 +72,8 @@ fun GenreSelection(
                     isSelected = isSelected,
                     onClick = { onGenreSelected(
                         when (genre.name) {
-                            "Male" -> Gender.MALE
-                            "Female" -> Gender.FEMALE
+                            "Male" -> RegisterGender.MALE
+                            "Female" -> RegisterGender.FEMALE
                             else -> {
                                 throw IllegalArgumentException("Invalid genre name")
                             }

@@ -1,32 +1,49 @@
 package com.example.presentation.screens.ui.authentication.register.actions
 
-import com.example.domain.model.authentication.register.FitnessGoal
-import com.example.domain.model.authentication.register.FitnessLevel
-import com.example.domain.model.authentication.register.Gender
+import com.example.domain.model.authentication.register.RegisterExperienceLevel
+import com.example.domain.model.authentication.register.RegisterGender
+import com.example.domain.model.authentication.register.RegisterGoal
+import com.example.domain.model.authentication.register.RegisterMacros
 
 sealed class RegisterAction {
+
+    // 1° Page
     data class FirstName(val value: String) : RegisterAction()
     data class LastName(val value: String) : RegisterAction()
-    data class EmailChanged(val value: String) : RegisterAction()
-    data class PasswordChanged(val value: String) : RegisterAction()
+
+    // 2° Page
     data class AgeChanged(val value: String) : RegisterAction()
     data class HeightChanged(val value: Int) : RegisterAction()
     data class WeightChanged(val value: Int) : RegisterAction()
-    data class GenderChanged(val value: Gender) : RegisterAction()
-    data class GoalsChanged(val value: FitnessGoal) : RegisterAction()
-    data class TrainingLevelChanged(val level: FitnessLevel) : RegisterAction()
-    object GoalsClean : RegisterAction()
-    data class UpdateLevel(val level: FitnessLevel) : RegisterAction()
-    data class UpdateAvatar(val avatarId: String) : RegisterAction()
-    data class UpdateWater(val value: Int) : RegisterAction()
+
+    // 3° Page
+    data class GenderChanged(val value: RegisterGender) : RegisterAction()
+
+    // 4° Page
+    data class GoalChanged(val value: RegisterGoal) : RegisterAction()
+
+    // 5° Page
+    data class ExperienceLevelChanged(val level: RegisterExperienceLevel) : RegisterAction()
+
+    // 6° Page
+    data class AvatarChanged(val avatarId: String) : RegisterAction()
+
+    // 7° Page
+    data class UpdateMacros(val macros: RegisterMacros) : RegisterAction()
     data class UpdateCalories(val value: Int) : RegisterAction()
+    data class UpdateCarbs(val value: Int) : RegisterAction()
     data class UpdateProteins(val value: Int) : RegisterAction()
     data class UpdateFats(val value: Int) : RegisterAction()
-    data class UpdateCarbs(val value: Int) : RegisterAction()
+    data class UpdateWater(val value: Int) : RegisterAction()
+
+    // 8° Page
+    data class EmailChanged(val value: String) : RegisterAction()
+    data class PasswordChanged(val value: String) : RegisterAction()
+
+    // Dialogs
     data class DialogStatusAvatar(val value: Boolean) : RegisterAction()
 
-
-    // Outros Actions
+    // Outros Actions Buttons
     object Next : RegisterAction()
     object Exit : RegisterAction()
     object Back : RegisterAction()

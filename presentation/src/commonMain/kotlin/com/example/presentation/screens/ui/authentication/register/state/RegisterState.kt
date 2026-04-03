@@ -1,8 +1,9 @@
 package com.example.presentation.screens.ui.authentication.register.state
 
-import com.example.domain.model.authentication.register.FitnessGoal
-import com.example.domain.model.authentication.register.FitnessLevel
-import com.example.domain.model.authentication.register.Gender
+import com.example.domain.model.authentication.register.RegisterExperienceLevel
+import com.example.domain.model.authentication.register.RegisterGender
+import com.example.domain.model.authentication.register.RegisterGoal
+import com.example.domain.model.authentication.register.RegisterMacros
 import com.example.domain.model.authentication.register.RegisterPage
 import com.example.presentation.components.snackbar.SnackBarData
 
@@ -16,14 +17,15 @@ data class RegisterState(
     val height: Int = 170,
     val weight: Int = 70,
     val selectedAvatarId: String? = null,
+    val macroGoals: RegisterMacros = RegisterMacros(),
     val targetCalories: Int = 2000,
     val targetProteins: Int = 150,
     val targetFats: Int = 70,
     val targetWater: Int = 250,
     val targetCarbs: Int = 200,
-    val gender: Gender = Gender.OTHER,
-    val fitnessGoal: FitnessGoal? = null,
-    val trainingLevel: FitnessLevel = FitnessLevel.BEGINNER,
+    val registerGender: RegisterGender = RegisterGender.NONE,
+    val registerGoal: RegisterGoal = RegisterGoal.NONE,
+    val registerExperienceLevel: RegisterExperienceLevel = RegisterExperienceLevel.NONE,
     val ageErrors: List<String> = emptyList(),
     val nameErrors: List<String> = emptyList(),
     val emailErrors: List<String> = emptyList(),

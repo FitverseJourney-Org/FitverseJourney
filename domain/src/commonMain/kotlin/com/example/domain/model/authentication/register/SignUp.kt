@@ -5,10 +5,10 @@ data class SignUp(
     val name: String,
     val email: String,
     val password: String,
-    val gender: Gender,
+    val registerGender: RegisterGender,
     val birthDate: String,
     val heightCm: Int,
     val weightKg: Double,
-    val fitnessLevel: FitnessLevel,
-    val fitnessGoal: FitnessGoal
+    val registerExperienceLevel: RegisterExperienceLevel,
+    val registerGoal: RegisterGoal
 )
