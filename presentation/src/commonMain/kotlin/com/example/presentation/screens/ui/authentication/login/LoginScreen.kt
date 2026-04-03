@@ -21,7 +21,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.domain.model.local.language.Language
+import com.example.domain.model.local.language.AppLanguageItem
 import com.example.presentation.screens.ui.authentication.login.components.HeaderContainerLoginScreen
 import com.example.presentation.screens.ui.authentication.login.components.LoginFooter
 import com.example.presentation.screens.ui.authentication.login.components.LoginForm
@@ -30,7 +30,6 @@ import com.example.presentation.screens.ui.authentication.login.viewmodel.LoginV
 import com.example.presentation.screens.widgets.FitVerseSpacer
 import fitversejourneyapp.presentation.generated.resources.Res
 import fitversejourneyapp.presentation.generated.resources.ico_logo
-import fitversejourneyapp.presentation.generated.resources.locale_ru
 import fitversejourneyapp.presentation.generated.resources.login_subtitle
 import fitversejourneyapp.presentation.generated.resources.login_title
 import org.jetbrains.compose.resources.painterResource
@@ -41,7 +40,7 @@ import org.jetbrains.compose.resources.stringResource
 fun LoginScreen(
     state: LoginState,
     viewmodel: LoginViewModel,
-    currentLanguage: Language,
+    currentAppLanguageItem: AppLanguageItem,
     onPasswordChanged: (String) -> Unit,
     onEmailChanged: (String) -> Unit,
     snackBarHost: @Composable () -> Unit,
@@ -71,7 +70,7 @@ fun LoginScreen(
         topBar = {
             HeaderContainerLoginScreen(
                 showLanguageScreen = showLanguageScreen,
-                currentLanguage = currentLanguage
+                currentAppLanguageItem = currentAppLanguageItem
             )
         }
     ) { innerPadding ->

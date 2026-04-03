@@ -17,6 +17,7 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
 import com.example.expect.DatabaseDriverFactory
+import com.example.presentation.screens.ui.LoadingLanguageScreen
 import com.example.presentation.screens.ui.onboarding.viewmodel.OnboardingViewModel
 import com.example.presentation.screens.ui.splash.viewmodel.SplashViewModel
 import kotlinx.serialization.modules.SerializersModule
@@ -42,6 +43,7 @@ fun FitverseRootNavigation(
                     subclass(NavRoutes.AuthFlow::class, NavRoutes.AuthFlow.serializer())
                     subclass(NavRoutes.HomeFlow::class, NavRoutes.HomeFlow.serializer())
                     subclass(NavRoutes.WorkoutFlow::class, NavRoutes.WorkoutFlow.serializer())
+                    subclass(NavRoutes.LoadingLanguage::class, NavRoutes.LoadingLanguage.serializer())
                 }
             }
         },
@@ -116,6 +118,9 @@ fun FitverseRootNavigation(
                     toHomeFlow = {
                         rootBackStack.clear()
                         rootBackStack.add(NavRoutes.HomeFlow)
+                    },
+                    toLoadingLanguage = {
+                        rootBackStack.add(NavRoutes.LoadingLanguage)
                     }
                 )
             }
@@ -124,6 +129,13 @@ fun FitverseRootNavigation(
                     onLogout = {
                         rootBackStack.clear()
                         rootBackStack.add(NavRoutes.AuthFlow)
+                    }
+                )
+            }
+            entry<NavRoutes.LoadingLanguage>{
+                LoadingLanguageScreen(
+                    toBack = {
+                        rootBackStack.removeLastOrNull()
                     }
                 )
             }

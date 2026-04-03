@@ -1,5 +1,6 @@
 package com.example.di
 
+import com.example.presentation.screens.ui.LanguageViewModel
 import com.example.presentation.screens.ui.authentication.login.viewmodel.LoginViewModel
 import com.example.presentation.screens.ui.authentication.register.viewmodel.RegisterViewModel
 import com.example.presentation.screens.ui.authentication.resetPassword.viewmodel.ResetPasswordViewModel
@@ -14,8 +15,6 @@ val presentationModule = module {
     viewModel<LoginViewModel> {
         LoginViewModel(
             loginUseCase = get(),
-            setAppLanguageUseCase = get(),
-            observeAppLanguageUseCase = get()
         )
     }
     viewModel<RegisterViewModel> { RegisterViewModel(registerUseCase = get()) }
@@ -30,6 +29,15 @@ val presentationModule = module {
         SplashViewModel(
             observeIsAuthenticatedUseCase = get(),
             observeOnboardingCompletedUseCase = get()
+        )
+    }
+
+    viewModel {
+        LanguageViewModel(
+            appLanguageRepository = get(),
+            getAppLanguageUseCase = get(),
+            changeAppLanguageUseCase = get(),
+            getLocaleLanguageAppUseCase = get()
         )
     }
 }

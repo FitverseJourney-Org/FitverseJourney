@@ -1,36 +1,51 @@
 package com.example.data.features.dbLocal.datastore.repository
 
 import androidx.datastore.core.DataStore
-import androidx.datastore.core.IOException
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.emptyPreferences
-import com.example.data.features.dbLocal.datastore.PreferencesKeys
-import com.example.domain.model.local.language.Language
-import com.example.domain.model.local.language.TagLanguage
+import com.example.data.features.dbLocal.datastore.PreferencesKeys.APP_LANGUAGE
 import com.example.domain.repository.dbLocal.datastore.AppLanguageRepository
-import com.example.expect.DeviceLanguageProvider
+import com.example.expect.getDefaultLocale
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 class AppLanguageRepositoryImpl(
     private val dataStore: DataStore<Preferences>
 ) : AppLanguageRepository {
 
-    private val deviceSystemLanguage = DeviceLanguageProvider.getSystemLanguage()
-
-    override val appLanguage: Flow<String> = dataStore.data
-        .catch { exception ->
-            if (exception is IOException) emit(emptyPreferences()) else throw exception
-        }
+    // Agora é um Flow puro. Sempre que o DataStore mudar, ele emite aqui!
+    override val languageCode: Flow<String> = dataStore.data
         .map { preferences ->
-            preferences[PreferencesKeys.APP_LANGUAGE] ?: deviceSystemLanguage
+            preferences[APP_LANGUAGE] ?: getDefaultLocale()
         }
 
-    override suspend fun setAppLanguage(language: String) {
+    override suspend fun setLanguageCode(languageCode: String) {
         dataStore.edit { preferences ->
-            preferences[PreferencesKeys.APP_LANGUAGE] = language
+            preferences[APP_LANGUAGE] = languageCode
+        }
+    }
+
+    // nao esta usando
+    override suspend fun changeLanguageCode(languageCode: String) {
+        setLanguageCode(languageCode)
+    }
+
+    override suspend fun getCurrentLanguageCode(): String {
+        return languageCode.first()
+    }
+
+    override fun getLocale(): String {
+        return getDefaultLocale()
+    }
+
+    // nao esta usando
+    override fun getLanguageNameByCode(languageCode: String): String {
+        return when (languageCode.lowercase()) {
+            "pt" -> "Português"
+            "en" -> "English"
+            "es" -> "Español"
+            else -> "Unknown"
         }
     }
 }

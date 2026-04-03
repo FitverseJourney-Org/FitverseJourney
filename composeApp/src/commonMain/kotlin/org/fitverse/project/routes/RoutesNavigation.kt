@@ -8,6 +8,8 @@ sealed interface NavRoutes : NavKey {
     @Serializable object SplashScreen : NavKey, NavRoutes
     @Serializable object OnboardingScreen : NavRoutes
     @Serializable object TrialScreen : NavKey,NavRoutes
+    @Serializable object LoadingLanguage : NavKey,NavRoutes
+
 
     @Serializable
     data object AuthFlow : NavKey, NavRoutes {

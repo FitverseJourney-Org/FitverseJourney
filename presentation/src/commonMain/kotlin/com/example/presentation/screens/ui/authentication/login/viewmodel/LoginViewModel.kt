@@ -2,10 +2,6 @@ package com.example.presentation.screens.ui.authentication.login.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.model.local.language.Language
-import com.example.domain.model.local.language.TagLanguage
-import com.example.domain.usecase.database.datastore.language.ObserveAppLanguageUseCase
-import com.example.domain.usecase.database.datastore.language.SetAppLanguageUseCase
 import com.example.presentation.screens.ui.authentication.login.actions.LoginAction
 import com.example.domain.usecase.login.LoginUseCase
 import com.example.presentation.components.snackbar.SnackBarData
@@ -22,8 +18,6 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val loginUseCase: LoginUseCase,
-    private val setAppLanguageUseCase: SetAppLanguageUseCase,
-    private val observeAppLanguageUseCase: ObserveAppLanguageUseCase
 ) : ViewModel() {
 
     private val _navigationState = MutableSharedFlow<LoginNavigation>()
@@ -32,53 +26,21 @@ class LoginViewModel(
     private val _state = MutableStateFlow(LoginState())
     val state: StateFlow<LoginState> = _state
 
-    init {
-        // Observamos a linguagem vinda do DataStore de forma reativa
-        observeLanguage()
-    }
-
     fun onAction(action: LoginAction) {
         when (action) {
             is LoginAction.EmailChanged -> _state.update { it.copy(email = action.value) }
             is LoginAction.PasswordChanged -> _state.update { it.copy(password = action.value) }
             is LoginAction.TogglePasswordVisibility -> onTogglePasswordVisibility()
             is LoginAction.LoginClicked -> onLoginClick()
-
-            // Quando a língua muda na UI, mandamos para o DataStore.
-            // O observeLanguage() cuidará de atualizar o _state.
-            is LoginAction.LanguageChanged -> setLanguage(action.value)
-
             is LoginAction.NavigateToRegister -> navigateTo(LoginNavigation.ToRegister)
             is LoginAction.NavigateToForgotPassword -> navigateTo(LoginNavigation.ToResetPassword)
             is LoginAction.NavigateToHome -> navigateTo(LoginNavigation.ToHome)
+            else -> {
+
+            } 
         }
     }
 
-    private fun observeLanguage() {
-        viewModelScope.launch {
-            observeAppLanguageUseCase().collect { language ->
-                // Usamos o helper que centraliza a lógica de normalização e fallback
-                val resolvedLanguage = LanguageAvailableApp.fromCode(language)
-                println(
-                    "Resolved Language: $resolvedLanguage"
-                )
-                _state.update {
-                    it.copy(language = resolvedLanguage)
-                }
-            }
-        }
-    }
-
-    fun setLanguage(laguage: String) {
-        viewModelScope.launch {
-            println(
-                "Setting Language: $laguage"
-            )
-            setAppLanguageUseCase(laguage)
-        }
-    }
-
-    // Encapsulando a navegação para limpar o onAction
     private fun navigateTo(destination: LoginNavigation) {
         viewModelScope.launch { _navigationState.emit(destination) }
     }

@@ -4,7 +4,6 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,19 +11,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -53,21 +47,18 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.domain.model.local.language.Language
-import com.example.presentation.core.utils.LanguageAvailableApp.availableLanguages
-import com.example.presentation.screens.ui.setupLanguage.components.BtnChangeLanguage
-import com.example.presentation.screens.ui.setupLanguage.components.LanguageItem
-import org.jetbrains.compose.resources.DrawableResource
+import com.example.domain.model.local.language.AppLanguageItem
+import com.example.presentation.core.utils.LanguageAvailableApp.Companion.availableAppLanguageItems
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun SetupLanguageScreen(
-    onConfirmLanguage: (Language) -> Unit,
-    currentLanguage: Language,
+    onConfirmLanguage: (AppLanguageItem) -> Unit,
+    currentAppLanguageItem: AppLanguageItem,
     exit: () -> Unit
 ) {
     val colors = MaterialTheme.colorScheme
-    var selectedLanguage by remember { mutableStateOf(currentLanguage) }
+    var selectedLanguage by remember { mutableStateOf(currentAppLanguageItem) }
     val haptic = LocalHapticFeedback.current
 
     Scaffold(
@@ -140,9 +131,9 @@ fun SetupLanguageScreen(
             contentPadding = PaddingValues(horizontal = 24.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            items(availableLanguages) { language ->
+            items(availableAppLanguageItems) { language ->
                 LanguageSelectionCard(
-                    language = language,
+                    appLanguageItem = language,
                     isSelected = language == selectedLanguage,
                     onClick = {
                         haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
@@ -156,7 +147,7 @@ fun SetupLanguageScreen(
 
 @Composable
 private fun LanguageSelectionCard(
-    language: Language,
+    appLanguageItem: AppLanguageItem,
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
@@ -199,7 +190,7 @@ private fun LanguageSelectionCard(
                 contentAlignment = Alignment.Center
             ) {
                 Image(
-                    painter = painterResource(resource = language.flagRes),
+                    painter = painterResource(resource = appLanguageItem.flagRes),
                     contentDescription = null,
                     modifier = Modifier.size(40.dp)
 
@@ -210,12 +201,12 @@ private fun LanguageSelectionCard(
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = language.code.name,
+                    text = appLanguageItem.code.name,
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
                     color = colors.onSurface
                 )
                 Text(
-                    text = language.name, // Ex: Portuguese / Português
+                    text = appLanguageItem.name, // Ex: Portuguese / Português
                     style = MaterialTheme.typography.bodySmall,
                     color = colors.onSurfaceVariant
                 )

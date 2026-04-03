@@ -7,7 +7,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.*
@@ -34,19 +33,15 @@ import androidx.compose.material.icons.rounded.PieChart
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
@@ -56,7 +51,6 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.input.key.Key.Companion.Calendar
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.TextStyle
@@ -68,6 +62,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.example.domain.model.authentication.register.FitnessGoal
 import com.example.domain.model.authentication.register.FitnessLevel
 import com.example.domain.model.authentication.register.Gender
@@ -85,7 +81,6 @@ import fitversejourneyapp.presentation.generated.resources.Res
 import fitversejourneyapp.presentation.generated.resources.ico_assasin
 import fitversejourneyapp.presentation.generated.resources.ico_avengers
 import fitversejourneyapp.presentation.generated.resources.ico_logan
-import fitversejourneyapp.presentation.generated.resources.ico_logo
 import fitversejourneyapp.presentation.generated.resources.ico_marvel
 import fitversejourneyapp.presentation.generated.resources.ico_panther
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -100,9 +95,8 @@ private val TertiaryGreen = Color(0xFF10B981)
 @Composable
 fun RegisterScreen(
     state: RegisterState,
-    animatedProgress: Float,
-    snackBarHostState: @Composable () -> Unit,
     onAction: (RegisterAction) -> Unit,
+    snackBarHost: @Composable () -> Unit,
 ) {
     val cs = MaterialTheme.colorScheme
     val totalPages = RegisterPage.entries.size.toFloat()
@@ -237,9 +231,112 @@ fun RegisterScreen(
                 RegisterPage.Success -> RegisterPageSuccess(state, onAction)
             }
         }
+
+        if (state.dialogStatusAvatar) { // <-- Use o nome real da sua variável boolean aqui
+            AvatarStatusDialog(
+                onDismiss = {
+                    onAction(RegisterAction.DialogStatusAvatar(value = false))
+                }
+            )
+        }
     }
 }
+@Composable
+fun AvatarStatusDialog(
+    onDismiss: () -> Unit
+) {
+    Dialog(
+        onDismissRequest = onDismiss,
+        properties = DialogProperties(
+            usePlatformDefaultWidth = false,
+            dismissOnBackPress = true,
+            dismissOnClickOutside = true
+        )
+    ) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth(0.85f)
+                .wrapContentHeight(),
+            shape = RoundedCornerShape(20.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = Color(0xFF13151C) // Cor escura que combina com seu fundo neutro
+            ),
+            elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                // Ícone visual para dar um ar de "game"
+                Icon(
+                    imageVector = Icons.Default.Star,
+                    contentDescription = "Status Icon",
+                    tint = Color(0xFF4CAF50), // Substitua pelo seu TertiaryGreen
+                    modifier = Modifier
+                        .size(48.dp)
+                        .padding(bottom = 12.dp)
+                )
 
+                Text(
+                    text = "Vantagens Iniciais",
+                    color = Color.White,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+
+                Text(
+                    text = "Todos os avatares começam com os mesmos atributos base no Nível 1. Escolha o que melhor representa o seu estilo!",
+                    color = Color.White.copy(alpha = 0.6f),
+                    fontSize = 14.sp,
+                    textAlign = TextAlign.Center,
+                    lineHeight = 20.sp,
+                    modifier = Modifier.padding(bottom = 24.dp)
+                )
+
+                // Box de Status
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            color = Color.White.copy(alpha = 0.05f),
+                            shape = RoundedCornerShape(12.dp)
+                        )
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = "Bônus de XP",
+                        color = Color.White,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 16.sp
+                    )
+                    Text(
+                        text = "+ 5% / missão",
+                        color = Color(0xFF4CAF50), // Substitua pelo seu TertiaryGreen
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                // Botão de fechar reutilizando seu design
+                FitVerseButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "ENTENDI",
+                    topColor = MaterialTheme.colorScheme.primary,
+                    edgeColor = MaterialTheme.colorScheme.outline,
+                    textColor = MaterialTheme.colorScheme.onPrimary,
+                    onClick = onDismiss
+                )
+            }
+        }
+    }
+}
 
 
 @Composable
@@ -276,7 +373,8 @@ fun GridOptionCard(
     iconBgColor: Color,
     iconTint: Color,
     isSelected: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    openDialogStatusAvatar: () -> Unit = {}
 ) {
     val colors = MaterialTheme.colorScheme
     val brandPurple = Color(0xFF4F46E5)
@@ -300,40 +398,61 @@ fun GridOptionCard(
         ),
         color = containerColor
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier.padding(12.dp)
-        ) {
-            Surface(
-                shape = CircleShape,
-                color = if (isSelected) iconTint.copy(alpha = 0.2f) else iconBgColor,
-                modifier = Modifier.size(60.dp)
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ){
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier.padding(12.dp)
             ) {
-                if (icon != null) {
-                    Icon(
-                        imageVector = icon,
-                        contentDescription = null,
-                        tint = if (isSelected) brandPurple else iconTint,
-                        modifier = Modifier.padding(16.dp)
-                    )
-                } else if (iconResource != null) {
-                    Image(
-                        painter = painterResource(resource = iconResource),
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop
+                Surface(
+                    shape = CircleShape,
+                    color = if (isSelected) iconTint.copy(alpha = 0.2f) else iconBgColor,
+                    modifier = Modifier.size(60.dp)
+                ) {
+                    if (icon != null) {
+                        Icon(
+                            imageVector = icon,
+                            contentDescription = null,
+                            tint = if (isSelected) brandPurple else iconTint,
+                            modifier = Modifier.padding(16.dp)
+                        )
+                    } else if (iconResource != null) {
+                        Image(
+                            painter = painterResource(resource = iconResource),
+                            contentDescription = null,
+                            contentScale = ContentScale.Crop
+                        )
+                    }
+                }
+                if (text.isNotBlank()) {
+                    Spacer(Modifier.height(16.dp))
+                    Text(
+                        text = text.uppercase(),
+                        style = MaterialTheme.typography.labelLarge,
+                        fontWeight = FontWeight.Black,
+                        color = if (isSelected) brandPurple else colors.onSurface,
+                        letterSpacing = 1.sp
                     )
                 }
             }
-            if (text.isNotBlank()) {
-                Spacer(Modifier.height(16.dp))
-                Text(
-                    text = text.uppercase(),
-                    style = MaterialTheme.typography.labelLarge,
-                    fontWeight = FontWeight.Black,
-                    color = if (isSelected) brandPurple else colors.onSurface,
-                    letterSpacing = 1.sp
-                )
+
+            if(iconResource != null){
+                IconButton(
+                    modifier = Modifier.align(Alignment.TopEnd).padding(6.dp),
+                    onClick = {
+                        openDialogStatusAvatar()
+                    },
+                ){
+                    Icon(
+                        modifier = Modifier.size(24.dp),
+                        imageVector = Icons.Rounded.Info,
+                        contentDescription = null,
+                        tint = colors.onSurface
+                    )
+                }
             }
         }
 
@@ -843,7 +962,7 @@ fun StepAvatar(state: RegisterState, onAction: (RegisterAction) -> Unit) {
         val avatars = listOf(
             Triple("spiderman", Res.drawable.ico_marvel, "Spider-Man"),
             Triple("assassin", Res.drawable.ico_assasin, "Deadpool"),
-            Triple("avengers", Res.drawable.ico_avengers, "Avenger"),
+            Triple("avengers", Res.drawable.ico_avengers, "Iron Man"),
             Triple("logan", Res.drawable.ico_logan, "Wolverine"),
             Triple("panther", Res.drawable.ico_panther, "Black Panther")
         )
@@ -864,7 +983,10 @@ fun StepAvatar(state: RegisterState, onAction: (RegisterAction) -> Unit) {
                     iconBgColor = Color.White.copy(alpha = 0.15f),
                     iconTint = Color.White,
                     isSelected = state.selectedAvatarId == id,
-                    onClick = { onAction(RegisterAction.UpdateAvatar(id)) }
+                    onClick = { onAction(RegisterAction.UpdateAvatar(id)) },
+                    openDialogStatusAvatar = {
+                        onAction(RegisterAction.DialogStatusAvatar(value = true))
+                    }
                 )
             }
         }

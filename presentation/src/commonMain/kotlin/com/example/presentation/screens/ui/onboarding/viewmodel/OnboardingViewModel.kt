@@ -6,7 +6,7 @@ import com.example.domain.repository.dbLocal.datastore.AppPreferencesRepository
 import com.example.domain.usecase.database.datastore.onboarding.ObserveOnboardingCompletedUseCase
 import com.example.domain.usecase.database.datastore.onboarding.SetOnboardingCompletedUseCase
 import com.example.presentation.navigationState.OnboardingNavigation
-import com.example.presentation.states.onboarding.OnboardingState
+import com.example.presentation.screens.ui.onboarding.state.OnboardingState
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

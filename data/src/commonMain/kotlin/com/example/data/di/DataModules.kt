@@ -28,18 +28,17 @@ val dataModules = module {
 
     // DATASTORE
     single<DataStore<Preferences>> { AppDataStoreDb.dataStore }
+
     single<AppOnboardingRepository> { AppOnboardingRepositoryImpl(dataStore = get()) }
     single<AppAuthenticateRepository> { AppAuthenticateRepositoryImpl(dataStore = get()) }
     single<AppLanguageRepository> { AppLanguageRepositoryImpl(dataStore = get()) }
 
     single<AuthRepository> {AuthRemoteRepositoryImpl(remote = get<AuthRemoteRepository>(),tokenStore = get<AuthTokenStoreRepository>())}
     single<AuthTokenStoreRepository> { AuthTokenStoreImpl() }
-
     single<UserRepositoryDao>{UserDaoRepositoryImpl(databaseSqlDeLightHelper = get()) }
 
 
     single { DatabaseSqlDeLightHelper(driverFactory = get()) }
-
     // DATASTORE sqldelight
     single<ConfigLanguageDataSourceDao> { ConfigLanguageDataSourceDao(databaseSqlDeLightHelper = get()) }
     single<ConfigOnboardingDataSourceDao> { ConfigOnboardingDataSourceDao(databaseSqlDeLightHelper = get()) }
