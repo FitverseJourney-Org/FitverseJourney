@@ -2,8 +2,8 @@ package com.example.domain.model.register
 
 enum class RegisterPageCredentialsValidationType {
     EmptyFields,
-    NoEmail,
-    NoPassword,
+    EmptyEmail,
+    EmptyPassword,
     WeakPassword,
     InvalidEmail,
     Valid

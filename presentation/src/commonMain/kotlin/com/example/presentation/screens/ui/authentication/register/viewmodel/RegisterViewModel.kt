@@ -34,10 +34,10 @@ class RegisterViewModel(
         when (action) {
             // 1° Page Actions
             is RegisterAction.FirstName -> {
-                _state.update { it.copy(firstName = action.value, nameErrors = emptyList()) }
+                _state.update { it.copy(firstName = action.value) }
             }
             is RegisterAction.LastName -> {
-                _state.update { it.copy(lastName = action.value, nameErrors = emptyList()) }
+                _state.update { it.copy(lastName = action.value) }
             }
 
             // 2° Page Actions
@@ -45,7 +45,7 @@ class RegisterViewModel(
                 _state.update { it.copy(height = action.value) }
             }
             is RegisterAction.AgeChanged -> {
-                _state.update { it.copy(age = action.value, ageErrors = emptyList()) }
+                _state.update { it.copy(age = action.value) }
             }
             is RegisterAction.WeightChanged -> {
                 _state.update { it.copy(weight = action.value) }
@@ -53,7 +53,7 @@ class RegisterViewModel(
 
             // 3° Page Actions
             is RegisterAction.GenderChanged -> {
-                _state.update { it.copy(registerGender = action.value, genderErrors = emptyList()) }
+                _state.update { it.copy(registerGender = action.value) }
             }
 
             // 4° Page Actions
@@ -97,10 +97,10 @@ class RegisterViewModel(
 
             // 8° Page Actions
             is RegisterAction.EmailChanged -> {
-                _state.update { it.copy(email = action.value, emailErrors = emptyList()) }
+                _state.update { it.copy(email = action.value) }
             }
             is RegisterAction.PasswordChanged -> {
-                _state.update { it.copy(password = action.value, passwordErrors = emptyList()) }
+                _state.update { it.copy(password = action.value) }
             }
 
             // -------------------------------

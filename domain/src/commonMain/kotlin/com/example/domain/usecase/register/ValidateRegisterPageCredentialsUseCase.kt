@@ -1,7 +1,9 @@
 package com.example.domain.usecase.register
 
 import com.example.domain.model.register.RegisterPageCredentialsValidationType
-import com.example.domain.model.register.RegisterPageIntroductionValidationType
+import com.example.domain.utils.isEmptyInput
+import com.example.domain.utils.isValidEmail
+import com.example.domain.utils.isValidPassword
 
 class ValidateRegisterPageCredentialsUseCase() {
     operator fun invoke(
@@ -11,23 +13,18 @@ class ValidateRegisterPageCredentialsUseCase() {
         if (email.isBlank() && password.isBlank()) {
             return RegisterPageCredentialsValidationType.EmptyFields
         }
-
-        if(email.isBlank()) {
-            return RegisterPageCredentialsValidationType.NoEmail
+        if (email.isEmptyInput()) {
+            return RegisterPageCredentialsValidationType.EmptyEmail
         }
-        if(!email.contains("@")) {
+        if (!email.isValidEmail()) {
             return RegisterPageCredentialsValidationType.InvalidEmail
         }
-
-        if(password.isBlank()) {
-            return RegisterPageCredentialsValidationType.NoPassword
+        if (password.isEmptyInput()) {
+            return RegisterPageCredentialsValidationType.EmptyPassword
         }
-
-        if(password.length < 8) {
+        if (!password.isValidPassword()) {
             return RegisterPageCredentialsValidationType.WeakPassword
         }
-
-
         return RegisterPageCredentialsValidationType.Valid
     }
 }

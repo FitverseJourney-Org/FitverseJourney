@@ -15,7 +15,7 @@ class ValidateRegisterPageCredentialsInputsUseCaseTest {
             email = "",
             password = "12345678"
         )
-        assertEquals(RegisterPageCredentialsValidationType.NoEmail, result)
+        assertEquals(RegisterPageCredentialsValidationType.EmptyEmail, result)
     }
 
     @Test
@@ -24,7 +24,7 @@ class ValidateRegisterPageCredentialsInputsUseCaseTest {
             email = "John@gmail.com",
             password = ""
         )
-        assertEquals(RegisterPageCredentialsValidationType.NoPassword, result)
+        assertEquals(RegisterPageCredentialsValidationType.EmptyPassword, result)
     }
 
     @Test

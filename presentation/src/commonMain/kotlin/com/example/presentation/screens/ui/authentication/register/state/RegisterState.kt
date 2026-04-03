@@ -13,6 +13,7 @@ data class RegisterState(
     val lastName: String = "",
     val email: String = "",
     val password: String = "",
+    val passwordShown: Boolean = false,
     val age: String = "",
     val height: Int = 170,
     val weight: Int = 70,
@@ -34,8 +35,10 @@ data class RegisterState(
     val passwordErrors: List<String> = emptyList(),
     val trainingLevelErrors: List<String> = emptyList(),
     val showGoalsDialog: Boolean = false,
-    val isPasswordVisible: Boolean = false,
     val isLoading: Boolean = false,
     val snackBarData: SnackBarData? = null,
-    val dialogStatusAvatar: Boolean = false
+    val dialogStatusAvatar: Boolean = false,
+    val errorMessageInput : String? = null,
+    val errorMessageLoginProcess : String? = null,
+    val isSuccessfullyRegistered : Boolean = false
 )
