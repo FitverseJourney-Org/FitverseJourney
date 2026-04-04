@@ -3,8 +3,9 @@ package com.example.domain.model.authentication.register
 enum class RegisterAvatar {
     SPIDERMAN,
     ASSASSIN,
-    AVENGERS,
-    LOGAN,
-    PANTHER,
+    DEADPOOL,
+    IRON_MAN,
+    WOLVERINE,
+    BLACK_PANTHER,
     NONE,
 }

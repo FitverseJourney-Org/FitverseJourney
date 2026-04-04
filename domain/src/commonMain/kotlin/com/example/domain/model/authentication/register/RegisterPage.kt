@@ -5,7 +5,7 @@ enum class RegisterPage {
     Metrics,
     Gender,
     Goals,
-    Level,
+    ExperienceLevel,
     Avatar,
     Macros, // Nova etapa adicionada antes das credenciais
     Credentials,
@@ -16,8 +16,8 @@ enum class RegisterPage {
             Profile     -> Metrics
             Metrics     -> Gender
             Gender      -> Goals
-            Goals       -> Level
-            Level       -> Avatar
+            Goals       -> ExperienceLevel
+            ExperienceLevel       -> Avatar
             Avatar      -> Macros
             Macros      -> Credentials
             Credentials -> Success
@@ -30,8 +30,8 @@ enum class RegisterPage {
             Success     -> Credentials
             Credentials -> Macros      // Voltar das credenciais leva para os Macros
             Macros      -> Avatar      // Voltar dos Macros leva para o Avatar
-            Avatar      -> Level
-            Level       -> Goals
+            Avatar      -> ExperienceLevel
+            ExperienceLevel       -> Goals
             Goals       -> Gender
             Gender      -> Metrics
             Metrics     -> Profile

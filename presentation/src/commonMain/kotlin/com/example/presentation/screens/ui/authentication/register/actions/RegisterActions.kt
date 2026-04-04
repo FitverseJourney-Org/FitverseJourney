@@ -1,5 +1,6 @@
 package com.example.presentation.screens.ui.authentication.register.actions
 
+import com.example.domain.model.authentication.register.RegisterAvatar
 import com.example.domain.model.authentication.register.RegisterExperienceLevel
 import com.example.domain.model.authentication.register.RegisterGender
 import com.example.domain.model.authentication.register.RegisterGoal
@@ -26,7 +27,7 @@ sealed class RegisterAction {
     data class ExperienceLevelChanged(val level: RegisterExperienceLevel) : RegisterAction()
 
     // 6° Page
-    data class AvatarChanged(val avatarId: String) : RegisterAction()
+    data class AvatarChanged(val avatar: RegisterAvatar) : RegisterAction()
 
     // 7° Page
     data class UpdateMacros(val macros: RegisterMacros) : RegisterAction()
@@ -39,6 +40,8 @@ sealed class RegisterAction {
     // 8° Page
     data class EmailChanged(val value: String) : RegisterAction()
     data class PasswordChanged(val value: String) : RegisterAction()
+    data class PasswordShown(val value: Boolean) : RegisterAction()
+
 
     // Dialogs
     data class DialogStatusAvatar(val value: Boolean) : RegisterAction()

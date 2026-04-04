@@ -13,12 +13,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.domain.model.authentication.register.RegisterAvatar
 import com.example.presentation.screens.ui.authentication.register.actions.RegisterAction
 import com.example.presentation.screens.ui.authentication.register.components.FormHeader
 import com.example.presentation.screens.ui.authentication.register.components.GridOptionCard
 import com.example.presentation.screens.ui.authentication.register.state.RegisterState
 import fitversejourneyapp.presentation.generated.resources.Res
-import fitversejourneyapp.presentation.generated.resources.ico_assasin
+import fitversejourneyapp.presentation.generated.resources.ico_deadpool
 import fitversejourneyapp.presentation.generated.resources.ico_avengers
 import fitversejourneyapp.presentation.generated.resources.ico_logan
 import fitversejourneyapp.presentation.generated.resources.ico_marvel
@@ -36,11 +37,11 @@ fun RegisterPageAvatar(state: RegisterState, onAction: (RegisterAction) -> Unit)
         // Lista tipada em vez de Triple
         val avatars = remember {
             listOf(
-                Avatar("spiderman", "Spider-Man", Res.drawable.ico_marvel),
-                Avatar("assassin", "Deadpool", Res.drawable.ico_assasin),
-                Avatar("avengers", "Iron Man", Res.drawable.ico_avengers),
-                Avatar("logan", "Wolverine", Res.drawable.ico_logan),
-                Avatar("panther", "Black Panther", Res.drawable.ico_panther)
+                Avatar(RegisterAvatar.SPIDERMAN, "Spider-Man", Res.drawable.ico_marvel),
+                Avatar(RegisterAvatar.DEADPOOL, "Deadpool", Res.drawable.ico_deadpool),
+                Avatar(RegisterAvatar.IRON_MAN, "Iron Man", Res.drawable.ico_avengers),
+                Avatar(RegisterAvatar.WOLVERINE, "Wolverine", Res.drawable.ico_logan),
+                Avatar(RegisterAvatar.BLACK_PANTHER, "Black Panther", Res.drawable.ico_panther)
             )
         }
 
@@ -51,17 +52,14 @@ fun RegisterPageAvatar(state: RegisterState, onAction: (RegisterAction) -> Unit)
             contentPadding = PaddingValues(10.dp),
             modifier = Modifier.fillMaxSize().padding(10.dp)
         ) {
-            items(
-                items = avatars,
-                key = { it.id } // Boa prática para performance em listas
-            ) { avatar ->
+            items(avatars) { avatar ->
                 GridOptionCard(
                     text = avatar.name,
                     iconResource = avatar.imageRes,
                     iconBgColor = Color.White.copy(alpha = 0.15f),
                     iconTint = Color.White,
-                    isSelected = state.selectedAvatarId == avatar.id,
-                    onClick = { onAction(RegisterAction.AvatarChanged(avatar.id)) },
+                    isSelected = state.selectedAvatar == avatar.type,
+                    onClick = { onAction(RegisterAction.AvatarChanged(avatar.type)) },
                     openDialogStatusAvatar = {
                         onAction(RegisterAction.DialogStatusAvatar(value = true))
                     }
@@ -72,8 +70,8 @@ fun RegisterPageAvatar(state: RegisterState, onAction: (RegisterAction) -> Unit)
 }
 
 data class Avatar(
-    val id: String,
+    val type: RegisterAvatar, // Mudamos de String para o Enum que o UseCase exige
     val name: String,
     val imageRes: DrawableResource,
-    val isLocked: Boolean = false // Exemplo: para futuras mecânicas de XP/Gamificação
+    val isLocked: Boolean = false
 )

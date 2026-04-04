@@ -17,7 +17,16 @@ val presentationModule = module {
             loginUseCase = get(),
         )
     }
-    viewModel<RegisterViewModel> { RegisterViewModel(registerUseCase = get()) }
+    viewModel<RegisterViewModel> { RegisterViewModel(
+        registerUseCase = get(),
+        validateRegisterPageIntroductionUseCase = get(),
+        validateRegisterPageGenderUseCase = get(),
+        validateRegisterPageGoalsUseCase = get(),
+        validateRegisterPageExperienceLevelUseCase = get(),
+        validateRegisterPageAvatarUseCase = get(),
+        validateRegisterPageMacrosUseCase = get(),
+        validateRegisterPageCredentialsUseCase = get()
+    ) }
     viewModel<ResetPasswordViewModel> { ResetPasswordViewModel(resetPasswordUseCase = get()) }
     viewModel<OnboardingViewModel> {
         OnboardingViewModel(

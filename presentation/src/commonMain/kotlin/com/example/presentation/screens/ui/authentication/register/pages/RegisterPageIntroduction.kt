@@ -30,14 +30,16 @@ fun RegisterPageIntroduction(state: RegisterState, onAction: (RegisterAction) ->
             onValueChange = { onAction(RegisterAction.FirstName(it)) },
             placeholder = "Joe",
             singleLine = true,
-            label = "First Name"
+            label = "First Name",
+            isError = state.nameErrors.isNotEmpty()
         )
         FitverseOutlinedTextField(
             value = state.lastName, // Ajustado para lastName
             onValueChange = { onAction(RegisterAction.LastName(it)) },
             placeholder = "Doe",
             singleLine = true,
-            label = "Last Name"
+            label = "Last Name",
+            isError = state.nameErrors.isNotEmpty()
         )
     }
 }

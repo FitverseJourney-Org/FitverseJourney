@@ -11,6 +11,13 @@ import com.example.domain.usecase.database.datastore.onboarding.ObserveOnboardin
 import com.example.domain.usecase.database.datastore.onboarding.SetOnboardingCompletedUseCase
 import com.example.domain.usecase.login.LoginUseCase
 import com.example.domain.usecase.register.RegisterUseCase
+import com.example.domain.usecase.register.ValidateRegisterPageAvatarUseCase
+import com.example.domain.usecase.register.ValidateRegisterPageCredentialsUseCase
+import com.example.domain.usecase.register.ValidateRegisterPageExperienceLevelUseCase
+import com.example.domain.usecase.register.ValidateRegisterPageGenderUseCase
+import com.example.domain.usecase.register.ValidateRegisterPageGoalsUseCase
+import com.example.domain.usecase.register.ValidateRegisterPageIntroductionUseCase
+import com.example.domain.usecase.register.ValidateRegisterPageMacrosUseCase
 import com.example.domain.usecase.reset.ResetPasswordUseCase
 import org.koin.dsl.module
 
@@ -45,5 +52,15 @@ val domainModule = module {
     factory { SetNewAppLanguageUseCase(get()) }
     factory { ChangeAppLanguageUseCase(get()) }
     factory { GetLocaleLanguageAppUseCase(get()) }
+
+    // register
+    factory { ValidateRegisterPageIntroductionUseCase() }
+    factory { ValidateRegisterPageExperienceLevelUseCase() }
+    factory { ValidateRegisterPageAvatarUseCase() }
+    factory { ValidateRegisterPageMacrosUseCase() }
+    factory { ValidateRegisterPageGenderUseCase() }
+    factory { ValidateRegisterPageGoalsUseCase() }
+    factory { ValidateRegisterPageCredentialsUseCase() }
+
 
 }

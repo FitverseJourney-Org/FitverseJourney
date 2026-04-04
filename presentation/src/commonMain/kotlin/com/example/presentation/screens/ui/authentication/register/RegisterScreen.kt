@@ -65,8 +65,10 @@ fun RegisterScreen(
         animationSpec = tween(durationMillis = 500),
         label = "RegisterProgress"
     )
+
     Scaffold(
         modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
+        snackbarHost = snackBarHost,
         containerColor = Color.Transparent, // Fundo Neutro #0A0B0F
         topBar = {
             Column(
@@ -127,7 +129,7 @@ fun RegisterScreen(
         },
         bottomBar = {
             Box(
-                modifier = Modifier.navigationBarsPadding().padding(24.dp),
+                modifier = Modifier.navigationBarsPadding().padding(bottom = 24.dp),
                 contentAlignment = Alignment.Center
             ){
                 FitVerseButton(
@@ -176,13 +178,12 @@ fun RegisterScreen(
                 }
             }
         ) { page ->
-            // Mapeamento das páginas no fluxo
             when (page) {
                 RegisterPage.Profile -> RegisterPageIntroduction(state, onAction)
                 RegisterPage.Metrics -> RegisterPageMetrics(state, onAction)
                 RegisterPage.Goals -> RegisterPageGoals(state, onAction)
                 RegisterPage.Gender -> RegisterPageStepGender(state, onAction)
-                RegisterPage.Level -> RegisterPageExperienceLevel(state, onAction)
+                RegisterPage.ExperienceLevel -> RegisterPageExperienceLevel(state, onAction)
                 RegisterPage.Avatar -> RegisterPageAvatar(state, onAction)
                 RegisterPage.Macros -> RegisterPageMacros(state, onAction) // NOVA TELA AQUI
                 RegisterPage.Credentials -> RegisterPageCredentials(state, onAction)
@@ -190,7 +191,7 @@ fun RegisterScreen(
             }
         }
 
-        if (state.dialogStatusAvatar) { // <-- Use o nome real da sua variável boolean aqui
+        if (state.dialogStatusAvatar) {
             AvatarStatusDialog(
                 onDismiss = {
                     onAction(RegisterAction.DialogStatusAvatar(value = false))

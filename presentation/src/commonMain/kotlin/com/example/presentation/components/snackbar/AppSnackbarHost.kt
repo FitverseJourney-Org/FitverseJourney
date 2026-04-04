@@ -3,10 +3,15 @@ package com.example.presentation.components.snackbar
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CheckCircle
@@ -47,9 +52,7 @@ fun AppSnackbarHost(
 ) {
     SnackbarHost(
         hostState = snackbarHostState,
-        modifier = Modifier
-            .systemBarsPadding() // Garante que não fique sob a navigation bar
-            .padding(16.dp) // Padding externo da tela
+        modifier = Modifier.statusBarsPadding().padding(vertical = 24.dp, horizontal = 16.dp)
     ) { data ->
         // Captura o estilo baseado no tipo
         val style = getSnackbarStyle(snackbarType)
