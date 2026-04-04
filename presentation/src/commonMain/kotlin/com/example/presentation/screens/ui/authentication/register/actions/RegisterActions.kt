@@ -13,7 +13,7 @@ sealed class RegisterAction {
     data class LastName(val value: String) : RegisterAction()
 
     // 2° Page
-    data class AgeChanged(val value: String) : RegisterAction()
+    data class DateOfBirthChanged(val day: Int, val month: Int, val year: Int) : RegisterAction()
     data class HeightChanged(val value: Int) : RegisterAction()
     data class WeightChanged(val value: Int) : RegisterAction()
 
@@ -31,11 +31,13 @@ sealed class RegisterAction {
 
     // 7° Page
     data class UpdateMacros(val macros: RegisterMacros) : RegisterAction()
-    data class UpdateCalories(val value: Int) : RegisterAction()
-    data class UpdateCarbs(val value: Int) : RegisterAction()
-    data class UpdateProteins(val value: Int) : RegisterAction()
-    data class UpdateFats(val value: Int) : RegisterAction()
-    data class UpdateWater(val value: Int) : RegisterAction()
+    data class UpdateCalories(val value: String) : RegisterAction()
+    data class UpdateCarbs(val value: String) : RegisterAction()
+    data class UpdateProteins(val value: String) : RegisterAction()
+    data class UpdateFats(val value: String) : RegisterAction()
+    data class UpdateWater(val value: String) : RegisterAction()
+    object AutoAdjustMacros : RegisterAction()
+
 
     // 8° Page
     data class EmailChanged(val value: String) : RegisterAction()

@@ -22,8 +22,10 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AutoFixHigh
 import androidx.compose.material.icons.filled.BakeryDining
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Downloading
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.LocalFireDepartment
 import androidx.compose.material.icons.filled.Opacity
@@ -69,13 +71,10 @@ import com.example.presentation.screens.ui.authentication.register.state.Registe
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterPageMacros(state: RegisterState, onAction: (RegisterAction) -> Unit) {
-    val macros = state.macroGoals
     var isEditing by remember { mutableStateOf(false) }
     var showInfoSheet by remember { mutableStateOf(false) } // Estado para o modal
     val sheetState = rememberModalBottomSheetState()
     val colors = MaterialTheme.colorScheme
-// Modal de Informação (Cálculos)
-
 
     if (showInfoSheet) {
         ModalBottomSheet(
@@ -88,15 +87,14 @@ fun RegisterPageMacros(state: RegisterState, onAction: (RegisterAction) -> Unit)
         }
     }
     Column(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
             .padding(horizontal = 20.dp)
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(Modifier.height(32.dp))
 
-        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center){
             FormHeader(
                 title = "Seu Alvo Diário",
                 subtitle = "Metas baseadas no seu perfil e nível de atividade."
@@ -117,8 +115,6 @@ fun RegisterPageMacros(state: RegisterState, onAction: (RegisterAction) -> Unit)
 
         Spacer(Modifier.height(24.dp))
 
-        // 1. CALORIAS (Destaque Principal)
-        // 1. CALORIAS (Destaque Principal)
         Box(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.Center // Isso garante que o conteúdo fique 100% no meio
@@ -126,13 +122,20 @@ fun RegisterPageMacros(state: RegisterState, onAction: (RegisterAction) -> Unit)
             MacroCardRefined(
                 modifier = Modifier.fillMaxWidth(0.65f),
                 title = "Calorias",
-                value = macros.calories.toString(),
+                value = state.targetCalories,
                 unit = "kcal",
                 icon = Icons.Default.LocalFireDepartment,
                 accentColor = Color(0xFFFF9800),
                 isEditing = isEditing,
                 onValueChange = { newValue ->
-                    onAction(RegisterAction.UpdateMacros(macros.copy(calories = newValue.toIntOrNull() ?: 0)))
+                    if (newValue.all { it.isDigit() }) {
+                        if(!isEditing){
+                            onAction(RegisterAction.UpdateMacros(state.macroGoals.copy(calories = newValue.toIntOrNull() ?: 0)))
+                        }else{
+                            onAction(RegisterAction.UpdateCalories(newValue))
+                        }
+                    }
+
                 }
             )
         }
@@ -148,25 +151,37 @@ fun RegisterPageMacros(state: RegisterState, onAction: (RegisterAction) -> Unit)
             MacroCardRefined(
                 modifier = Modifier.weight(1f),
                 title = "Carbos",
-                value = macros.carbohydrates.toString(),
+                value = state.targetCarbs,
                 unit = "g",
                 icon = Icons.Default.BakeryDining,
                 accentColor = Color(0xFF4CAF50),
                 isEditing = isEditing,
                 onValueChange = { newValue ->
-                    onAction(RegisterAction.UpdateMacros(macros.copy(carbohydrates = newValue.toIntOrNull() ?: 0)))
+                    if (newValue.all { it.isDigit() }) {
+                        if(!isEditing){
+                            onAction(RegisterAction.UpdateMacros(macros = state.macroGoals.copy(carbohydrates = newValue.toIntOrNull() ?: 0)))
+                        }else{
+                            onAction(RegisterAction.UpdateCarbs(newValue))
+                        }
+                    }
                 }
             )
             MacroCardRefined(
                 modifier = Modifier.weight(1f),
                 title = "Proteína",
-                value = state.macroGoals.proteins.toString(),
+                value = state.targetProteins,
                 unit = "g",
                 icon = Icons.Default.Restaurant,
                 accentColor = Color(0xFFE91E63),
                 isEditing = isEditing,
-                onValueChange = {
-                    onAction(RegisterAction.UpdateMacros(state.macroGoals.copy(proteins = it.toIntOrNull() ?: 0)))
+                onValueChange = { newValue ->
+                    if (newValue.all { it.isDigit() }) {
+                        if(!isEditing){
+                            onAction(RegisterAction.UpdateMacros(state.macroGoals.copy(proteins = newValue.toIntOrNull() ?: 0)))
+                        }else{
+                            onAction(RegisterAction.UpdateProteins(newValue))
+                        }
+                    }
                 }
             )
         }
@@ -181,26 +196,39 @@ fun RegisterPageMacros(state: RegisterState, onAction: (RegisterAction) -> Unit)
             MacroCardRefined(
                 modifier = Modifier.weight(1f),
                 title = "Gordura",
-                value = state.macroGoals.fats.toString(),
+                value = state.targetFats,
                 unit = "g",
                 icon = Icons.Default.Opacity,
                 accentColor = Color(0xFF2196F3),
                 isEditing = isEditing,
-                onValueChange = {
-                    onAction(RegisterAction.UpdateMacros(state.macroGoals.copy(fats = it.toIntOrNull() ?: 0)))
+                onValueChange = { newValue ->
+                    if (newValue.all { it.isDigit() }) {
+                        if(!isEditing){
+                            onAction(RegisterAction.UpdateMacros(state.macroGoals.copy(fats = newValue.toIntOrNull() ?: 0)))
+                        }else{
+                            onAction(RegisterAction.UpdateFats(newValue))
+                        }
+
+                    }
                 }
             )
 
             MacroCardRefined(
                 modifier = Modifier.weight(1f),
                 title = "Água",
-                value = state.macroGoals.waterMl.toString(),
+                value = state.targetWater,
                 unit = "ml",
                 icon = Icons.Default.WaterDrop,
                 accentColor = Color(0xFF00BCD4),
                 isEditing = isEditing,
-                onValueChange = {
-                    onAction(RegisterAction.UpdateMacros(state.macroGoals.copy(waterMl = it.toIntOrNull() ?: 0)))
+                onValueChange = { newValue ->
+                    if (newValue.all { it.isDigit() }) {
+                        if(!isEditing){
+                            onAction(RegisterAction.UpdateMacros(state.macroGoals.copy(waterMl = newValue.toIntOrNull() ?: 0)))
+                        }else{
+                            onAction(RegisterAction.UpdateWater(newValue))
+                        }
+                    }
                 }
             )
         }
@@ -208,21 +236,70 @@ fun RegisterPageMacros(state: RegisterState, onAction: (RegisterAction) -> Unit)
         Spacer(modifier = Modifier.height(32.dp))
 
         // Botão de Ajuste
-        OutlinedButton(
-            onClick = { isEditing = !isEditing },
-            shape = CircleShape,
-            colors = ButtonDefaults.outlinedButtonColors(
-                containerColor = if (isEditing) colors.primaryContainer else Color.Transparent
-            ),
-            border = BorderStroke(1.dp, if (isEditing) colors.primary else colors.outlineVariant)
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Icon(
-                if (isEditing) Icons.Default.Check else Icons.Default.Tune,
-                null,
-                Modifier.size(18.dp)
-            )
-            Spacer(Modifier.width(8.dp))
-            Text(if (isEditing) "SALVAR METAS" else "AJUSTAR MANUALMENTE")
+            // Botão 1: Alternar Modo de Edição
+            OutlinedButton(
+                onClick = { isEditing = !isEditing },
+                shape = CircleShape,
+                colors = ButtonDefaults.outlinedButtonColors(
+                    // Fundo Glass: Usa a cor com baixa opacidade. Mais forte se estiver ativo.
+                    containerColor = if (isEditing)
+                        colors.primary.copy(alpha = 0.10f)
+                    else
+                        colors.onSurface.copy(alpha = 0.08f),
+                    // Cor do conteúdo (ícone e texto)
+                    contentColor = if (isEditing) colors.primary else colors.onSurface
+                ),
+                border = BorderStroke(
+                    width = 1.dp,
+                    // Borda Glass: Fina e semi-transparente para dar o brilho do vidro
+                    color = if (isEditing)
+                        colors.primary.copy(alpha = 0.50f)
+                    else
+                        colors.onSurface.copy(alpha = 0.15f)
+                ),
+                // Opcional, mas recomendado: padroniza a largura dos botões na coluna
+                modifier = Modifier.fillMaxWidth(0.85f)
+            ) {
+                Icon(
+                    imageVector = if (isEditing) Icons.Default.Check else Icons.Default.Tune,
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp)
+                )
+                Spacer(Modifier.width(8.dp))
+                Text(if (isEditing) "SALVAR METAS" else "AJUSTAR MANUALMENTE")
+            }
+
+            // Botão 2: Ajuste Automático
+            OutlinedButton(
+                onClick = {
+                    onAction(RegisterAction.AutoAdjustMacros)
+                },
+                shape = CircleShape,
+                colors = ButtonDefaults.outlinedButtonColors(
+                    // Fundo Glass neutro
+                    containerColor = colors.onSurface.copy(alpha = 0.02f),
+                    contentColor = colors.onSurface
+                ),
+                border = BorderStroke(
+                    width = 1.dp,
+                    // Borda sutil
+                    color = colors.onSurface.copy(alpha = 0.15f)
+                ),
+                modifier = Modifier.fillMaxWidth(0.85f)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.AutoFixHigh,
+                    contentDescription = null,
+                    modifier = Modifier.size(18.dp)
+                )
+                Spacer(Modifier.width(8.dp))
+                Text("AJUSTAR AUTOMATICAMENTE")
+            }
         }
 
         Spacer(Modifier.height(40.dp))
