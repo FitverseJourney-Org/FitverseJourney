@@ -60,7 +60,7 @@ fun RegisterPageMetrics(state: RegisterState, onAction: (RegisterAction) -> Unit
         ) {
             DatePicker(
                 onDateSelected = { day, month, year ->
-                    // onAction(RegisterAction.DateOfBirthChanged(day, month, year))
+                    onAction(RegisterAction.DateOfBirthChanged(day, month, year))
                 }
             )
         }
@@ -75,7 +75,7 @@ fun RegisterPageMetrics(state: RegisterState, onAction: (RegisterAction) -> Unit
             WeightPicker(
                 initialWeight = 70,
                 onWeightSelected = { weight ->
-                    // onAction(RegisterAction.WeightChanged(weight))
+                    onAction(RegisterAction.WeightChanged(weight))
                 }
             )
         }
@@ -90,7 +90,7 @@ fun RegisterPageMetrics(state: RegisterState, onAction: (RegisterAction) -> Unit
             HeightPicker(
                 initialHeight = 170,
                 onHeightSelected = { height ->
-                    // onAction(RegisterAction.HeightChanged(height))
+                    onAction(RegisterAction.HeightChanged(height))
                 }
             )
         }

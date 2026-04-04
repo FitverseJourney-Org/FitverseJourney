@@ -6,17 +6,7 @@ import com.example.domain.model.register.RegisterPageMacrosValidationType
 class ValidateRegisterPageMacrosUseCase {
 
     operator fun invoke(macros: RegisterMacros): RegisterPageMacrosValidationType {
-
         // 1. Validação se TODOS forem 0 (Nenhum campo preenchido)
-        val allAreZero = macros.calories == 0 &&
-                macros.carbohydrates == 0 &&
-                macros.proteins == 0 &&
-                macros.fats == 0 &&
-                macros.waterMl == 0
-
-        if (allAreZero) {
-            return RegisterPageMacrosValidationType.EmptyFields
-        }
 
         // 2. Validações individuais (se algum específico for 0)
         if (macros.calories == 0) {

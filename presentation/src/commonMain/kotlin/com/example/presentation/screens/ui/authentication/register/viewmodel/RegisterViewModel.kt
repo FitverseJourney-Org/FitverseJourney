@@ -2,6 +2,7 @@ package com.example.presentation.screens.ui.authentication.register.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.domain.model.authentication.register.RegisterMacros
 import com.example.domain.model.authentication.register.RegisterPage
 import com.example.domain.model.register.RegisterPageAvatarValidationType
 import com.example.domain.model.register.RegisterPageCredentialsValidationType
@@ -65,8 +66,8 @@ class RegisterViewModel(
             is RegisterAction.HeightChanged -> {
                 _state.update { it.copy(height = action.value) }
             }
-            is RegisterAction.AgeChanged -> {
-                _state.update { it.copy(age = action.value) }
+            is RegisterAction.DateOfBirthChanged -> {
+                _state.update { it.copy(age = action.year.toString()) }
             }
             is RegisterAction.WeightChanged -> {
                 _state.update { it.copy(weight = action.value) }
@@ -101,19 +102,46 @@ class RegisterViewModel(
 
             // 7° Page Actions
             is RegisterAction.UpdateCalories -> {
-                _state.update { it.copy(targetCalories = action.value) }
+                _state.update { it.copy(
+                    targetCalories = action.value,
+                    macroGoals = it.macroGoals.copy(calories = action.value.toIntOrNull() ?: 0)
+                ) }
             }
             is RegisterAction.UpdateProteins -> {
-                _state.update { it.copy(targetProteins = action.value) }
+                _state.update { it.copy(
+                    targetProteins = action.value,
+                    macroGoals = it.macroGoals.copy(proteins = action.value.toIntOrNull() ?: 0)
+                ) }
             }
             is RegisterAction.UpdateFats -> {
-                _state.update { it.copy(targetFats = action.value) }
+                _state.update {
+                    it.copy(
+                        targetFats = action.value,
+                        macroGoals = it.macroGoals.copy(fats = action.value.toIntOrNull() ?: 0)
+                    )
+                }
             }
             is RegisterAction.UpdateCarbs -> {
-                _state.update { it.copy(targetCarbs = action.value) }
+                _state.update {
+                    it.copy(
+                        targetCarbs = action.value,
+                        macroGoals = it.macroGoals.copy(carbohydrates = action.value.toIntOrNull() ?: 0)
+                    )
+                }
             }
             is RegisterAction.UpdateWater -> {
-                _state.update { it.copy(targetWater = action.value) }
+                _state.update {
+                    it.copy(
+                        targetWater = action.value,
+                        macroGoals = it.macroGoals.copy(waterMl = action.value.toIntOrNull() ?: 0)
+                    )
+                }
+            }
+            is RegisterAction.UpdateMacros -> {
+                _state.update { it.copy(macroGoals = action.macros) }
+            }
+            RegisterAction.AutoAdjustMacros -> {
+                processDataCalcMacros()
             }
 
             // 8° Page Actions
@@ -124,7 +152,7 @@ class RegisterViewModel(
                 _state.update { it.copy(password = action.value) }
             }
             is RegisterAction.PasswordShown -> {
-                _state.update { it.copy(passwordShown = action.value) }
+                _state.update { it.copy(passwordShown = !action.value) }
             }
 
 
@@ -158,13 +186,9 @@ class RegisterViewModel(
                 }
             }
 
-            is RegisterAction.UpdateMacros -> {
-                _state.update { currentState ->
-                    currentState.copy(
-                        macroGoals = action.macros
-                    )
-                }
-            }
+
+
+
         }
     }
     private fun validateAndNext() {
@@ -259,11 +283,8 @@ class RegisterViewModel(
             RegisterPage.Success -> {
                 // Não faz nada ou navega para o Login
             }
-
-
         }
     }
-    // Função auxiliar para evitar repetição de código ao chamar a Snackbar
     private fun showError(message: String) {
         _state.update {
             it.copy(
@@ -319,6 +340,25 @@ class RegisterViewModel(
                     }
                 )
             }
+        }
+    }
+
+    private fun processDataCalcMacros() {
+        _state.update {
+            it.copy(
+                targetCalories = "2000",
+                targetCarbs = "200",
+                targetProteins = "100",
+                targetFats = "80",
+                targetWater = "8",
+                macroGoals = RegisterMacros(
+                    calories = 2000,
+                    carbohydrates = 200,
+                    proteins = 100,
+                    fats = 80,
+                    waterMl = 8
+                )
+            )
         }
     }
     fun consumeSnackBar() {

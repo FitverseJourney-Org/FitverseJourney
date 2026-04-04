@@ -10,28 +10,35 @@ import com.example.presentation.components.snackbar.SnackBarData
 
 data class RegisterState(
     val page: RegisterPage = RegisterPage.Profile,
+
     // 1° Page
     val firstName: String = "",
     val lastName: String = "",
+
     // 2° Page
     val height: Int = 170,
     val age: String = "",
     val weight: Int = 70,
+
     // 3° Page
     val registerGender: RegisterGender = RegisterGender.NONE,
+
     // 4° Page
     val registerGoal: RegisterGoal = RegisterGoal.NONE,
+
     // 5° Page
     val registerExperienceLevel: RegisterExperienceLevel = RegisterExperienceLevel.NONE,
     // 6° Page
     val selectedAvatar: RegisterAvatar = RegisterAvatar.NONE,
+
     // 7° Page
     val macroGoals: RegisterMacros = RegisterMacros(),
-    val targetCalories: Int = 2000,
-    val targetProteins: Int = 150,
-    val targetFats: Int = 70,
-    val targetWater: Int = 250,
-    val targetCarbs: Int = 200,
+    val targetCalories: String = "",
+    val targetProteins: String = "",
+    val targetFats: String = "",
+    val targetWater: String = "",
+    val targetCarbs: String = "",
+
     // 8° Page
     val email: String = "",
     val password: String = "",
