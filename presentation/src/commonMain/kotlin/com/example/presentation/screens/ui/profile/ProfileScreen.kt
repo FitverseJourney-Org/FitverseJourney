@@ -23,6 +23,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.EmojiEvents
+import androidx.compose.material.icons.filled.LocalFireDepartment
 import androidx.compose.material.icons.rounded.EmojiEvents
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -38,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -94,6 +96,28 @@ fun ProfileScreen() {
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ){
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "RECENT RECORDS",
+                        color = MaterialTheme.colorScheme.onBackground,
+                        fontSize = 13.sp,
+                        fontWeight = FontWeight.ExtraBold,
+                        letterSpacing = 0.5.sp
+                    )
+                    TextButton(onClick = {}) {
+                        // Sênior: O link de ação é importante, então usamos Tertiary para atrair o clique
+                        Text(
+                            text = "TODAS",
+                            color = MaterialTheme.colorScheme.tertiary,
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Black
+                        )
+                    }
+                }
                 MilestoneCard(
                     title = "Broke Personal Record in Deadlift",
                     stats = "345 LBS • +15 LBS INCREASE",
@@ -113,7 +137,6 @@ fun ProfileScreen() {
 fun ProfileHeader(name: String, streak: Int) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Box(contentAlignment = Alignment.BottomEnd) {
-            // Avatar com Borda Neon usando Primary e Secondary do Theme
             Surface(
                 modifier = Modifier
                     .size(120.dp)
@@ -123,20 +146,21 @@ fun ProfileHeader(name: String, streak: Int) {
                         CircleShape
                     ),
                 shape = CircleShape,
-                color = MaterialTheme.colorScheme.surface
+                // Aplicando a transparência sênior
+                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.7f)
             ) {
                 Icon(
                     Icons.Default.EmojiEvents,
-                    contentDescription = null,
+                    null,
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.padding(24.dp)
                 )
             }
-            // Badge de Verificado usando Tertiary
+            // Badge de Verificado
             Icon(
                 Icons.Default.CheckCircle,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.tertiary,
+                null,
+                tint = MaterialTheme.colorScheme.tertiary, // Importância = Tertiary
                 modifier = Modifier
                     .size(28.dp)
                     .background(MaterialTheme.colorScheme.background, CircleShape)
@@ -145,16 +169,22 @@ fun ProfileHeader(name: String, streak: Int) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Text(text = name, color = MaterialTheme.colorScheme.onBackground, fontSize = 24.sp, fontWeight = FontWeight.Bold)
+        Text(
+            text = name,
+            color = MaterialTheme.colorScheme.onBackground,
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Black // Mais peso para destacar o nome
+        )
 
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(Icons.Default.CheckCircle, contentDescription = null, tint = MaterialTheme.colorScheme.tertiary, modifier = Modifier.size(14.dp))
+            Icon(Icons.Default.LocalFireDepartment, null, tint = MaterialTheme.colorScheme.tertiary, modifier = Modifier.size(16.dp))
             Spacer(modifier = Modifier.width(4.dp))
+            // O Streak é um dado importante de gamificação
             Text(
                 text = "$streak DAY STREAK",
                 color = MaterialTheme.colorScheme.tertiary,
                 fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.ExtraBold,
                 letterSpacing = 1.sp
             )
         }
@@ -162,61 +192,46 @@ fun ProfileHeader(name: String, streak: Int) {
 }
 
 @Composable
-fun StatCard(label: String, value: String, unit: String = "", modifier: Modifier = Modifier) {
-    Card(
-        modifier = modifier,
-        colors = CardDefaults.cardColors(
-            containerColor = DarkGamifiedColors.PrimarySoft.copy(alpha = 0.25f)
-        ),
-        shape = RoundedCornerShape(12.dp)
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = label, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 10.sp, fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(verticalAlignment = Alignment.Bottom) {
-                Text(text = value, color = MaterialTheme.colorScheme.tertiary, fontSize = 28.sp, fontWeight = FontWeight.Bold)
-                if (unit.isNotEmpty()) {
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(text = unit, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp, modifier = Modifier.padding(bottom = 4.dp))
-                }
-            }
-            Spacer(modifier = Modifier.height(8.dp))
-            // Barra de progresso decorativa inferior
-            Box(modifier = Modifier.fillMaxWidth().height(2.dp).background(MaterialTheme.colorScheme.outlineVariant)) {
-                Box(modifier = Modifier.fillMaxWidth(0.6f).height(2.dp).background(MaterialTheme.colorScheme.secondary))
-            }
-        }
-    }
-}
-
-@Composable
 fun LevelProgressCard(xpLeft: Int, nextLevel: Int, progress: Float) {
+    val cs = MaterialTheme.colorScheme
+
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = DarkGamifiedColors.PrimarySoft.copy(alpha = 0.25f)),
-        shape = RoundedCornerShape(12.dp),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.3f))
-    ) {
+        colors = CardDefaults.cardColors(
+            containerColor = cs.surface.copy(alpha = 0.7f)
+        ),
+        shape = RoundedCornerShape(16.dp),
+        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.05f))
+    ){
         Row(
-            modifier = Modifier.fillMaxWidth().padding(20.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            modifier = Modifier.padding(20.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Column {
-                Text(text = "NEXT LEVEL PROGRESS", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 10.sp, fontWeight = FontWeight.Bold)
+            Column(modifier = Modifier.weight(1f)) {
+                Text(text = "PROGRESSO", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 10.sp, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(text = "$xpLeft XP until Level $nextLevel", color = MaterialTheme.colorScheme.onSurface, fontSize = 16.sp)
+                Row {
+                    Text(text = "Faltam ", color = MaterialTheme.colorScheme.onSurface, fontSize = 14.sp)
+                    // Destaque Tertiary no número de XP
+                    Text(text = "$xpLeft XP", color = MaterialTheme.colorScheme.tertiary, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                    Text(text = " para o Nível $nextLevel", color = MaterialTheme.colorScheme.onSurface, fontSize = 14.sp)
+                }
             }
 
             Box(contentAlignment = Alignment.Center) {
                 CircularProgressIndicator(
                     progress = { progress },
-                    color = MaterialTheme.colorScheme.primary,
+                    color = MaterialTheme.colorScheme.tertiary, // Tertiary na barra para brilhar
                     strokeWidth = 6.dp,
-                    modifier = Modifier.size(60.dp),
-                    trackColor = MaterialTheme.colorScheme.surfaceVariant
+                    modifier = Modifier.size(54.dp),
+                    trackColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
                 )
-                Text(text = "${(progress * 100).toInt()}%", color = MaterialTheme.colorScheme.onSurface, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                Text(
+                    text = "${(progress * 100).toInt()}%",
+                    color = MaterialTheme.colorScheme.tertiary,
+                    fontSize = 11.sp,
+                    fontWeight = FontWeight.Black
+                )
             }
         }
     }
@@ -224,22 +239,37 @@ fun LevelProgressCard(xpLeft: Int, nextLevel: Int, progress: Float) {
 
 @Composable
 fun BadgeSection() {
+
     Column(modifier = Modifier.fillMaxWidth()) {
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-            Text(text = "EARNED BADGES", color = MaterialTheme.colorScheme.onBackground, fontSize = 14.sp, fontWeight = FontWeight.Bold)
-            TextButton(
-                onClick = {}
-            ){
-                Text(text = "VIEW ALL", color = MaterialTheme.colorScheme.primary, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "CONQUISTAS",
+                color = MaterialTheme.colorScheme.onBackground,
+                fontSize = 13.sp,
+                fontWeight = FontWeight.ExtraBold,
+                letterSpacing = 0.5.sp
+            )
+            TextButton(onClick = {}) {
+                // Sênior: O link de ação é importante, então usamos Tertiary para atrair o clique
+                Text(
+                    text = "TODAS",
+                    color = MaterialTheme.colorScheme.tertiary,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Black
+                )
             }
         }
-        Spacer(modifier = Modifier.height(16.dp))
-        LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            items(5) { _ ->
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            items(5) { index ->
                 FitverseBadge(
-                    title = "Hypertrophy King",
-                    iconRes = Icons.Default.EmojiEvents,
-                    isLocked = false
+                    title = if (index == 0) "Hypertrophy King" else "Early Bird",
+                    iconRes = Icons.Default.EmojiEvents
                 )
             }
         }
@@ -250,67 +280,95 @@ fun BadgeSection() {
 fun FitverseBadge(
     title: String,
     iconRes: ImageVector,
-    isLocked: Boolean = false
-){
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.width(90.dp)
+) {
+    val cs = MaterialTheme.colorScheme
+
+    Surface(
+        modifier = Modifier.width(120.dp).height(120.dp),
+        shape = RoundedCornerShape(10.dp),
+        color = cs.surface.copy(alpha = 0.7f),
+        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.05f))
     ) {
-        // Container Externo (O Card Escuro)
-        Surface(
-            shape = RoundedCornerShape(20.dp),
-            color = MaterialTheme.colorScheme.surface,
-            border = BorderStroke(
-                width = 1.dp,
-                color = if (isLocked) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f) else MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)
-            )
-        ) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
             Column(
                 modifier = Modifier.padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterVertically)
-            ){
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
                 Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier.size(52.dp)
+                    modifier = Modifier
+                        .size(44.dp)
+                        .clip(RoundedCornerShape(14.dp))
+                        .background(
+                            brush = Brush.linearGradient(listOf(
+                                MaterialTheme.colorScheme.tertiary,
+                                MaterialTheme.colorScheme.primary
+                            ))
+                        ),
+                    contentAlignment = Alignment.Center
                 ) {
-                    // Quadrado Interno com Gradiente (O ícone em si)
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .clip(RoundedCornerShape(14.dp))
-                            .background(
-                                brush = if (isLocked) {
-                                    Brush.linearGradient(listOf(
-                                        MaterialTheme.colorScheme.surfaceVariant,
-                                        MaterialTheme.colorScheme.surface
-                                    ))
-                                } else {
-                                    Brush.linearGradient(listOf(
-                                        MaterialTheme.colorScheme.primary,
-                                        MaterialTheme.colorScheme.secondary
-                                    ))
-                                }
-                            ),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = iconRes,
-                            contentDescription = null,
-                            modifier = Modifier.size(28.dp),
-                            tint = if (isLocked) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f) else MaterialTheme.colorScheme.surface
-                        )
-                    }
+                    Icon(
+                        imageVector = iconRes,
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp),
+                        tint = Color.Black.copy(alpha = 0.8f)
+                    )
                 }
+
                 Text(
                     text = title.uppercase(),
-                    color = if (isLocked) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onSurface,
-                    fontSize = 10.sp,
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = 1.sp,
+                    // Sênior: Se estiver desbloqueado, o título pode ter um toque de Tertiary
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontSize = 9.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    letterSpacing = 0.5.sp,
                     textAlign = TextAlign.Center,
-                    lineHeight = 14.sp
+                    lineHeight = 12.sp
                 )
+            }
+
+        }
+    }
+}
+
+@Composable
+fun StatCard(label: String, value: String, unit: String = "", modifier: Modifier = Modifier) {
+    val cs = MaterialTheme.colorScheme
+
+    Card(
+        modifier = modifier,
+        colors = CardDefaults.cardColors(
+            containerColor = cs.surface.copy(alpha = 0.7f),
+        ),
+        shape = RoundedCornerShape(16.dp),
+        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.05f))
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = label,
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
+                fontSize = 10.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Row(verticalAlignment = Alignment.Bottom) {
+                // O Valor é o que o usuário quer ver primeiro
+                Text(
+                    text = value,
+                    color = MaterialTheme.colorScheme.tertiary,
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.Black
+                )
+                if (unit.isNotEmpty()) {
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = unit,
+                        color = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.7f),
+                        fontSize = 12.sp,
+                        modifier = Modifier.padding(bottom = 6.dp),
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
         }
     }
@@ -320,28 +378,29 @@ fun FitverseBadge(
 fun MilestoneCard(title: String, stats: String, date: String) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        shape = RoundedCornerShape(12.dp)
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.7f)
+        ),
+        shape = RoundedCornerShape(16.dp)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Default.EmojiEvents, contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(20.dp))
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(text = "RECENT MILESTONE", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 12.sp, fontWeight = FontWeight.Bold)
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-            Row {
-                Surface(modifier = Modifier.size(80.dp), shape = RoundedCornerShape(8.dp), color = MaterialTheme.colorScheme.background) {
-                    // Placeholder para ilustração do exercício
-                }
-                Spacer(modifier = Modifier.width(16.dp))
-                Column {
-                    Text(text = title, color = MaterialTheme.colorScheme.onSurface, fontSize = 16.sp, fontWeight = FontWeight.Bold)
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(text = stats, color = MaterialTheme.colorScheme.tertiary, fontSize = 12.sp, fontWeight = FontWeight.Bold)
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(text = date, color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 10.sp)
-                }
+        Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                Icons.Default.EmojiEvents,
+                null,
+                tint = MaterialTheme.colorScheme.tertiary,
+                modifier = Modifier.size(32.dp)
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+            Column {
+                Text(text = title, color = Color.White, fontSize = 15.sp, fontWeight = FontWeight.Bold)
+                // O Recorde (stats) é a informação chamativa
+                Text(
+                    text = stats,
+                    color = MaterialTheme.colorScheme.tertiary,
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.ExtraBold
+                )
+                Text(text = date, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f), fontSize = 10.sp)
             }
         }
     }

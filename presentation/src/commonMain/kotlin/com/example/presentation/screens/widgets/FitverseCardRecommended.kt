@@ -46,16 +46,19 @@ fun FitverseCardRecommended(workout: WorkoutItem, onClick: () -> Unit) {
             // Icon Placeholder (Roxo Elétrico)
             Box(
                 modifier = Modifier
-                    .size(56.dp)
+                    .size(48.dp)
                     .clip(RoundedCornerShape(16.dp))
-                    .background(DarkGamifiedColors.PrimarySoft.copy(alpha = 0.15f)),
+                    .background(
+                        color = cs.primary.copy(alpha = 0.1f),
+                        shape = RoundedCornerShape(12.dp)
+                    ),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = Icons.Rounded.FitnessCenter,
                     contentDescription = null,
-                    tint = DarkGamifiedColors.PrimarySoft,
-                    modifier = Modifier.size(28.dp)
+                    tint = cs.primary,
+                    modifier = Modifier.size(24.dp)
                 )
             }
 
@@ -72,18 +75,17 @@ fun FitverseCardRecommended(workout: WorkoutItem, onClick: () -> Unit) {
                     )
                     Text(
                         text = "+${workout.xp} XP",
-                        color = cs.onTertiary,
+                        color = cs.tertiary,
                         fontWeight = FontWeight.Black,
                         fontSize = 12.sp
                     )
                 }
             }
 
-            // Tag de dificuldade/intensidade
             Icon(
                 Icons.Rounded.Bolt,
                 null,
-                tint = if (workout.xp > 150) cs.onTertiary else Color.White.copy(alpha = 0.2f),
+                tint = if (workout.xp > 150) cs.tertiary else Color.White.copy(alpha = 0.2f),
                 modifier = Modifier.size(20.dp)
             )
         }

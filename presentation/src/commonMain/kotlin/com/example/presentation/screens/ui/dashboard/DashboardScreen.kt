@@ -31,8 +31,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.WaterDrop
 import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.DirectionsRun
 import androidx.compose.material.icons.rounded.HelpOutline
 import androidx.compose.material.icons.rounded.LocalFireDepartment
+import androidx.compose.material.icons.rounded.WaterDrop
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -62,6 +64,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -72,6 +75,7 @@ import com.example.domain.model.dashboard.TaskItem
 import com.example.expect.getHourOfDay
 import com.example.presentation.utils.Dashboard.levelFromXp
 import com.example.presentation.screens.ui.dashboard.components.ContainerLevel
+import com.example.presentation.screens.widgets.FitVerseSpacer
 import com.example.presentation.screens.widgets.FitverseAvatarCard
 import com.example.presentation.screens.widgets.FitverseIconNotifications
 import com.example.presentation.screens.widgets.FitverseIconStreak
@@ -214,138 +218,167 @@ fun DashboardScreen(
                 onStreakClick = { showStreakDialog = true }
             )
         }
-        item { ContainerLevel(state = avatarState, modifier = Modifier.fillMaxWidth()) }
-        item { FitverseAvatarCard(state = avatarState) }
-        item { HydrationTrackerCard() }
         item {
-            Text(
-                modifier = Modifier.padding(top = 8.dp, bottom = 4.dp),
-                text = "DAILY TASKS",
-                color = cs.onBackground,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = (-0.5).sp
-            )
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                ContainerLevel(state = avatarState, modifier = Modifier.fillMaxWidth())
+                FitverseAvatarCard(state = avatarState)
+                FitVerseSpacer(vertical = true, value = 16.dp)
+            }
         }
-        items(items = tasks, key = { it.id }) { task ->
-            FitverseTaskItem(
-                task = task,
-                isSelected = task.completed,
-                onToggle = { onToggleTask(task) },
-                onSelect = {
-                    tasks = tasks.map { if (it.id == task.id) it.copy(completed = !it.completed) else it }
-                }
-            )
-        }
-    }
-}
-// Definição manual das cores exatas do Design System
-private val ColorSecondaryBlue = Color(0xFF2563EB) // Azul Neon
-private val ColorPureBlack = Color(0xFF181818)    // Preto Puro
-private val ColorSurfaceDark = Color(0xFF16171D)   // Trilho da barra
-private val ColorTextMuted = Color(0xFF71717A)    // Texto /3.5L
-
-@Composable
-fun HydrationTrackerCard(
-    currentLiters: Float = 2.4f,
-    goalLiters: Float = 3.5f
-) {
-    val progress = (currentLiters / goalLiters).coerceIn(0f, 1f)
-
-    val backgroundBrush = Brush.linearGradient(
-        colors = listOf(
-            ColorSecondaryBlue.copy(alpha = 0.15f), // Início: Azul suave (Wash)
-            Color.Transparent,
-            ColorPureBlack                          // Fim: Preto Puro
-        ),
-        start = Offset.Zero,
-        end = Offset.Infinite
-    )
-
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.Transparent
-        ),
-        border = BorderStroke(
-            width = 1.dp,
-            color = ColorSecondaryBlue.copy(alpha = 0.25f)
-        )
-    ) {
-        // Colocamos o fundo no gradiente aqui dentro
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(backgroundBrush) // Aplica o Brush solicitado
-                .padding(horizontal = 24.dp, vertical = 24.dp)
-        ) {
-            // Título em Azul Secundário puro conforme a imagem
-            Text(
-                text = "HYDRATION GOAL",
-                color = ColorSecondaryBlue, // #2563EB
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = 1.2.sp
-            )
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                // Sessão Numérica e Ícone
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Icon(
-                        imageVector = Icons.Default.WaterDrop,
-                        contentDescription = null,
-                        tint = ColorSecondaryBlue, // #2563EB
-                        modifier = Modifier.size(28.dp)
+        item {
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                SectionTitle("CONDIÇÃO FÍSICA")
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
+                ){
+                    HydrationTrackerCard(
+                        modifier = Modifier.weight(1f)
                     )
-
-                    Spacer(modifier = Modifier.width(12.dp))
-
-                    // Valor Principal em Branco Puro para contraste contra o Preto do gradiente
-                    Text(
-                        text = "$currentLiters",
-                        color = Color.White,
-                        fontSize = 32.sp,
-                        fontWeight = FontWeight.Black
-                    )
-
-                    // Meta em Cinza Mudo
-                    Text(
-                        text = "/$goalLiters L",
-                        color = ColorTextMuted,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(bottom = 4.dp, start = 2.dp)
+                    StepsTrackerCard(
+                        modifier = Modifier.weight(1f)
                     )
                 }
-
-                // Barra de Progresso Estilizada
-                Box(
-                    modifier = Modifier
-                        .width(130.dp)
-                        .height(8.dp)
-                        .clip(CircleShape)
-                        .background(ColorSurfaceDark) // #16171D
-                ) {
-                    LinearProgressIndicator(
-                        progress = { progress },
-                        modifier = Modifier.fillMaxSize(),
-                        color = ColorSecondaryBlue, // #2563EB Ativo
-                        trackColor = Color.Transparent, // O Box externo é o track
-                        strokeCap = StrokeCap.Round
+            }
+        }
+        item {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                SectionTitle("MISSÕES DIÁRIAS")
+                tasks.forEach { task ->
+                    FitverseTaskItem(
+                        task = task,
+                        isSelected = task.completed,
+                        onToggle = { onToggleTask(task) },
+                        onSelect = {
+                            tasks = tasks.map { if (it.id == task.id) it.copy(completed = !it.completed) else it }
+                        }
                     )
                 }
             }
         }
     }
 }
+@Composable
+private fun SectionTitle(text: String) {
+    Text(
+        text = text,
+        color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.9f),
+        fontSize = 13.sp,
+        fontWeight = FontWeight.Black,
+        letterSpacing = 1.sp,
+        modifier = Modifier.padding(start = 4.dp, bottom = 4.dp)
+    )
+}
 
+@Composable
+fun FitverseMetricCard(
+    modifier: Modifier = Modifier,
+    title: String,
+    icon: ImageVector,
+    currentValue: String,
+    goalValue: String,
+    unit: String,
+    progress: Float,
+    accentColor: Color
+) {
+    val cs = MaterialTheme.colorScheme
+
+    Surface(
+        modifier = modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(24.dp),
+        color = cs.surface.copy(alpha = 0.7f), // Glassmorphism padrão
+        border = BorderStroke(1.dp, accentColor.copy(alpha = 0.2f))
+    ) {
+        Box(
+            modifier = Modifier.background(
+                Brush.radialGradient(
+                    colors = listOf(accentColor.copy(alpha = 0.15f), Color.Transparent),
+                    center = Offset(0f, 0f),
+                    radius = 400f
+                )
+            )
+        ) {
+            Row(
+                modifier = Modifier.padding(24.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    // Header (Ícone + Título)
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = icon,
+                            contentDescription = null,
+                            tint = accentColor,
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        Text(
+                            text = title.uppercase(),
+                            color = accentColor,
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Black,
+                            letterSpacing = 1.sp
+                        )
+                    }
+
+                    Spacer(Modifier.height(12.dp))
+
+                    // Valores
+                    Row(verticalAlignment = Alignment.Bottom) {
+                        Text(
+                            text = currentValue,
+                            color = cs.onSurface,
+                            fontSize = 32.sp,
+                            fontWeight = FontWeight.Black
+                        )
+                        Text(
+                            text = " / $goalValue $unit",
+                            color = cs.onSurfaceVariant,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(bottom = 4.dp, start = 4.dp)
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+@Composable
+fun HydrationTrackerCard(
+    modifier: Modifier = Modifier,
+    currentLiters: Float = 2.4f,
+    goalLiters: Float = 3.5f
+) {
+    FitverseMetricCard(
+        modifier = modifier,
+        title = "Hidratação",
+        icon = Icons.Rounded.WaterDrop,
+        currentValue = currentLiters.toString(),
+        goalValue = goalLiters.toString(),
+        unit = "L",
+        progress = (currentLiters / goalLiters).coerceIn(0f, 1f),
+        accentColor = MaterialTheme.colorScheme.secondary // Azul/Ciano (dependendo do seu tema)
+    )
+}
+@Composable
+fun StepsTrackerCard(
+    modifier: Modifier = Modifier,
+    currentSteps: Int = 6500,
+    goalSteps: Int = 10000
+) {
+    FitverseMetricCard(
+        modifier = modifier,
+        title = "Passos",
+        icon = Icons.Rounded.DirectionsRun, // ou DirectionsWalk
+        currentValue = currentSteps.toString(), // Em um app real, formatar para "6.500"
+        goalValue = (goalSteps / 1000).toString(), // Exibe "10 k" para ficar mais limpo
+        unit = "k",
+        progress = (currentSteps.toFloat() / goalSteps).coerceIn(0f, 1f),
+        accentColor = MaterialTheme.colorScheme.primary
+    )
+}
 @Composable
 fun getGreeting(): String {
     return when (getHourOfDay()) {

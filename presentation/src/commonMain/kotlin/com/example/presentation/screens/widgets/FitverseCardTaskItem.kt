@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Assignment
 import androidx.compose.material.icons.rounded.Bolt
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material3.Icon
@@ -64,7 +65,7 @@ fun FitverseTaskItem(
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    imageVector = if (isSelected) Icons.Rounded.Check else Icons.Rounded.Bolt,
+                    imageVector = if (isSelected) Icons.Rounded.Check else Icons.Rounded.Assignment,
                     contentDescription = null,
                     tint = if (isSelected) Color.Black else cs.primary,
                     modifier = Modifier.size(24.dp)

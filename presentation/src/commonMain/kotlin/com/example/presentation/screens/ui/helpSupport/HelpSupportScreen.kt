@@ -282,9 +282,11 @@ fun HelpFooter() {
 
 @Composable
 fun SectionHeader(title: String) {
+    val cs = MaterialTheme.colorScheme
     Text(
-        text = title,
-        style = MaterialTheme.typography.titleLarge,
-        fontWeight = FontWeight.Bold
+        text = title.uppercase(),
+        style = MaterialTheme.typography.titleMedium,
+        fontWeight = FontWeight.Black,
+        color = cs.onSurfaceVariant
     )
 }

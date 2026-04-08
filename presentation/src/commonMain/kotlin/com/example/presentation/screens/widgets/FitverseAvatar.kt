@@ -58,7 +58,6 @@ fun FitverseAvatarCard(
     val isAlive = state.health > 0
     val healthProgress by animateFloatAsState(targetValue = state.health / 100f, label = "hp")
     val foodProgress by animateFloatAsState(targetValue = state.food / 100f, label = "food")
-
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -66,13 +65,9 @@ fun FitverseAvatarCard(
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(
             // SurfaceVariant (#16171D) com alpha para profundidade
-            containerColor = cs.surfaceVariant.copy(alpha = 0.4f)
+            containerColor = cs.surface.copy(alpha = 0.7f),
         ),
-        border = BorderStroke(
-            width = 1.dp,
-            // Borda sutil em Roxo (Primary) para o "Glow" do card
-            color = cs.primary.copy(alpha = 0.2f)
-        )
+        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.05f))
     ) {
         Column(modifier = Modifier.padding(20.dp)) {
             if (isAlive) {

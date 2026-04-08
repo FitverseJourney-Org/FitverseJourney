@@ -136,13 +136,14 @@ fun ModalDrawerSheetMainScreen(
                     MenuSectionTitle("EXPLORE")
                     MenuCardContainer {
                         ActionRow("Workout Plan", Icons.Rounded.FitnessCenter, colors) { onNavigate(NavRoutes.PlanWorkoutFlow) }
-                        ActionRow("Meals Plan", Icons.Rounded.LocalDining, colors) { onNavigate(NavRoutes.PlanMealsFlow.PlanList) }
                         ActionRow("Historic", Icons.Rounded.History, colors) { onNavigate(NavRoutes.Historic) }
                         ActionRow("Achievements", Icons.Rounded.Star, colors) { onNavigate(NavRoutes.Achievements) }
                         ActionRow("Progress", Icons.Rounded.Timeline, colors) { onNavigate(NavRoutes.Progress) }
                         ActionRow("Leaderboards", Icons.Rounded.EmojiEvents, colors) { onNavigate(NavRoutes.Leaderboards) }
                         ActionRow("Friends", Icons.Rounded.Group, colors) { onNavigate(NavRoutes.Friends) }
                         ActionRow("Tasks", Icons.Rounded.Assignment, colors) { onNavigate(NavRoutes.TasksFlow) }
+                        ActionRow("Shop", Icons.Rounded.ShoppingCart, colors) { onNavigate(NavRoutes.Shopping) }
+                        ActionRow("Wiki Fitness", Icons.Rounded.Info, colors) { onNavigate(NavRoutes.WikiFitness) }
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -150,6 +151,7 @@ fun ModalDrawerSheetMainScreen(
                     MenuCardContainer {
                         ActionRow("Devices", Icons.Rounded.Devices, colors) { onNavigate(NavRoutes.Devices) }
                         ActionRow("Help", Icons.Rounded.Help, colors) { onNavigate(NavRoutes.HelpSupport) }
+                        ActionRow("Language", Icons.Rounded.Language, colors) { onNavigate(NavRoutes.HelpSupport) }
                     }
 
                     Spacer(modifier = Modifier.height(24.dp))

@@ -13,7 +13,7 @@ import com.example.presentation.screens.ui.workout.WorkoutSessionScreen
 
 @Composable
 fun WorkoutSessionDestination(
-    navigateToWorkoutSession: () -> Unit
+    ToWorkout: () -> Unit
 ) {
     val exercises = remember { // Use remember para não recriar a lista em cada recomposição
         listOf(
@@ -22,7 +22,7 @@ fun WorkoutSessionDestination(
                 title = "Jumping Jacks",
                 durationSeconds = 45,
                 sets = 3,
-                type = ExerciseType.TIMED
+                type = ExerciseType.TIME
             ),
             Exercise(
                 id = 102,
@@ -43,22 +43,15 @@ fun WorkoutSessionDestination(
                 title = "Plank Hold",
                 durationSeconds = 30,
                 sets = 2,
-                type = ExerciseType.TIMED
+                type = ExerciseType.TIME
             )
         )
     }
-    var currentExercise by remember { mutableStateOf(exercises.first()) }
 
     WorkoutSessionScreen(
         modifier = Modifier,
         onFinish = {
-            navigateToWorkoutSession()
-        },
-        changeExercise = {
-            currentExercise = it
-        },
-        currentExercise = {
-            currentExercise
+            ToWorkout()
         },
         workout = WorkoutPlan(
             id = 1,

@@ -2,10 +2,10 @@ package com.example.presentation.screens.ui.progress
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -23,20 +23,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.expect.DateTimeManager
 import com.example.expect.PlatformDate
+import com.example.expect.formatDecimal
 import com.example.presentation.screens.widgets.FitverseTopAppBar
-import com.patrykandpatrick.vico.compose.cartesian.marker.CartesianMarker
-import com.patrykandpatrick.vico.compose.cartesian.marker.DefaultCartesianMarker
-import com.patrykandpatrick.vico.compose.cartesian.marker.rememberDefaultCartesianMarker
-import com.patrykandpatrick.vico.compose.common.Fill
-import com.patrykandpatrick.vico.compose.common.Insets
-import com.patrykandpatrick.vico.compose.common.LayeredComponent
-import com.patrykandpatrick.vico.compose.common.MarkerCornerBasedShape
-import com.patrykandpatrick.vico.compose.common.component.ShapeComponent
-import com.patrykandpatrick.vico.compose.common.component.TextComponent
-import com.patrykandpatrick.vico.compose.common.component.rememberShapeComponent
-import com.patrykandpatrick.vico.compose.common.component.rememberTextComponent
 import ir.ehsannarmani.compose_charts.LineChart
 import ir.ehsannarmani.compose_charts.models.DotProperties
 import ir.ehsannarmani.compose_charts.models.DrawStyle
@@ -48,33 +37,13 @@ import ir.ehsannarmani.compose_charts.models.Line
 import ir.ehsannarmani.compose_charts.models.PopupProperties
 import ir.ehsannarmani.compose_charts.models.ZeroLineProperties
 
-
-private fun getMonthName(month: String): String {
-    return when (month) {
-        "1" -> "Janeiro"
-        "2" -> "Fevereiro"
-        "3" -> "Março"
-        "4" -> "Abril"
-        "5" -> "Maio"
-        "6" -> "Junho"
-        "7" -> "Julho"
-        "8" -> "Agosto"
-        "9" -> "Setembro"
-        "10" -> "Outubro"
-        "11" -> "Novembro"
-        "12" -> "Dezembro"
-        else -> month
-    }
+private fun getMonthName(month: Int): String {
+    val months = arrayOf(
+        "", "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+        "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
+    )
+    return months.getOrElse(month) { month.toString() }
 }
-
-// 1. Modificamos o modelo para incluir a qual ficha o exercício pertence
-@Immutable
-data class Exercise(
-    val id: String,
-    val name: String,
-    val muscleGroup: String,
-    val trainingSplit: String // Ex: "Treino A", "Treino B", "Treino C"
-)
 
 @Immutable
 data class LoadProgressionPoint(
@@ -83,34 +52,95 @@ data class LoadProgressionPoint(
     val estimatedOneRm: Double
 )
 
-// Mock atualizado para demonstrar o filtro
-val mockSupinoProgression = listOf(
-    LoadProgressionPoint(
-        date = DateTimeManager.create(10, 1, 2026),
-        weight = 60.0,
-        estimatedOneRm = 72.0
-    ),
-    LoadProgressionPoint(
-        date = DateTimeManager.create(24, 1, 2026),
-        weight = 62.5,
-        estimatedOneRm = 75.0
-    ),
-    LoadProgressionPoint(
-        date = DateTimeManager.create(7, 2, 2026),
-        weight = 65.0,
-        estimatedOneRm = 78.0
-    ),
-    LoadProgressionPoint(
-        date = DateTimeManager.create(21, 2, 2026),
-        weight = 65.0,
-        estimatedOneRm = 80.0
-    ),
-    LoadProgressionPoint(
-        date = DateTimeManager.create(7, 3, 2026),
-        weight = 70.0,
-        estimatedOneRm = 84.0
-    )
+data class ProgressionStats(
+    val personalRecord: Double,
+    val currentLoad: Double,
+    val evolutionDelta: Double,
+    val sessionCount: Int
 )
+
+fun calculateProgressionStats(data: List<LoadProgressionPoint>): ProgressionStats {
+    if (data.isEmpty()) return ProgressionStats(0.0, 0.0, 0.0, 0)
+
+    val pr = data.maxOfOrNull { it.weight } ?: 0.0
+    val current = data.last().weight
+    val first = data.first().weight
+    val delta = current - first
+
+    return ProgressionStats(
+        personalRecord = pr,
+        currentLoad = current,
+        evolutionDelta = delta,
+        sessionCount = data.size
+    )
+}
+
+@Composable
+fun ProgressionStatsGrid(
+    progressionData: List<LoadProgressionPoint>,
+    primaryColor: Color,
+    modifier: Modifier = Modifier
+) {
+    if (progressionData.isEmpty()) return
+
+    val stats = remember(progressionData) { calculateProgressionStats(progressionData) }
+
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            StatCard(
+                modifier = Modifier.weight(1f),
+                title = "Recorde Pessoal",
+                value = stats.personalRecord,
+                unit = "kg",
+                icon = Icons.Default.EmojiEvents,
+                color = primaryColor
+            )
+            StatCard(
+                modifier = Modifier.weight(1f),
+                title = "Carga Atual",
+                value = stats.currentLoad,
+                unit = "kg",
+                icon = Icons.Default.FitnessCenter,
+                color = Color.White
+            )
+        }
+
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            val isPositive = stats.evolutionDelta >= 0
+            val sign = if (isPositive) "+" else ""
+            val deltaColor = if (isPositive) Color(0xFF4CAF50) else Color(0xFFF44336)
+
+            StatCardString(
+                modifier = Modifier.weight(1f),
+                title = "Evolução",
+                value = "$sign${stats.evolutionDelta.formatDecimal()}",
+                unit = "kg",
+                icon = Icons.Default.TrendingUp,
+                color = deltaColor
+            )
+            StatCardString(
+                modifier = Modifier.weight(1f),
+                title = "Treinos",
+                value = stats.sessionCount.toString(),
+                unit = "sessões",
+                icon = Icons.Default.CalendarToday,
+                color = Color.LightGray
+            )
+        }
+    }
+}
+
+@Immutable
+data class Exercise(
+    val id: String,
+    val name: String,
+    val muscleGroup: String,
+    val trainingSplit: String
+)
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProgressScreen(
@@ -119,34 +149,28 @@ fun ProgressScreen(
     monthbeforeProgression: List<LoadProgressionPoint>,
     onBack: () -> Unit
 ) {
-    // --- 1. Lógica de Filtro: Treino e Exercício ---
-    val availableSplits = remember(exercises) {
-        exercises.map { it.trainingSplit }.distinct().sorted()
-    }
+    val cs = MaterialTheme.colorScheme
+
+    // Filtros de Exercício
+    val availableSplits = remember(exercises) { exercises.map { it.trainingSplit }.distinct().sorted() }
     var selectedSplit by remember { mutableStateOf(availableSplits.firstOrNull() ?: "") }
     var splitDropdownOpen by remember { mutableStateOf(false) }
 
-    val filteredExercises = remember(selectedSplit, exercises) {
-        exercises.filter { it.trainingSplit == selectedSplit }
-    }
+    val filteredExercises = remember(selectedSplit, exercises) { exercises.filter { it.trainingSplit == selectedSplit } }
     var selectedExercise by remember(filteredExercises) { mutableStateOf(filteredExercises.firstOrNull()) }
     var exerciseDropdownOpen by remember { mutableStateOf(false) }
 
-    // --- 2. Lógica de Filtro: Período (Início e Fim) ---
-    // Agora a lista contém todos os meses de 1 a 12 fixamente
+    // Filtros de Período
     val availableMonths = remember { (1..12).toList() }
-
-    var startMonth by remember { mutableIntStateOf(1) } // Janeiro por padrão
-    var endMonth by remember { mutableIntStateOf(12) }  // Dezembro por padrão
-
+    var startMonth by remember { mutableIntStateOf(1) }
+    var endMonth by remember { mutableIntStateOf(12) }
     var startDropdownOpen by remember { mutableStateOf(false) }
     var endDropdownOpen by remember { mutableStateOf(false) }
 
-    // Filtragem dos dados baseada no range [startMonth..endMonth] e também no exercício selecionado (boa prática)
+    // Dados Filtrados
     val displayData = remember(startMonth, endMonth, currentProgression) {
         currentProgression.filter { it.date.month in startMonth..endMonth }
     }
-
     val displayDataBefore = remember(startMonth, endMonth, monthbeforeProgression) {
         monthbeforeProgression.filter { it.date.month in startMonth..endMonth }
     }
@@ -155,12 +179,8 @@ fun ProgressScreen(
     LaunchedEffect(Unit) { isVisible = true }
 
     Scaffold(
-        topBar = {
-            FitverseTopAppBar(
-                title = "PROGRESSÃO",
-                onBack = onBack
-            )
-        }
+        topBar = { FitverseTopAppBar(title = "PROGRESSÃO", onBack = onBack) },
+        containerColor = cs.background
     ) { padding ->
         AnimatedVisibility(visible = isVisible, modifier = Modifier.padding(padding)) {
             LazyColumn(
@@ -168,29 +188,21 @@ fun ProgressScreen(
                 contentPadding = PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
-                // CABEÇALHO DE FILTROS
+                // Filtros (Cabeçalho)
                 item {
                     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                        // PRIMEIRA LINHA: Ficha e Exercício
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             Box(modifier = Modifier.weight(.5f)) {
                                 SelectorCard(
-                                    modifier = Modifier.fillMaxWidth(),
                                     label = "Ficha",
                                     value = selectedSplit,
                                     icon = Icons.Default.ListAlt,
                                     onClick = { splitDropdownOpen = true }
                                 )
-                                // Definindo altura máxima de 250.dp para forçar o scroll se necessário
                                 DropdownMenu(
-                                    modifier = Modifier
-                                        .width(150.dp) // Largura fixa para manter consistência
-                                        .heightIn(max = 250.dp),
                                     expanded = splitDropdownOpen,
-                                    onDismissRequest = { splitDropdownOpen = false }
+                                    onDismissRequest = { splitDropdownOpen = false },
+                                    modifier = Modifier.width(150.dp).heightIn(max = 250.dp)
                                 ) {
                                     availableSplits.forEach { split ->
                                         DropdownMenuItem(
@@ -202,18 +214,15 @@ fun ProgressScreen(
                             }
                             Box(modifier = Modifier.weight(1f)) {
                                 SelectorCard(
-                                    modifier = Modifier.fillMaxWidth(),
                                     label = "Exercício",
                                     value = selectedExercise?.name ?: "Selecione",
                                     icon = Icons.Default.FitnessCenter,
                                     onClick = { exerciseDropdownOpen = true }
                                 )
                                 DropdownMenu(
-                                    modifier = Modifier
-                                        .width(220.dp)
-                                        .heightIn(max = 250.dp), // Altura fixa com scroll
                                     expanded = exerciseDropdownOpen,
-                                    onDismissRequest = { exerciseDropdownOpen = false }
+                                    onDismissRequest = { exerciseDropdownOpen = false },
+                                    modifier = Modifier.width(220.dp).heightIn(max = 250.dp)
                                 ) {
                                     filteredExercises.forEach { ex ->
                                         DropdownMenuItem(
@@ -225,29 +234,22 @@ fun ProgressScreen(
                             }
                         }
 
-                        // SEGUNDA LINHA: Período Inicial e Final
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             Box(modifier = Modifier.weight(1f)) {
                                 SelectorCard(
-                                    modifier = Modifier.fillMaxWidth(),
                                     label = "Início",
-                                    value = getMonthName(startMonth.toString()),
+                                    value = getMonthName(startMonth),
                                     icon = Icons.Default.CalendarMonth,
                                     onClick = { startDropdownOpen = true }
                                 )
                                 DropdownMenu(
-                                    modifier = Modifier
-                                        .width(180.dp)
-                                        .heightIn(max = 280.dp), // Perfeito para os 12 meses
                                     expanded = startDropdownOpen,
-                                    onDismissRequest = { startDropdownOpen = false }
+                                    onDismissRequest = { startDropdownOpen = false },
+                                    modifier = Modifier.width(180.dp).heightIn(max = 280.dp)
                                 ) {
                                     availableMonths.forEach { month ->
                                         DropdownMenuItem(
-                                            text = { Text(getMonthName(month.toString())) },
+                                            text = { Text(getMonthName(month)) },
                                             onClick = { startMonth = month; startDropdownOpen = false }
                                         )
                                     }
@@ -255,22 +257,19 @@ fun ProgressScreen(
                             }
                             Box(modifier = Modifier.weight(1f)) {
                                 SelectorCard(
-                                    modifier = Modifier.fillMaxWidth(),
                                     label = "Fim",
-                                    value = getMonthName(endMonth.toString()),
+                                    value = getMonthName(endMonth),
                                     icon = Icons.Default.Event,
                                     onClick = { endDropdownOpen = true }
                                 )
                                 DropdownMenu(
-                                    modifier = Modifier
-                                        .width(180.dp)
-                                        .heightIn(max = 280.dp),
                                     expanded = endDropdownOpen,
-                                    onDismissRequest = { endDropdownOpen = false }
+                                    onDismissRequest = { endDropdownOpen = false },
+                                    modifier = Modifier.width(180.dp).heightIn(max = 280.dp)
                                 ) {
                                     availableMonths.forEach { month ->
                                         DropdownMenuItem(
-                                            text = { Text(getMonthName(month.toString())) },
+                                            text = { Text(getMonthName(month)) },
                                             onClick = { endMonth = month; endDropdownOpen = false },
                                             enabled = month >= startMonth
                                         )
@@ -281,13 +280,9 @@ fun ProgressScreen(
                     }
                 }
 
-                // CONTEÚDO DINÂMICO (Gráficos ou Empty State)
+                // Conteúdo Dinâmico
                 item {
-                    // Crossfade cria uma transição suave entre a tela vazia e os gráficos
-                    Crossfade(
-                        targetState = displayData.isEmpty(),
-                        label = "Data Transition"
-                    ) { isEmpty ->
+                    Crossfade(targetState = displayData.isEmpty(), label = "Data Transition") { isEmpty ->
                         if (isEmpty) {
                             EmptyDataState()
                         } else {
@@ -295,11 +290,16 @@ fun ProgressScreen(
                                 ProgressChartCard(
                                     progressionData = displayData,
                                     monthBeforeProgression = displayDataBefore,
-                                    // Passamos os nomes formatados para o componente
-                                    currentPeriodLabel = getMonthName(endMonth.toString()),
-                                    previousPeriodLabel = getMonthName(startMonth.toString())
+                                    currentPeriodLabel = getMonthName(endMonth),
+                                    previousPeriodLabel = getMonthName(startMonth),
+                                    colorBefore = Color.Red,
+                                    colorAfter = Color.White
                                 )
-                                KeyStatsRow(progressionData = displayData)
+                                // Chamando o Grid refatorado
+                                ProgressionStatsGrid(
+                                    progressionData = displayData,
+                                    primaryColor = Color.White
+                                )
                                 InsightsCard(progressionData = displayData)
                             }
                         }
@@ -310,7 +310,6 @@ fun ProgressScreen(
     }
 }
 
-// --- Componente de UX para quando não há dados ---
 @Composable
 fun EmptyDataState() {
     Card(
@@ -359,20 +358,20 @@ fun ProgressChartCard(
     progressionData: List<LoadProgressionPoint>,
     monthBeforeProgression: List<LoadProgressionPoint>,
     currentPeriodLabel: String,
-    previousPeriodLabel: String
+    previousPeriodLabel: String,
+    colorBefore: Color,
+    colorAfter: Color
 ) {
     val labelColor = Color.White
+    val cs = MaterialTheme.colorScheme
 
     Card(
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)),
+        colors = CardDefaults.cardColors(containerColor = cs.surface.copy(alpha = 0.7f)),
         shape = RoundedCornerShape(16.dp),
+        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.05f)),
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp)
-        ) {
+        Column(modifier = Modifier.fillMaxWidth().padding(20.dp)){
             if (progressionData.isEmpty()) {
                 Box(
                     modifier = Modifier
@@ -439,7 +438,7 @@ fun ProgressChartCard(
                         Line(
                             label = previousPeriodLabel,
                             values = monthBeforeProgression.map { it.weight },
-                            color = SolidColor(Color.White),
+                            color = SolidColor(colorBefore),
                             curvedEdges = true,
                             drawStyle = DrawStyle.Stroke(2.dp),
                             dotProperties = DotProperties(enabled = false)
@@ -447,7 +446,7 @@ fun ProgressChartCard(
                         Line(
                             label = currentPeriodLabel,
                             values = progressionData.map { it.weight },
-                            color = SolidColor(Color.Yellow),
+                            color = SolidColor(colorAfter),
                             drawStyle = DrawStyle.Stroke(2.dp),
                             curvedEdges = true,
                             dotProperties = DotProperties(enabled = false)
@@ -459,7 +458,18 @@ fun ProgressChartCard(
     }
 }
 
-// ---------- Funções auxiliares de cálculo ----------
+@Composable
+fun StatCardString(
+    modifier: Modifier = Modifier,
+    title: String,
+    value: String,
+    unit: String,
+    icon: ImageVector,
+    color: Color
+) {
+    StatCardBase(modifier, title, value, unit, icon, color)
+}
+
 private fun computeChangePercent(progression: List<LoadProgressionPoint>): Double? {
     if (progression.size < 2) return null
     val start = progression.first().weight
@@ -467,102 +477,58 @@ private fun computeChangePercent(progression: List<LoadProgressionPoint>): Doubl
     return if (start <= 0.0) null else ((last - start) / start) * 100.0
 }
 
-private fun computePr(progression: List<LoadProgressionPoint>): LoadProgressionPoint? {
-    return progression.maxByOrNull { it.weight }
-}
-@Composable
-fun ChartMarkerComponent(
-    value: String,
-    modifier: Modifier = Modifier
-) {
-    // A caixa preta arredondada do marker
-    Surface(
-        color = Color.Black.copy(alpha = 0.85f), // Fundo preto levemente transparente
-        shape = RoundedCornerShape(8.dp),
-        modifier = modifier
-    ) {
-        Row(
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // Ícone opcional, mas vamos focar no texto como na imagem
-            Text(
-                text = value,
-                color = Color.White,
-                style = MaterialTheme.typography.bodySmall,
-                fontWeight = FontWeight.Bold
-            )
-        }
-    }
-}
-
-// ---------- Componente: cards de stats ----------
-@Composable
-fun KeyStatsRow(progressionData: List<LoadProgressionPoint>) {
-    if (progressionData.isEmpty()) return
-
-    val latest = progressionData.last()
-    val pr = computePr(progressionData)
-
-    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-        StatCard(
-            modifier = Modifier.weight(1f),
-            title = "Recorde Pessoal",
-            value = pr?.weight?.toInt() ?: 0,
-            unit = "kg",
-            icon = Icons.Default.TrendingUp,
-            color = Color(0xFFFFD700)
-        )
-        StatCard(
-            modifier = Modifier.weight(1f),
-            title = "1RM Estimada",
-            value = latest.estimatedOneRm.toInt(),
-            unit = "kg",
-            icon = Icons.Default.FitnessCenter,
-            color = MaterialTheme.colorScheme.primary
-        )
-    }
-}
-
 @Composable
 fun StatCard(
     modifier: Modifier = Modifier,
     title: String,
-    value: Int,
+    value: Double,
     unit: String,
     icon: ImageVector,
     color: Color
 ) {
-    val animatedValue by animateIntAsState(
-        targetValue = value,
+    val animatedValue by animateFloatAsState(
+        targetValue = value.toFloat(),
         animationSpec = tween(durationMillis = 900, easing = FastOutSlowInEasing),
-        label = "statCount"
+        label = "statAnimation"
     )
 
+    // Aqui usamos o formatDecimal() que você criou com expect/actual
+    StatCardBase(
+        modifier = modifier,
+        title = title,
+        displayValue = animatedValue.toDouble().formatDecimal(),
+        unit = unit,
+        icon = icon,
+        color = color
+    )
+}
+
+@Composable
+private fun StatCardBase(
+    modifier: Modifier,
+    title: String,
+    displayValue: String,
+    unit: String,
+    icon: ImageVector,
+    color: Color
+) {
+    val cs = MaterialTheme.colorScheme
     Card(
         modifier = modifier,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+        colors = CardDefaults.cardColors(containerColor = cs.surface.copy(alpha = 0.7f)),
+        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.05f)),
         shape = RoundedCornerShape(12.dp)
     ) {
         Column(modifier = Modifier.padding(14.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    icon,
-                    contentDescription = "$title icon",
-                    modifier = Modifier.size(18.dp),
-                    tint = color
-                )
+                Icon(icon, contentDescription = null, modifier = Modifier.size(18.dp), tint = color)
                 Spacer(Modifier.width(10.dp))
-                Text(
-                    title,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                Text(title, style = MaterialTheme.typography.labelSmall, color = cs.onSurfaceVariant)
             }
             Spacer(Modifier.height(8.dp))
             Row(verticalAlignment = Alignment.Bottom) {
                 Text(
-                    text = "$animatedValue",
+                    text = displayValue, // Corrigido aqui
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
                     color = color
@@ -587,39 +553,26 @@ private fun SelectorCard(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
+    val cs = MaterialTheme.colorScheme
     Surface(
         tonalElevation = 1.dp,
         shape = RoundedCornerShape(12.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
-        modifier = modifier.clip(RoundedCornerShape(12.dp)).clickable { onClick() }
+        color = cs.surface.copy(alpha = 0.7f),
+        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.05f)),
+        modifier = modifier.fillMaxWidth().clip(RoundedCornerShape(12.dp)).clickable { onClick() }
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
-            Text(
-                label,
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.primary
-            )
+            Text(label, style = MaterialTheme.typography.labelSmall, color = cs.primary)
             Spacer(Modifier.height(4.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    icon,
-                    null,
-                    modifier = Modifier.size(16.dp),
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                Icon(icon, null, modifier = Modifier.size(16.dp), tint = cs.onSurfaceVariant)
                 Spacer(Modifier.width(8.dp))
-                Text(
-                    value,
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 1
-                )
+                Text(value, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold, maxLines = 1)
             }
         }
     }
 }
 
-// ---------- Componente: insights simples ----------
 @Composable
 fun InsightsCard(progressionData: List<LoadProgressionPoint>) {
     if (progressionData.size < 2) return
@@ -650,59 +603,4 @@ fun InsightsCard(progressionData: List<LoadProgressionPoint>) {
             )
         }
     }
-}
-
-
-
-
-@Composable
-internal fun rememberMarker(
-    valueFormatter: DefaultCartesianMarker.ValueFormatter =
-        DefaultCartesianMarker.ValueFormatter.default(),
-    showIndicator: Boolean = true,
-): CartesianMarker {
-    val labelBackgroundShape = MarkerCornerBasedShape(CircleShape)
-    val labelBackground = rememberShapeComponent(
-        fill = Fill(MaterialTheme.colorScheme.background),
-        shape = labelBackgroundShape,
-        strokeFill = Fill(MaterialTheme.colorScheme.outline),
-        strokeThickness = 1.dp,
-    )
-
-    val label = rememberTextComponent(
-        style =
-            TextStyle(
-                color = MaterialTheme.colorScheme.onSurface,
-                textAlign = TextAlign.Center,
-                fontSize = 12.sp,
-            ),
-        padding = Insets(8.dp, 4.dp),
-        background = labelBackground,
-        minWidth = TextComponent.MinWidth.fixed(40.dp),
-    )
-
-    val indicatorFrontComponent = rememberShapeComponent(Fill(MaterialTheme.colorScheme.surface), CircleShape)
-
-    return rememberDefaultCartesianMarker(
-        label = label,
-        valueFormatter = valueFormatter,
-        indicator =
-            if (showIndicator) {
-                { color ->
-                    LayeredComponent(
-                        back = ShapeComponent(Fill(color.copy(alpha = 0.15f)), CircleShape),
-                        front =
-                            LayeredComponent(
-                                back = ShapeComponent(fill = Fill(color), shape = CircleShape),
-                                front = indicatorFrontComponent,
-                                padding = Insets(5.dp),
-                            ),
-                        padding = Insets(10.dp),
-                    )
-                }
-            } else {
-                null
-            },
-        indicatorSize = 36.dp,
-    )
 }
