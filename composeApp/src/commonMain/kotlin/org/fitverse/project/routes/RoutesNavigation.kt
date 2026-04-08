@@ -24,6 +24,25 @@ sealed interface NavRoutes : NavKey {
         @Serializable
         data object ResetPassword : NavKey, NavRoutes
     }
+
+    @Serializable
+    data object HomeFlowMenu : NavKey, NavRoutes {
+        @Serializable
+        data object Dashboard : NavKey, NavRoutes
+
+        @Serializable
+        data object Workout : NavKey, NavRoutes
+
+        @Serializable
+        data object Community : NavKey, NavRoutes
+
+        @Serializable
+        data object Meals : NavKey, NavRoutes
+
+        @Serializable
+        data object Profile : NavKey, NavRoutes
+    }
+
     @Serializable
     data object HomeFlow : NavKey, NavRoutes {
         @Serializable
@@ -46,18 +65,27 @@ sealed interface NavRoutes : NavKey {
     @Serializable
     data object WorkoutFlow : NavKey, NavRoutes {
         @Serializable
+        data object Workout : NavKey, NavRoutes
+        @Serializable
         data object WorkoutSession : NavKey, NavRoutes
     }
 
     @Serializable
     data object PlanWorkoutFlow : NavKey, NavRoutes {
         @Serializable
-        data object List : NavKey, NavRoutes
+        data object PlanList : NavKey, NavRoutes
+        @Serializable
+        data object Plan : NavKey, NavRoutes
         @Serializable
         data object Builder : NavKey, NavRoutes
 
         @Serializable
         data object Exercises : NavKey, NavRoutes
+        @Serializable
+        data object ExerciseDetails : NavKey, NavRoutes
+
+        @Serializable
+        data object PlanIA : NavRoutes
 
     }
 
@@ -69,22 +97,12 @@ sealed interface NavRoutes : NavKey {
         data object TasksLibrary : NavKey, NavRoutes
     }
 
-    @Serializable
-    data object PlanMealsFlow : NavKey, NavRoutes {
-        @Serializable
-        data object PlanList : NavKey, NavRoutes
-        @Serializable
-        data object PlanBuilder : NavKey, NavRoutes
-
-        @Serializable
-        data object ListMeals : NavKey, NavRoutes
-
-    }
 
 
 
+    @Serializable object Shopping : NavRoutes
 
-
+    @Serializable object WikiFitness : NavRoutes
 
     @Serializable object PlanPaymentScreen : NavRoutes
     @Serializable object Devices : NavRoutes

@@ -93,8 +93,8 @@ fun ContainerLevel(
     Surface(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
-        color = cs.surface.copy(alpha = 0.75f),
-        border = BorderStroke(1.dp, DarkGamifiedColors.PrimarySoft.copy(alpha = 0.2f)),
+        color = cs.surface.copy(alpha = 0.7f),
+        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.05f)),
         tonalElevation = 2.dp
     ) {
         Column(modifier = Modifier.padding(20.dp)) {

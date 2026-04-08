@@ -12,11 +12,8 @@ import com.example.presentation.screens.ui.historic.HistoricScreen
 fun HistoricDestination(
     navigateBack: () -> Unit
 ) {
-    val cs = MaterialTheme.colorScheme
 
-    Box(modifier = Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(cs.surface, cs.background)))){
-        HistoricScreen(
-            onBack = navigateBack
-        )
-    }
+    HistoricScreen(
+        onBack = navigateBack
+    )
 }

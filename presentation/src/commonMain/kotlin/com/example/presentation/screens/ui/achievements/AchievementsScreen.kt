@@ -19,10 +19,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.presentation.screens.widgets.FitverseCustomProgressBar
 import com.example.presentation.screens.widgets.FitverseIconBack
 import com.example.presentation.screens.widgets.FitverseTopAppBar
 import com.example.presentation.theme.PADDING_TOPAPPBAR_DEFAULT_HORIZONTAL
@@ -52,15 +54,16 @@ data class Achievement(
 fun AchievementsScreen(
     navigateBack: () -> Unit
 ) {
-    val cs = MaterialTheme.colorScheme
     val achievements = remember { getFullAchievementList() }
     val unlockedCount = achievements.count { it.isUnlocked }
-
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             FitverseTopAppBar(
                 title = "GALERIA DE TROFÉUS",
-                onBack = navigateBack
+                onBack = navigateBack,
+                scrollBehavior = scrollBehavior
             )
         }
     ) { padding ->
@@ -159,7 +162,7 @@ fun SagaHeader(saga: AchievementSaga) {
 @Composable
 fun AchievementItem(achievement: Achievement) {
     val isUnlocked = achievement.isUnlocked
-
+    val cs = MaterialTheme.colorScheme
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -169,9 +172,10 @@ fun AchievementItem(achievement: Achievement) {
                 else Modifier
             ),
         shape = RoundedCornerShape(16.dp),
+        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.05f)),
         colors = CardDefaults.cardColors(
             containerColor = if (isUnlocked) MaterialTheme.colorScheme.surface
-            else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+            else cs.surface.copy(alpha = 0.7f)
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = if (isUnlocked) 2.dp else 0.dp
@@ -185,7 +189,11 @@ fun AchievementItem(achievement: Achievement) {
                 modifier = Modifier
                     .size(48.dp)
                     .clip(CircleShape)
-                    .background(if (isUnlocked) achievement.saga.color.copy(0.1f) else Color.LightGray.copy(0.2f)),
+                    .background(
+                        if (isUnlocked) achievement.saga.color.copy(0.1f) else Color.LightGray.copy(
+                            0.2f
+                        )
+                    ),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
@@ -215,10 +223,10 @@ fun AchievementItem(achievement: Achievement) {
 
                 if (!isUnlocked && achievement.progress > 0) {
                     Spacer(modifier = Modifier.height(8.dp))
-                    LinearProgressIndicator(
-                        progress = { achievement.progress },
-                        modifier = Modifier.fillMaxWidth().height(4.dp).clip(CircleShape),
-                        color = achievement.saga.color.copy(0.6f)
+
+                    FitverseCustomProgressBar(
+                        progress = achievement.progress,
+                        color = achievement.saga.color
                     )
                 }
             }
@@ -235,35 +243,203 @@ fun getFullAchievementList(): List<Achievement> {
     val list = mutableListOf<Achievement>()
 
     // SAGAS: STEPS (12)
-    list.add(Achievement("s1", "Primeiros Passos", "Alcance 5.000 passos em um dia.", AchievementSaga.STEPS, true))
-    list.add(Achievement("s2", "Meta Batida", "Alcance 10.000 passos em um dia.", AchievementSaga.STEPS, true))
-    list.add(Achievement("s3", "Maratonista Semanal", "70.000 passos em uma semana.", AchievementSaga.STEPS, false, 0.4f, "28k/70k"))
-    list.add(Achievement("s4", "Inabalável", "Meta de passos por 7 dias seguidos.", AchievementSaga.STEPS, false))
-    list.add(Achievement("s5", "Pés de Mercúrio", "Alcance 15.000 passos em um dia.", AchievementSaga.STEPS, false))
+    list.add(
+        Achievement(
+            "s1",
+            "Primeiros Passos",
+            "Alcance 5.000 passos em um dia.",
+            AchievementSaga.STEPS,
+            true
+        )
+    )
+    list.add(
+        Achievement(
+            "s2",
+            "Meta Batida",
+            "Alcance 10.000 passos em um dia.",
+            AchievementSaga.STEPS,
+            true
+        )
+    )
+    list.add(
+        Achievement(
+            "s3",
+            "Maratonista Semanal",
+            "70.000 passos em uma semana.",
+            AchievementSaga.STEPS,
+            false,
+            0.4f,
+            "28k/70k"
+        )
+    )
+    list.add(
+        Achievement(
+            "s4",
+            "Inabalável",
+            "Meta de passos por 7 dias seguidos.",
+            AchievementSaga.STEPS,
+            false
+        )
+    )
+    list.add(
+        Achievement(
+            "s5",
+            "Pés de Mercúrio",
+            "Alcance 15.000 passos em um dia.",
+            AchievementSaga.STEPS,
+            false
+        )
+    )
     // ... adicione as variações de passos até completar 12
 
     // SAGAS: STRENGTH (15)
-    list.add(Achievement("f1", "Peso Pena", "Registre sua primeira progressão.", AchievementSaga.STRENGTH, true))
-    list.add(Achievement("f2", "Clube dos 100", "Levante 100kg em uma única série.", AchievementSaga.STRENGTH, true))
-    list.add(Achievement("f3", "Supino de Respeito", "Levante seu peso corporal no supino.", AchievementSaga.STRENGTH, false, 0.7f, "60/85kg"))
-    list.add(Achievement("f4", "Titã do Agachamento", "Agache com 1.5x seu peso.", AchievementSaga.STRENGTH, false))
-    list.add(Achievement("f5", "Volume Absurdo", "Movimente 5 toneladas em um treino.", AchievementSaga.STRENGTH, false))
+    list.add(
+        Achievement(
+            "f1",
+            "Peso Pena",
+            "Registre sua primeira progressão.",
+            AchievementSaga.STRENGTH,
+            true
+        )
+    )
+    list.add(
+        Achievement(
+            "f2",
+            "Clube dos 100",
+            "Levante 100kg em uma única série.",
+            AchievementSaga.STRENGTH,
+            true
+        )
+    )
+    list.add(
+        Achievement(
+            "f3",
+            "Supino de Respeito",
+            "Levante seu peso corporal no supino.",
+            AchievementSaga.STRENGTH,
+            false,
+            0.7f,
+            "60/85kg"
+        )
+    )
+    list.add(
+        Achievement(
+            "f4",
+            "Titã do Agachamento",
+            "Agache com 1.5x seu peso.",
+            AchievementSaga.STRENGTH,
+            false
+        )
+    )
+    list.add(
+        Achievement(
+            "f5",
+            "Volume Absurdo",
+            "Movimente 5 toneladas em um treino.",
+            AchievementSaga.STRENGTH,
+            false
+        )
+    )
     // ... adicione recordes para Terra, Leg Press, etc até 15
 
     // SAGAS: CONSISTENCY (13)
-    list.add(Achievement("c1", "Semana Santa", "Treine 5 dias em uma semana.", AchievementSaga.CONSISTENCY, true))
-    list.add(Achievement("c2", "Habitual", "Complete 10 treinos no total.", AchievementSaga.CONSISTENCY, true))
-    list.add(Achievement("c3", "Veterano", "Complete 50 treinos no total.", AchievementSaga.CONSISTENCY, false, 0.6f, "30/50"))
-    list.add(Achievement("c4", "Mês Perfeito", "30 dias sem faltar nenhum treino.", AchievementSaga.CONSISTENCY, false))
-    list.add(Achievement("c5", "Lobo Solitário", "Treine em uma noite de sexta-feira.", AchievementSaga.CONSISTENCY, true))
+    list.add(
+        Achievement(
+            "c1",
+            "Semana Santa",
+            "Treine 5 dias em uma semana.",
+            AchievementSaga.CONSISTENCY,
+            true
+        )
+    )
+    list.add(
+        Achievement(
+            "c2",
+            "Habitual",
+            "Complete 10 treinos no total.",
+            AchievementSaga.CONSISTENCY,
+            true
+        )
+    )
+    list.add(
+        Achievement(
+            "c3",
+            "Veterano",
+            "Complete 50 treinos no total.",
+            AchievementSaga.CONSISTENCY,
+            false,
+            0.6f,
+            "30/50"
+        )
+    )
+    list.add(
+        Achievement(
+            "c4",
+            "Mês Perfeito",
+            "30 dias sem faltar nenhum treino.",
+            AchievementSaga.CONSISTENCY,
+            false
+        )
+    )
+    list.add(
+        Achievement(
+            "c5",
+            "Lobo Solitário",
+            "Treine em uma noite de sexta-feira.",
+            AchievementSaga.CONSISTENCY,
+            true
+        )
+    )
     // ... adicione metas de meses, anos e frequências até 13
 
     // SAGAS: LIFESTYLE (10)
-    list.add(Achievement("l1", "Madrugador", "Treine antes das 07:00 da manhã.", AchievementSaga.LIFESTYLE, true))
-    list.add(Achievement("l2", "Hidratado", "Beba 2L de água por dia por 7 dias.", AchievementSaga.LIFESTYLE, false, 0.3f, "2/7"))
-    list.add(Achievement("l3", "Sem Desculpas", "Registre um treino em um feriado.", AchievementSaga.LIFESTYLE, false))
-    list.add(Achievement("l4", "Explorador", "Tente um exercício novo.", AchievementSaga.LIFESTYLE, true))
-    list.add(Achievement("l5", "Focado", "Sem celular entre as séries por 1 treino.", AchievementSaga.LIFESTYLE, false))
+    list.add(
+        Achievement(
+            "l1",
+            "Madrugador",
+            "Treine antes das 07:00 da manhã.",
+            AchievementSaga.LIFESTYLE,
+            true
+        )
+    )
+    list.add(
+        Achievement(
+            "l2",
+            "Hidratado",
+            "Beba 2L de água por dia por 7 dias.",
+            AchievementSaga.LIFESTYLE,
+            false,
+            0.3f,
+            "2/7"
+        )
+    )
+    list.add(
+        Achievement(
+            "l3",
+            "Sem Desculpas",
+            "Registre um treino em um feriado.",
+            AchievementSaga.LIFESTYLE,
+            false
+        )
+    )
+    list.add(
+        Achievement(
+            "l4",
+            "Explorador",
+            "Tente um exercício novo.",
+            AchievementSaga.LIFESTYLE,
+            true
+        )
+    )
+    list.add(
+        Achievement(
+            "l5",
+            "Focado",
+            "Sem celular entre as séries por 1 treino.",
+            AchievementSaga.LIFESTYLE,
+            false
+        )
+    )
     // ... complete até 10
 
     return list

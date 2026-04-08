@@ -8,11 +8,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Restaurant
-import androidx.compose.material.icons.outlined.BakeryDining
-import androidx.compose.material.icons.outlined.LunchDining
-import androidx.compose.material.icons.outlined.Nightlight
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -24,12 +19,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.presentation.screens.ui.planMeals.Macros
-import com.example.presentation.screens.ui.planMeals.MealPlanScreenState
 import com.example.presentation.screens.widgets.FitverseHeader
 import com.example.presentation.theme.DarkGamifiedColors
 
@@ -64,7 +56,24 @@ data class MealGroup(
     val totalCalories: Int get() = foods.sumOf { it.calories }
 }
 
-
+data class MealPlanScreenState(
+    val isLoading: Boolean = false,
+    val objective: String = "Déficit Calórico",
+    val currentWeight: Double = 85.0,
+    val targetWeight: Double = 78.0,
+    val dailyCaloriesTarget: Int = 2100,
+    val dailyMacros: Macros = Macros(protein = 160, carbs = 200, fat = 73),
+    val activePlan: MealPlanItem? = null, // Plano atual destacado
+    val availablePlans: List<MealPlanItem> = emptyList() // Banco de reservas
+)
+data class MealPlanItem(
+    val id: String,
+    val title: String,
+    val description: String,
+    val focus: String = "Reeducação", // Ex: "Low Carb", "Cetogênica"
+    val isActive: Boolean
+)
+data class Macros(val protein: Int, val carbs: Int, val fat: Int)
 @Composable
 fun PlanMealsListScreenPro(
     state: MealPlanScreenState,
@@ -120,7 +129,7 @@ fun PlanMealsListScreenPro(
         item {
             Text(
                 text = "REFEIÇÕES DO DIA",
-                color = colors.onBackground, // Branco Puro
+                color = colors.onBackground,
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Black,
                 letterSpacing = 1.sp
@@ -166,15 +175,17 @@ fun GoalNutritionHeader(
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(28.dp),
-        color = colors.surface.copy(alpha = 0.7f), // Surface Escuro (#16171D)
-        border = BorderStroke(1.dp, colors.outline.copy(alpha = 0.2f))
+        // Sênior: Glassmorphism base
+        color = colors.surface.copy(alpha = 0.7f),
+        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.05f))
     ) {
         Column(modifier = Modifier.padding(24.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
-                text = "MISSION: ${objective.uppercase()}",
+                text = "MISSÃO: ${objective.uppercase()}",
                 style = MaterialTheme.typography.labelMedium,
-                color = colors.secondary, // Azul Elétrico para Metas
-                fontWeight = FontWeight.Black
+                color = colors.primary, // Primary para a missão geral
+                fontWeight = FontWeight.Black,
+                letterSpacing = 1.sp
             )
 
             Spacer(Modifier.height(24.dp))
@@ -187,10 +198,10 @@ fun GoalNutritionHeader(
                 // RESTANTE
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text("$remaining", color = colors.onSurface, fontSize = 22.sp, fontWeight = FontWeight.Black)
-                    Text("Restante", color = colors.onSurfaceVariant, fontSize = 12.sp) // Cinza Muted
+                    Text("Restante", color = colors.onSurfaceVariant.copy(alpha = 0.7f), fontSize = 12.sp, fontWeight = FontWeight.Bold)
                 }
 
-                // ARCO CENTRAL
+                // ARCO CENTRAL (O Protagonista)
                 Box(modifier = Modifier.size(140.dp), contentAlignment = Alignment.Center) {
                     Canvas(modifier = Modifier.fillMaxSize()) {
                         drawArc(
@@ -201,8 +212,8 @@ fun GoalNutritionHeader(
                             style = Stroke(width = 24f, cap = StrokeCap.Round)
                         )
                         drawArc(
-                            // Degradê entre Roxo (Primary) e Azul (Secondary)
-                            brush = Brush.sweepGradient(listOf(colors.primary, colors.secondary)),
+                            // Sênior: O gradiente termina em Tertiary para indicar "sucesso" conforme a barra enche
+                            brush = Brush.sweepGradient(listOf(colors.primary, colors.tertiary)),
                             startAngle = 140f,
                             sweepAngle = 260f * animatedProgress,
                             useCenter = false,
@@ -210,15 +221,16 @@ fun GoalNutritionHeader(
                         )
                     }
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("$consumedCalories", color = colors.onSurface, fontSize = 32.sp, fontWeight = FontWeight.Black)
-                        Text("kcal", color = colors.onSurfaceVariant, fontSize = 12.sp)
+                        // Sênior: O número mais importante da tela recebe o destaque Tertiary
+                        Text("$consumedCalories", color = colors.tertiary, fontSize = 36.sp, fontWeight = FontWeight.Black)
+                        Text("kcal", color = colors.onSurfaceVariant, fontSize = 12.sp, fontWeight = FontWeight.Bold)
                     }
                 }
 
                 // META
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Text("$targetCalories", color = colors.onSurface, fontSize = 22.sp, fontWeight = FontWeight.Black)
-                    Text("Meta", color = colors.onSurfaceVariant, fontSize = 12.sp)
+                    Text("Meta", color = colors.onSurfaceVariant.copy(alpha = 0.7f), fontSize = 12.sp, fontWeight = FontWeight.Bold)
                 }
             }
         }
@@ -233,11 +245,12 @@ fun PlannedMacrosRow(
     consumedFat: Int
 ) {
     val colors = MaterialTheme.colorScheme
+
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
-        color = colors.surface.copy(alpha = 0.5f), // Bom em containers de widgets
-        border = BorderStroke(1.dp, colors.outline.copy(alpha = 0.1f))
+        color = colors.surface.copy(alpha = 0.7f),
+        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.05f))
     ) {
         Row(
             modifier = Modifier.padding(20.dp),
@@ -274,27 +287,6 @@ fun MacroItem(label: String, consumed: Int, target: Int, color: Color) {
 }
 
 @Composable
-fun WeightGoalCard(current: Double, target: Double) {
-    Surface(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(24.dp),
-        // Usamos PrimarySoft aqui para diferenciar dos cards normais
-        color = DarkGamifiedColors.PrimarySoft.copy(alpha = 0.15f),
-        border = BorderStroke(1.dp, DarkGamifiedColors.PrimarySoft.copy(alpha = 0.3f))
-    ) {
-        Row(
-            modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceAround
-        ) {
-            WeightMetricPro("Peso Atual", "$current kg")
-            Box(modifier = Modifier.size(1.dp, 30.dp).background(DarkGamifiedColors.PrimarySoft.copy(alpha = 0.5f)))
-            WeightMetricPro("Meta", "$target kg")
-        }
-    }
-}
-
-@Composable
 fun WeightMetricPro(label: String, value: String) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(label, style = MaterialTheme.typography.labelMedium, color = DarkGamifiedColors.Primary)
@@ -316,32 +308,37 @@ fun MealGroupCard(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = null,
-                    tint = colors.secondary, // Ícones de categoria em Azul
-                    modifier = Modifier.size(20.dp)
-                )
-                Spacer(modifier = Modifier.width(10.dp))
+                // Fundo sutil para o ícone
+                Box(
+                    modifier = Modifier
+                        .size(32.dp)
+                        .background(colors.primary.copy(alpha = 0.15f), RoundedCornerShape(8.dp)),
+                    contentAlignment = Alignment.Center
+                ){
+                    Icon(imageVector = icon, contentDescription = null, tint = colors.primary, modifier = Modifier.size(18.dp))
+                }
+                Spacer(modifier = Modifier.width(12.dp))
                 Text(
                     text = mealGroup.name.uppercase(),
-                    color = colors.onSurface,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Black
+                    color = colors.onBackground,
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Black,
+                    letterSpacing = 0.5.sp
                 )
             }
 
-            // Badge de Calorias: Fundo em tom PrimarySoft
+            // Sênior: Badge de calorias com contraste forte, mas elegante
             Surface(
-                color = colors.primaryContainer.copy(alpha = 0.4f),
-                shape = RoundedCornerShape(8.dp)
+                color = colors.surface.copy(alpha = 0.7f),
+                shape = RoundedCornerShape(8.dp),
+                border = BorderStroke(1.dp, colors.tertiary.copy(alpha = 0.2f))
             ) {
                 Text(
                     text = "${mealGroup.totalCalories} kcal",
-                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-                    color = colors.primary, // Texto em Roxo Vibrante
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp),
+                    color = colors.tertiary, // Destaque na soma total
                     fontSize = 12.sp,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Black
                 )
             }
         }
@@ -349,8 +346,8 @@ fun MealGroupCard(
         Surface(
             modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(24.dp),
-            color = colors.surfaceVariant.copy(alpha = 0.4f), // Card background (#16171D)
-            border = BorderStroke(1.dp, colors.outline.copy(alpha = 0.15f))
+            color = colors.surface.copy(alpha = 0.5f), // Transparência um pouco maior para o grupo
+            border = BorderStroke(1.dp, Color.White.copy(alpha = 0.05f))
         ) {
             Column {
                 if (mealGroup.foods.isEmpty()) {
@@ -361,17 +358,17 @@ fun MealGroupCard(
                         if (index < mealGroup.foods.lastIndex) {
                             HorizontalDivider(
                                 modifier = Modifier.padding(horizontal = 16.dp),
-                                color = colors.outline.copy(alpha = 0.3f)
+                                color = Color.White.copy(alpha = 0.05f) // Divisor quase invisível
                             )
                         }
                     }
 
-                    // Botão de Adição com Tertiary (Verde Neon)
+                    // Botão de Adição com visual premium
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable { onAddFoodClick() }
-                            .background(colors.tertiary.copy(alpha = 0.08f))
+                            .background(colors.tertiary.copy(alpha = 0.05f))
                             .padding(16.dp),
                         contentAlignment = Alignment.Center
                     ) {
@@ -379,7 +376,8 @@ fun MealGroupCard(
                             text = "+ ADICIONAR ITEM",
                             color = colors.tertiary,
                             fontWeight = FontWeight.Black,
-                            fontSize = 12.sp
+                            fontSize = 12.sp,
+                            letterSpacing = 1.sp
                         )
                     }
                 }
@@ -390,47 +388,43 @@ fun MealGroupCard(
 
 
 @Composable
-fun FoodEntryRowPro(
-    food: FoodEntry,
-    colors: ColorScheme
-) {
+fun FoodEntryRowPro(food: FoodEntry, colors: ColorScheme) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
+        modifier = Modifier.fillMaxWidth().padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Column(modifier = Modifier.weight(1f)) {
-            // Título: Branco Puro
             Text(
                 text = food.name,
                 color = colors.onSurface,
                 fontWeight = FontWeight.Bold,
-                fontSize = 16.sp
+                fontSize = 15.sp
             )
-            // Porção: Cinza Muted
+            Spacer(modifier = Modifier.height(2.dp))
             Text(
                 text = food.portion,
-                color = colors.onSurfaceVariant,
-                fontSize = 13.sp
+                color = colors.onSurfaceVariant.copy(alpha = 0.8f),
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Medium
             )
         }
 
         Column(horizontalAlignment = Alignment.End) {
-            // Calorias: Destaque em Negrito
+            // Sênior: Calorias da porção em Tertiary (o valor mais buscado pelo usuário)
             Text(
                 text = "${food.calories} kcal",
-                color = colors.onSurface,
+                color = colors.tertiary,
                 fontWeight = FontWeight.Black,
                 fontSize = 15.sp
             )
-            // Macros: Roxo Vibrante (Primary) para gamificação
+            Spacer(modifier = Modifier.height(2.dp))
+            // Macros como subtítulo
             Text(
-                text = "P: ${food.protein}g | C: ${food.carbs}g | G: ${food.fat}g",
-                color = colors.primary,
+                text = "P: ${food.protein}g • C: ${food.carbs}g • G: ${food.fat}g",
+                color = colors.onSurfaceVariant,
                 fontWeight = FontWeight.Bold,
-                fontSize = 11.sp
+                fontSize = 10.sp
             )
         }
     }

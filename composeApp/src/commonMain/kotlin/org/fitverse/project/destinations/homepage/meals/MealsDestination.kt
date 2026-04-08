@@ -8,8 +8,8 @@ import androidx.compose.ui.Modifier
 import com.example.presentation.screens.ui.meals.FoodEntry
 import com.example.presentation.screens.ui.meals.MealGroup
 import com.example.presentation.screens.ui.meals.MealPeriod
+import com.example.presentation.screens.ui.meals.MealPlanScreenState
 import com.example.presentation.screens.ui.meals.PlanMealsListScreenPro
-import com.example.presentation.screens.ui.planMeals.MealPlanScreenState
 import org.fitverse.project.destinations.homepage.dashboad.DarkGamifiedDashboardBackground
 
 @Composable

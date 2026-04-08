@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,6 +33,8 @@ data class ExerciseLibraryItem(
     val id: String,
     val name: String,
     val muscleGroup: String,
+    val description: String = "Execute o movimento de forma controlada, mantendo a postura e a contração muscular alvo durante toda a amplitude.",
+    val imageUrl: String = "", // Link para o GIF ou PNG
     val icon: ImageVector = Icons.Rounded.FitnessCenter
 )
 
@@ -58,19 +61,16 @@ val libraryExercises = listOf(
 @Composable
 fun WorkoutPlanExercisesScreen(
     onBack: () -> Unit,
-    onAddExercise: (ExerciseLibraryItem) -> Unit
+    onAddExercise: (ExerciseLibraryItem) -> Unit,
+    onDetails: () -> Unit
 ) {
     val colors = MaterialTheme.colorScheme
     var searchQuery by remember { mutableStateOf("") }
     var selectedFilter by remember { mutableStateOf("Todos") }
 
     // Fundo padrão: Deep Neutral (#0A0B0F)
-    val screenGradient = Brush.verticalGradient(
-        colors = listOf(colors.surface, colors.background)
-    )
-
     Scaffold(
-        modifier = Modifier.background(screenGradient),
+        modifier = Modifier,
         containerColor = colors.background,
         topBar = {
             FitverseTopAppBar(
@@ -124,8 +124,9 @@ fun WorkoutPlanExercisesScreen(
                 items(muscleGroups) { group ->
                     val isSelected = selectedFilter == group
                     Surface(
-                        modifier = Modifier.clickable { selectedFilter = group },
+                        modifier = Modifier,
                         shape = RoundedCornerShape(12.dp),
+                        onClick = { selectedFilter = group },
                         // Se selecionado, brilha em Azul (Secondary)
                         color = if (isSelected) colors.secondary else colors.surfaceVariant.copy(alpha = 0.5f),
                         border = BorderStroke(
@@ -159,7 +160,9 @@ fun WorkoutPlanExercisesScreen(
                     }
                     else {
                         items(filteredList, key = { it.id }) { exercise ->
-                            ExerciseSelectionCard(exercise, colors) { onAddExercise(exercise) }
+                            ExerciseSelectionCard(
+                                exercise, colors, onDetails = onDetails
+                            ) { onAddExercise(exercise) }
                         }
                     }
                 }
@@ -173,11 +176,13 @@ fun WorkoutPlanExercisesScreen(
 fun ExerciseSelectionCard(
     exercise: ExerciseLibraryItem,
     colors: ColorScheme,
+    onDetails: () -> Unit,
     onAdd: () -> Unit
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
+        onClick = onDetails,
         color = colors.surfaceVariant.copy(alpha = 0.6f), // Card background (#16171D)
         border = BorderStroke(1.dp, colors.outline.copy(alpha = 0.2f))
     ) {

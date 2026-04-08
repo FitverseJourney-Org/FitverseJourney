@@ -115,7 +115,6 @@ fun FitverseIconBack(
     IconButton(
         onClick = { onBack() },
         modifier = Modifier
-            .background(SurfaceDark, RoundedCornerShape(12.dp))
             .size(40.dp)
             .clip(RoundedCornerShape(12.dp))
     ) {

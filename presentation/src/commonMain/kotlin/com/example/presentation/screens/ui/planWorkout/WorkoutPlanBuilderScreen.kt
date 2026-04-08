@@ -44,8 +44,8 @@ data class Exercise(
 @Composable
 fun WorkoutPlanBuilderScreen(
     onBack: () -> Unit,
-    onSave: () -> Unit,
-    toAddExercises: () -> Unit
+    toAddExercises: () -> Unit,
+    savedPlan: () -> Unit
 ) {
     val colors = MaterialTheme.colorScheme
     var planName by remember { mutableStateOf("") }
@@ -67,7 +67,9 @@ fun WorkoutPlanBuilderScreen(
                 title = "MONTAR MISSÃO",
                 onBack = onBack,
                 actions = {
-                    TextButton(onClick = onSave) {
+                    TextButton(onClick = {
+                        savedPlan()
+                    }) {
                         // Action principal em Secondary (Azul)
                         Text("SALVAR", color = colors.secondary, fontWeight = FontWeight.Black)
                     }

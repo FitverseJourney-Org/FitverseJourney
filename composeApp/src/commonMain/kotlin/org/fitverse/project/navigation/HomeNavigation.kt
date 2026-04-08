@@ -2,13 +2,14 @@ package org.fitverse.project.navigation
 
 import HistoricDestination
 import LeaderboardsDestination
-import MealsPlanBuilderScreen
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -31,6 +32,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -47,8 +49,6 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
-import com.example.presentation.screens.ui.planMeals.MealPlanScreenState
-import com.example.presentation.screens.ui.planMeals.PlanMealsListScreen
 import com.example.presentation.theme.DarkGamifiedColors
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
@@ -62,9 +62,11 @@ import org.fitverse.project.destinations.homepage.meals.MealsDestination
 import org.fitverse.project.destinations.homepage.dashboad.NotificationDestination
 import org.fitverse.project.destinations.homepage.profile.ProfileDestination
 import org.fitverse.project.destinations.homepage.workout.WorkoutDestination
+import org.fitverse.project.destinations.homepage.workout.WorkoutSessionDestination
 import org.fitverse.project.destinations.modal_destinations.friends.FriendsDestination
 import org.fitverse.project.destinations.modal_destinations.progress.ProgressDestination
 import org.fitverse.project.destinations.payments.PlanDestination
+import org.fitverse.project.destinations.wiki.WikiFitnessDestination
 import org.fitverse.project.routes.NavRoutes
 
 @Composable
@@ -75,35 +77,49 @@ fun HomeNavigation(
         SavedStateConfiguration {
             serializersModule = SerializersModule {
                 polymorphic(NavKey::class) {
-                    subclass(NavRoutes.HomeFlow.Dashboard::class, NavRoutes.HomeFlow.Dashboard.serializer())
-                    subclass(NavRoutes.HomeFlow.Workout::class, NavRoutes.HomeFlow.Workout.serializer())
-                    subclass(NavRoutes.HomeFlow.Meals::class, NavRoutes.HomeFlow.Meals.serializer())
+                    subclass(NavRoutes.HomeFlowMenu.Dashboard::class, NavRoutes.HomeFlowMenu.Dashboard.serializer())
+                    subclass(NavRoutes.HomeFlowMenu.Workout::class, NavRoutes.HomeFlowMenu.Workout.serializer())
+                    subclass(NavRoutes.HomeFlowMenu.Community::class, NavRoutes.HomeFlowMenu.Community.serializer())
+                    subclass(NavRoutes.HomeFlowMenu.Meals::class, NavRoutes.HomeFlowMenu.Meals.serializer())
+                    subclass(NavRoutes.HomeFlowMenu.Profile::class, NavRoutes.HomeFlowMenu.Profile.serializer())
                     subclass(NavRoutes.PlanWorkoutFlow::class, NavRoutes.PlanWorkoutFlow.serializer())
                     subclass(NavRoutes.TasksFlow::class, NavRoutes.TasksFlow.serializer())
                     subclass(NavRoutes.PlanPaymentScreen::class, NavRoutes.PlanPaymentScreen.serializer())
-                    subclass(NavRoutes.HomeFlow.Profile::class, NavRoutes.HomeFlow.Profile.serializer())
+                    subclass(NavRoutes.Shopping::class, NavRoutes.Shopping.serializer())
+                    subclass(NavRoutes.Friends::class, NavRoutes.Friends.serializer())
+                    subclass(NavRoutes.Leaderboards::class, NavRoutes.Leaderboards.serializer())
+                    subclass(NavRoutes.Historic::class, NavRoutes.Historic.serializer())
+                    subclass(NavRoutes.Progress::class, NavRoutes.Progress.serializer())
+                    subclass(NavRoutes.Achievements::class, NavRoutes.Achievements.serializer())
+                    subclass(NavRoutes.Devices::class, NavRoutes.Devices.serializer())
+                    subclass(NavRoutes.HelpSupport::class, NavRoutes.HelpSupport.serializer())
+                    subclass(NavRoutes.HomeFlow.NotificationScreen::class, NavRoutes.HomeFlow.NotificationScreen.serializer())
+                    subclass(NavRoutes.HomeFlow.AddPost::class, NavRoutes.HomeFlow.AddPost.serializer())
+                    subclass(NavRoutes.WorkoutFlow.WorkoutSession::class, NavRoutes.WorkoutFlow.WorkoutSession.serializer())
+                    subclass(NavRoutes.WorkoutFlow.Workout::class, NavRoutes.WorkoutFlow.Workout.serializer())
+                    subclass(NavRoutes.WikiFitness::class, NavRoutes.WikiFitness.serializer())
                 }
             }
         },
-        NavRoutes.HomeFlow.Dashboard
+        NavRoutes.HomeFlowMenu.Dashboard
     )
 
     val bottomBarItems = listOf(
-        NavRoutes.HomeFlow.Dashboard,
-        NavRoutes.HomeFlow.Workout,
-        NavRoutes.HomeFlow.Community,
-        NavRoutes.HomeFlow.Meals,
-        NavRoutes.HomeFlow.Profile,
+        NavRoutes.HomeFlowMenu.Dashboard,
+        NavRoutes.HomeFlowMenu.Workout,
+        NavRoutes.HomeFlowMenu.Community,
+        NavRoutes.HomeFlowMenu.Meals,
+        NavRoutes.HomeFlowMenu.Profile,
     )
 
 
     val currentKey = rootBackStack.lastOrNull()
     val isMainScreen = when (currentKey) {
-        is NavRoutes.HomeFlow.Dashboard,
-        is NavRoutes.HomeFlow.Workout,
-        is NavRoutes.HomeFlow.Community,
-        is NavRoutes.HomeFlow.Meals,
-        is NavRoutes.HomeFlow.Profile -> true
+        is NavRoutes.HomeFlowMenu.Dashboard,
+        is NavRoutes.HomeFlowMenu.Workout,
+        is NavRoutes.HomeFlowMenu.Community,
+        is NavRoutes.HomeFlowMenu.Meals,
+        is NavRoutes.HomeFlowMenu.Profile -> true
         else -> false
     }
 
@@ -124,11 +140,11 @@ fun HomeNavigation(
                     val currentKey = rootBackStack.lastOrNull()
 
                     val showBottomBar = when (currentKey) {
-                        is NavRoutes.HomeFlow.Dashboard,
-                        is NavRoutes.HomeFlow.Workout,
-                        is NavRoutes.HomeFlow.Community,
-                        is NavRoutes.HomeFlow.Meals,
-                        is NavRoutes.HomeFlow.Profile-> true
+                        is NavRoutes.HomeFlowMenu.Dashboard,
+                        is NavRoutes.HomeFlowMenu.Workout,
+                        is NavRoutes.HomeFlowMenu.Community,
+                        is NavRoutes.HomeFlowMenu.Meals,
+                        is NavRoutes.HomeFlowMenu.Profile-> true
                         else -> false
                     }
 
@@ -168,33 +184,35 @@ fun HomeNavigation(
 
                     },
                     entryProvider = entryProvider {
-                        entry<NavRoutes.HomeFlow.Dashboard> {
+                        entry<NavRoutes.HomeFlowMenu.Dashboard> {
                             DashboardDestination(
                                 toNotification = {
                                     rootBackStack.add(NavRoutes.HomeFlow.NotificationScreen)
                                 }
                             )
                         }
-                        entry<NavRoutes.HomeFlow.Workout> {
+                        entry<NavRoutes.HomeFlowMenu.Workout> {
                             WorkoutDestination(
-                                toWorkoutSession = {}
+                                toWorkoutSession = {
+                                    rootBackStack.add(NavRoutes.WorkoutFlow.WorkoutSession)
+                                }
                             )
                         }
-                        entry<NavRoutes.HomeFlow.Community> {
+                        entry<NavRoutes.HomeFlowMenu.Community> {
                             CommunityDestination(
                                 toAddPost = {
                                     rootBackStack.add(NavRoutes.HomeFlow.AddPost)
                                 }
                             )
                         }
-                        entry<NavRoutes.HomeFlow.Meals> {
+                        entry<NavRoutes.HomeFlowMenu.Meals> {
                             MealsDestination(
                                 toAddMeal = {
-                                    rootBackStack.add(NavRoutes.PlanMealsFlow.ListMeals)
+
                                 }
                             )
                         }
-                        entry<NavRoutes.HomeFlow.Profile>{
+                        entry<NavRoutes.HomeFlowMenu.Profile>{
                             ProfileDestination()
                         }
                         entry<NavRoutes.HomeFlow.AddPost> {
@@ -202,11 +220,17 @@ fun HomeNavigation(
                                 toBack = { rootBackStack.removeLastOrNull() }
                             )
                         }
+                        entry<NavRoutes.WorkoutFlow.WorkoutSession> {
+                            WorkoutSessionDestination(
+                                ToWorkout = {
+                                    rootBackStack.add(NavRoutes.WorkoutFlow.Workout)
+                                }
+                            )
+                        }
                         entry<NavRoutes.HomeFlow.NotificationScreen> {
                             NotificationDestination(
                                 toDashboard = {
-                                    rootBackStack.clear()
-                                    rootBackStack.add(NavRoutes.HomeFlow.Dashboard)
+                                    rootBackStack.removeLastOrNull()
                                 }
                             )
                         }
@@ -262,30 +286,14 @@ fun HomeNavigation(
                                 toBack = { rootBackStack.removeLastOrNull() }
                             )
                         }
-                        entry<NavRoutes.PlanMealsFlow.PlanList>{
-                            PlanMealsListScreen(
-                                state = MealPlanScreenState(),
-                                onBack = {
-                                    rootBackStack.removeLastOrNull()
-                                },
-                                onNewPlanClick = {
-                                    rootBackStack.add(NavRoutes.PlanMealsFlow.PlanBuilder)
-                                },
-                                onPlanClick = {
-                                    rootBackStack.add(NavRoutes.PlanMealsFlow.PlanBuilder)
-                                }
-                            )
+                        entry<NavRoutes.Shopping>{
+                            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+                                Text("SHOPPING")
+                            }
                         }
-                        entry<NavRoutes.PlanMealsFlow.PlanBuilder>{
-                            MealsPlanBuilderScreen(
-                                onBackClick = { rootBackStack.removeLastOrNull() },
-                                onSavePlan = { rootBackStack.removeLastOrNull() },
-                                onAddFoodClick = {
-
-                                },
-                            )
+                        entry<NavRoutes.WikiFitness>{
+                            WikiFitnessDestination()
                         }
-
                     }
                 )
             }
@@ -302,11 +310,11 @@ fun handleHomeBackPress(homeBackStack: MutableList<NavKey>): Boolean {
         is NavRoutes.HomeFlow.Dashboard -> {
             false
         }
-        is NavRoutes.HomeFlow.Workout,
-        is NavRoutes.HomeFlow.Meals,
-        is NavRoutes.HomeFlow.Community -> {
+        is NavRoutes.HomeFlowMenu.Workout,
+        is NavRoutes.HomeFlowMenu.Meals,
+        is NavRoutes.HomeFlowMenu.Community -> {
             homeBackStack.clear()
-            homeBackStack.add(NavRoutes.HomeFlow.Dashboard)
+            homeBackStack.add(NavRoutes.HomeFlowMenu.Dashboard)
             true
         }
         else -> {
@@ -327,7 +335,7 @@ fun FitVerseBottomBar(
     // Container com efeito de "Vidro Fumê"
     Surface(
         // Cor de fundo levemente translúcida para deixar o gradiente do fundo passar
-        color = DarkGamifiedColors.Surface.copy(alpha = 0.92f),
+        color = DarkGamifiedColors.PrimarySoft.copy(alpha = 0.25f),
         // Borda superior sutil usando PrimarySoft para o efeito de "linha de energia"
         border = BorderStroke(
             width = 0.5.dp,
@@ -355,11 +363,11 @@ fun FitVerseBottomBar(
 
                 // Mapeamento de Cores e Identidade por Seção
                 val (label, icon, activeColor) = when (item) {
-                    is NavRoutes.HomeFlow.Dashboard -> Triple("Home", Icons.Rounded.Home, colors.secondary) // Azul: Dados/Visão Geral
-                    is NavRoutes.HomeFlow.Workout -> Triple("Treino", Icons.Rounded.FitnessCenter, colors.primary) // Roxo: Força/Ação
-                    is NavRoutes.HomeFlow.Community -> Triple("Social", Icons.Rounded.Groups, colors.primary) // Roxo: Clã/Equipe
-                    is NavRoutes.HomeFlow.Meals -> Triple("Dieta", Icons.Rounded.Restaurant, colors.tertiary) // Verde: Nutrição/Saúde
-                    is NavRoutes.HomeFlow.Profile -> Triple("Perfil", Icons.Rounded.Person, colors.secondary) // Azul: Atributos
+                    is NavRoutes.HomeFlowMenu.Dashboard -> Triple("Home", Icons.Rounded.Home, colors.secondary) // Azul: Dados/Visão Geral
+                    is NavRoutes.HomeFlowMenu.Workout -> Triple("Treino", Icons.Rounded.FitnessCenter, colors.secondary) // Roxo: Força/Ação
+                    is NavRoutes.HomeFlowMenu.Community -> Triple("Social", Icons.Rounded.Groups, colors.secondary) // Roxo: Clã/Equipe
+                    is NavRoutes.HomeFlowMenu.Meals -> Triple("Dieta", Icons.Rounded.Restaurant, colors.secondary) // Verde: Nutrição/Saúde
+                    is NavRoutes.HomeFlowMenu.Profile -> Triple("Perfil", Icons.Rounded.Person, colors.secondary) // Azul: Atributos
                     else -> Triple("", Icons.Rounded.Block, colors.outline)
                 }
 
