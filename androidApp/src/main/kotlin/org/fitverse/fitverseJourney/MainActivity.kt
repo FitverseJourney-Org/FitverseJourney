@@ -10,17 +10,12 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.datastore.core.DataStore
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.expect.AppDataStoreDb
-import com.example.expect.DatabaseDriverFactory
+import com.example.data.database.sqldelight.DatabaseFactory
 import com.example.expect.LocalAppLocale
-import com.example.expect.getDefaultLocale
 import com.example.presentation.screens.ui.LanguageViewModel
 import com.example.presentation.theme.FitVerseJourneyTheme
 import org.fitverse.project.navigation.FitverseRootNavigation
 import org.koin.compose.koinInject
-import java.util.prefs.Preferences
 
 
 class MainActivity : ComponentActivity() {
@@ -29,7 +24,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             App(
-                dbHelper = DatabaseDriverFactory(this),
+                dbHelper = DatabaseFactory(this),
             )
         }
     }
@@ -38,7 +33,7 @@ class MainActivity : ComponentActivity() {
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun App(
-    dbHelper: DatabaseDriverFactory,
+    dbHelper: DatabaseFactory,
 ) {
     FitVerseJourneyTheme {
 

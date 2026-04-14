@@ -30,8 +30,9 @@ kotlin {
 
             // -----------------------------------------------------------------------------------------
             // DEPENDENCY INJECTION
-            // -----------------------------------------------------------------------------------------
-            api(libs.koin.core)
+            // ----------------------------------------------------------------------------------------
+            implementation(project.dependencies.platform(libs.koin.bom))
+            implementation(libs.koin.core)
 
         }
 
@@ -77,12 +78,14 @@ kotlin {
             // LIFECYCLE / VIEWMODEL
             // -----------------------------------------------------------------------------------------
             implementation(libs.jetbrains.lifecycle.viewmodel)
-            implementation(libs.jetbrains.lifecycle.viewmodel.navigation3)
+            implementation(libs.lifecycle.viewmodel.navigation3)
 
             // -----------------------------------------------------------------------------------------
             // DEPENDENCY INJECTION
             // -----------------------------------------------------------------------------------------
-            implementation(libs.koin.compose.navigation3)
+            implementation(project.dependencies.platform(libs.koin.bom))
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose.viewmodel)
 
             // -----------------------------------------------------------------------------------------
             // SERIALIZATION

@@ -6,6 +6,7 @@ plugins {
 
     // sqlDelight
     alias(libs.plugins.sqldelight)
+
 }
 
 kotlin {
@@ -48,7 +49,8 @@ kotlin {
             implementation(project(":domain"))
 
             // koin
-            api(libs.koin.core)
+            implementation(project.dependencies.platform(libs.koin.bom))
+            implementation(libs.koin.core)
 
             // datastore
             implementation(libs.datastore)
@@ -68,6 +70,10 @@ kotlin {
             // serialization
             implementation(libs.kotlinx.serialization)
             implementation(libs.ktor.serialization.kotlinx.json)
+
+            implementation("app.cash.sqldelight:coroutines-extensions:2.0.1")
+
+
         }
         iosMain.dependencies {
 
@@ -77,11 +83,17 @@ kotlin {
         }
         androidMain.dependencies {
 
-
+            // coroutines
+            implementation(libs.kotlinx.coroutines.android)
+            implementation(libs.kotlinx.coroutines.play.services)
             // firebase
             implementation(project.dependencies.platform(libs.firebase.bom))
             implementation(libs.firebase.auth.ktx)
             implementation(libs.firebase.firestore)
+
+            // koin
+            implementation(project.dependencies.platform(libs.koin.bom))
+            implementation(libs.koin.android)
 
             // engine ktor
             implementation(libs.ktor.client.okhttp)
@@ -92,8 +104,6 @@ kotlin {
             implementation(libs.sqldelight.android.driver)
 
 
-            // coroutines
-            implementation(libs.kotlinx.coroutines.android)
 
         }
         commonTest.dependencies {
@@ -111,9 +121,11 @@ kotlin {
 
 sqldelight {
     databases {
-        create("fitverse_db") {
-            packageName.set("com.journey.fitverse")
+        create("AppDatabase") {
+            packageName.set("com.journey.database")
             generateAsync.set(true)
+            schemaOutputDirectory.set(file("src/commonMain/sqldelight"))
+            deriveSchemaFromMigrations.set(true)
         }
     }
     linkSqlite.set(true)

@@ -4,26 +4,18 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
     repositories {
-        // resolução de plugins
-        gradlePluginPortal()
         google()
         mavenCentral()
-
-        // necessário para Compose Multiplatform
-        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+        gradlePluginPortal() // ESTA LINHA É OBRIGATÓRIA
     }
 }
 
 dependencyResolutionManagement {
-    // força centralização de repositórios
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-
     repositories {
         google()
         mavenCentral()
-
-        // Compose Multiplatform
-        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+        // Adicione este se estiver usando versões Alpha/Snapshot da Koin
+        maven("https://oss.sonatype.org/content/repositories/snapshots/")
     }
 }
 

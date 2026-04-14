@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.android.kotlin.multiplatform.library)
     alias(libs.plugins.android.lint)
+    alias(libs.plugins.composeCompiler)
 }
 
 kotlin {
@@ -41,7 +42,8 @@ kotlin {
             implementation(libs.compose.material3)
 
             // koin
-            api(libs.koin.core)
+            implementation(project.dependencies.platform(libs.koin.bom))
+            implementation(libs.koin.core)
 
             // icons extended
             implementation(libs.icons.compose.material)

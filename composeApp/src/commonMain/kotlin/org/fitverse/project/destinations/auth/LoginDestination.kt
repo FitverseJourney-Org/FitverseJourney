@@ -20,6 +20,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import org.koin.compose.koinInject
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import com.example.presentation.screens.ui.authentication.login.actions.LoginAction
 import com.example.presentation.components.snackbar.AppSnackbarHost
@@ -32,7 +33,6 @@ import com.example.presentation.screens.ui.authentication.login.viewmodel.LoginV
 import com.example.presentation.screens.ui.authentication.login.components.AnimatedLoginBackground
 import com.example.presentation.screens.ui.setupLanguage.SetupLanguageScreen
 import kotlinx.coroutines.flow.collectLatest
-import org.koin.compose.koinInject
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable

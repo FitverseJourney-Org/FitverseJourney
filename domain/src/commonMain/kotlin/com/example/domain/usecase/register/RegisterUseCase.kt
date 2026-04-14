@@ -3,7 +3,7 @@ package com.example.domain.usecase.register
 import com.example.domain.model.authentication.register.RegisterExperienceLevel
 import com.example.domain.model.authentication.register.RegisterGender
 import com.example.domain.model.authentication.register.RegisterGoal
-import com.example.domain.model.authentication.register.SignUp
+import com.example.domain.model.authentication.register.RegisterUser
 import com.example.domain.repository.authentication.AuthRepository
 
 class RegisterUseCase(
@@ -21,7 +21,7 @@ class RegisterUseCase(
         registerGoal: RegisterGoal
     ): Result<Unit> {
         return authRepository.register(
-            data = SignUp(
+            data = RegisterUser(
                 name = nickname,
                 email = email,
                 password = password,

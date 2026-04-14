@@ -1,0 +1,48 @@
+
+
+-- ============================================================
+-- QUERIES
+-- ============================================================
+
+selectAllUsers:
+SELECT * FROM UserEntity;
+
+selectUserById:
+SELECT * FROM UserEntity WHERE id = ?;
+
+selectUserByEmail:
+SELECT * FROM UserEntity WHERE email = ?;
+
+insertUser:
+INSERT OR REPLACE INTO UserEntity(
+    id, name, email, gender, age, weight, height,
+    experienceLevel, goals, targetWeight, targetCalories,
+    targetProtein, targetCarbs, targetFat, isPremium,
+    createdAt, updatedAt
+)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+updateUser:
+UPDATE UserEntity SET
+    name = ?,
+    email = ?,
+    gender = ?,
+    age = ?,
+    weight = ?,
+    height = ?,
+    experienceLevel = ?,
+    goals = ?,
+    targetWeight = ?,
+    targetCalories = ?,
+    targetProtein = ?,
+    targetCarbs = ?,
+    targetFat = ?,
+    isPremium = ?,
+    updatedAt = ?
+WHERE id = ?;
+
+deleteUser:
+DELETE FROM UserEntity WHERE id = ?;
+
+deleteAllUsers:
+DELETE FROM UserEntity;

@@ -1,8 +1,5 @@
 package org.fitverse.project.destinations.auth
 
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.SnackbarHostState
@@ -13,7 +10,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.domain.model.authentication.register.progress
 import com.example.presentation.components.snackbar.AppSnackbarHost
 import com.example.presentation.components.snackbar.SnackbarType
 import com.example.presentation.navigationState.RegisterNavigation
@@ -23,6 +19,8 @@ import com.example.presentation.screens.ui.authentication.register.actions.Regis
 import com.example.presentation.screens.ui.authentication.register.viewmodel.RegisterViewModel
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.koinInject
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 @Composable
 fun RegisterDestination(toLogin: () -> Unit) {

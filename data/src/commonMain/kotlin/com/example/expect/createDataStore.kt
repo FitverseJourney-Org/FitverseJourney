@@ -21,4 +21,4 @@ fun createDataStore(
     )
 }
 
-internal const val dataStoreFileName = "fitverse.preferences_pb"
+internal const val dataStoreFileName = "database.preferences_pb"

@@ -40,6 +40,7 @@ kotlin {
             implementation(project(":domain"))
 
             // koin
+            implementation(project.dependencies.platform(libs.koin.bom))
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
@@ -69,10 +70,8 @@ kotlin {
         iosMain.dependencies {
         }
         androidMain.dependencies {
-            implementation(libs.lifecycle.viewmodel)
+            implementation(libs.lifecycle.viewmodel.compose)
             implementation(libs.android.lottie.compose)
-            implementation(libs.koin.android)
-            implementation(libs.koin.androidx.compose)
             // preview
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.compose.ui.tooling)
