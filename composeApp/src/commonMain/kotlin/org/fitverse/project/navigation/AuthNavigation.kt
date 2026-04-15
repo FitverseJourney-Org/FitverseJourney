@@ -16,7 +16,6 @@ import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
-import org.fitverse.project.destinations.auth.HomeDestination
 import org.fitverse.project.destinations.auth.LoginDestination
 import org.fitverse.project.destinations.auth.RegisterDestination
 import org.fitverse.project.destinations.auth.ResetPasswordDestination
@@ -32,14 +31,13 @@ fun AuthNavigation(
         SavedStateConfiguration {
             serializersModule = SerializersModule {
                 polymorphic(NavKey::class) {
-                    subclass(NavRoutes.AuthFlow.Home::class, NavRoutes.AuthFlow.Home.serializer())
                     subclass(NavRoutes.AuthFlow.Login::class, NavRoutes.AuthFlow.Login.serializer())
                     subclass(NavRoutes.AuthFlow.Register::class, NavRoutes.AuthFlow.Register.serializer())
                     subclass(NavRoutes.AuthFlow.ResetPassword::class, NavRoutes.AuthFlow.ResetPassword.serializer())
                 }
             }
         },
-        NavRoutes.AuthFlow.Home
+        NavRoutes.AuthFlow.Login
     )
 
     NavDisplay(
@@ -63,16 +61,6 @@ fun AuthNavigation(
                     slideOutHorizontally(targetOffsetX = { it })
         },
         entryProvider = entryProvider {
-            entry<NavRoutes.AuthFlow.Home>{
-                HomeDestination(
-                    toLogin = {
-                        authBackStack.add(NavRoutes.AuthFlow.Login)
-                    },
-                    toRegister = {
-                        authBackStack.add(NavRoutes.AuthFlow.Register)
-                    }
-                )
-            }
             entry<NavRoutes.AuthFlow.Login>{
                 LoginDestination(
                     toRegister = {

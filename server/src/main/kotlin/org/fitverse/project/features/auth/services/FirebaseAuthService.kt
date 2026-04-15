@@ -6,7 +6,6 @@ import com.google.firebase.FirebaseOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseToken
 import com.google.firebase.auth.UserRecord
-import io.ktor.client.HttpClient
 import io.ktor.http.HttpHeaders
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.request.header
@@ -14,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.FileInputStream
 import java.io.InputStream
+import java.net.http.HttpClient
 
 class FirebaseAuthService private constructor(private val client: HttpClient) {
 

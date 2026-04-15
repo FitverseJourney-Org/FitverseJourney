@@ -1,65 +1,39 @@
 plugins {
-    alias(libs.plugins.kotlinJvm) // Add this plugin
+    alias(libs.plugins.kotlinJvm)
+    alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.ktor)
-    id("com.gradleup.shadow")
+    application
+    id("com.github.johnrengelman.shadow")
+}
 
-}
-application {
-    // Forma correta para Gradle 7+ / 8+ / 9+
-    mainClass.set("com.example.ApplicationKt")
-}
 group = "org.fitverse.project"
 version = "1.0.0"
+
 application {
     mainClass.set("org.fitverse.project.ApplicationKt")
-    
+
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
 dependencies {
+    // Ktor Core & Engine
     implementation(libs.ktor.server.core)
     implementation(libs.ktor.server.netty)
-    // ktor logback
-    implementation(libs.ktor.server.logback)
-    testImplementation(libs.ktor.server.testhost)
-    testImplementation(libs.kotlin.test.junit)
+    implementation(libs.logback.classic)
+    // Plugins
+    implementation(libs.ktor.server.call.logging)
+    implementation(libs.ktor.server.content.negotiation)
+    implementation(libs.ktor.server.status.pages)
+    implementation(libs.ktor.server.cors)
+    implementation(libs.ktor.serialization.kotlinx.json.jvm)
 
-    // ---------------------------------------------------------------------------------------------------------
-    // --------------------------------------------- FIREBASE ----------------------------------------------------
-    // ---------------------------------------------------------------------------------------------------------
+    // firebase
     implementation(libs.firebase.admin)
-    implementation(libs.firebase.firestore.ktx)
+    implementation(libs.kotlinx.coroutines.core)
 
-    // ---------------------------------------------------------------------------------------------------------
-    // --------------------------------------------- COROUTINES ----------------------------------------------------
-    // ---------------------------------------------------------------------------------------------------------
-    implementation(libs.jetbrains.kotlinx.coroutines.core)
-    implementation(libs.jetbrains.kotlinx.coroutines.android)
-
-    implementation(libs.ktor.client.core)
-    implementation(libs.ktor.client.content.negotiation)
-    implementation(libs.ktor.client.logging)
-    implementation(libs.ktor.client.auth)
-
-    // ---------------------------------------------------------------------------------------------------------
-    // --------------------------------------------- PLUGINS KTOR ----------------------------------------------------
-    // ---------------------------------------------------------------------------------------------------------
-    implementation(libs.ktor.server.content.negotiation.jvm)
-    implementation(libs.ktor.server.call.logging.jvm)
-    implementation(libs.ktor.server.status.pages.jvm)
-    implementation(libs.ktor.server.cors.jvm)
-
-    // ---------------------------------------------------------------------------------------------------------
-    // --------------------------------------------- SERIALIZABLE ----------------------------------------------------
-    // ---------------------------------------------------------------------------------------------------------
-    implementation(libs.kotlinx.serialization)
-    implementation(libs.ktor.serialization.kotlinx.json)
-
-    // ---------------------------------------------------------------------------------------------------------
-    // --------------------------------------------- KOIN ----------------------------------------------------
-    // ---------------------------------------------------------------------------------------------------------
+    // koin
+    implementation(project.dependencies.platform(libs.koin.bom))
+    implementation(libs.koin.core)
     implementation(libs.koin.ktor)
-    implementation(libs.koin.ktor.logger)
-
 }

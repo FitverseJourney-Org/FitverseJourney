@@ -1,291 +1,450 @@
 [versions]
-
 # ----------------------------------------------------
-# ANDROID / BUILD
+# ANDROID / BUILD TOOLS
 # ----------------------------------------------------
-agp = "9.0.0"
-firebaseAdmin = "9.2.0"
-kotlin = "2.3.0"
-
-android-compileSdk = "36"
-android-minSdk = "24"
-android-targetSdk = "36"
+agp                            = "9.0.0"       # Android Gradle Plugin — toolchain de build Android
+kotlin                         = "2.3.0"       # Kotlin compiler e stdlib
+android-compileSdk             = "36"          # SDK de compilação
+android-minSdk                 = "24"          # SDK mínimo suportado (Android 7.0)
+android-targetSdk              = "36"          # SDK alvo
+shadow                         = "9.4.0"       # Plugin para gerar fat JARs (usado no servidor Ktor)
+google-services-plugin         = "4.4.4"       # Plugin do Google Services (Firebase)
 
 # ----------------------------------------------------
 # COMPOSE MULTIPLATFORM
 # ----------------------------------------------------
-composeMultiplatform = "1.10.0"
-componentsResources = "1.10.0"
-
-# ----------------------------------------------------
-# ANDROIDX
-# ----------------------------------------------------
-androidx-core = "1.17.0"
-androidx-appcompat = "1.7.1"
-androidx-activity = "1.12.2"
-androidx-lifecycle = "2.10.0-alpha08"
-androidx-viewmodel = "2.10.0"
-androidx-window = "1.5.1"
-androidx-savedstate = "1.4.0"
-
-# ----------------------------------------------------
-# TESTING
-# ----------------------------------------------------
-junit = "4.13.2"
-androidx-espresso = "3.7.0"
-androidx-testExt = "1.3.0"
-runner = "1.5.2"
-
-# ----------------------------------------------------
-# COROUTINES
-# ----------------------------------------------------
-kotlinx-coroutines = "1.10.2"
-
-# ----------------------------------------------------
-# KTOR
-# ----------------------------------------------------
-ktor = "3.1.1"
-ktor-logback = "1.5.32"
-
-# ----------------------------------------------------
-# PLUGINS KTOR
-# ----------------------------------------------------
-ktorServerCallLoggingJvm = "3.1.1"
-ktorServerContentNegotiationJvm = "3.1.1"
-ktorServerCorsJvm = "3.1.1"
-ktorServerStatusPagesJvm = "3.1.1"
-
-# ----------------------------------------------------
-# SERIALIZATION
-# ----------------------------------------------------
-kotlinxSerialization = "1.10.0"
-
-# ----------------------------------------------------
-# DEPENDENCY INJECTION
-# ----------------------------------------------------
-koin = "4.2.0-beta2"
-
-# ----------------------------------------------------
-# DATABASE
-# ----------------------------------------------------
-sqlDelight = "2.2.1"
-
-# ----------------------------------------------------
-# DATE / TIME
-# ----------------------------------------------------
-dateTime = "0.7.1"
-
-# ----------------------------------------------------
-# IMAGE / UI
-# ----------------------------------------------------
-coil = "3.3.0"
-lottieCompose = "6.7.1"
-icons = "1.7.3"
-
-# ----------------------------------------------------
-# NAVIGATION
-# ----------------------------------------------------
-navigationCompose = "2.9.0-rc02"
-navigation3 = "1.0.1"
-nav3Core = "1.0.1"
-navigationJetbrains = "1.0.0-alpha03"
-
-# ----------------------------------------------------
-# FIREBASE
-# ----------------------------------------------------
-firebase-bom = "34.9.0"
-firebaseAuthKtx = "23.2.1"
-firebaseFirestore = "26.0.0"
-firebaseFirestoreCloud = "3.38.0"
-# ----------------------------------------------------
-# DATASTORE
-# ----------------------------------------------------
-datastore = "1.2.0"
+composeMultiplatform           = "1.10.0"      # Compose Multiplatform (JetBrains) — UI compartilhada KMP
+componentsResources            = "1.10.0"      # Compose Multiplatform Resources — imagens, fontes, strings
 
 # ----------------------------------------------------
 # MATERIAL / DESIGN
 # ----------------------------------------------------
-material = "1.13.0"
-material3 = "1.9.0"
+material                       = "1.13.0"      # Material Design Components (Android clássico)
+material3                      = "1.9.0"       # Material 3 para Compose
 
 # ----------------------------------------------------
-# GOOGLE SERVICES
+# ICONS
 # ----------------------------------------------------
-google-services-plugin = "4.4.4"
+icons                          = "1.7.3"       # Material Icons Extended para Compose
 
-vico = "3.0.3"
+# ----------------------------------------------------
+# ANDROIDX — CORE
+# ----------------------------------------------------
+androidx-core                  = "1.16.0"      # AndroidX Core KTX — extensões Kotlin para APIs Android
+androidx-appcompat             = "1.7.0"       # AppCompat — compatibilidade com versões antigas do Android
+androidx-activity              = "1.10.1"      # Activity KTX + Activity Compose
+androidx-window                = "1.3.0"       # WindowManager — suporte a telas dobráveis e tamanhos de janela
+androidx-savedstate            = "1.2.1"       # SavedState — persistência de estado entre recriações
+
+# ----------------------------------------------------
+# ANDROIDX — LIFECYCLE / VIEWMODEL
+# ----------------------------------------------------
+androidx-lifecycle             = "2.8.7"       # AndroidX Lifecycle Runtime KTX (androidx.lifecycle)
+androidx-viewmodel             = "2.8.7"       # AndroidX ViewModel (androidx.lifecycle:lifecycle-viewmodel)
+jetbrains-lifecycle-nav3       = "1.0.0-alpha06" # JetBrains Navigation3 UI KMP (org.jetbrains.androidx.navigation3)
+
+# ----------------------------------------------------
+# NAVIGATION
+# ----------------------------------------------------
+navigationCompose              = "2.9.0-rc02"  # Jetpack Navigation Compose (JetBrains KMP wrapper)
+navigation3                    = "1.0.1"       # AndroidX Navigation3 Runtime
+nav3Core                       = "1.0.1"       # AndroidX Navigation3 Core (alias para navigation3)
+navigationJetbrains            = "1.0.0-alpha03" # JetBrains Navigation KMP (legado / referência)
+
+# ----------------------------------------------------
+# DEPENDENCY INJECTION — KOIN
+# ----------------------------------------------------
+koin-bom                       = "4.1.1"       # Koin BOM — gerencia versões de todos os módulos Koin
+koin-navigation                = "2.9.3"       # Koin Navigation (referência auxiliar, versão gerenciada pelo BOM)
+koinKtor                       = "4.2.0"       # Koin para Ktor (servidor)
+
+# ----------------------------------------------------
+# KTOR — CLIENTE / SERVIDOR
+# ----------------------------------------------------
+ktor                           = "3.0.3"       # Ktor framework (cliente KMP + servidor JVM)
+ktorSerialization              = "3.4.1"       # Ktor Serialization kotlinx-json (servidor JVM)
+slf4j-api                      = "2.0.17"      #
+logback                        = "1.4.14"       #
+
+
+# ----------------------------------------------------
+# SERIALIZATION
+# ----------------------------------------------------
+kotlinxSerialization           = "1.10.0"      # kotlinx.serialization JSON
+
+# ----------------------------------------------------
+# COROUTINES
+# ----------------------------------------------------
+kotlinxCoroutines              = "1.10.2"      # kotlinx.coroutines — suporte a suspend, Flow, etc.
+kotlinxCoroutinesPlayServices  = "1.10.2"      # kotlinx.coroutines integração com Google Play Services
+
+# ----------------------------------------------------
+# DATABASE — SQLDELIGHT
+# ----------------------------------------------------
+sqlDelight                     = "2.2.1"       # SQLDelight — banco de dados local multiplataforma
+
+# ----------------------------------------------------
+# DATE / TIME
+# ----------------------------------------------------
+dateTime                       = "0.7.1"       # kotlinx-datetime — data e hora multiplataforma
+
+# ----------------------------------------------------
+# IMAGE
+# ----------------------------------------------------
+coil                           = "3.3.0"       # Coil 3 — carregamento de imagens assíncrono KMP
+lottieCompose                  = "6.7.1"       # Lottie para Compose — animações After Effects
+
+# ----------------------------------------------------
+# CHARTS / GRAPHS
+# ----------------------------------------------------
+vico                           = "3.0.3"       # Vico — biblioteca de gráficos para Compose
+
+# ----------------------------------------------------
+# DATASTORE
+# ----------------------------------------------------
+datastore                      = "1.2.0"       # DataStore — armazenamento chave-valor e preferências
+
+# ----------------------------------------------------
+# FIREBASE
+# ----------------------------------------------------
+firebase-bom                   = "34.11.0"     # Firebase BOM — gerencia versões de todos os SDKs Firebase
+firebase-admin                 = "9.4.2"       # Firebase Admin SDK (JVM/servidor)
+coroutines-play-services       = "1.10.1"
+# ----------------------------------------------------
+# TESTING
+# ----------------------------------------------------
+junit                          = "4.13.2"      # JUnit 4 — testes unitários
+androidx-espresso              = "3.7.0"       # Espresso — testes de UI Android
+androidx-testExt               = "1.3.0"       # AndroidX Test Extensions (junit ktx)
+runner                         = "1.5.2"
+materialVersion = "1.13.0"       # AndroidX Test Runner
+
 
 [libraries]
+# =====================================================
+# COMPOSE MULTIPLATFORM — UI
+# =====================================================
 
-## ---------------------------------------------------------------------------------------------------------
-## ------------------------------------------- COMPOSE ----------------------------------------------------
-## ---------------------------------------------------------------------------------------------------------
+# Compose Runtime — núcleo do sistema de composição
+compose-runtime                = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "composeMultiplatform" }
+# Compose UI — componentes visuais base
+compose-ui                     = { module = "org.jetbrains.compose.ui:ui", version.ref = "composeMultiplatform" }
+# Compose Foundation — layouts, gestos e primitivas
+compose-foundation             = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "composeMultiplatform" }
+# Material 3 — design system moderno para Compose
+compose-material3              = { module = "org.jetbrains.compose.material3:material3", version.ref = "material3" }
+# Tooling Preview — suporte a @Preview no Android Studio
+compose-ui-tooling-preview     = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "composeMultiplatform" }
+# Tooling — inspetor de layout e debug
+compose-ui-tooling             = { module = "androidx.compose.ui:ui-tooling", version.ref = "composeMultiplatform" }
+# UI Graphics — APIs de desenho e canvas
+compose-ui-graphics            = { module = "androidx.compose.ui:ui-graphics", version.ref = "composeMultiplatform" }
+# UI Test Manifest — manifest necessário para testes de UI
+compose-ui-test-manifest       = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "composeMultiplatform" }
+# UI Test JUnit4 — testes de UI com JUnit4
+compose-ui-test-junit4         = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "composeMultiplatform" }
 
-compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "composeMultiplatform" }
-compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "composeMultiplatform" }
-compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "composeMultiplatform" }
-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "composeMultiplatform" }
-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "composeMultiplatform" }
-compose-ui-graphics = { module = "androidx.compose.ui:ui-graphics", version.ref = "composeMultiplatform" }
-compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "material3" }
-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "composeMultiplatform" }
-compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "composeMultiplatform" }
-android-lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottieCompose" }
-androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
-androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
-androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
-androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "androidx-espresso" }
+# =====================================================
+# ANDROIDX — CORE
+# =====================================================
 
-## ---------------------------------------------------------------------------------------------------------
-## --------------------------------------------- NAVIGATION ----------------------------------------------
-## ---------------------------------------------------------------------------------------------------------
+# Core KTX — extensões Kotlin para APIs Android essenciais
+androidx-core-ktx              = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
+# AppCompat — compatibilidade retroativa de componentes Android
+androidx-appcompat             = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
+# Activity Compose — setContent{} e integração Compose com Activity
+androidx-activity-compose      = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 
-jetbrains-kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android" }
-jetbrains-kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core" }
-jetbrains-navigation3-ui = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "navigationJetbrains" }
-jetbrains-lifecycle-viewmodel-navigation3 = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "androidx-lifecycle" }
-jetbrains-lifecycle-viewmodel = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
-navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
-androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "navigation3" }
+# =====================================================
+# ANDROIDX — LIFECYCLE / VIEWMODEL
+# =====================================================
 
-## ---------------------------------------------------------------------------------------------------------
-## --------------------------------------------- TESTS ----------------------------------------------------
-## ---------------------------------------------------------------------------------------------------------
+# Lifecycle ViewModel (AndroidX padrão — android/jvm)
+androidx-lifecycle-viewmodel   = { module = "androidx.lifecycle:lifecycle-viewmodel", version.ref = "androidx-viewmodel" }
+# Lifecycle Runtime KTX — lifecycleScope, repeatOnLifecycle
+androidx-lifecycle-runtime     = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 
-androidx-testExt-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-testExt" }
-androidx-runner = { module = "androidx.test:runner", version.ref = "runner" }
-androidx-core-test = { module = "androidx.test:core", version.ref = "androidx-core" }
-kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
-kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
-junit = { module = "junit:junit", version.ref = "junit" }
+# =====================================================
+# NAVIGATION 3 — JETBRAINS KMP
+# =====================================================
 
-## ---------------------------------------------------------------------------------------------------------
-## --------------------------------------------- DATASTORE ------------------------------------------------
-## ---------------------------------------------------------------------------------------------------------
+# Navigation3 UI KMP — NavDisplay e componentes visuais multiplataforma
+jetbrains-navigation3-ui       = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "jetbrains-lifecycle-nav3" }
+# Navigation3 Runtime AndroidX — backstack e entryProvider (Android)
+androidx-navigation3-runtime   = { module = "androidx.navigation3:navigation3-runtime", version.ref = "navigation3" }
+# Navigation Compose — JetBrains KMP wrapper para navegação Compose
+navigation-compose             = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 
-datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+# =====================================================
+# LIFECYCLE — JETBRAINS KMP (org.jetbrains.androidx.lifecycle)
+# =====================================================
 
-## ---------------------------------------------------------------------------------------------------------
-## --------------------------------------------- COROUTINES ----------------------------------------------
-## ---------------------------------------------------------------------------------------------------------
-kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
-kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
-kotlinx-coroutines-core-jvm = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm", version.ref = "kotlinx-coroutines" }
-## ---------------------------------------------------------------------------------------------------------
-## --------------------------------------------- KTOR ----------------------------------------------------
-## ---------------------------------------------------------------------------------------------------------
+# ViewModel KMP — ViewModel compartilhado entre plataformas
+jetbrains-lifecycle-viewmodel       = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel", version = "2.8.4" }
+# ViewModel para Navigation3 KMP — escopo de ViewModel por destino
+lifecycle-viewmodel-navigation3     = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-navigation3", version = "2.10.0" }
+# ViewModel Compose KMP — koinViewModel(), viewModel() em commonMain
+lifecycle-viewmodel-compose         = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "jetbrains-lifecycle-nav3" }
 
-ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
-ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
-ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
-ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
-ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
+# =====================================================
+# DEPENDENCY INJECTION — KOIN
+# =====================================================
+
+# Koin BOM — controla versões de todos os módulos Koin automaticamente
+koin-bom                       = { module = "io.insert-koin:koin-bom", version.ref = "koin-bom" }
+koin-ktor                      = { module = "io.insert-koin:koin-ktor" }
+# Koin Core — núcleo DI multiplataforma (versão gerenciada pelo BOM)
+koin-core                      = { module = "io.insert-koin:koin-core" }
+# Koin Android — KoinApplication, androidContext(), startKoin{}
+koin-android                   = { module = "io.insert-koin:koin-android" }
+# Koin Compose — KoinContext, koinInject() para Compose KMP
+koin-compose                   = { module = "io.insert-koin:koin-compose" }
+# Koin Compose ViewModel — koinViewModel() para Compose
+koin-compose-viewmodel         = { module = "io.insert-koin:koin-compose-viewmodel" }
+# Koin Navigation3 — integração Koin com AndroidX Navigation3
+koin-compose-navigation3       = { module = "io.insert-koin:koin-compose-navigation3" }
+# Koin Ktor — integração Koin com servidor Ktor
+insert-koin-koin-ktor          = { module = "io.insert-koin:koin-ktor", version.ref = "koinKtor" }
+koin-logger-slf4j              = { module = "io.insert-koin:koin-logger-slf4j" }
+
+
+# =====================================================
+# KTOR — SERVIDOR (JVM)
+# =====================================================
+
+# Ktor Server Core JVM — núcleo do servidor Ktor
+ktor-server-core               = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
+# Ktor Netty — engine de servidor HTTP baseado em Netty
+ktor-server-netty              = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
+# Ktor Content Negotiation — serialização automática de request/response
+ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor" }
+# Ktor Call Logging — log de requisições HTTP no servidor
+ktor-server-call-logging  = { module = "io.ktor:ktor-server-call-logging",  version.ref = "ktor" }
+logback-classic           = { module = "ch.qos.logback:logback-classic",    version.ref = "logback" }
+
+# Ktor Status Pages — tratamento centralizado de erros HTTP
+ktor-server-status-pages       = { module = "io.ktor:ktor-server-status-pages", version.ref = "ktor" }
+# Ktor CORS — política de Cross-Origin Resource Sharing
+ktor-server-cors               = { module = "io.ktor:ktor-server-cors", version.ref = "ktor" }
+# Ktor Serialization JSON JVM — kotlinx.serialization para servidor
+ktor-serialization-kotlinx-json-jvm = { module = "io.ktor:ktor-serialization-kotlinx-json-jvm", version.ref = "ktorSerialization" }
+
+# =====================================================
+# KTOR — CLIENTE KMP
+# =====================================================
+
+# Ktor Client Core — cliente HTTP multiplataforma
+ktor-client-core               = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+# Ktor Client Logging — log de chamadas HTTP do cliente
+ktor-client-logging            = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
+# Ktor Client OkHttp — engine HTTP para Android/JVM
+ktor-client-okhttp             = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+# Ktor Client Darwin — engine HTTP para iOS/macOS (NSURLSession)
+ktor-client-darwin             = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
+# Ktor Client Android — engine HTTP nativo para Android
+ktor-client-android            = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
+# Ktor Client Content Negotiation — serialização automática no cliente
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
-ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }
-ktor-server-core = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
-ktor-server-netty = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor" }
-ktor-server-testhost = { module = "io.ktor:ktor-server-test-host-jvm", version.ref = "ktor" }
-ktor-server-logback = { module = "ch.qos.logback:logback-classic", version.ref = "ktor-logback" }
-
-## ---------------------------------------------------------------------------------------------------------
-## --------------------------------------------- SERIALIZATION -------------------------------------------
-## ---------------------------------------------------------------------------------------------------------
-
-kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
+# Ktor Client Auth — autenticação (Bearer token, Basic, etc.)
+ktor-client-auth               = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }
+# Ktor Serialization JSON — kotlinx.serialization JSON compartilhado
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 
-## ---------------------------------------------------------------------------------------------------------
-## --------------------------------------------- COIL ----------------------------------------------------
-## ---------------------------------------------------------------------------------------------------------
+# =====================================================
+# SERIALIZATION
+# =====================================================
 
-coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
-coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
+# kotlinx.serialization JSON — conversão Kotlin <-> JSON
+kotlinx-serialization          = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 
-## ---------------------------------------------------------------------------------------------------------
-## --------------------------------------------- LOTTIE --------------------------------------------------
-## ---------------------------------------------------------------------------------------------------------
+# =====================================================
+# COROUTINES
+# =====================================================
 
-lottie = { module = "com.airbnb.android:lottie", version.ref = "lottieCompose" }
+# kotlinx.coroutines Core — suspend, Flow, CoroutineScope (KMP)
+kotlinx-coroutines-core        = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
+# kotlinx.coroutines Android — Main dispatcher para Android
+kotlinx-coroutines-android     = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
+# kotlinx.coroutines Core JVM — dispatcher IO para JVM/servidor
+kotlinx-coroutines-core-jvm    = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm", version.ref = "kotlinxCoroutines" }
+# Aliases adicionais usados por plugins internos
+jetbrains-kotlinx-coroutines-core    = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core" }
+jetbrains-kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android" }
 
-## ---------------------------------------------------------------------------------------------------------
-## --------------------------------------------- KOIN ----------------------------------------------------
-## ---------------------------------------------------------------------------------------------------------
+# =====================================================
+# DATABASE — SQLDELIGHT
+# =====================================================
 
-koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
-koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
-koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
-koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
-koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }
-koin-compose-navigation3 = { module = "io.insert-koin:koin-compose-navigation3", version.ref = "koin" }
+# SQLDelight Runtime — núcleo multiplataforma
+sqldelight-runtime             = { module = "app.cash.sqldelight:runtime", version.ref = "sqlDelight" }
+# SQLDelight Android Driver — driver SQLite para Android
+sqldelight-android-driver      = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlDelight" }
+# SQLDelight Native Driver — driver SQLite para iOS/Native
+sqldelight-native-driver       = { module = "app.cash.sqldelight:native-driver", version.ref = "sqlDelight" }
 
-koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koin"}
-koin-ktor-logger = { module = "io.insert-koin:koin-logger-slf4j", version.ref = "koin"}
+# =====================================================
+# DATE / TIME
+# =====================================================
 
-## ---------------------------------------------------------------------------------------------------------
-## --------------------------------------------- SQLDELIGHT ----------------------------------------------
-## ---------------------------------------------------------------------------------------------------------
+# kotlinx-datetime — data, hora e timezone multiplataforma
+kotlinx-datetime               = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "dateTime" }
 
-sqldelight-runtime = { module = "app.cash.sqldelight:runtime", version.ref = "sqlDelight" }
-sqldelight-android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlDelight" }
-sqldelight-native-driver = { module = "app.cash.sqldelight:native-driver", version.ref = "sqlDelight" }
+# =====================================================
+# IMAGE
+# =====================================================
 
-## ---------------------------------------------------------------------------------------------------------
-## ------------------------------------------- KOTLINX DATETIME ------------------------------------------
-## ---------------------------------------------------------------------------------------------------------
+# Coil Compose — carregamento de imagens assíncrono com AsyncImage
+coil-compose                   = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+# Coil OkHttp — engine de rede OkHttp para Coil
+coil-network-okhttp            = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
 
-kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "dateTime" }
+# =====================================================
+# LOTTIE
+# =====================================================
 
-## ---------------------------------------------------------------------------------------------------------
-## ------------------------------------------- COMPOSE RESOURCES -----------------------------------------
-## ---------------------------------------------------------------------------------------------------------
+# Lottie — animações After Effects renderizadas em runtime
+lottie                         = { module = "com.airbnb.android:lottie", version.ref = "lottieCompose" }
+# Lottie Compose — wrapper Compose para animações Lottie
+android-lottie-compose         = { module = "com.airbnb.android:lottie-compose", version.ref = "lottieCompose" }
+
+# =====================================================
+# CHARTS — VICO
+# =====================================================
+
+# Vico Compose — gráficos de linha, barra e área para Compose
+vico-compose                   = { group = "com.patrykandpatrick.vico", name = "compose", version.ref = "vico" }
+# Vico Compose M3 — tema Material 3 para gráficos Vico
+vico-compose-m3                = { group = "com.patrykandpatrick.vico", name = "compose-m3", version.ref = "vico" }
+
+# =====================================================
+# DATASTORE
+# =====================================================
+
+# DataStore — armazenamento de dados chave-valor assíncrono (substituto SharedPreferences)
+datastore                      = { module = "androidx.datastore:datastore", version.ref = "datastore" }
+# DataStore Preferences — API simplificada com Preferences
+datastore-preferences          = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+
+# =====================================================
+# FIREBASE
+# =====================================================
+
+# Firebase BOM — gerencia versões de todos os SDKs Firebase
+firebase-bom                   = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
+# Firebase Auth — autenticação (email, Google, etc.)
+firebase-auth                  = { module = "com.google.firebase:firebase-auth" }
+# Firebase Analytics — rastreamento de eventos e usuários
+firebase-analytics             = { module = "com.google.firebase:firebase-analytics" }
+# Firebase Firestore — banco de dados NoSQL em tempo real
+firebase-firestore             = { module = "com.google.firebase:firebase-firestore" }
+
+kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "coroutines-play-services" }
+
+
+# Firebase Firestore KTX — cliente Firestore para servidor/JVM (Google Cloud)
+# firebase-firestore-ktx         = { module = "com.google.cloud:google-cloud-firestore" }
+# Firebase Admin SDK — acesso privilegiado ao Firebase via servidor
+firebase-admin                 = { module = "com.google.firebase:firebase-admin", version.ref = "firebase-admin" }
+
+# =====================================================
+# ICONS
+# =====================================================
+
+# Material Icons Extended — biblioteca completa de ícones Material para Compose
+icons-compose-material         = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "icons" }
+
+# =====================================================
+# RESOURCES
+# =====================================================
 
 components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "componentsResources" }
 
-## ---------------------------------------------------------------------------------------------------------
-## ------------------------------------------- FIREBASE --------------------------------------------------
-## ---------------------------------------------------------------------------------------------------------
-firebase-admin = { module = "com.google.firebase:firebase-admin", version.ref = "firebaseAdmin" }
-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
-firebase-auth-ktx = { module = "com.google.firebase:firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
-firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
-firebase-firestore = { module = "com.google.firebase:firebase-firestore", version.ref = "firebaseFirestore" }
-firebase-firestore-ktx = { module = "com.google.cloud:google-cloud-firestore", version.ref = "firebaseFirestoreCloud"}
-## ---------------------------------------------------------------------------------------------------------
-## ------------------------------------------- ICONS -----------------------------------------------------
-## ---------------------------------------------------------------------------------------------------------
+# =====================================================
+# KOTLIN STDLIB
+# =====================================================
 
-icons-compose-material = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "icons" }
-kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+# Kotlin Stdlib — biblioteca padrão Kotlin
+kotlin-stdlib                  = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 
-## ---------------------------------------------------------------------------------------------------------
-## ------------------------------------------- LIFECYCLE -------------------------------------------------
-## ---------------------------------------------------------------------------------------------------------
+# =====================================================
+# TESTING
+# =====================================================
 
-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel", version.ref = "androidx-lifecycle" }
-
-## ---------------------------------------------------------------------------------------------------------
-## ------------------------------------------- PLUGINS KTOR -------------------------------------------------
-## ---------------------------------------------------------------------------------------------------------
-
-ktor-server-call-logging-jvm = { module = "io.ktor:ktor-server-call-logging-jvm", version.ref = "ktorServerCallLoggingJvm" }
-ktor-server-content-negotiation-jvm = { module = "io.ktor:ktor-server-content-negotiation-jvm", version.ref = "ktorServerContentNegotiationJvm" }
-ktor-server-cors-jvm = { module = "io.ktor:ktor-server-cors-jvm", version.ref = "ktorServerCorsJvm" }
-ktor-server-status-pages-jvm = { module = "io.ktor:ktor-server-status-pages-jvm", version.ref = "ktorServerStatusPagesJvm" }
+# JUnit 4 — framework de testes unitários
+junit                          = { module = "junit:junit", version.ref = "junit" }
+# Kotlin Test — asserções Kotlin multiplataforma
+kotlin-test                    = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+# Kotlin Test JUnit — integração kotlin-test com JUnit4
+kotlin-test-junit              = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
+# AndroidX JUnit Extension — JUnit4 runner para testes instrumentados
+androidx-testExt-junit         = { module = "androidx.test.ext:junit", version.ref = "androidx-testExt" }
+# AndroidX Test Runner — executor de testes instrumentados Android
+androidx-runner                = { module = "androidx.test:runner", version.ref = "runner" }
+# AndroidX Core Test — utilitários de teste (ApplicationProvider, etc.)
+androidx-core-test             = { module = "androidx.test:core", version.ref = "androidx-core" }
+# Espresso — testes de UI instrumentados Android
+androidx-espresso-core         = { module = "androidx.test.espresso:espresso-core", version.ref = "androidx-espresso" }
+material = { group = "com.google.android.material", name = "material", version.ref = "materialVersion" }
 
 
-vico-compose = { group = "com.patrykandpatrick.vico", name = "compose", version.ref = "vico" }
-vico-compose-m3 = { group = "com.patrykandpatrick.vico", name = "compose-m3", version.ref = "vico" }
 [plugins]
-androidApplication = { id = "com.android.application", version.ref = "agp" }
-androidLibrary = { id = "com.android.library", version.ref = "agp" }
-composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
-composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
-kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+# =====================================================
+# ANDROID
+# =====================================================
+
+# Android Application — módulo app Android executável
+androidApplication             = { id = "com.android.application", version.ref = "agp" }
+# Android Library — módulo biblioteca Android (.aar)
+androidLibrary                 = { id = "com.android.library", version.ref = "agp" }
+# Android Lint — análise estática de código Android
+android-lint                   = { id = "com.android.lint", version.ref = "agp" }
+# Android Kotlin Multiplatform Library — biblioteca KMP com target Android
 android-kotlin-multiplatform-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
-sqldelight = { id = "app.cash.sqldelight", version.ref = "sqlDelight" }
-googleServices = { id = "com.google.gms.google-services", version.ref = "google-services-plugin" }
-android-lint = { id = "com.android.lint", version.ref = "agp" }
+
+# =====================================================
+# KOTLIN
+# =====================================================
+
+# Kotlin JVM — plugin Kotlin para módulos JVM puros (servidor)
+kotlinJvm                      = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+# Kotlin Multiplatform — plugin KMP (Android + iOS + JVM + JS)
+kotlinMultiplatform            = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+# Kotlin Serialization — habilita @Serializable e geração de código
+kotlinSerialization            = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+# Kotlin Compose Compiler — compilador Compose para Kotlin 2.x
+composeCompiler                = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+
+# =====================================================
+# COMPOSE MULTIPLATFORM
+# =====================================================
+
+# Compose Multiplatform — plugin principal JetBrains Compose
+composeMultiplatform           = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
+
+# =====================================================
+# KTOR
+# =====================================================
+
+# Ktor Plugin — empacotamento e execução do servidor Ktor
+ktor                           = { id = "io.ktor.plugin", version.ref = "ktor" }
+
+# =====================================================
+# SQLDELIGHT
+# =====================================================
+
+# SQLDelight — geração de código SQL tipado multiplataforma
+sqldelight                     = { id = "app.cash.sqldelight", version.ref = "sqlDelight" }
+
+# =====================================================
+# FIREBASE / GOOGLE
+# =====================================================
+
+# Google Services — processa google-services.json e configura Firebase
+googleServices                 = { id = "com.google.gms.google-services", version.ref = "google-services-plugin" }
+
+# =====================================================
+# UTILITÁRIOS
+# =====================================================
+
+# Shadow — gera fat JAR com todas as dependências (deploy do servidor)
+shadow                         = { id = "com.github.johnrengelman.shadow", version = "9.4.0" }

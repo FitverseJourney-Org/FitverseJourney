@@ -39,6 +39,9 @@ android {
     buildFeatures {
         compose = true
     }
+    buildFeatures {
+        compose = true
+    }
 }
 
 dependencies {
@@ -54,8 +57,10 @@ dependencies {
     // -----------------------------------------------------------------------------------------
     // KOIN
     // -----------------------------------------------------------------------------------------
-    api(libs.koin.core)
+    implementation(platform(libs.koin.bom))
+    implementation(libs.koin.android)
     implementation(libs.koin.compose)
+
 
     // -----------------------------------------------------------------------------------------
     // DATASTORE
@@ -66,9 +71,9 @@ dependencies {
     // -----------------------------------------------------------------------------------------
     // FIREBASE
     // -----------------------------------------------------------------------------------------
-    api(platform(libs.firebase.bom))
-    implementation(libs.firebase.analytics)
-    implementation(libs.firebase.auth.ktx)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
 
     // -----------------------------------------------------------------------------------------
     // COMPOSE
