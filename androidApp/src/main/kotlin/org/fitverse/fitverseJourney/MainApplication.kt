@@ -4,12 +4,9 @@ import android.app.Application
 import com.example.data.di.androidPlatformModule
 import com.example.expect.AppDataStoreDb
 import com.google.firebase.FirebaseApp
-import org.fitverse.fitverseJourney.di.appModule
-import org.fitverse.fitverseJourney.di.firebaseModule
 import org.fitverse.project.di.initKoin
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
-import org.koin.core.context.GlobalContext.startKoin
 
 class MainApplication : Application() {
 
@@ -20,14 +17,9 @@ class MainApplication : Application() {
         // 1. Passamos o contexto global (Application Context) para o DataStore.
         // Isso resolve completamente o risco de Memory Leak!
         AppDataStoreDb.context = this
-//        initKoin(androidPlatformModule) {
-//            androidLogger()
-//            androidContext(this@MainApplication)
-//        }
-        startKoin {
+        initKoin(androidPlatformModule) {
+            androidLogger()
             androidContext(this@MainApplication)
-            modules(appModule + firebaseModule)
         }
-
     }
 }

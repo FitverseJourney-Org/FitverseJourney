@@ -8,6 +8,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.animation.with
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -148,24 +149,18 @@ fun LoginDestination(
                         (slideInHorizontally(
                             initialOffsetX = { -it },
                             animationSpec = tween(300)
-                        ) + fadeIn(animationSpec = tween(100)))
-                            .with(
-                                slideOutHorizontally(
-                                    targetOffsetX = { it },
-                                    animationSpec = tween(300)
-                                ) + fadeOut(animationSpec = tween(100))
-                            )
+                        ) + fadeIn(animationSpec = tween(100))) togetherWith slideOutHorizontally(
+                            targetOffsetX = { it },
+                            animationSpec = tween(300)
+                        ) + fadeOut(animationSpec = tween(100))
+
                     } else {
                         (slideInHorizontally(
                             initialOffsetX = { it },
                             animationSpec = tween(700)
-                        ) + fadeIn(animationSpec = tween(500)))
-                            .with(
-                                slideOutHorizontally(
-                                    targetOffsetX = { -it },
-                                    animationSpec = tween(1200)
-                                )
-                            )
+                        ) + fadeIn(animationSpec = tween(500))) togetherWith slideOutHorizontally(
+                            targetOffsetX = { -it },
+                            animationSpec = tween(1200))
                     }.using(SizeTransform(clip = false))
                 }
             ) { shown ->

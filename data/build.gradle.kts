@@ -73,7 +73,6 @@ kotlin {
 
             implementation("app.cash.sqldelight:coroutines-extensions:2.0.1")
 
-
         }
         iosMain.dependencies {
 
@@ -84,12 +83,14 @@ kotlin {
         androidMain.dependencies {
 
             // coroutines
-            implementation(libs.kotlinx.coroutines.android)
             implementation(libs.kotlinx.coroutines.play.services)
+            implementation(libs.kotlinx.coroutines.android)
+
             // firebase
             implementation(project.dependencies.platform(libs.firebase.bom))
-            implementation(libs.firebase.auth.ktx)
+            implementation(libs.firebase.auth)
             implementation(libs.firebase.firestore)
+            implementation(libs.firebase.analytics)
 
             // koin
             implementation(project.dependencies.platform(libs.koin.bom))
@@ -102,8 +103,6 @@ kotlin {
 
             // sqlDelight
             implementation(libs.sqldelight.android.driver)
-
-
 
         }
         commonTest.dependencies {

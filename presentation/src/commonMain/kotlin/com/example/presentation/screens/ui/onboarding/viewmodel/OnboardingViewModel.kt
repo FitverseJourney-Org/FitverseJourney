@@ -48,4 +48,17 @@ class OnboardingViewModel(
             _navigationState.emit(OnboardingNavigation.ToTrial)
         }
     }
+    fun emitToNewAccount() {
+        viewModelScope.launch {
+            setOnboardingCompletedUseCase(true)
+            _navigationState.emit(OnboardingNavigation.ToNewAccount)
+        }
+    }
+    fun emitToLogin() {
+        viewModelScope.launch {
+            setOnboardingCompletedUseCase(true)
+            _navigationState.emit(OnboardingNavigation.ToLogin)
+        }
+    }
+
 }

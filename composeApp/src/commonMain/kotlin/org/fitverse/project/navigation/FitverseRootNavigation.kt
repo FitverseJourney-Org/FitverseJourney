@@ -102,6 +102,14 @@ fun FitverseRootNavigation(
                     toTrial = {
                         viewmodel.emitToTrial()
                         rootBackStack.add(NavRoutes.TrialScreen)
+                    },
+                    toNewAccount = {
+                        viewmodel.emitToNewAccount()
+                        rootBackStack.add(NavRoutes.AuthFlow)
+                    },
+                    toLogin = {
+                        viewmodel.emitToLogin()
+                        rootBackStack.add(NavRoutes.AuthFlow)
                     }
                 )
             }

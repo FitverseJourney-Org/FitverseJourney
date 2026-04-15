@@ -14,6 +14,8 @@ import com.example.data.database.sqldelight.DatabaseFactory
 import com.example.expect.LocalAppLocale
 import com.example.presentation.screens.ui.LanguageViewModel
 import com.example.presentation.theme.FitVerseJourneyTheme
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 import org.fitverse.project.navigation.FitverseRootNavigation
 import org.koin.compose.koinInject
 

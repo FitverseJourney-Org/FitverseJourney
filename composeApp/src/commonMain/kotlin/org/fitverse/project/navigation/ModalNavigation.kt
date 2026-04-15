@@ -10,6 +10,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.Assignment
+import androidx.compose.material.icons.automirrored.rounded.Help
+import androidx.compose.material.icons.automirrored.rounded.Logout
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
@@ -141,7 +144,7 @@ fun ModalDrawerSheetMainScreen(
                         ActionRow("Progress", Icons.Rounded.Timeline, colors) { onNavigate(NavRoutes.Progress) }
                         ActionRow("Leaderboards", Icons.Rounded.EmojiEvents, colors) { onNavigate(NavRoutes.Leaderboards) }
                         ActionRow("Friends", Icons.Rounded.Group, colors) { onNavigate(NavRoutes.Friends) }
-                        ActionRow("Tasks", Icons.Rounded.Assignment, colors) { onNavigate(NavRoutes.TasksFlow) }
+                        ActionRow("Tasks", Icons.AutoMirrored.Rounded.Assignment, colors) { onNavigate(NavRoutes.TasksFlow) }
                         ActionRow("Shop", Icons.Rounded.ShoppingCart, colors) { onNavigate(NavRoutes.Shopping) }
                         ActionRow("Wiki Fitness", Icons.Rounded.Info, colors) { onNavigate(NavRoutes.WikiFitness) }
                     }
@@ -150,14 +153,15 @@ fun ModalDrawerSheetMainScreen(
                     MenuSectionTitle("SETTINGS")
                     MenuCardContainer {
                         ActionRow("Devices", Icons.Rounded.Devices, colors) { onNavigate(NavRoutes.Devices) }
-                        ActionRow("Help", Icons.Rounded.Help, colors) { onNavigate(NavRoutes.HelpSupport) }
+                        ActionRow("Help", Icons.AutoMirrored.Rounded.Help, colors) { onNavigate(NavRoutes.HelpSupport) }
                         ActionRow("Language", Icons.Rounded.Language, colors) { onNavigate(NavRoutes.HelpSupport) }
                     }
 
                     Spacer(modifier = Modifier.height(24.dp))
 
                     // Logout em Vermelho (Error)
-                    ActionRow("Logout", Icons.Rounded.Logout, colors, isDanger = true, onClick = onLogout)
+                    ActionRow("Logout",
+                        Icons.AutoMirrored.Rounded.Logout, colors, isDanger = true, onClick = onLogout)
 
                     Spacer(modifier = Modifier.height(40.dp))
                 }

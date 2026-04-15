@@ -125,7 +125,10 @@ fun LoginScreen(
                     onEmailChange = onEmailChanged,
                     onPasswordChange = onPasswordChanged,
                     onTogglePasswordVisibility = onTogglePasswordVisibility,
-                    onLoginClick = onLoginClick
+                    onLoginClick = onLoginClick,
+                    onGoogleSignIn = {
+//                        viewmodel.onGoogleSignIn()
+                    },
                 )
 
                 LoginFooter(

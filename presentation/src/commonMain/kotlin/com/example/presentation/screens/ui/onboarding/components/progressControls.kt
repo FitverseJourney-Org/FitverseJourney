@@ -44,31 +44,31 @@ fun OnboardingControls(
 
         Spacer(Modifier.height(18.dp))
 
-        FitVerseButton(
-            text = buttonText,
-            // Lógica de clique transferida para cá
-            onClick = buttonOnClick,
-            modifier = Modifier.fillMaxWidth(), // Agora funciona sem conflito
-            // Mapeamento de cores do seu sistema (cs)
-            topColor = cs.primary,
-            edgeColor = cs.outline, // Ou uma cor mais escura que o primary
-            textColor = cs.onPrimary,
-            textStyle = TextStyle(
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
-            )
-        )
-
-        Spacer(Modifier.height(10.dp))
-
-        TextButton(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = onSkip
-        ) {
-            Text(
-                text = "Skip",
-                color = cs.onBackground.copy(alpha = 0.7f)
-            )
-        }
+//        FitVerseButton(
+//            text = buttonText,
+//            // Lógica de clique transferida para cá
+//            onClick = buttonOnClick,
+//            modifier = Modifier.fillMaxWidth(), // Agora funciona sem conflito
+//            // Mapeamento de cores do seu sistema (cs)
+//            topColor = cs.primary,
+//            edgeColor = cs.outline, // Ou uma cor mais escura que o primary
+//            textColor = cs.onPrimary,
+//            textStyle = TextStyle(
+//                fontSize = 16.sp,
+//                fontWeight = FontWeight.Bold
+//            )
+//        )
+//
+//        Spacer(Modifier.height(10.dp))
+//
+//        TextButton(
+//            modifier = Modifier.fillMaxWidth(),
+//            onClick = onSkip
+//        ) {
+//            Text(
+//                text = "Skip",
+//                color = cs.onBackground.copy(alpha = 0.7f)
+//            )
+//        }
     }
 }

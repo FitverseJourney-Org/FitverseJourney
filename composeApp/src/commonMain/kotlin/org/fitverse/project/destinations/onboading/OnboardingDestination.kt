@@ -16,6 +16,8 @@ fun OnboardingDestination(
     state : OnboardingState,
     viewmodel: OnboardingViewModel,
     toTrial: () -> Unit,
+    toNewAccount: () -> Unit,
+    toLogin: () -> Unit
 
 ) {
 
@@ -24,6 +26,12 @@ fun OnboardingDestination(
             when(it) {
                 is OnboardingNavigation.ToTrial -> {
                     toTrial()
+                }
+                is OnboardingNavigation.ToNewAccount -> {
+                    toNewAccount()
+                }
+                is OnboardingNavigation.ToLogin -> {
+                    toLogin()
                 }
             }
         }
@@ -35,6 +43,12 @@ fun OnboardingDestination(
         viewmodel = viewmodel,
         emitToTrial = {
             viewmodel.emitToTrial()
+        },
+        emitToNewAccount = {
+            viewmodel.emitToNewAccount()
+        },
+        emitToLogin = {
+            viewmodel.emitToLogin()
         }
     )
 }
