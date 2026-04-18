@@ -6,9 +6,13 @@ import com.example.data.database.datastore.repository.AppOnboardingRepositoryImp
 import com.example.data.database.sqldelight.repository.configuration.ConfigLanguageDataSourceDao
 import com.example.data.database.sqldelight.repository.configuration.ConfigOnboardingDataSourceDao
 import com.example.data.database.sqldelight.repository.configuration.ConfigTokenDaoDataSourceImpl
+import com.example.data.datasource.remote.friends.FriendsRemoteDataSourceImpl
 import com.example.data.features.auth.repository.AuthRemoteRepositoryImpl
 import com.example.data.features.auth.repository.AuthTokenStoreImpl
+import com.example.data.repository.WikiRepositoryImpl
 import com.example.data.repository.user.UserRepositoryImpl
+import com.example.domain.repository.FakeFriendsRepository
+import com.example.domain.repository.FriendsRepository
 import com.example.domain.repository.authentication.AuthRepository
 import com.example.domain.repository.authentication.AuthTokenStoreRepository
 import com.example.domain.repository.dbLocal.datastore.AppAuthenticateRepository
@@ -16,6 +20,7 @@ import com.example.domain.repository.dbLocal.datastore.AppLanguageRepository
 import com.example.domain.repository.dbLocal.datastore.AppOnboardingRepository
 import com.example.domain.repository.dbLocal.sqldelight.configurations.ConfigTokenDataSourceDao
 import com.example.domain.repository.dbLocal.sqldelight.user.UserRepository
+import com.example.domain.repository.wiki.WikiRepository
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
@@ -41,6 +46,13 @@ val repositoryModule = module {
     singleOf(::ConfigLanguageDataSourceDao)
     singleOf(::ConfigOnboardingDataSourceDao)
     singleOf(::ConfigTokenDaoDataSourceImpl) { bind<ConfigTokenDataSourceDao>() }
+
+    singleOf(::FriendsRemoteDataSourceImpl) { bind<FriendsRepository>() }
+    singleOf(::FakeFriendsRepository)
+
+
+    // WIKI
+    singleOf(::WikiRepositoryImpl) { bind<WikiRepository>() }
 
     // WorkoutRepository
     // singleOf(::WorkoutRepositoryImpl) { bind<WorkoutRepository>() }

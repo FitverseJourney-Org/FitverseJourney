@@ -66,6 +66,9 @@ sealed interface NavRoutes : NavKey {
     data object WorkoutFlow : NavKey, NavRoutes {
         @Serializable
         data object Workout : NavKey, NavRoutes
+
+        @Serializable
+        data object WorkoutCompleted : NavKey, NavRoutes
         @Serializable
         data object WorkoutSession : NavKey, NavRoutes
     }

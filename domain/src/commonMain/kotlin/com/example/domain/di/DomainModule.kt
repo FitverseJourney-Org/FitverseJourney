@@ -19,6 +19,9 @@ import com.example.domain.usecase.register.ValidateRegisterPageGoalsUseCase
 import com.example.domain.usecase.register.ValidateRegisterPageIntroductionUseCase
 import com.example.domain.usecase.register.ValidateRegisterPageMacrosUseCase
 import com.example.domain.usecase.reset.ResetPasswordUseCase
+import com.example.domain.usecase.wiki.GetWikiArticlesUseCase
+import com.example.domain.usecase.wiki.SearchWikiArticlesUseCase
+import com.example.domain.usecase.wiki.ToggleBookmarkUseCase
 import org.koin.dsl.module
 
 val domainModule = module {
@@ -61,6 +64,11 @@ val domainModule = module {
     factory { ValidateRegisterPageGenderUseCase() }
     factory { ValidateRegisterPageGoalsUseCase() }
     factory { ValidateRegisterPageCredentialsUseCase() }
+
+
+    factory { ToggleBookmarkUseCase(get()) }
+    factory { SearchWikiArticlesUseCase(get()) }
+    factory { GetWikiArticlesUseCase(get()) }
 
 
 }

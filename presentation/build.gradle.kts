@@ -66,6 +66,10 @@ kotlin {
             // charts
             implementation ("io.github.ehsannarmani:compose-charts:0.2.5")
 
+
+            // Coil
+            implementation(libs.coil.compose)
+
         }
         iosMain.dependencies {
         }

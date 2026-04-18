@@ -53,4 +53,50 @@
     <string name="login_forget_password">Forgot password?</string>
 
 
+
+    <!-- FRIENDS -->
+    <!-- Screen titles -->
+    <string name="friends_title">FRIENDS</string>
+
+    <!-- Add Friend Section -->
+    <string name="add_friend_title">Adicionar conexão</string>
+    <string name="add_friend_code_hint">Ex: FIT-1234</string>
+
+    <!-- Suggestions -->
+    <string name="suggestions_title">Pessoas que você talvez conheça</string>
+    <string name="mutual_connections">%1$d em comum</string>
+
+    <!-- Friends List -->
+    <string name="friends_list_title">Seus Amigos (%1$d)</string>
+
+    <!-- Actions -->
+    <string name="action_add">Adicionar</string>
+    <string name="action_ok">OK</string>
+    <string name="action_cancel">Cancelar</string>
+
+    <!-- Errors -->
+    <string name="error_title">Erro</string>
+    <string name="error_network">Erro de conexão. Verifique sua internet.</string>
+    <string name="error_user_not_found">Usuário com código %1$s não encontrado.</string>
+    <string name="error_unknown">Ocorreu um erro inesperado.</string>
+    <string name="error_invalid_code">Código inválido. Use o formato FIT-XXXX</string>
+
+    <!-- Empty States -->
+    <string name="empty_friends_title">Você ainda não tem amigos</string>
+    <string name="empty_friends_message">Adicione amigos para ver suas atividades e competir!</string>
+
+    <!-- Content Descriptions (Accessibility) -->
+    <string name="cd_navigate_back">Voltar</string>
+    <string name="cd_qr_code_scanner">Escanear código QR</string>
+    <string name="cd_add_friend">Adicionar amigo</string>
+    <string name="cd_sort_ascending">Ordenar de A a Z</string>
+    <string name="cd_sort_descending">Ordenar de Z a A</string>
+    <string name="cd_user_avatar">Avatar do usuário</string>
+    <string name="cd_streak_indicator">Indicador de sequência</string>
+
+    <!-- Sort -->
+    <string name="sort_a_z">A-Z</string>
+    <string name="sort_z_a">Z-A</string>
+
+
 </resources>

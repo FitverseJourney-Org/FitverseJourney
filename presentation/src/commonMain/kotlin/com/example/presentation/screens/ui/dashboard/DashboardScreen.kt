@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -44,6 +45,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -202,60 +204,66 @@ fun DashboardScreen(
             }
         )
     }
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp),
-        contentPadding = PaddingValues(vertical = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp) // Espaço respirável
-    ) {
-        item {
-            HeaderRow(
-                username = username,
-                avatarInitials = avatarInitials,
-                streakCount = totalStreakCount,
-                onNotificationsClick = onNotificationsClick,
-                onStreakClick = { showStreakDialog = true }
-            )
-        }
-        item {
-            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                ContainerLevel(state = avatarState, modifier = Modifier.fillMaxWidth())
-                FitverseAvatarCard(state = avatarState)
-                FitVerseSpacer(vertical = true, value = 16.dp)
+    Scaffold(
+        contentWindowInsets = WindowInsets(0,0,0,0),
+        containerColor = Color.Transparent
+    ){
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp),
+            contentPadding = PaddingValues(vertical = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp) // Espaço respirável
+        ) {
+            item {
+                HeaderRow(
+                    username = username,
+                    avatarInitials = avatarInitials,
+                    streakCount = totalStreakCount,
+                    onNotificationsClick = onNotificationsClick,
+                    onStreakClick = { showStreakDialog = true }
+                )
             }
-        }
-        item {
-            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                SectionTitle("CONDIÇÃO FÍSICA")
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp)
-                ){
-                    HydrationTrackerCard(
-                        modifier = Modifier.weight(1f)
-                    )
-                    StepsTrackerCard(
-                        modifier = Modifier.weight(1f)
-                    )
+            item {
+                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    ContainerLevel(state = avatarState, modifier = Modifier.fillMaxWidth())
+                    FitverseAvatarCard(state = avatarState)
+                    FitVerseSpacer(vertical = true, value = 16.dp)
+                }
+            }
+            item {
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    SectionTitle("CONDIÇÃO FÍSICA")
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp)
+                    ){
+                        HydrationTrackerCard(
+                            modifier = Modifier.weight(1f)
+                        )
+                        StepsTrackerCard(
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                }
+            }
+            item {
+                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    SectionTitle("MISSÕES DIÁRIAS")
+                    tasks.forEach { task ->
+                        FitverseTaskItem(
+                            task = task,
+                            isSelected = task.completed,
+                            onToggle = { onToggleTask(task) },
+                            onSelect = {
+                                tasks = tasks.map { if (it.id == task.id) it.copy(completed = !it.completed) else it }
+                            }
+                        )
+                    }
                 }
             }
         }
-        item {
-            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                SectionTitle("MISSÕES DIÁRIAS")
-                tasks.forEach { task ->
-                    FitverseTaskItem(
-                        task = task,
-                        isSelected = task.completed,
-                        onToggle = { onToggleTask(task) },
-                        onSelect = {
-                            tasks = tasks.map { if (it.id == task.id) it.copy(completed = !it.completed) else it }
-                        }
-                    )
-                }
-            }
-        }
+
     }
 }
 @Composable
