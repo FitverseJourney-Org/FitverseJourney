@@ -33,8 +33,12 @@ class GetProgressionDataUseCase(
         endMonth: Int,
         currentYear: Int,
     ): Flow<Result<ProgressionData>> {
-        val currentFlow = progressionRepository.getProgressionPoints(exerciseId)
-            .map { points -> points.filter { it.date in startMonth..endMonth } }
+        val currentFlow = progressionRepository.getProgressionPoints(exerciseId).map { points ->
+            points.filter {
+                it.date.month in startMonth..endMonth
+            }
+        }
+
 
         val previousFlow = progressionRepository.getPreviousPeriodPoints(
             exerciseId = exerciseId,

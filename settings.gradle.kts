@@ -25,6 +25,9 @@ include(
     ":composeApp",
     ":domain",
     ":presentation",
-    ":server"
+    ":server",
 )
-include(":data")
+include(":data:local", ":data:remote", ":data:repository")
+project(":data:local").projectDir      = File(rootDir, "data/local")
+project(":data:remote").projectDir     = File(rootDir, "data/remote")
+project(":data:repository").projectDir = File(rootDir, "data/repository")

@@ -16,11 +16,12 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun WeightPicker(
-    initialWeight: Int = 70,
-    onWeightSelected: (Int) -> Unit
+    initialWeight: Double = 70.0,
+    onWeightSelected: (Double) -> Unit
 ) {
-    val weights = remember { (30..200).toList() }
-    val initialIndex = weights.indexOf(initialWeight).takeIf { it >= 0 } ?: 40
+    val weights = remember { (300..2000).map { it / 10.0 } }
+    val initialIndex = weights.indexOfFirst { it == initialWeight }.takeIf { it >= 0 }
+        ?: weights.indexOfFirst { it == 70.0 }.coerceAtLeast(0)
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -31,7 +32,12 @@ fun WeightPicker(
             WheelPicker(
                 items = weights,
                 initialIndex = initialIndex,
-                onItemSelected = onWeightSelected
+                onItemSelected = onWeightSelected,
+                itemContent = { v ->
+                    val intPart = v.toInt()
+                    val decPart = kotlin.math.round((v - intPart) * 10).toInt()
+                    "$intPart.$decPart"
+                }
             )
         }
         Text(

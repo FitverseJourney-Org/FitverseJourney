@@ -16,7 +16,6 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
-import com.example.data.database.sqldelight.DatabaseFactory
 import com.example.presentation.screens.ui.LoadingLanguageScreen
 import com.example.presentation.screens.ui.onboarding.viewmodel.OnboardingViewModel
 import com.example.presentation.screens.ui.splash.viewmodel.SplashViewModel
@@ -31,7 +30,6 @@ import org.koin.compose.koinInject
 
 @Composable
 fun FitverseRootNavigation(
-    dbHelper: DatabaseFactory,
 ) {
     val rootBackStack = rememberNavBackStack(
         SavedStateConfiguration {
@@ -47,7 +45,7 @@ fun FitverseRootNavigation(
                 }
             }
         },
-        NavRoutes.HomeFlow
+        NavRoutes.SplashScreen
     )
 
     NavDisplay(

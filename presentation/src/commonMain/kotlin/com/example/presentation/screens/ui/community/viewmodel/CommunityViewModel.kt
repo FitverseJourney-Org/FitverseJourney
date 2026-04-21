@@ -2,7 +2,7 @@ package com.example.presentation.screens.ui.community.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.expect.DateTimeManager
+import com.example.expect.TimerManager
 import com.example.presentation.screens.ui.community.CommunityGroup
 import com.example.presentation.screens.ui.community.CommunityUiState
 import com.example.presentation.screens.ui.community.WorkoutPost
@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlin.time.Clock
 
 class CommunityViewModel : ViewModel() {
 
@@ -75,7 +74,7 @@ class CommunityViewModel : ViewModel() {
 
             // 1. Gera um código único estilo FIT-1234
             val generatedCode = "FIT-${(1000..9999).random()}"
-            val newId = "grp_${DateTimeManager.nowMillis()}"
+            val newId = "grp_${TimerManager.nowMillis()}"
 
             // 2. Cria o novo objeto de grupo
             val newSquad = CommunityGroup(
@@ -105,8 +104,8 @@ class CommunityViewModel : ViewModel() {
     private fun getPostsForGroup(groupId: String): List<WorkoutPost> {
         return when (groupId) {
             "grp_001" -> listOf(
-                WorkoutPost("p1", "Marcos", "", "Treino A (Peito e Ombro) finalizado! 💪", DateTimeManager.nowMillis()),
-                WorkoutPost("p2", "Juliana", "", "EAA novo aprovado! 🔥", DateTimeManager.nowMillis() - 3600000)
+                WorkoutPost("p1", "Marcos", "", "Treino A (Peito e Ombro) finalizado! 💪", TimerManager.nowMillis()),
+                WorkoutPost("p2", "Juliana", "", "EAA novo aprovado! 🔥", TimerManager.nowMillis() - 3600000)
             )
             else -> emptyList() // Grupos novos ou outros IDs começam vazios
         }

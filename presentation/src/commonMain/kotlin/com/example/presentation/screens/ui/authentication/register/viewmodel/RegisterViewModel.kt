@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.model.authentication.register.RegisterMacros
 import com.example.domain.model.authentication.register.RegisterPage
+import com.example.domain.model.local.User
 import com.example.domain.model.register.RegisterPageAvatarValidationType
 import com.example.domain.model.register.RegisterPageCredentialsValidationType
 import com.example.domain.model.register.RegisterPageExperienceLevelValidationType
@@ -19,6 +20,7 @@ import com.example.domain.usecase.register.ValidateRegisterPageGenderUseCase
 import com.example.domain.usecase.register.ValidateRegisterPageGoalsUseCase
 import com.example.domain.usecase.register.ValidateRegisterPageIntroductionUseCase
 import com.example.domain.usecase.register.ValidateRegisterPageMacrosUseCase
+import com.example.expect.TimerManager
 import com.example.presentation.components.snackbar.SnackBarData
 import com.example.presentation.components.snackbar.SnackbarType
 import com.example.presentation.navigationState.RegisterNavigation
@@ -67,7 +69,7 @@ class RegisterViewModel(
                 _state.update { it.copy(height = action.value) }
             }
             is RegisterAction.DateOfBirthChanged -> {
-                _state.update { it.copy(age = action.year.toString()) }
+                _state.update { it.copy(age = action.year) }
             }
             is RegisterAction.WeightChanged -> {
                 _state.update { it.copy(weight = action.value) }
@@ -142,6 +144,9 @@ class RegisterViewModel(
             }
             RegisterAction.AutoAdjustMacros -> {
                 processDataCalcMacros()
+            }
+            RegisterAction.ToggleEditingMacros -> {
+                _state.update { it.copy(isEditingMacros = !it.isEditingMacros) }
             }
 
             // 8° Page Actions
@@ -309,14 +314,33 @@ class RegisterViewModel(
     private fun submitRegistration() {
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
-            val result = registerUseCase.invoke(
-                nickname = _state.value.firstName,
+            val user = User(
+                id = null,
+                name = _state.value.firstName,
                 email = _state.value.email,
-                age = _state.value.age.toInt(),
+                gender = _state.value.registerGender.name,
+                age = _state.value.age,
+                weight = _state.value.weight,
+                height = _state.value.height,
+                experienceLevel = _state.value.registerExperienceLevel.name,
+                goals = _state.value.registerGoal.name,
+                targetCalories = _state.value.targetCalories.toInt(),
+                targetProtein = _state.value.targetProteins.toDouble(),
+                targetCarbs = _state.value.targetCarbs.toDouble(),
+                targetFat = _state.value.targetFats.toDouble(),
+                createdAt = TimerManager.now(),
+                updatedAt = TimerManager.now(),
+                isPremium = false,
+                targetWeight = _state.value.weight,
+            )
+            val result = registerUseCase.invoke(
+                name = _state.value.firstName,
+                email = _state.value.email,
+                age = _state.value.age,
                 height = _state.value.height,
                 registerGender = _state.value.registerGender,
-                trainingLevel = _state.value.registerExperienceLevel,
-                registerGoal = _state.value.registerGoal,
+                experienceLevel = _state.value.registerExperienceLevel,
+                goal = _state.value.registerGoal,
                 weight = _state.value.weight,
                 password = _state.value.password
             )

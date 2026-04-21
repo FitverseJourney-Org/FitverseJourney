@@ -295,15 +295,7 @@ fun TrialIntroScreen(
                             onClick = onStartTrial,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .scale(scale), // Mantém a sua animação de escala original
-                            topColor = colors.primary,
-                            // Para o edgeColor, usamos uma versão mais escura do primary para o efeito 3D
-                            edgeColor = colors.outline,
-                            textColor = colors.onPrimary,
-                            textStyle = TextStyle(
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold
-                            )
+                                .scale(scale),
                         )
 
                         Text(

@@ -52,7 +52,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.example.presentation.screens.ui.progress.Exercise
+import com.example.domain.model.progress.Exercise
 import com.example.presentation.screens.ui.progress.PeriodFilter
 import com.example.presentation.utils.MonthNames
 

@@ -135,10 +135,16 @@ fun RegisterScreen(
                 FitVerseButton(
                     modifier = Modifier.fillMaxWidth(),
                     text = if(state.page == RegisterPage.Success) "VOLTAR PARA LOGIN" else if(state.page == RegisterPage.Credentials) "FINALIZAR" else "AVANÇAR",
-                    topColor = cs.primary,
-                    edgeColor = cs.outline, // Ou uma cor mais escura que o primary
-                    textColor = cs.onPrimary,
                     isLoading = state.isLoading,
+                    enabled = {
+                        if(state.isEditingMacros){
+                            false
+                        }else if(state.isLoading){
+                            false
+                        }else {
+                            true
+                        }
+                    },
                     onClick = {
                         if(state.page == RegisterPage.Success) {
                             onAction(RegisterAction.Exit)

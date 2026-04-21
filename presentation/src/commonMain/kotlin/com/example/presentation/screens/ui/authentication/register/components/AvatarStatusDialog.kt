@@ -117,10 +117,8 @@ fun AvatarStatusDialog(
                 FitVerseButton(
                     modifier = Modifier.fillMaxWidth(),
                     text = "ENTENDI",
-                    topColor = MaterialTheme.colorScheme.primary,
-                    edgeColor = MaterialTheme.colorScheme.outline,
-                    textColor = MaterialTheme.colorScheme.onPrimary,
-                    onClick = onDismiss
+                    onClick = onDismiss,
+                    enabled = { true }
                 )
             }
         }

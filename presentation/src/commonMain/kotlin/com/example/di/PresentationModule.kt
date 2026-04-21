@@ -7,7 +7,7 @@ import com.example.presentation.screens.ui.authentication.resetPassword.viewmode
 import com.example.presentation.screens.ui.community.viewmodel.CommunityViewModel
 import com.example.presentation.screens.ui.friends.viewmodel.FriendsViewModel
 import com.example.presentation.screens.ui.onboarding.viewmodel.OnboardingViewModel
-import com.example.presentation.screens.ui.progress.viewmodel.ProgressViewModel
+import com.example.presentation.screens.ui.progress.ProgressViewModel
 import com.example.presentation.screens.ui.splash.viewmodel.SplashViewModel
 import com.example.presentation.screens.ui.wiki.viewmodel.WikiViewModel
 import org.koin.core.module.dsl.viewModel
@@ -67,9 +67,10 @@ val presentationModule = module {
     }
     viewModel {
         ProgressViewModel(
-            allExercises = get(),
-            rawCurrentData = get(),
-            rawPreviousData = get()
+            getTrainingSplitsUseCase = get(),
+            getExercisesByTrainingSplitUseCase = get(),
+            getProgressionDataUseCase = get(),
+            buildProgressionInsightUseCase = get()
         )
     }
 }

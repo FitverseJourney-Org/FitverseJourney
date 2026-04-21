@@ -3,44 +3,46 @@ plugins {
     alias(libs.plugins.composeCompiler)
     id("com.google.gms.google-services")
     id("org.jetbrains.compose")
+    // ❌ REMOVA: kotlin("android") — não é mais necessário com AGP 9.0
 }
 
 android {
     namespace = "org.fitverse.fitverseJourney"
     compileSdk = 36
-    defaultConfig {
-        minSdk = 26
 
+    defaultConfig {
+        applicationId = "org.fitverse.fitverseJourney"  // 👈 obrigatório
+        minSdk = 26
+        targetSdk = 36
+        versionCode = 1
+        versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
-        release {
+        debug {
             isMinifyEnabled = false
+            applicationIdSuffix = ".dev"
+            versionNameSuffix = "-DEBUG"
+        }
+        release {
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
-        getByName("debug") {
-            isMinifyEnabled = false
-            applicationIdSuffix = ".dev"
-            versionNameSuffix = "-DEBUG"
-        }
-        getByName("release") {
-            isMinifyEnabled = true
-        }
+        // ❌ REMOVA o segundo bloco release duplicado que estava antes
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+    }
 
-    }
     buildFeatures {
         compose = true
-    }
-    buildFeatures {
-        compose = true
+        // ❌ REMOVA o buildFeatures duplicado que estava antes
     }
 }
 
@@ -49,7 +51,9 @@ dependencies {
     // -----------------------------------------------------------------------------------------
     // MODULES
     // -----------------------------------------------------------------------------------------
-    implementation(projects.data)
+    implementation(project(":data:local"))
+    implementation(project(":data:remote"))
+    implementation(project(":data:repository"))
     implementation(projects.domain)
     implementation(projects.presentation)
     implementation(projects.composeApp)

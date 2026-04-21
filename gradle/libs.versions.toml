@@ -3,6 +3,7 @@
 # ANDROID / BUILD TOOLS
 # ----------------------------------------------------
 agp                            = "9.0.0"       # Android Gradle Plugin — toolchain de build Android
+coroutinesExtensions = "2.3.2"
 kotlin                         = "2.3.0"       # Kotlin compiler e stdlib
 android-compileSdk             = "36"          # SDK de compilação
 android-minSdk                 = "24"          # SDK mínimo suportado (Android 7.0)
@@ -76,12 +77,11 @@ kotlinxSerialization           = "1.10.0"      # kotlinx.serialization JSON
 # COROUTINES
 # ----------------------------------------------------
 kotlinxCoroutines              = "1.10.2"      # kotlinx.coroutines — suporte a suspend, Flow, etc.
-kotlinxCoroutinesPlayServices  = "1.10.2"      # kotlinx.coroutines integração com Google Play Services
 
 # ----------------------------------------------------
 # DATABASE — SQLDELIGHT
 # ----------------------------------------------------
-sqlDelight                     = "2.2.1"       # SQLDelight — banco de dados local multiplataforma
+sqlDelight                     = "2.3.2"       # SQLDelight — banco de dados local multiplataforma
 
 # ----------------------------------------------------
 # DATE / TIME
@@ -109,7 +109,6 @@ datastore                      = "1.2.0"       # DataStore — armazenamento cha
 # ----------------------------------------------------
 firebase-bom                   = "34.11.0"     # Firebase BOM — gerencia versões de todos os SDKs Firebase
 firebase-admin                 = "9.4.2"       # Firebase Admin SDK (JVM/servidor)
-coroutines-play-services       = "1.10.1"
 # ----------------------------------------------------
 # TESTING
 # ----------------------------------------------------
@@ -169,6 +168,7 @@ androidx-lifecycle-runtime     = { module = "androidx.lifecycle:lifecycle-runtim
 # =====================================================
 
 # Navigation3 UI KMP — NavDisplay e componentes visuais multiplataforma
+sqldelight-coroutines-extensions = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "coroutinesExtensions" }
 jetbrains-navigation3-ui       = { module = "org.jetbrains.androidx.navigation3:navigation3-ui", version.ref = "jetbrains-lifecycle-nav3" }
 # Navigation3 Runtime AndroidX — backstack e entryProvider (Android)
 androidx-navigation3-runtime   = { module = "androidx.navigation3:navigation3-runtime", version.ref = "navigation3" }
@@ -261,6 +261,7 @@ kotlinx-serialization          = { module = "org.jetbrains.kotlinx:kotlinx-seria
 # COROUTINES
 # =====================================================
 
+kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlinxCoroutines" }
 # kotlinx.coroutines Core — suspend, Flow, CoroutineScope (KMP)
 kotlinx-coroutines-core        = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 # kotlinx.coroutines Android — Main dispatcher para Android
@@ -338,7 +339,6 @@ firebase-analytics             = { module = "com.google.firebase:firebase-analyt
 # Firebase Firestore — banco de dados NoSQL em tempo real
 firebase-firestore             = { module = "com.google.firebase:firebase-firestore" }
 
-kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "coroutines-play-services" }
 
 
 # Firebase Firestore KTX — cliente Firestore para servidor/JVM (Google Cloud)

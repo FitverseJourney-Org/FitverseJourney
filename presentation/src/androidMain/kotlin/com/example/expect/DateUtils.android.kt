@@ -1,10 +1,11 @@
 package com.example.expect
 
+import com.example.domain.models.PlatformDate
 import java.time.LocalDate
 import java.util.Calendar
 
 
-actual object DateTimeManager {
+actual object TimerManager {
     actual fun now(): Long = System.currentTimeMillis()
 
     actual fun formatMillisToDate(millis: Long): String {

@@ -49,10 +49,10 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
-import com.example.expect.DateTimeManager
+import com.example.expect.TimerManager
 import com.example.expect.PlatformDateFormatter
 import com.example.presentation.screens.ui.friends.viewmodel.FriendsViewModel
-import com.example.presentation.screens.ui.progress.viewmodel.ProgressViewModel
+import com.example.presentation.screens.ui.progress.ProgressViewModel
 import com.example.presentation.screens.ui.wiki.viewmodel.WikiViewModel
 import com.example.presentation.screens.ui.workout.PastWorkoutLog
 import com.example.presentation.screens.ui.workout.SetRecord
@@ -349,7 +349,7 @@ fun WorkoutCompletedDestination(
     viewStatsGraph: () -> Unit = {}
 ) {
     // Calculamos um timestamp de 7 dias atrás para o histórico
-    val oneWeekAgo = DateTimeManager.nowMillis() - (7 * 24 * 60 * 60 * 1000)
+    val oneWeekAgo = TimerManager.nowMillis() - (7 * 24 * 60 * 60 * 1000)
 
     val exerciseHistory = mapOf(
         1 to listOf( // Supino Reto

@@ -16,17 +16,15 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.expect.DateTimeManager
+import com.example.expect.TimerManager
 import com.example.expect.PlatformDateFormatter
 import com.example.expect.formatWorkoutTime
 import kotlinx.coroutines.delay
@@ -51,7 +49,7 @@ data class WorkoutCompletionResult(
     val personalRecords: List<PersonalRecord> = emptyList(),
     val achievements: List<Achievement> = emptyList(),
     val improvementPercentage: Float = 0f,
-    val completedAt: Long = DateTimeManager.nowMillis()
+    val completedAt: Long = TimerManager.nowMillis()
 )
 
 /**

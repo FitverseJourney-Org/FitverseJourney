@@ -73,7 +73,7 @@ fun RegisterPageMetrics(state: RegisterState, onAction: (RegisterAction) -> Unit
             icon = Icons.Rounded.MonitorWeight
         ) {
             WeightPicker(
-                initialWeight = 70,
+                initialWeight = 70.0,
                 onWeightSelected = { weight ->
                     onAction(RegisterAction.WeightChanged(weight))
                 }

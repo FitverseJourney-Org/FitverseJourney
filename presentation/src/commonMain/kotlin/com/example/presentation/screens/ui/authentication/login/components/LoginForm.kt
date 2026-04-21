@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -17,10 +18,12 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -54,31 +57,45 @@ fun LoginForm(
 
     Column {
 
-        LoginTextField(
-            value = { state.email },
+        // E-mail
+        FitverseOutlinedTextField(
+            value = state.email,
             onValueChange = onEmailChange,
-            icon = Icons.Outlined.Email,
-            txtHint = stringResource(Res.string.login_email_label),
+            label = stringResource(Res.string.login_email_label),
+            placeholder = "seu@email.com",
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Outlined.Email,
+                    contentDescription = null,
+                    tint = Color(0xFF6366F1)
+                )
+            },
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Next,
                 keyboardType = KeyboardType.Email
             ),
-            txtPlaceholder = stringResource(Res.string.login_email_label)
+            shape = RoundedCornerShape(16.dp), // Mantendo a consistência com o botão
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Color(0xFF6366F1).copy(alpha = .4f),
+                focusedLabelColor = Color(0xFF6366F1).copy(alpha = .4f),
+                unfocusedBorderColor = Color(0xFF6366F1).copy(alpha = .2f)
+            )
         )
 
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(16.dp))
 
-        LoginTextField(
-            value = { state.password },
+        // Senha
+        FitverseOutlinedTextField(
+            value = state.password,
             onValueChange = onPasswordChange,
-            icon = Icons.Outlined.Lock,
-            txtHint = stringResource(Res.string.login_password_label),
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Done,
-                keyboardType = KeyboardType.Password
-            ),
-            keyboardActions = KeyboardActions {
-                onLoginClick()
+            label = stringResource(Res.string.login_password_label),
+            placeholder = "••••••••",
+            leadingIcon = {
+                Icon(
+                    imageVector = Icons.Outlined.Lock,
+                    contentDescription = null,
+                    tint = Color(0xFF6366F1)
+                )
             },
             trailingIcon = {
                 IconButton(onClick = onTogglePasswordVisibility) {
@@ -87,7 +104,8 @@ fun LoginForm(
                             Icons.Outlined.Visibility
                         else
                             Icons.Outlined.VisibilityOff,
-                        contentDescription = null
+                        contentDescription = null,
+                        tint = Color(0xFF94A3B8)
                     )
                 }
             },
@@ -95,7 +113,17 @@ fun LoginForm(
                 VisualTransformation.None
             else
                 PasswordVisualTransformation(),
-            txtPlaceholder = stringResource(Res.string.login_password_label),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done,
+                keyboardType = KeyboardType.Password
+            ),
+            keyboardActions = KeyboardActions { onLoginClick() },
+            shape = RoundedCornerShape(16.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Color(0xFF6366F1).copy(alpha = .8f),
+                focusedLabelColor = Color(0xFF6366F1).copy(alpha = .4f),
+                unfocusedBorderColor = Color(0xFF6366F1).copy(alpha = .2f)
+            )
         )
 
         Spacer(Modifier.height(16.dp))
@@ -103,13 +131,10 @@ fun LoginForm(
         FitVerseButton(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(Res.string.login_button_text),
-            topColor = cs.primary,
-            edgeColor = cs.outline, // Ou uma cor mais escura que o primary
-            textColor = cs.onPrimary,
             isLoading = state.isLoading,
             onClick = {
                 onLoginClick()
-            }
+            },
         )
         Spacer(Modifier.height(24.dp))
         Row(

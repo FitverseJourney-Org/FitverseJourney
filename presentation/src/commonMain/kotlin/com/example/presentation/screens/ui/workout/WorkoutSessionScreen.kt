@@ -9,7 +9,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,25 +24,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.key.Key.Companion.Calendar
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.compose.AsyncImage
-import com.example.expect.DateTimeManager
-import com.example.expect.PlatformDate
+import com.example.expect.TimerManager
 import com.example.expect.PlatformDateFormatter
 import com.example.expect.formatWorkoutTime
 import com.example.presentation.screens.widgets.FitVerseSpacer
@@ -51,7 +45,6 @@ import fitversejourneyapp.presentation.generated.resources.Res
 import fitversejourneyapp.presentation.generated.resources.bg_girl_pose
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.Resource
 import org.jetbrains.compose.resources.painterResource
 
 // ============================================================================
@@ -103,7 +96,7 @@ data class SetRecord(
 data class PastWorkoutLog(
     val id: String,
     val date: String,
-    val timestamp: Long = DateTimeManager.nowMillis(),
+    val timestamp: Long = TimerManager.nowMillis(),
     val exerciseId: Int,
     val exerciseName: String = "",
     val sets: List<SetRecord>,
@@ -1071,7 +1064,7 @@ fun SetsTable(
                     val updatedSet = setRecord.copy(
                         isCompleted = !setRecord.isCompleted,
                         completedAt = if (!setRecord.isCompleted) {
-                            DateTimeManager.nowMillis()
+                            TimerManager.nowMillis()
                         } else null
                     )
                     val updated = sets.toMutableList().apply {

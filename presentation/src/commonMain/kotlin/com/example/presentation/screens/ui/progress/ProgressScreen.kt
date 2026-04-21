@@ -173,7 +173,9 @@ private fun ProgressSuccessContent(
         ExerciseBottomSheet(
             exercises = state.exercises,
             selectedExercise = state.selectedExercise,
-            onExerciseSelected = { viewModel.onIntent(ProgressIntent.SelectExercise(it)) },
+            onExerciseSelected = {
+//                viewModel.onIntent(ProgressIntent.SelectExercise(it))
+            },
             onDismiss = { viewModel.onIntent(ProgressIntent.CloseExerciseSheet) },
         )
     }

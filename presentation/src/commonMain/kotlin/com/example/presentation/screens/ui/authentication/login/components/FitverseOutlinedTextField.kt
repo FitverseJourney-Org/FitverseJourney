@@ -35,8 +35,6 @@ fun FitverseOutlinedTextField(
     trailingIcon: (@Composable () -> Unit)? = null,
     prefix: (@Composable () -> Unit)? = null,
     suffix: (@Composable () -> Unit)? = null,
-    supportingText: String? = null,
-    errorText: String? = null,
     isError: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
@@ -64,18 +62,6 @@ fun FitverseOutlinedTextField(
         trailingIcon = trailingIcon,
         prefix = prefix,
         suffix = suffix,
-        supportingText = {
-            if (isError) {
-                Text(
-                    text = errorText ?: "",
-                    color = MaterialTheme.colorScheme.error
-                )
-            } else {
-                if (supportingText != null) {
-                    Text(text = supportingText)
-                }
-            }
-        },
         isError = isError,
         visualTransformation = visualTransformation,
         keyboardOptions = keyboardOptions,

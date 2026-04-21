@@ -1,5 +1,6 @@
 package com.example.domain.usecase.progression
 
+import com.example.domain.expect.formatPercent
 import com.example.domain.model.progress.InsightLevel
 import com.example.domain.model.progress.LoadProgressionPoint
 import com.example.domain.model.progress.ProgressionInsight

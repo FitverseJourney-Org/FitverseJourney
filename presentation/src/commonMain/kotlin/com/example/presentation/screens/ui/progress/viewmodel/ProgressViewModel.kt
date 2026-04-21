@@ -11,7 +11,7 @@ import com.example.domain.usecase.progression.BuildProgressionInsightUseCase
 import com.example.domain.usecase.progression.GetExercisesByTrainingSplitUseCase
 import com.example.domain.usecase.progression.GetProgressionDataUseCase
 import com.example.domain.usecase.progression.GetTrainingSplitsUseCase
-import com.example.expect.DateTimeManager
+import com.example.expect.TimerManager
 import com.example.presentation.utils.MonthNames
 import com.example.presentation.utils.validatePeriod
 import ir.ehsannarmani.compose_charts.models.DotProperties
@@ -286,5 +286,5 @@ class ProgressViewModel(
 
     // ── Utilitários ───────────────────────────────────────────────────────────
 
-    private fun getCurrentYear(): Int = DateTimeManager.getCurrentYear()
+    private fun getCurrentYear(): Int = TimerManager.getCurrentYear()
 }

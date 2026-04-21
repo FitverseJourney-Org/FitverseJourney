@@ -16,4 +16,9 @@ interface UserRepository {
 
     // Sincronização com remoto
     suspend fun syncOfflineData(dto: User)
+
+    suspend fun login(email: String, password: String): User
+    suspend fun register(email: String, password: String, userData: User): User
+    suspend fun resetPassword(email: String): Result<Unit>
+    suspend fun logout()
 }

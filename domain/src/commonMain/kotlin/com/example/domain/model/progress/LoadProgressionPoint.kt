@@ -1,6 +1,7 @@
 package com.example.domain.model.progress
 
 import androidx.compose.runtime.Immutable
+import com.example.domain.expect.PlatformDate
 
 /**
  * Ponto de dado de uma sessão de treino para um exercício específico.

@@ -1,5 +1,6 @@
 package com.example.expect
 
+import com.example.domain.models.PlatformDate
 import platform.Foundation.NSCalendar
 import platform.Foundation.NSCalendarUnitYear
 import platform.Foundation.NSDate
@@ -8,7 +9,7 @@ import platform.Foundation.dateWithTimeIntervalSince1970
 import platform.Foundation.timeIntervalSince1970
 import platform.Foundation.timeZoneWithName
 
-actual object DateTimeManager {
+actual object TimerManager {
     actual fun now(): Long {
         return (NSDate().timeIntervalSince1970 * 1000).toLong()
     }

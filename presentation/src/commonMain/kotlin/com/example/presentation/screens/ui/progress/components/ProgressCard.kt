@@ -33,9 +33,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.presentation.screens.ui.progress.InsightLevel
-import com.example.presentation.screens.ui.progress.ProgressInsight
-import com.example.presentation.screens.ui.progress.ProgressionStats
+import com.example.domain.model.progress.InsightLevel
+import com.example.domain.model.progress.ProgressionInsight
+import com.example.domain.model.progress.ProgressionStats
 import com.example.presentation.utils.formatDecimalKmp
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -236,7 +236,7 @@ fun AnimatedGlassStatCard(
  */
 @Composable
 fun InsightsCard(
-    insight: ProgressInsight,
+    insight: ProgressionInsight,
     modifier: Modifier = Modifier,
 ) {
     val levelColor = when (insight.level) {
