@@ -15,7 +15,7 @@ sealed class RegisterAction {
     // 2° Page
     data class DateOfBirthChanged(val day: Int, val month: Int, val year: Int) : RegisterAction()
     data class HeightChanged(val value: Int) : RegisterAction()
-    data class WeightChanged(val value: Int) : RegisterAction()
+    data class WeightChanged(val value: Double) : RegisterAction()
 
     // 3° Page
     data class GenderChanged(val value: RegisterGender) : RegisterAction()
@@ -37,6 +37,8 @@ sealed class RegisterAction {
     data class UpdateFats(val value: String) : RegisterAction()
     data class UpdateWater(val value: String) : RegisterAction()
     object AutoAdjustMacros : RegisterAction()
+    object ToggleEditingMacros : RegisterAction()
+
 
 
     // 8° Page

@@ -116,6 +116,9 @@ fun DeviceSettingsScreenPro(
                 title = "DISPOSITIVOS E SAÚDE",
                 onBack = navigateBack
             )
+        },
+        bottomBar = {
+            FooterLinks()
         }
     ) { padding ->
         LazyColumn(
@@ -144,7 +147,7 @@ fun DeviceSettingsScreenPro(
                 )
             }
 
-            item { FooterLinks() }
+            item {  }
         }
     }
 }

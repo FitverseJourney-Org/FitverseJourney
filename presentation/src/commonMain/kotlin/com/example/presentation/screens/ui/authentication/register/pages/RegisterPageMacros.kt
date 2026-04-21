@@ -71,7 +71,6 @@ import com.example.presentation.screens.ui.authentication.register.state.Registe
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterPageMacros(state: RegisterState, onAction: (RegisterAction) -> Unit) {
-    var isEditing by remember { mutableStateOf(false) }
     var showInfoSheet by remember { mutableStateOf(false) } // Estado para o modal
     val sheetState = rememberModalBottomSheetState()
     val colors = MaterialTheme.colorScheme
@@ -126,10 +125,10 @@ fun RegisterPageMacros(state: RegisterState, onAction: (RegisterAction) -> Unit)
                 unit = "kcal",
                 icon = Icons.Default.LocalFireDepartment,
                 accentColor = Color(0xFFFF9800),
-                isEditing = isEditing,
+                isEditing = state.isEditingMacros,
                 onValueChange = { newValue ->
                     if (newValue.all { it.isDigit() }) {
-                        if(!isEditing){
+                        if(!state.isEditingMacros){
                             onAction(RegisterAction.UpdateMacros(state.macroGoals.copy(calories = newValue.toIntOrNull() ?: 0)))
                         }else{
                             onAction(RegisterAction.UpdateCalories(newValue))
@@ -155,10 +154,10 @@ fun RegisterPageMacros(state: RegisterState, onAction: (RegisterAction) -> Unit)
                 unit = "g",
                 icon = Icons.Default.BakeryDining,
                 accentColor = Color(0xFF4CAF50),
-                isEditing = isEditing,
+                isEditing = state.isEditingMacros,
                 onValueChange = { newValue ->
                     if (newValue.all { it.isDigit() }) {
-                        if(!isEditing){
+                        if(!state.isEditingMacros){
                             onAction(RegisterAction.UpdateMacros(macros = state.macroGoals.copy(carbohydrates = newValue.toIntOrNull() ?: 0)))
                         }else{
                             onAction(RegisterAction.UpdateCarbs(newValue))
@@ -173,10 +172,10 @@ fun RegisterPageMacros(state: RegisterState, onAction: (RegisterAction) -> Unit)
                 unit = "g",
                 icon = Icons.Default.Restaurant,
                 accentColor = Color(0xFFE91E63),
-                isEditing = isEditing,
+                isEditing = state.isEditingMacros,
                 onValueChange = { newValue ->
                     if (newValue.all { it.isDigit() }) {
-                        if(!isEditing){
+                        if(!state.isEditingMacros){
                             onAction(RegisterAction.UpdateMacros(state.macroGoals.copy(proteins = newValue.toIntOrNull() ?: 0)))
                         }else{
                             onAction(RegisterAction.UpdateProteins(newValue))
@@ -200,10 +199,10 @@ fun RegisterPageMacros(state: RegisterState, onAction: (RegisterAction) -> Unit)
                 unit = "g",
                 icon = Icons.Default.Opacity,
                 accentColor = Color(0xFF2196F3),
-                isEditing = isEditing,
+                isEditing = state.isEditingMacros,
                 onValueChange = { newValue ->
                     if (newValue.all { it.isDigit() }) {
-                        if(!isEditing){
+                        if(!state.isEditingMacros){
                             onAction(RegisterAction.UpdateMacros(state.macroGoals.copy(fats = newValue.toIntOrNull() ?: 0)))
                         }else{
                             onAction(RegisterAction.UpdateFats(newValue))
@@ -220,10 +219,10 @@ fun RegisterPageMacros(state: RegisterState, onAction: (RegisterAction) -> Unit)
                 unit = "ml",
                 icon = Icons.Default.WaterDrop,
                 accentColor = Color(0xFF00BCD4),
-                isEditing = isEditing,
+                isEditing = state.isEditingMacros,
                 onValueChange = { newValue ->
                     if (newValue.all { it.isDigit() }) {
-                        if(!isEditing){
+                        if(!state.isEditingMacros){
                             onAction(RegisterAction.UpdateMacros(state.macroGoals.copy(waterMl = newValue.toIntOrNull() ?: 0)))
                         }else{
                             onAction(RegisterAction.UpdateWater(newValue))
@@ -243,21 +242,23 @@ fun RegisterPageMacros(state: RegisterState, onAction: (RegisterAction) -> Unit)
         ) {
             // Botão 1: Alternar Modo de Edição
             OutlinedButton(
-                onClick = { isEditing = !isEditing },
+                onClick = {
+                    onAction(RegisterAction.ToggleEditingMacros)
+                },
                 shape = CircleShape,
                 colors = ButtonDefaults.outlinedButtonColors(
                     // Fundo Glass: Usa a cor com baixa opacidade. Mais forte se estiver ativo.
-                    containerColor = if (isEditing)
+                    containerColor = if (state.isEditingMacros)
                         colors.primary.copy(alpha = 0.10f)
                     else
                         colors.onSurface.copy(alpha = 0.08f),
                     // Cor do conteúdo (ícone e texto)
-                    contentColor = if (isEditing) colors.primary else colors.onSurface
+                    contentColor = if (state.isEditingMacros) colors.primary else colors.onSurface
                 ),
                 border = BorderStroke(
                     width = 1.dp,
                     // Borda Glass: Fina e semi-transparente para dar o brilho do vidro
-                    color = if (isEditing)
+                    color = if (state.isEditingMacros)
                         colors.primary.copy(alpha = 0.50f)
                     else
                         colors.onSurface.copy(alpha = 0.15f)
@@ -266,12 +267,12 @@ fun RegisterPageMacros(state: RegisterState, onAction: (RegisterAction) -> Unit)
                 modifier = Modifier.fillMaxWidth(0.85f)
             ) {
                 Icon(
-                    imageVector = if (isEditing) Icons.Default.Check else Icons.Default.Tune,
+                    imageVector = if (state.isEditingMacros) Icons.Default.Check else Icons.Default.Tune,
                     contentDescription = null,
                     modifier = Modifier.size(18.dp)
                 )
                 Spacer(Modifier.width(8.dp))
-                Text(if (isEditing) "SALVAR METAS" else "AJUSTAR MANUALMENTE")
+                Text(if (state.isEditingMacros) "SALVAR METAS" else "AJUSTAR MANUALMENTE")
             }
 
             // Botão 2: Ajuste Automático

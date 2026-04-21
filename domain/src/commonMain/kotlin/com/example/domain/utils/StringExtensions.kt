@@ -12,3 +12,4 @@ fun String.isValidPassword(): Boolean {
 fun String.isEmptyInput(): Boolean {
     return this.trim().isEmpty()
 }
+

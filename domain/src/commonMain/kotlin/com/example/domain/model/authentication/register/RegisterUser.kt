@@ -6,9 +6,9 @@ data class RegisterUser(
     val email: String,
     val password: String,
     val registerGender: RegisterGender,
-    val birthDate: String,
-    val heightCm: Int,
-    val weightKg: Double,
-    val registerExperienceLevel: RegisterExperienceLevel,
-    val registerGoal: RegisterGoal
+    val age: Int,
+    val height: Int,
+    val weight: Double,
+    val experienceLevel: RegisterExperienceLevel,
+    val goal: RegisterGoal
 )

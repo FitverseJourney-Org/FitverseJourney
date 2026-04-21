@@ -17,8 +17,8 @@ data class RegisterState(
 
     // 2° Page
     val height: Int = 170,
-    val age: String = "",
-    val weight: Int = 70,
+    val age: Int = 0,
+    val weight: Double = 70.0,
 
     // 3° Page
     val registerGender: RegisterGender = RegisterGender.NONE,
@@ -38,6 +38,7 @@ data class RegisterState(
     val targetFats: String = "",
     val targetWater: String = "",
     val targetCarbs: String = "",
+    var isEditingMacros: Boolean = false,
 
     // 8° Page
     val email: String = "",

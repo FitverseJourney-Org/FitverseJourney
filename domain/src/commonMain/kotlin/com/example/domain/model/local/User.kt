@@ -5,12 +5,12 @@ data class User(
     val name: String,
     val email: String,
     val gender: String,
-    val age: Int, // Calculado a partir da birthDate
+    val age: Int,
     val weight: Double,
     val height: Int,
     val experienceLevel: String,
     val goals: String,
-    val isPremium: Boolean,
+    val isPremium: Boolean = false,
     // Metas de Saúde
     val targetWeight: Double,
     val targetCalories: Int,

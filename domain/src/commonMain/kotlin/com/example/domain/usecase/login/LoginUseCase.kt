@@ -7,18 +7,23 @@ class LoginUseCase(
     private val authRepository: AuthRepository
 ) {
     suspend operator fun invoke(email: String, password: String): Result<UserToken> {
-        val result = authRepository.login(email, password)
+        // 1. Valide PRIMEIRO
+        if (email.isBlank() || password.isBlank()) {
+            return Result.failure(Exception("Preencha todos os campos"))
+        }
 
-        return if(result.isSuccess){
-            Result.success(result.getOrThrow())
-        }else{
+        // 2. Tente a operação de rede apenas se os dados forem válidos
+        return try {
+            val result = authRepository.login(email, password)
 
-            if(email.isEmpty() || password.isEmpty()) {
-                Result.failure(Exception("Email or password cannot be empty"))
-            }else{
-                Result.failure(Exception("Invalid email or password"))
+            if (result.token == null) {
+                Result.failure(Exception("Login failed: Token nulo"))
+            } else {
+                Result.success(UserToken(result.token))
             }
-
+        } catch (e: Exception) {
+            // Captura erros do Firebase (credenciais inválidas, rede, etc)
+            Result.failure(e)
         }
     }
 }

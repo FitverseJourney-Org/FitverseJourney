@@ -115,7 +115,6 @@ fun ResetPasswordScreen(
                     onDone = { onSendResetLink() }
                 ),
                 isError = emailErrors.isNotEmpty(),
-                errorText = emailErrors.firstOrNull()
             )
 
             Spacer(Modifier.height(24.dp))
@@ -125,11 +124,9 @@ fun ResetPasswordScreen(
                     .fillMaxWidth()
                     .height(56.dp),
                 text = "Send reset link",
-                topColor = colors.primary, // O botão principal leva a cor fria de destaque
-                edgeColor = colors.primary.copy(alpha = 0.8f),
-                textColor = colors.onPrimary,
-                onClick = onSendResetLink,
-                enabled = emailErrors.isEmpty() && state.email.isNotBlank(), // Evita clique com e-mail vazio
+                onClick = { onSendResetLink() },
+                enabled = { !isLoading },
+                isLoading = isLoading,
             )
 
             Spacer(Modifier.height(24.dp))

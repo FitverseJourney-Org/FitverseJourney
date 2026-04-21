@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -33,6 +34,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -63,59 +65,66 @@ fun WorkoutScreenV2(
     var selectedCategory by remember { mutableStateOf(WorkoutCategory.STRENGTH) }
     val cs = MaterialTheme.colorScheme
 
-    LazyColumn(
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(14.dp) // Respiro maior entre blocos
-    ) {
-
-        item {
-            FitverseHeader(
-                level = 23,
-                xp = 340
-            )
+    Scaffold(
+        containerColor = Color.Transparent,
+        contentWindowInsets = WindowInsets(0,0,0,0),
+        topBar = {
+            FitverseHeader(level = 23,xp = 340)
         }
+    ){
+        LazyColumn(
+            modifier = Modifier.padding(it),
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(14.dp) // Respiro maior entre blocos
+        ) {
 
-        item {
-            if (hasActivePlan) {
-                ActiveWorkoutCard(
-                    planName = "Hypertrophy A",
-                    onStart = onStart
+            item {
+
+            }
+
+            item {
+                if (hasActivePlan) {
+                    ActiveWorkoutCard(
+                        planName = "Hypertrophy A",
+                        onStart = onStart
+                    )
+                } else {
+                    CreatePlanCard(
+                        onCreate = onCreatePlan
+                    )
+                }
+            }
+
+            item {
+                WorkoutCategorySelector(
+                    selected = selectedCategory,
+                    onSelect = { selectedCategory = it }
                 )
-            } else {
-                CreatePlanCard(
-                    onCreate = onCreatePlan
+            }
+
+            item {
+                Text(
+                    text = "Recommended for you",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = cs.onBackground, // Branco Puro
+                    letterSpacing = (-0.5).sp
+                )
+            }
+
+            items(
+                items = workoutList.filter { workout -> workout.category.contains(selectedCategory) },
+                key = { it.id }
+            ) { workout ->
+                FitverseCardRecommended(
+                    workout = workout,
+                    onClick = {
+
+                    }
                 )
             }
         }
 
-        item {
-            WorkoutCategorySelector(
-                selected = selectedCategory,
-                onSelect = { selectedCategory = it }
-            )
-        }
-
-        item {
-            Text(
-                text = "Recommended for you",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.ExtraBold,
-                color = cs.onBackground, // Branco Puro
-                letterSpacing = (-0.5).sp
-            )
-        }
-
-        items(
-            items = workoutList.filter { workout -> workout.category.contains(selectedCategory) },
-            key = { it.id }
-        ) { workout ->
-            FitverseCardRecommended(
-                workout = workout,
-                onClick = {
-
-                }
-            )
-        }
     }
 }
 
@@ -236,19 +245,19 @@ fun ActiveWorkoutCard(
             Button(
                 onClick = onStart,
                 modifier = Modifier.fillMaxWidth().height(56.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = cs.tertiary), // Botão de Ação Ativa em Tertiary
+                colors = ButtonDefaults.buttonColors(containerColor = cs.primary), // Botão de Ação Ativa em Tertiary
                 shape = RoundedCornerShape(16.dp)
             ) {
                 Icon(
                     imageVector = Icons.Filled.PlayArrow,
                     contentDescription = null,
-                    tint = Color.Black.copy(alpha = 0.8f), // Ícone escuro sobre botão neon gera muito contraste
+                    tint = Color.White.copy(alpha = 0.8f), // Ícone escuro sobre botão neon gera muito contraste
                     modifier = Modifier.size(24.dp)
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = "RESUME SESSION",
-                    color = Color.Black.copy(alpha = 0.9f),
+                    color = Color.White.copy(alpha = 0.9f),
                     fontWeight = FontWeight.Black,
                     letterSpacing = 1.5.sp,
                     fontSize = 14.sp

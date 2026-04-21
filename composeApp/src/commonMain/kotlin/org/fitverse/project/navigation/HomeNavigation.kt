@@ -49,25 +49,36 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
+import com.example.expect.TimerManager
+import com.example.expect.PlatformDateFormatter
+import com.example.presentation.screens.ui.friends.viewmodel.FriendsViewModel
+import com.example.presentation.screens.ui.progress.ProgressViewModel
+import com.example.presentation.screens.ui.wiki.viewmodel.WikiViewModel
+import com.example.presentation.screens.ui.workout.PastWorkoutLog
+import com.example.presentation.screens.ui.workout.SetRecord
+import com.example.presentation.screens.ui.workout.WorkoutAnalyzer
+import com.example.presentation.screens.ui.workout.WorkoutCompletionScreen
+import com.example.presentation.screens.ui.workout.WorkoutDataSource
 import com.example.presentation.theme.DarkGamifiedColors
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
-import org.fitverse.project.destinations.modal_destinations.achievement.AchievementDestination
 import org.fitverse.project.destinations.homepage.community.AddPostDestination
 import org.fitverse.project.destinations.homepage.community.CommunityDestination
 import org.fitverse.project.destinations.homepage.dashboad.DashboardDestination
-import org.fitverse.project.destinations.modal_destinations.device.DevicesDestination
-import org.fitverse.project.destinations.modal_destinations.helpSupport.HelpSupportDestination
-import org.fitverse.project.destinations.homepage.meals.MealsDestination
 import org.fitverse.project.destinations.homepage.dashboad.NotificationDestination
+import org.fitverse.project.destinations.homepage.meals.MealsDestination
 import org.fitverse.project.destinations.homepage.profile.ProfileDestination
 import org.fitverse.project.destinations.homepage.workout.WorkoutDestination
 import org.fitverse.project.destinations.homepage.workout.WorkoutSessionDestination
+import org.fitverse.project.destinations.modal_destinations.achievement.AchievementDestination
+import org.fitverse.project.destinations.modal_destinations.device.DevicesDestination
 import org.fitverse.project.destinations.modal_destinations.friends.FriendsDestination
+import org.fitverse.project.destinations.modal_destinations.helpSupport.HelpSupportDestination
 import org.fitverse.project.destinations.modal_destinations.progress.ProgressDestination
 import org.fitverse.project.destinations.payments.PlanDestination
 import org.fitverse.project.destinations.wiki.WikiFitnessDestination
 import org.fitverse.project.routes.NavRoutes
+import org.koin.compose.koinInject
 
 @Composable
 fun HomeNavigation(
@@ -97,6 +108,7 @@ fun HomeNavigation(
                     subclass(NavRoutes.HomeFlow.AddPost::class, NavRoutes.HomeFlow.AddPost.serializer())
                     subclass(NavRoutes.WorkoutFlow.WorkoutSession::class, NavRoutes.WorkoutFlow.WorkoutSession.serializer())
                     subclass(NavRoutes.WorkoutFlow.Workout::class, NavRoutes.WorkoutFlow.Workout.serializer())
+                    subclass(NavRoutes.WorkoutFlow.WorkoutCompleted::class, NavRoutes.WorkoutFlow.WorkoutCompleted.serializer())
                     subclass(NavRoutes.WikiFitness::class, NavRoutes.WikiFitness.serializer())
                 }
             }
@@ -222,9 +234,19 @@ fun HomeNavigation(
                         }
                         entry<NavRoutes.WorkoutFlow.WorkoutSession> {
                             WorkoutSessionDestination(
-                                ToWorkout = {
-                                    rootBackStack.add(NavRoutes.WorkoutFlow.Workout)
-                                }
+                                toCompletedWorkout = {
+                                    rootBackStack.add(NavRoutes.WorkoutFlow.WorkoutCompleted)
+                                },
+                            )
+                        }
+                        entry<NavRoutes.WorkoutFlow.WorkoutCompleted> {
+                            WorkoutCompletedDestination(
+                                toBack = {
+                                    rootBackStack.clear()
+                                    rootBackStack.add(NavRoutes.HomeFlowMenu.Workout)
+
+                                },
+
                             )
                         }
                         entry<NavRoutes.HomeFlow.NotificationScreen> {
@@ -247,8 +269,14 @@ fun HomeNavigation(
                             )
                         }
                         entry<NavRoutes.Friends>{
+                            val viewmodel = koinInject<FriendsViewModel>()
+
                             FriendsDestination(
-                                navigateBack = { rootBackStack.removeLastOrNull() }
+                                onBack = { rootBackStack.removeLastOrNull() },
+                                viewModel = viewmodel,
+                                onNavigateToQrScanner = {
+//                                    rootBackStack.add(NavRoutes.Friends.QrScanner)
+                                }
                             )
                         }
                         entry<NavRoutes.Leaderboards>{
@@ -262,7 +290,10 @@ fun HomeNavigation(
                             )
                         }
                         entry<NavRoutes.Progress>{
+                            val viewmodel = koinInject<ProgressViewModel>()
+
                             ProgressDestination(
+                                viewmodel = viewmodel,
                                 toBack = { rootBackStack.removeLastOrNull() }
                             )
                         }
@@ -292,7 +323,18 @@ fun HomeNavigation(
                             }
                         }
                         entry<NavRoutes.WikiFitness>{
-                            WikiFitnessDestination()
+                            val viewmodel = koinInject<WikiViewModel>()
+
+
+                            WikiFitnessDestination(
+                                onNavigateToArticle = {
+
+                                },
+                                viewModel = viewmodel,
+                                onBack = {
+                                    rootBackStack.removeLastOrNull()
+                                }
+                            )
                         }
                     }
                 )
@@ -300,7 +342,78 @@ fun HomeNavigation(
         }
     )
 }
+@Composable
+fun WorkoutCompletedDestination(
+    toBack: () -> Unit,
+    shareWorkout: () -> Unit = {},
+    viewStatsGraph: () -> Unit = {}
+) {
+    // Calculamos um timestamp de 7 dias atrás para o histórico
+    val oneWeekAgo = TimerManager.nowMillis() - (7 * 24 * 60 * 60 * 1000)
 
+    val exerciseHistory = mapOf(
+        1 to listOf( // Supino Reto
+            PastWorkoutLog(
+                id = "hist_1",
+                exerciseId = 1,
+                exerciseName = "Supino Reto",
+                totalVolume = 1000f,
+                timestamp = oneWeekAgo,
+                date = PlatformDateFormatter.formatFullDate(oneWeekAgo),
+                // Corrigido: setNumber (Int), weight (String), reps (String), isCompleted (Boolean)
+                sets = listOf(
+                    SetRecord(setNumber = 1, weight = "50", reps = "10", isCompleted = true),
+                    SetRecord(setNumber = 2, weight = "50", reps = "10", isCompleted = true)
+                ),
+                personalRecord = false
+            )
+        ),
+        2 to listOf( // Agachamento
+            PastWorkoutLog(
+                id = "hist_2",
+                exerciseId = 2,
+                exerciseName = "Agachamento",
+                totalVolume = 1200f,
+                timestamp = oneWeekAgo,
+                date = PlatformDateFormatter.formatFullDate(oneWeekAgo),
+                sets = listOf(
+                    SetRecord(setNumber = 1, weight = "60", reps = "10", isCompleted = true),
+                    SetRecord(setNumber = 2, weight = "60", reps = "10", isCompleted = true)
+                ),
+                personalRecord = false
+            )
+        )
+    )
+
+    // O restante do código (allExerciseSets e analyzeWorkout) permanece igual
+    val allExerciseSets = mapOf(
+        1 to listOf(
+            SetRecord(weight = "60", reps = "10", isCompleted = true, setNumber = 2),
+            SetRecord(weight = "60", reps = "10", isCompleted = true, setNumber = 2),
+            SetRecord(weight = "65", reps = "8", isCompleted = true, setNumber = 2)
+        ),
+        2 to listOf(
+            SetRecord(weight = "60", reps = "12", isCompleted = true, setNumber = 2),
+            SetRecord(weight = "60", reps = "12", isCompleted = true, setNumber = 2),
+            SetRecord(weight = "60", reps = "12", isCompleted = true, setNumber = 2)
+        )
+    )
+
+    val result = WorkoutAnalyzer.analyzeWorkout(
+        workoutPlan = WorkoutDataSource.getMockWorkoutPlan(),
+        allExerciseSets = allExerciseSets,
+        exerciseHistory = exerciseHistory,
+        durationSeconds = 2100,
+        totalXp = 150
+    )
+
+    WorkoutCompletionScreen(
+        result = result,
+        onContinue = toBack,
+        onShareWorkout = shareWorkout,
+        onViewStats = viewStatsGraph
+    )
+}
 
 
 fun handleHomeBackPress(homeBackStack: MutableList<NavKey>): Boolean {

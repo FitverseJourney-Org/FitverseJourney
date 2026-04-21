@@ -49,13 +49,21 @@ class LoginViewModel(
     }
 
     fun onLoginClick() {
+        val email = _state.value.email
+        val password = _state.value.password
+
+        // Validação de UI preventiva
+        if (email.isBlank() || password.isBlank()) {
+            _state.update { it.copy(
+                snackBarData = SnackBarData("Por favor, preencha e-mail e senha", SnackbarType.ERROR)
+            )}
+            return
+        }
+
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
 
-            loginUseCase(
-                _state.value.email,
-                _state.value.password
-            ).fold(
+            loginUseCase(email, password).fold(
                 onSuccess = {
                     _state.update { it.copy(isLoading = false) }
                     _navigationState.emit(LoginNavigation.ToHome)

@@ -1,7 +1,6 @@
 package com.example.presentation.screens.ui.profile
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -10,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,7 +24,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.EmojiEvents
 import androidx.compose.material.icons.filled.LocalFireDepartment
-import androidx.compose.material.icons.rounded.EmojiEvents
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -41,93 +40,88 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.presentation.screens.widgets.FitVerseSpacer
 import com.example.presentation.screens.widgets.FitverseHeader
-import com.example.presentation.theme.DarkGamifiedColors
-import fitversejourneyapp.presentation.generated.resources.Res
-import fitversejourneyapp.presentation.generated.resources.locale_pt
-import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun ProfileScreen() {
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        contentPadding = PaddingValues(16.dp)
-    ) {
-        item {
-            FitverseHeader(
-                level = 15,
-                xp = 2000
-            )
-            FitVerseSpacer(vertical = true, value = 30.dp)
+    Scaffold(
+        containerColor = Color.Transparent,
+        contentWindowInsets = WindowInsets(0,0,0,0),
+        topBar = {
+            FitverseHeader(level = 15,xp = 2000)
         }
-        item {
-            ProfileHeader(name = "ALEX RIVERS", streak = 15)
-        }
-
-        item {
-            Spacer(modifier = Modifier.height(24.dp))
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                StatCard(label = "TOTAL WORKOUTS", value = "142", modifier = Modifier.weight(1f))
-                StatCard(label = "WEIGHT LIFTED", value = "12.4", unit = "TONS", modifier = Modifier.weight(1f))
+    ){
+        LazyColumn(
+            modifier = Modifier.fillMaxSize().padding(it),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            item {
+                FitVerseSpacer(vertical = true, value = 25.dp)
+                ProfileHeader(name = "ALEX RIVERS", streak = 15)
             }
-        }
 
-        item {
-            Spacer(modifier = Modifier.height(16.dp))
-            LevelProgressCard(xpLeft = 250, nextLevel = 25, progress = 0.88f)
-        }
-
-        item {
-            Spacer(modifier = Modifier.height(24.dp))
-            BadgeSection()
-        }
-
-        item {
-            Spacer(modifier = Modifier.height(24.dp))
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ){
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "RECENT RECORDS",
-                        color = MaterialTheme.colorScheme.onBackground,
-                        fontSize = 13.sp,
-                        fontWeight = FontWeight.ExtraBold,
-                        letterSpacing = 0.5.sp
-                    )
-                    TextButton(onClick = {}) {
-                        // Sênior: O link de ação é importante, então usamos Tertiary para atrair o clique
-                        Text(
-                            text = "TODAS",
-                            color = MaterialTheme.colorScheme.tertiary,
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Black
-                        )
-                    }
+            item {
+                Spacer(modifier = Modifier.height(24.dp))
+                Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                    StatCard(label = "TOTAL WORKOUTS", value = "142", modifier = Modifier.weight(1f))
+                    StatCard(label = "WEIGHT LIFTED", value = "12.4", unit = "TONS", modifier = Modifier.weight(1f))
                 }
-                MilestoneCard(
-                    title = "Broke Personal Record in Deadlift",
-                    stats = "345 LBS • +15 LBS INCREASE",
-                    date = "COMPLETED 2 DAYS AGO"
-                )
-                MilestoneCard(
-                    title = "Broke Personal Record in Squat",
-                    stats = "300 LBS • +10 LBS INCREASE",
-                    date = "COMPLETED 1 WEEK AGO"
-                )
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
+                LevelProgressCard(modifier = Modifier, xpLeft = 250, nextLevel = 25, progress = 0.88f)
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(24.dp))
+                BadgeSection()
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(24.dp))
+                Column(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ){
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "RECENT RECORDS",
+                            color = MaterialTheme.colorScheme.onBackground,
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.ExtraBold,
+                            letterSpacing = 0.5.sp
+                        )
+                        TextButton(onClick = {}) {
+                            // Sênior: O link de ação é importante, então usamos Tertiary para atrair o clique
+                            Text(
+                                text = "TODAS",
+                                color = MaterialTheme.colorScheme.tertiary,
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Black
+                            )
+                        }
+                    }
+                    MilestoneCard(
+                        title = "Broke Personal Record in Deadlift",
+                        stats = "345 LBS • +15 LBS INCREASE",
+                        date = "COMPLETED 2 DAYS AGO"
+                    )
+                    MilestoneCard(
+                        title = "Broke Personal Record in Squat",
+                        stats = "300 LBS • +10 LBS INCREASE",
+                        date = "COMPLETED 1 WEEK AGO"
+                    )
+                }
             }
         }
     }
@@ -192,24 +186,22 @@ fun ProfileHeader(name: String, streak: Int) {
 }
 
 @Composable
-fun LevelProgressCard(xpLeft: Int, nextLevel: Int, progress: Float) {
+fun LevelProgressCard(xpLeft: Int, nextLevel: Int, progress: Float, modifier: Modifier) {
     val cs = MaterialTheme.colorScheme
 
     Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = cs.surface.copy(alpha = 0.7f)
-        ),
+        modifier = modifier.fillMaxWidth().padding(horizontal = 16.dp),
+        colors = CardDefaults.cardColors(containerColor = cs.surface.copy(alpha = 0.7f)),
         shape = RoundedCornerShape(16.dp),
         border = BorderStroke(1.dp, Color.White.copy(alpha = 0.05f))
     ){
         Row(
-            modifier = Modifier.padding(20.dp),
+            modifier = modifier.padding(20.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(modifier = Modifier.weight(1f)) {
+            Column(modifier = modifier.weight(1f)) {
                 Text(text = "PROGRESSO", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 10.sp, fontWeight = FontWeight.Bold)
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = modifier.height(4.dp))
                 Row {
                     Text(text = "Faltam ", color = MaterialTheme.colorScheme.onSurface, fontSize = 14.sp)
                     // Destaque Tertiary no número de XP
@@ -223,7 +215,7 @@ fun LevelProgressCard(xpLeft: Int, nextLevel: Int, progress: Float) {
                     progress = { progress },
                     color = MaterialTheme.colorScheme.tertiary, // Tertiary na barra para brilhar
                     strokeWidth = 6.dp,
-                    modifier = Modifier.size(54.dp),
+                    modifier = modifier.size(54.dp),
                     trackColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
                 )
                 Text(
@@ -242,7 +234,7 @@ fun BadgeSection() {
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -265,6 +257,7 @@ fun BadgeSection() {
         }
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
+            contentPadding = PaddingValues(horizontal = 16.dp)
         ) {
             items(5) { index ->
                 FitverseBadge(

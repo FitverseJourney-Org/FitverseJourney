@@ -54,15 +54,6 @@ fun LoginScreen(
 ) {
     val colors = MaterialTheme.colorScheme
 
-    // Gradiente profissional usando apenas o tema
-    val backgroundBrush = Brush.verticalGradient(
-        colors = listOf(
-            colors.background,
-            colors.surface,
-            colors.surfaceVariant
-        )
-    )
-
     Scaffold(
         modifier = modifier.fillMaxSize(),
         snackbarHost = snackBarHost,

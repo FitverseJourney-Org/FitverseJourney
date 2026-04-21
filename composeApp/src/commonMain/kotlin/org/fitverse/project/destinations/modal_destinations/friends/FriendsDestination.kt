@@ -1,28 +1,23 @@
 package org.fitverse.project.destinations.modal_destinations.friends
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.presentation.screens.ui.friends.FriendsScreen
+import com.example.presentation.screens.ui.friends.viewmodel.FriendsViewModel
 
 @Composable
 fun FriendsDestination(
-    navigateBack: () -> Unit
+    onBack: () -> Unit,
+    onNavigateToQrScanner: () -> Unit,
+    viewModel: FriendsViewModel
 ) {
-    val cs = MaterialTheme.colorScheme
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    Box(
-        modifier = Modifier.fillMaxSize()
-            .background(
-                Brush.verticalGradient(listOf(cs.surface, cs.background))
-            )
-    ) {
-        FriendsScreen(
-            onBack = navigateBack
-        )
-    }
+    FriendsScreen(
+        uiState = uiState,
+        onEvent = viewModel::onEvent,
+        onBack = onBack,
+        onNavigateToQrScanner = onNavigateToQrScanner
+    )
 }

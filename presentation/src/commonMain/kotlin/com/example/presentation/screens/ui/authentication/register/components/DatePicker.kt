@@ -13,7 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.expect.DateTimeManager
+import com.example.expect.TimerManager
 
 @Composable
 fun DatePicker(
@@ -21,7 +21,7 @@ fun DatePicker(
 ) {
     // 1. Captura o ano máximo permitido (Ano Atual - 18) usando a API Calendar
     val maxAllowedYear = remember {
-        DateTimeManager.getCurrentYear() - 18
+        TimerManager.getCurrentYear() - 18
     }
 
     val days = remember { (1..31).toList() }

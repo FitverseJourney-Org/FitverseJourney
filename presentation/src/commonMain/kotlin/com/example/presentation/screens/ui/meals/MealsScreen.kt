@@ -89,68 +89,73 @@ fun PlanMealsListScreenPro(
     val carbsConsumed = meals.flatMap { it.foods }.sumOf { it.carbs }
     val fatConsumed = meals.flatMap { it.foods }.sumOf { it.fat }
 
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        item {
+    Scaffold(
+        containerColor = Color.Transparent,
+        contentWindowInsets = WindowInsets(0,0,0,0),
+        topBar = {
             FitverseHeader(xp = 2000, level = 104)
         }
-
-        // 1. HEADER "ENERGY CORE"
-        item {
-            GoalNutritionHeader(
-                objective = state.objective,
-                targetCalories = state.dailyCaloriesTarget,
-                consumedCalories = caloriesConsumed
-            )
-        }
-
-        // 2. MACROS
-        item {
-            PlannedMacrosRow(
-                targetMacros = state.dailyMacros,
-                consumedProtein = proteinConsumed,
-                consumedCarbs = carbsConsumed,
-                consumedFat = fatConsumed
-            )
-        }
-
-        // 3. CARD DE META DE PESO
-        item {
-            WeightGoalCard(
-                current = state.currentWeight,
-                target = state.targetWeight,
-                cs = colors
-            )
-        }
-
-        item {
-            Text(
-                text = "REFEIÇÕES DO DIA",
-                color = colors.onBackground,
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Black,
-                letterSpacing = 1.sp
-            )
-        }
-
-        items(meals, key = { it.id }) { mealGroup ->
-            val icon = when {
-                mealGroup.name.contains("Café", true) -> Icons.Rounded.BakeryDining
-                mealGroup.name.contains("Almoço", true) -> Icons.Rounded.LunchDining
-                mealGroup.name.contains("Jantar", true) -> Icons.Rounded.Nightlight
-                else -> Icons.Rounded.Restaurant
+    ){
+        LazyColumn(
+            modifier = Modifier.padding(it).fillMaxSize(),
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            // 1. HEADER "ENERGY CORE"
+            item {
+                GoalNutritionHeader(
+                    objective = state.objective,
+                    targetCalories = state.dailyCaloriesTarget,
+                    consumedCalories = caloriesConsumed
+                )
             }
 
-            MealGroupCard(
-                mealGroup = mealGroup,
-                icon = icon,
-                onAddFoodClick = { onAddFoodClick(mealGroup.id) }
-            )
+            // 2. MACROS
+            item {
+                PlannedMacrosRow(
+                    targetMacros = state.dailyMacros,
+                    consumedProtein = proteinConsumed,
+                    consumedCarbs = carbsConsumed,
+                    consumedFat = fatConsumed
+                )
+            }
+
+            // 3. CARD DE META DE PESO
+            item {
+                WeightGoalCard(
+                    current = state.currentWeight,
+                    target = state.targetWeight,
+                    cs = colors
+                )
+            }
+
+            item {
+                Text(
+                    text = "REFEIÇÕES DO DIA",
+                    color = colors.onBackground,
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Black,
+                    letterSpacing = 1.sp
+                )
+            }
+
+            items(meals, key = { it.id }) { mealGroup ->
+                val icon = when {
+                    mealGroup.name.contains("Café", true) -> Icons.Rounded.BakeryDining
+                    mealGroup.name.contains("Almoço", true) -> Icons.Rounded.LunchDining
+                    mealGroup.name.contains("Jantar", true) -> Icons.Rounded.Nightlight
+                    else -> Icons.Rounded.Restaurant
+                }
+
+                MealGroupCard(
+                    mealGroup = mealGroup,
+                    icon = icon,
+                    onAddFoodClick = { onAddFoodClick(mealGroup.id) }
+                )
+            }
         }
     }
+
     // containerColor usa o Background Neutro (#0A0B0F)
 }
 /* ========================================================================== */
@@ -205,7 +210,7 @@ fun GoalNutritionHeader(
                 Box(modifier = Modifier.size(140.dp), contentAlignment = Alignment.Center) {
                     Canvas(modifier = Modifier.fillMaxSize()) {
                         drawArc(
-                            color = colors.outline.copy(alpha = 0.1f),
+                            color = colors.outline.copy(alpha = 0.3f),
                             startAngle = 140f,
                             sweepAngle = 260f,
                             useCenter = false,
@@ -222,7 +227,7 @@ fun GoalNutritionHeader(
                     }
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         // Sênior: O número mais importante da tela recebe o destaque Tertiary
-                        Text("$consumedCalories", color = colors.tertiary, fontSize = 36.sp, fontWeight = FontWeight.Black)
+                        Text("$consumedCalories", color = Color.White, fontSize = 36.sp, fontWeight = FontWeight.Black)
                         Text("kcal", color = colors.onSurfaceVariant, fontSize = 12.sp, fontWeight = FontWeight.Bold)
                     }
                 }
@@ -435,7 +440,7 @@ fun WeightGoalCard(current: Double, target: Double, cs: ColorScheme) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
-        color = cs.secondaryContainer.copy(alpha = 0.3f),
+        color = cs.primary.copy(alpha = 0.3f),
         border = BorderStroke(1.dp, cs.secondary.copy(alpha = 0.1f))
     ) {
         Row(

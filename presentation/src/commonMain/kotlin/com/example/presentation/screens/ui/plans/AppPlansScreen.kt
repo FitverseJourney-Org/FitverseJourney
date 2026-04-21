@@ -153,10 +153,7 @@ fun AppPlansScreen(
                         .fillMaxWidth()
                         .height(56.dp),
                     text = btnText,
-                    topColor = btnTopColor,
-                    edgeColor = btnEdgeColor,
-                    textColor = btnTextColor,
-                    onClick = { /* Fluxo de assinatura */ }
+                    onClick = { onBack() },
                 )
             }
         }

@@ -13,50 +13,12 @@ import com.example.presentation.screens.ui.workout.WorkoutSessionScreen
 
 @Composable
 fun WorkoutSessionDestination(
-    ToWorkout: () -> Unit
+    toCompletedWorkout: (resultXp: Int) -> Unit
 ) {
-    val exercises = remember { // Use remember para não recriar a lista em cada recomposição
-        listOf(
-            Exercise(
-                id = 101,
-                title = "Jumping Jacks",
-                durationSeconds = 45,
-                sets = 3,
-                type = ExerciseType.TIME
-            ),
-            Exercise(
-                id = 102,
-                title = "Bodyweight Squats",
-                reps = 15,
-                sets = 3,
-                type = ExerciseType.REPS
-            ),
-            Exercise(
-                id = 103,
-                title = "Push-Ups",
-                reps = 12,
-                sets = 3,
-                type = ExerciseType.REPS
-            ),
-            Exercise(
-                id = 104,
-                title = "Plank Hold",
-                durationSeconds = 30,
-                sets = 2,
-                type = ExerciseType.TIME
-            )
-        )
-    }
-
     WorkoutSessionScreen(
         modifier = Modifier,
         onFinish = {
-            ToWorkout()
+            toCompletedWorkout(14)
         },
-        workout = WorkoutPlan(
-            id = 1,
-            title = "Full Body Starter",
-            exercises = exercises
-        )
     )
 }

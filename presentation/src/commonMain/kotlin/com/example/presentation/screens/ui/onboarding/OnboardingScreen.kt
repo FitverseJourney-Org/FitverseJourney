@@ -31,6 +31,7 @@ import com.example.presentation.screens.ui.onboarding.viewmodel.OnboardingViewMo
 import com.example.presentation.screens.ui.onboarding.state.OnboardingState
 import fitversejourneyapp.presentation.generated.resources.Res
 import fitversejourneyapp.presentation.generated.resources.*
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
 import org.jetbrains.compose.resources.stringResource
 
@@ -85,8 +86,8 @@ fun OnboardingScreen(
         }
     }
 
-    Scaffold(containerColor = BackgroundColor) { innerPadding ->
-        ModernFitverseBackground()
+
+    Scaffold(containerColor = Color.Transparent) { innerPadding ->
         OnboardingContent(
             modifier        = Modifier.padding(innerPadding),
             pagerState      = pagerState,
@@ -114,12 +115,30 @@ fun OnboardingContent(
 ) {
     val lastIndex = onboardingPages.lastIndex
 
+    // 1. Sincroniza o scroll manual do Pager com o ViewModel
     LaunchedEffect(pagerState) {
         snapshotFlow { pagerState.currentPage to pagerState.isScrollInProgress }
             .distinctUntilChanged()
             .collect { (pageIndex, isScrolling) ->
                 if (!isScrolling) viewmodel.setCurrentPage(pageIndex, lastIndex)
             }
+    }
+
+    // 2. NOVO: Timer de 5 segundos para avanço automático
+    LaunchedEffect(pagerState.currentPage, pagerState.isScrollInProgress) {
+        // Só inicia o timer se o usuário não estiver interagindo manualmente
+        if (!pagerState.isScrollInProgress) {
+            delay(5000L)
+
+            val nextPageIndex = if (pagerState.currentPage < lastIndex) {
+                pagerState.currentPage + 1
+            } else {
+                0 // Volta para a primeira página se estiver na última
+            }
+
+            // Atualiza o ViewModel, que por sua vez disparará a animação no OnboardingScreen
+            viewmodel.setCurrentPage(nextPageIndex, lastIndex)
+        }
     }
 
     Column(
@@ -171,7 +190,7 @@ fun OnboardingContent(
                 else {
                     nextPage()
                 }
-           },
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(54.dp),
@@ -244,12 +263,11 @@ fun OnboardingPageContent(page: OnboardingPage) {
                 .padding(10.dp)
                 .fillMaxWidth()
                 .aspectRatio(1f)
-                .clip(RoundedCornerShape(28.dp))
-                .background(cs.surface.copy(alpha = 0.6f)),
+                .clip(RoundedCornerShape(28.dp)),
             contentAlignment = Alignment.Center
         ) {
             FitnessLottieAnimation(
-                modifier  = Modifier.fillMaxSize(0.72f),
+                modifier  = Modifier.fillMaxSize(0.85f),
                 animation = page.animation
             )
         }
