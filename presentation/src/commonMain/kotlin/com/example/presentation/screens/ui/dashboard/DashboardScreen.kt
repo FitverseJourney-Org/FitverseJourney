@@ -83,6 +83,7 @@ import com.example.presentation.screens.widgets.FitverseIconNotifications
 import com.example.presentation.screens.widgets.FitverseIconStreak
 import com.example.presentation.screens.widgets.FitverseProfileImage
 import com.example.presentation.screens.widgets.FitverseTaskItem
+import com.example.presentation.screens.widgets.PlayerProfileCard
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
@@ -227,7 +228,8 @@ fun DashboardScreen(
             item {
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     ContainerLevel(state = avatarState, modifier = Modifier.fillMaxWidth())
-                    FitverseAvatarCard(state = avatarState)
+//                    FitverseAvatarCard(state = avatarState)
+                    PlayerProfileCard()
                     FitVerseSpacer(vertical = true, value = 16.dp)
                 }
             }

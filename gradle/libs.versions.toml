@@ -27,7 +27,8 @@ material3                      = "1.9.0"       # Material 3 para Compose
 # ICONS
 # ----------------------------------------------------
 icons                          = "1.7.3"       # Material Icons Extended para Compose
-
+compose-icons-devsrsouza = "1.1.1"   # DevSrSouza – Font Awesome, Eva, Feather…
+compose-icons-lucide      = "1.1.0"   # composablehorizons – Lucide CMP
 # ----------------------------------------------------
 # ANDROIDX — CORE
 # ----------------------------------------------------
@@ -352,6 +353,24 @@ firebase-admin                 = { module = "com.google.firebase:firebase-admin"
 
 # Material Icons Extended — biblioteca completa de ícones Material para Compose
 icons-compose-material         = { module = "org.jetbrains.compose.material:material-icons-extended", version.ref = "icons" }
+# Lucide  (composablehorizons) ─ favorito da comunidade CMP
+# 1.695 ícones: Dumbbell, Flame, Heart, Activity, Timer, Trophy, Bike…
+icons-lucide = { module = "com.composables:icons-lucide", version.ref = "compose-icons-lucide" }
+
+# Font Awesome  (DevSrSouza) ─ ícones sociais, usuário, badges
+icons-font-awesome = { module = "br.com.devsrsouza.compose.icons:font-awesome", version.ref = "compose-icons-devsrsouza" }
+
+# Eva Icons  (DevSrSouza) ─ UI limpa: bell, settings, navigation
+icons-eva = { module = "br.com.devsrsouza.compose.icons:eva-icons", version.ref = "compose-icons-devsrsouza" }
+
+# ── Outras opções disponíveis (não incluídas por padrão) ──────
+# Descomente se precisar de ícones extras:
+#
+# icons-feather      = { module = "br.com.devsrsouza.compose.icons:feather",      version.ref = "compose-icons-devsrsouza" }
+# icons-line-awesome = { module = "br.com.devsrsouza.compose.icons:line-awesome", version.ref = "compose-icons-devsrsouza" }
+# icons-simple       = { module = "br.com.devsrsouza.compose.icons:simple-icons", version.ref = "compose-icons-devsrsouza" }
+# icons-octicons     = { module = "br.com.devsrsouza.compose.icons:octicons",     version.ref = "compose-icons-devsrsouza" }
+
 
 # =====================================================
 # RESOURCES

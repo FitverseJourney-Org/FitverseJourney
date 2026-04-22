@@ -34,7 +34,6 @@ kotlin {
             implementation(libs.compose.foundation)
             implementation(libs.compose.runtime)
             implementation(libs.compose.ui)
-
             implementation(libs.compose.material3)
 
             implementation(project(":domain"))
@@ -45,8 +44,21 @@ kotlin {
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
 
-            // icons
+            // ── icons ──────────────────────────────────────────────────
+            // Material Icons (extended) – já existente, mantido
             implementation(libs.icons.compose.material)
+
+            // Lucide – 1.695 ícones modernos, perfeitos para fitness
+            // Dumbbell, Flame, Heart, Activity, Timer, Trophy, Bike, Apple…
+            implementation(libs.icons.lucide)
+
+            // Font Awesome – ícones de redes sociais, usuário e badges
+            // Útil para perfil, compartilhamento, conquistas
+            implementation(libs.icons.font.awesome)
+
+            // Eva Icons – ícones limpos de UI (menu, bell, settings, etc.)
+            implementation(libs.icons.eva)
+            // ──────────────────────────────────────────────────────────
 
             // components resources
             implementation(libs.components.resources)
@@ -57,22 +69,20 @@ kotlin {
             // dateTime
             implementation(libs.kotlinx.datetime)
 
-
             // vico
             implementation(libs.vico.compose)
             implementation(libs.vico.compose.m3)
 
-
             // charts
-            implementation ("io.github.ehsannarmani:compose-charts:0.2.5")
-
+            implementation("io.github.ehsannarmani:compose-charts:0.2.5")
 
             // Coil
             implementation(libs.coil.compose)
-
         }
+
         iosMain.dependencies {
         }
+
         androidMain.dependencies {
             implementation(libs.lifecycle.viewmodel.compose)
             implementation(libs.android.lottie.compose)
