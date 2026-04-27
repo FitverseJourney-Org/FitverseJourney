@@ -47,7 +47,7 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.domain.model.local.language.AppLanguageItem
+import com.example.domain.models.local.language.AppLanguageItem
 import com.example.presentation.utils.LanguageAvailableApp.Companion.availableAppLanguageItems
 import org.jetbrains.compose.resources.painterResource
 

@@ -5,8 +5,8 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.model.progress.ProgressionData
-import com.example.domain.model.progress.calculateProgressionStats
+import com.example.domain.models.progress.ProgressionData
+import com.example.domain.models.progress.calculateProgressionStats
 import com.example.domain.usecase.progression.BuildProgressionInsightUseCase
 import com.example.domain.usecase.progression.GetExercisesByTrainingSplitUseCase
 import com.example.domain.usecase.progression.GetProgressionDataUseCase

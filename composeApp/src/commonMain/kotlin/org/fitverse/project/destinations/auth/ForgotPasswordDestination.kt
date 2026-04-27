@@ -11,11 +11,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import com.example.presentation.components.snackbar.AppSnackbarHost
-import com.example.presentation.components.snackbar.SnackbarType
-import com.example.presentation.screens.ui.authentication.login.components.AnimatedLoginBackground
 import com.example.presentation.screens.ui.authentication.resetPassword.ResetPasswordScreen
-import com.example.presentation.screens.ui.authentication.resetPassword.viewmodel.ResetPasswordViewModel
+import com.example.presentation.screens.ui.authentication.resetPassword.ResetPasswordViewModel
 import org.koin.compose.koinInject
 
 @Composable
@@ -39,28 +36,10 @@ fun ResetPasswordDestination(toLogin: () -> Unit) {
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        AnimatedLoginBackground()
         ResetPasswordScreen(
-            state = state,
-            snackBarHostState = {
-                AppSnackbarHost(
-                    snackbarHostState = snackBarHostState,
-                    snackbarType = state.snackBarData?.type ?: SnackbarType.INFO
-                )
-            },
-            onBackClick = {
-                toLogin()
-            },
-            isLoading = false,
-            onEmailChange = viewmodel::onEmailChange,
-            onSendResetLink = {
-                keyboardController?.hide()
-                viewmodel.onClickResetPassword()
+            onBack = toLogin,
+            onSendLink = { email ->
 
-            },
-            emailErrors = emptyList(),
-            onNavigateToLogin = {
-                toLogin()
             }
         )
     }

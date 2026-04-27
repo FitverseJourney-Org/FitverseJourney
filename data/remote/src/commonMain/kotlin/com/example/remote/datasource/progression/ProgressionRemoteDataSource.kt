@@ -1,6 +1,6 @@
 package com.example.remote.datasource.progression
 
-import com.example.data.model.dto.progression.ProgressionPointDto
+import com.example.remote.dto.progression.ProgressionPointDto
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Interface

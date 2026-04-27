@@ -24,24 +24,6 @@ fun OnboardingDestination(
     toLogin: () -> Unit
 
 ) {
-
-    LaunchedEffect(true){
-        viewmodel.navigationState.collectLatest {
-            when(it) {
-                is OnboardingNavigation.ToTrial -> {
-                    toTrial()
-                }
-                is OnboardingNavigation.ToNewAccount -> {
-                    toNewAccount()
-                }
-                is OnboardingNavigation.ToLogin -> {
-                    toLogin()
-                }
-            }
-        }
-    }
-
-
     Box(modifier = Modifier.fillMaxSize()){
         DarkGamifiedDashboardBackground()
         OnboardingScreen(
@@ -55,7 +37,10 @@ fun OnboardingDestination(
             },
             emitToLogin = {
                 viewmodel.emitToLogin()
-            }
+            },
+            toTrial = toTrial,
+            toNewAccount = toNewAccount,
+            toLogin = toLogin
         )
     }
 }

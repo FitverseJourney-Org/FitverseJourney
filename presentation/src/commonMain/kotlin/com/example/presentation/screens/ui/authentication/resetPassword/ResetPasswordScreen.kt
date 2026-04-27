@@ -1,8 +1,14 @@
 package com.example.presentation.screens.ui.authentication.resetPassword
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,138 +16,165 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.presentation.screens.ui.authentication.login.components.FitverseOutlinedTextField
-import com.example.presentation.screens.ui.authentication.resetPassword.components.ResetPasswordTopBar
-import com.example.presentation.screens.ui.authentication.resetPassword.state.ResetPasswordState
-import com.example.presentation.screens.widgets.FitVerseButton
-import com.example.presentation.screens.widgets.FitverseTopAppBar
-import fitversejourneyapp.presentation.generated.resources.Res
-import fitversejourneyapp.presentation.generated.resources.ico_reset
-import org.jetbrains.compose.resources.painterResource
+import com.example.presentation.screens.widgets.FitVerseSpacer
+import com.example.presentation.screens.widgets.FitverseButton
+import kotlinx.coroutines.delay
+import ui.components.FitverseTopBar
+import ui.theme.FitverseColors
 
 @Composable
 fun ResetPasswordScreen(
-    state: ResetPasswordState,
-    snackBarHostState: @Composable () -> Unit,
-    isLoading: Boolean,
-    onEmailChange: (String) -> Unit,
-    emailErrors: List<String>,
-    onSendResetLink: () -> Unit,
-    onBackClick: () -> Unit,
-    onNavigateToLogin: () -> Unit
+    onBack: () -> Unit,
+    onSendLink: (email: String) -> Unit,
 ) {
-    val colors = MaterialTheme.colorScheme
+    var email by remember { mutableStateOf("") }
+    var emailSent by remember { mutableStateOf(false) }
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        containerColor = Color.Transparent, // Fundo amarrado ao tema (geralmente preto ou um azul/cinza muito escuro)
-        snackbarHost = snackBarHostState,
-        topBar = {
-            ResetPasswordTopBar(onBackClick = onBackClick)
-        }
-    ) { padding ->
-
-        Column(
-            modifier = Modifier
-                .padding(padding)
-                .padding(horizontal = 24.dp)
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.Top
-        ) {
-            Image(
-                painter = painterResource(Res.drawable.ico_reset),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(200.dp)
-                    .align(Alignment.Start)
-            )
-
-
-            Text(
-                text = "Reset your password",
-                style = MaterialTheme.typography.headlineSmall.copy(
-                    color = colors.onBackground, // Adapta-se automaticamente se você tiver Dark/Light mode
-                    fontWeight = FontWeight.SemiBold
-                )
-            )
-
-            Spacer(Modifier.height(8.dp))
-
-            Text(
-                text = "Enter your email and we’ll send you a secure link to reset your password.",
-                style = MaterialTheme.typography.bodyMedium.copy(
-                    color = colors.onSurfaceVariant // Tom acinzentado frio, melhor que o Color.Gray direto
-                )
-            )
-
-            Spacer(Modifier.height(32.dp))
-
-            FitverseOutlinedTextField(
-                value = state.email,
-                onValueChange = onEmailChange,
-                label = "Email",
-                placeholder = "your@email.com",
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Outlined.Email,
-                        contentDescription = null,
-                        tint = colors.primary // Ícone ganha a cor fria principal para dar destaque
-                    )
-                },
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Done,
-                    keyboardType = KeyboardType.Email
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = { onSendResetLink() }
-                ),
-                isError = emailErrors.isNotEmpty(),
-            )
-
-            Spacer(Modifier.height(24.dp))
-
-            FitVerseButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                text = "Send reset link",
-                onClick = { onSendResetLink() },
-                enabled = { !isLoading },
-                isLoading = isLoading,
-            )
-
-            Spacer(Modifier.height(24.dp))
-
-            Text(
-                text = "Remembered your password? Sign in",
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .clickable { onNavigateToLogin() }
-                    .padding(8.dp), // Melhora a área de toque (touch target)
-                style = MaterialTheme.typography.bodyMedium.copy(
-                    color = colors.primary, // Indica que é um texto clicável (link) usando a cor do app
-                    fontWeight = FontWeight.Bold
-                )
-            )
+    // Auto-navigate back after 3 seconds when email is sent
+    LaunchedEffect(emailSent) {
+        if (emailSent) {
+            delay(3_000L)
+            onBack()
         }
     }
+
+    Scaffold(
+        topBar = {
+            FitverseTopBar(onBack = onBack)
+        },
+        containerColor = FitverseColors.Bg,
+        content = { paddingValues ->
+            AnimatedContent(
+                targetState = emailSent,
+                transitionSpec = {
+                    fadeIn(animationSpec = tween(600)) togetherWith
+                            fadeOut(animationSpec = tween(300))
+                },
+                label = "ResetPasswordContent"
+            ) { sent ->
+                if (sent) {
+                    // ── Success State ──────────────────────────────────────────
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(paddingValues),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            // Green checkmark box
+                            Box(
+                                modifier = Modifier
+                                    .size(72.dp)
+                                    .background(
+                                        color = Color(0xFF2ECC40),
+                                        shape = RoundedCornerShape(8.dp)
+                                    ),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Check,
+                                    contentDescription = "Sucesso",
+                                    tint = Color.White,
+                                    modifier = Modifier.size(44.dp)
+                                )
+                            }
+
+                            FitVerseSpacer(value = 24.dp, vertical = true)
+
+                            Text(
+                                text = "E-MAIL ENVIADO!",
+                                style = MaterialTheme.typography.labelMedium,
+                                color = Color(0xFF2ECC40),
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 22.sp,
+                            )
+
+                            FitVerseSpacer(value = 8.dp, vertical = true)
+
+                            Text(
+                                text = "Verifique sua caixa de entrada.",
+                                fontSize = 16.sp,
+                                color = FitverseColors.TextMuted,
+                            )
+                        }
+                    }
+                } else {
+                    // ── Form State ─────────────────────────────────────────────
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 20.dp)
+                            .padding(paddingValues)
+                    ) {
+                        Column(modifier = Modifier.fillMaxSize()) {
+                            FitVerseSpacer(value = 8.dp, vertical = true)
+                            Text(
+                                modifier = Modifier.padding(5.dp),
+                                text = "🔑",
+                                fontSize = 50.sp
+                            )
+                            FitVerseSpacer(value = 8.dp, vertical = true)
+                            Text(
+                                text = "RECUPERAR ACESSO",
+                                style = MaterialTheme.typography.labelMedium,
+                                color = FitverseColors.TextPrimary,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 28.sp,
+                            )
+                            FitVerseSpacer(value = 8.dp, vertical = true)
+                            Text(
+                                text = "Insira seu e-mail e enviaremos um link de redefinição de senha.",
+                                fontSize = 16.sp,
+                                color = FitverseColors.TextMuted,
+                                lineHeight = 19.sp,
+                            )
+                            FitVerseSpacer(value = 28.dp, vertical = true)
+                            FitverseOutlinedTextField(
+                                value = email,
+                                subtitle = "E-MAIL",
+                                onValueChange = { email = it },
+                                placeholder = "seu@email.com",
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                                modifier = Modifier.fillMaxWidth(),
+                            )
+                            FitVerseSpacer(value = 20.dp, vertical = true)
+                            FitverseButton(
+                                text = "Enviar Link",
+                                onClick = {
+                                    onSendLink(email)
+                                    emailSent = true   // trigger AnimatedContent
+                                },
+                                enabled = email.isNotBlank(),
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    )
 }

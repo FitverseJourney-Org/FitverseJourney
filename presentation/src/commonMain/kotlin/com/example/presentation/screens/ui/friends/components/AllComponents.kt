@@ -1,7 +1,6 @@
 package com.example.presentation.screens.ui.friends.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -27,8 +26,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.example.domain.friends.SortOrder
-import com.example.domain.friends.UserProfile
+import com.example.domain.models.friends.SortOrder
+import com.example.domain.models.friends.UserProfile
 import fitversejourneyapp.presentation.generated.resources.Res
 import fitversejourneyapp.presentation.generated.resources.action_add
 import fitversejourneyapp.presentation.generated.resources.add_friend_code_hint

@@ -1,6 +1,7 @@
 package com.example.local.datasource.user
 
-import com.example.domain.model.local.User
+import com.example.domain.models.local.User
+import com.journey.database.migrations.UserEntity
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -8,14 +9,10 @@ import kotlinx.coroutines.flow.Flow
  * Define o contrato para acesso ao banco de dados
  */
 interface UserLocalDataSource {
-    suspend fun insertUser(user: User): Unit
-    suspend fun updateUser(user: User): Unit
-    suspend fun deleteUser(userId: Long): Unit
-    suspend fun deleteAllUsers(): Unit
-
-    suspend fun getUserById(userId: Long): User?   // ← era UserDto
-    suspend fun getAllUsers(): List<User>           // ← era List<UserDto>
-
-    fun observeUser(userId: Long): Flow<User?>     // ← era Flow<UserDto>
-    fun observeAllUsers(): Flow<List<User>>        // ← era Flow<List<UserDto>>
+    fun observeUser(userId: String): Flow<UserEntity?>      // ✅ String + Entity
+    suspend fun getUser(userId: String): UserEntity?        // ✅ String + Entity
+    suspend fun insertUser(entity: UserEntity)
+    suspend fun updateUser(entity: UserEntity)
+    suspend fun deleteUser(userId: String)                  // ✅ String
+    suspend fun deleteAllUsers()                            // ✅ útil para logout
 }

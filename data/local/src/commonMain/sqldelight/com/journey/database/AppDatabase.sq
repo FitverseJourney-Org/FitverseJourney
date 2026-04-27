@@ -4,45 +4,47 @@
 -- QUERIES
 -- ============================================================
 
-selectAllUsers:
-SELECT * FROM UserEntity;
+-- ============================================================
+-- QUERIES
+-- ============================================================
 
-selectUserById:
-SELECT * FROM UserEntity WHERE id = ?;
-
-selectUserByEmail:
-SELECT * FROM UserEntity WHERE email = ?;
+selectUserByUid:
+SELECT * FROM UserEntity WHERE uid = ?;
 
 insertUser:
 INSERT OR REPLACE INTO UserEntity(
-    id, name, email, gender, age, weight, height,
-    experienceLevel, goals, targetWeight, targetCalories,
-    targetProtein, targetCarbs, targetFat, isPremium,
+    uid, name, email, lastname, username, birthDate,
+    gender, classType, weight, height, experienceLevel,
+    goals, isPremium, targetWeight, targetCalories,
+    targetProtein, targetCarbs, targetFat,
     createdAt, updatedAt
 )
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 updateUser:
 UPDATE UserEntity SET
     name = ?,
     email = ?,
+    lastname = ?,
+    username = ?,
+    birthDate = ?,
     gender = ?,
-    age = ?,
+    classType = ?,
     weight = ?,
     height = ?,
     experienceLevel = ?,
     goals = ?,
+    isPremium = ?,
     targetWeight = ?,
     targetCalories = ?,
     targetProtein = ?,
     targetCarbs = ?,
     targetFat = ?,
-    isPremium = ?,
     updatedAt = ?
-WHERE id = ?;
+WHERE uid = ?;
 
 deleteUser:
-DELETE FROM UserEntity WHERE id = ?;
+DELETE FROM UserEntity WHERE uid = ?;
 
 deleteAllUsers:
 DELETE FROM UserEntity;

@@ -1,7 +1,7 @@
 package com.example.domain.usecase.wiki
 
-import com.example.domain.model.wiki.WikiArticle
-import com.example.domain.model.wiki.WikiCategory
+import com.example.domain.models.wiki.WikiArticle
+import com.example.domain.models.wiki.WikiCategory
 import com.example.domain.repository.wiki.WikiRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch

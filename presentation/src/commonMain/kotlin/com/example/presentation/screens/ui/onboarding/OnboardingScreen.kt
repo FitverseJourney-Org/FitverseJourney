@@ -22,16 +22,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.domain.model.onboarding.OnboardingAnimationTopics
-import com.example.domain.model.onboarding.OnboardingPage
+import com.example.domain.models.onboarding.OnboardingAnimationTopics
+import com.example.domain.models.onboarding.OnboardingPage
 import com.example.expect.FitnessLottieAnimation
-import com.example.presentation.components.background.ModernFitverseBackground
-import com.example.presentation.screens.ui.authentication.login.components.AnimatedLoginBackground
+import com.example.presentation.navigationState.OnboardingNavigation
 import com.example.presentation.screens.ui.onboarding.viewmodel.OnboardingViewModel
 import com.example.presentation.screens.ui.onboarding.state.OnboardingState
+import com.example.presentation.screens.widgets.FitverseButton
 import fitversejourneyapp.presentation.generated.resources.Res
 import fitversejourneyapp.presentation.generated.resources.*
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import org.jetbrains.compose.resources.stringResource
 
@@ -49,7 +50,10 @@ fun OnboardingScreen(
     viewmodel: OnboardingViewModel,
     emitToTrial: () -> Unit,
     emitToNewAccount: () -> Unit,
-    emitToLogin: () -> Unit
+    emitToLogin: () -> Unit,
+    toTrial: () -> Unit,
+    toNewAccount: () -> Unit,
+    toLogin: () -> Unit
 ) {
     val onboardingPages = listOf(
         OnboardingPage(
@@ -80,40 +84,27 @@ fun OnboardingScreen(
         pageCount   = { onboardingPages.size }
     )
 
+    LaunchedEffect(true){
+        viewmodel.navigationState.collectLatest {
+            when(it) {
+                is OnboardingNavigation.ToTrial -> {
+                    toTrial()
+                }
+                is OnboardingNavigation.ToNewAccount -> {
+                    toTrial()
+                }
+                is OnboardingNavigation.ToLogin -> {
+                    toTrial()
+                }
+            }
+        }
+    }
+
     LaunchedEffect(state.currentPage) {
         if (state.currentPage <= lastIndex) {
             pagerState.animateScrollToPage(state.currentPage)
         }
     }
-
-
-    Scaffold(containerColor = Color.Transparent) { innerPadding ->
-        OnboardingContent(
-            modifier        = Modifier.padding(innerPadding),
-            pagerState      = pagerState,
-            onboardingPages = onboardingPages,
-            viewmodel       = viewmodel,
-            nextPage        = { viewmodel.nextPage(lastIndex) },
-            skipToLastPage  = { viewmodel.skipToLastPage(lastIndex) },
-            toNewAccount    = emitToNewAccount,
-            toLogin         = emitToLogin
-        )
-    }
-}
-
-// ── Content ───────────────────────────────────────────────────────────────────
-@Composable
-fun OnboardingContent(
-    modifier: Modifier,
-    pagerState: PagerState,
-    nextPage: () -> Unit,
-    skipToLastPage: () -> Unit,
-    onboardingPages: List<OnboardingPage>,
-    viewmodel: OnboardingViewModel,
-    toNewAccount: () -> Unit,
-    toLogin: () -> Unit
-) {
-    val lastIndex = onboardingPages.lastIndex
 
     // 1. Sincroniza o scroll manual do Pager com o ViewModel
     LaunchedEffect(pagerState) {
@@ -141,110 +132,128 @@ fun OnboardingContent(
         }
     }
 
-    Column(
-        modifier= modifier
-            .fillMaxSize()
-            .padding(horizontal = 28.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+    OnboardingScreenContent(
+        pagerState      = pagerState,
+        onboardingPages = onboardingPages,
+        viewmodel       = viewmodel,
+        nextPage        = { viewmodel.nextPage(lastIndex) },
+        skipToLastPage  = { viewmodel.skipToLastPage(lastIndex) },
+        toNewAccount    = emitToNewAccount,
+        toLogin         = emitToLogin,
+        lastIndex       = lastIndex
+    )
+}
 
-        Spacer(Modifier.height(32.dp))
+// ── Content ───────────────────────────────────────────────────────────────────
+@Composable
+fun OnboardingScreenContent(
+    viewmodel: OnboardingViewModel,
+    lastIndex: Int,
+    pagerState: PagerState,
+    nextPage: () -> Unit,
+    skipToLastPage: () -> Unit,
+    onboardingPages: List<OnboardingPage>,
+    toNewAccount: () -> Unit,
+    toLogin: () -> Unit
+) {
+    val cs = MaterialTheme.colorScheme
 
-        // ── Logo ──────────────────────────────────────────────────────────────
-        AppLogo()
-
-        Spacer(Modifier.height(6.dp))
-
-        Text(
-            text      = "Intelligent fitness companion",
-            fontSize  = 13.sp,
-            color     = TextSecondary,
-            textAlign = TextAlign.Center
-        )
-
-        Spacer(Modifier.height(28.dp))
-
-        // ── Pager ─────────────────────────────────────────────────────────────
-        HorizontalPager(
-            modifier = Modifier.weight(1f),
-            state    = pagerState
-        ) { pageIndex ->
-            OnboardingPageContent(page = onboardingPages[pageIndex])
-        }
-
-        // ── Dots ──────────────────────────────────────────────────────────────
-        Spacer(Modifier.height(20.dp))
-        PagerDots(
-            currentPage = pagerState.currentPage,
-            totalPages  = onboardingPages.size
-        )
-
-        Spacer(Modifier.height(20.dp))
-
-        // ── CTA Button ────────────────────────────────────────────────────────
-        Button(
-            onClick  = {
-                if (pagerState.currentPage == lastIndex) {
-                    toNewAccount()
-                }
-                else {
-                    nextPage()
-                }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(54.dp),
-            shape  = RoundedCornerShape(14.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = PrimaryBlue)
+    Scaffold(
+        containerColor = Color.Transparent
+    ){
+        Column(
+            modifier= Modifier.fillMaxSize().padding(horizontal = 28.dp).padding(it),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
+            Spacer(Modifier.height(32.dp))
+
+            // ── Logo ──────────────────────────────────────────────────────────────
+            AppLogo()
+
+            Spacer(Modifier.height(6.dp))
+
             Text(
-                text       = if (pagerState.currentPage == lastIndex) "Create Free Account" else "Continue",
-                fontSize   = 16.sp,
-                fontWeight = FontWeight.SemiBold,
-                color      = TextPrimary
+                text      = "Intelligent fitness companion",
+                fontSize  = 13.sp,
+                color     = TextSecondary,
+                textAlign = TextAlign.Center
             )
+
+            Spacer(Modifier.height(28.dp))
+
+            // ── Pager ─────────────────────────────────────────────────────────────
+            HorizontalPager(
+                modifier = Modifier.weight(1f),
+                state    = pagerState
+            ) { pageIndex ->
+                OnboardingPageContent(page = onboardingPages[pageIndex])
+            }
+
+            // ── Dots ──────────────────────────────────────────────────────────────
+            Spacer(Modifier.height(20.dp))
+            PagerDots(
+                currentPage = pagerState.currentPage,
+                totalPages  = onboardingPages.size
+            )
+
+            Spacer(Modifier.height(20.dp))
+
+            // ── CTA Button ────────────────────────────────────────────────────────
+            FitverseButton(
+                text = if (pagerState.currentPage == lastIndex) "Create Free Account" else "Continue",
+                onClick = {
+                    if (pagerState.currentPage == lastIndex) {
+                        toNewAccount()
+                    }
+                    else {
+                        nextPage()
+                    }
+                }
+            )
+
+            Spacer(Modifier.height(14.dp))
+
+            // ── Already have account ──────────────────────────────────────────────
+            Text(
+                text = buildAnnotatedString {
+                    withStyle(SpanStyle(color = TextSecondary, fontSize = 13.sp)) {
+                        append("Already have an account? ")
+                    }
+                    withStyle(SpanStyle(color = cs.primary, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)) {
+                        append("Sign In")
+                    }
+                },
+                modifier = Modifier.clickable {
+                    toLogin()
+                }
+            )
+
+            Spacer(Modifier.height(12.dp))
+
+            // ── Terms ─────────────────────────────────────────────────────────────
+            Text(
+                text = buildAnnotatedString {
+                    withStyle(SpanStyle(color = TextMuted, fontSize = 11.sp)) {
+                        append("By continuing, you agree to our ")
+                    }
+                    withStyle(SpanStyle(color = cs.primary, fontSize = 11.sp)) {
+                        append("Terms")
+                    }
+                    withStyle(SpanStyle(color = TextMuted, fontSize = 11.sp)) {
+                        append(" and ")
+                    }
+                    withStyle(SpanStyle(color = cs.primary, fontSize = 11.sp)) {
+                        append("Privacy Policy")
+                    }
+                },
+                textAlign = TextAlign.Center,
+                lineHeight = 16.sp
+            )
+
+            Spacer(Modifier.height(24.dp))
         }
 
-        Spacer(Modifier.height(14.dp))
-
-        // ── Already have account ──────────────────────────────────────────────
-        Text(
-            text = buildAnnotatedString {
-                withStyle(SpanStyle(color = TextSecondary, fontSize = 13.sp)) {
-                    append("Already have an account? ")
-                }
-                withStyle(SpanStyle(color = PrimaryBlue, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)) {
-                    append("Sign In")
-                }
-            },
-            modifier = Modifier.clickable {
-                toLogin()
-            }
-        )
-
-        Spacer(Modifier.height(12.dp))
-
-        // ── Terms ─────────────────────────────────────────────────────────────
-        Text(
-            text = buildAnnotatedString {
-                withStyle(SpanStyle(color = TextMuted, fontSize = 11.sp)) {
-                    append("By continuing, you agree to our ")
-                }
-                withStyle(SpanStyle(color = PrimaryBlue, fontSize = 11.sp)) {
-                    append("Terms")
-                }
-                withStyle(SpanStyle(color = TextMuted, fontSize = 11.sp)) {
-                    append(" and ")
-                }
-                withStyle(SpanStyle(color = PrimaryBlue, fontSize = 11.sp)) {
-                    append("Privacy Policy")
-                }
-            },
-            textAlign = TextAlign.Center,
-            lineHeight = 16.sp
-        )
-
-        Spacer(Modifier.height(24.dp))
     }
 }
 
@@ -298,6 +307,8 @@ fun OnboardingPageContent(page: OnboardingPage) {
 // ── Dots ──────────────────────────────────────────────────────────────────────
 @Composable
 private fun PagerDots(currentPage: Int, totalPages: Int) {
+    val cs = MaterialTheme.colorScheme
+
     Row(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment     = Alignment.CenterVertically
@@ -305,7 +316,7 @@ private fun PagerDots(currentPage: Int, totalPages: Int) {
         repeat(totalPages) { index ->
             val isSelected = index == currentPage
             val color by animateColorAsState(
-                targetValue = if (isSelected) PrimaryBlue else TextSecondary.copy(alpha = 0.3f),
+                targetValue = if (isSelected) cs.primary else TextSecondary.copy(alpha = 0.3f),
                 label       = "DotColor"
             )
             val width by animateDpAsState(
@@ -327,6 +338,8 @@ private fun PagerDots(currentPage: Int, totalPages: Int) {
 // ── Logo ──────────────────────────────────────────────────────────────────────
 @Composable
 private fun AppLogo() {
+    val cs = MaterialTheme.colorScheme
+
     Row(
         verticalAlignment     = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
@@ -341,7 +354,7 @@ private fun AppLogo() {
         Box(
             modifier         = Modifier
                 .clip(RoundedCornerShape(7.dp))
-                .background(PrimaryBlue)
+                .background(cs.primary)
                 .padding(horizontal = 9.dp, vertical = 3.dp),
             contentAlignment = Alignment.Center
         ) {
@@ -349,7 +362,7 @@ private fun AppLogo() {
                 text       = "Journey",
                 fontSize   = 13.sp,
                 fontWeight = FontWeight.Bold,
-                color      = TextPrimary
+                color      = Color.Black
             )
         }
     }

@@ -83,7 +83,7 @@ data class HistoricSearchState(
 ) {
     val isFilterActive: Boolean get() = startDate != null
 }
-val currentMoment = TimerManager.now()
+val currentMoment = TimerManager.nowMillis()
 val dayMillis = 86_400_000L
 
 val mockHistory = listOf(

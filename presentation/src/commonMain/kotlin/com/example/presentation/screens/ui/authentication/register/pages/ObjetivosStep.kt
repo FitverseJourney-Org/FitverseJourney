@@ -1,0 +1,125 @@
+package com.example.presentation.screens.ui.authentication.register.pages
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.unit.dp
+import com.example.domain.models.local.NivelExperiencia
+import com.example.domain.models.local.Objetivo
+import com.example.domain.models.auth.register.RegisterIntent
+import com.example.domain.models.auth.register.RegisterUiState
+import com.example.presentation.screens.ui.authentication.register.components.RadioChip
+import com.example.presentation.screens.ui.authentication.register.components.RegisterPrimaryButton
+import com.example.presentation.screens.ui.authentication.register.components.SelectionChip
+import com.example.presentation.theme.RegisterDimens
+
+@Composable
+fun ObjetivosStep(
+    state: RegisterUiState,
+    onIntent: (RegisterIntent) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val colors = MaterialTheme.colorScheme
+    val type   = MaterialTheme.typography
+    val shapes = MaterialTheme.shapes
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = RegisterDimens.screenHorizontal),
+        verticalArrangement = Arrangement.spacedBy(RegisterDimens.sectionGap),
+    ) {
+        Spacer(Modifier.height(4.dp))
+
+        // ── Selected class summary ────────────────────────────────────────────
+        state.selectedClass?.let { classe ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(shapes.medium)
+                    .background(colors.surfaceVariant)
+                    .border(1.dp, classe.accentColor.copy(alpha = 0.4f), shapes.medium)
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                Text(text = classe.iconEmoji, style = type.titleLarge)
+                Column {
+                    Text(
+                        text  = "${classe.displayName} – NÍVEL 1",
+                        style = type.titleLarge.copy(color = classe.accentColor),
+                    )
+                    Text(
+                        text  = "${classe.subtitle} · Frame \"${classe.frameLabel}\"",
+                        style = type.bodySmall.copy(color = colors.onSurfaceVariant),
+                    )
+                }
+            }
+        }
+
+        // ── Goals ─────────────────────────────────────────────────────────────
+        Column(verticalArrangement = Arrangement.spacedBy(RegisterDimens.itemGap)) {
+            Text(
+                text  = "Qual é o seu principal objetivo?",
+                style = type.bodyLarge.copy(color = colors.onBackground),
+            )
+            FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement   = Arrangement.spacedBy(8.dp),
+            ) {
+                Objetivo.entries.forEach { objetivo ->
+                    SelectionChip(
+                        text     = objetivo.label,
+                        selected = objetivo in state.selectedObjetivos,
+                        onClick  = { onIntent(RegisterIntent.ObjectiveToggled(objetivo)) },
+                    )
+                }
+            }
+        }
+
+        // ── Experience level ──────────────────────────────────────────────────
+        Column(verticalArrangement = Arrangement.spacedBy(RegisterDimens.itemGap)) {
+            Text(
+                text  = "Seu nível de experiência:",
+                style = type.bodyLarge.copy(color = colors.onBackground),
+            )
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                NivelExperiencia.entries.forEach { nivel ->
+                    RadioChip(
+                        text     = nivel.label,
+                        selected = state.nivelExperiencia == nivel,
+                        onClick  = { onIntent(RegisterIntent.LevelSelected(nivel)) },
+                    )
+                }
+            }
+        }
+
+
+
+        Spacer(Modifier.weight(1f))
+
+        RegisterPrimaryButton(
+            text      = "CRIAR MINHA CONTA",
+            onClick   = { onIntent(RegisterIntent.Submit) },
+            isLoading = state.isLoading,
+            modifier  = Modifier.padding(bottom = 32.dp),
+        )
+    }
+}

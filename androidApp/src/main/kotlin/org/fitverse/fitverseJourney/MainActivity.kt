@@ -10,8 +10,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import com.example.expect.LocalAppLocale
-import com.example.local.database.sqldelight.DatabaseFactory
+import com.example.expect.locale.LocalAppLocale
 import com.example.presentation.screens.ui.LanguageViewModel
 import com.example.presentation.theme.FitVerseJourneyTheme
 import org.fitverse.project.navigation.FitverseRootNavigation

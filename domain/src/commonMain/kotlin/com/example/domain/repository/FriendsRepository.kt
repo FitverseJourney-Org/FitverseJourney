@@ -1,6 +1,6 @@
 package com.example.domain.repository
 
-import com.example.domain.friends.UserProfile
+import com.example.domain.models.friends.UserProfile
 import kotlinx.coroutines.flow.Flow
 
 /**

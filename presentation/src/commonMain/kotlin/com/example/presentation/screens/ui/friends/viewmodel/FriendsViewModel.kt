@@ -2,11 +2,11 @@ package com.example.presentation.screens.ui.friends.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.friends.FriendsError
-import com.example.domain.friends.FriendsEvent
-import com.example.domain.friends.FriendsUiState
-import com.example.domain.friends.SortOrder
-import com.example.domain.friends.UserProfile
+import com.example.domain.models.friends.FriendsError
+import com.example.domain.models.friends.FriendsEvent
+import com.example.domain.models.friends.FriendsUiState
+import com.example.domain.models.friends.SortOrder
+import com.example.domain.models.friends.UserProfile
 import com.example.domain.repository.FriendsRepository
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch

@@ -1,11 +1,13 @@
 package org.fitverse.project.plugins
 
+import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
+import io.ktor.server.application.log
 import io.ktor.server.plugins.calllogging.*
 import io.ktor.server.plugins.calllogging.processingTimeMillis
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
@@ -14,13 +16,17 @@ import io.ktor.server.plugins.origin
 import io.ktor.server.plugins.statuspages.StatusPages
 import io.ktor.server.request.httpMethod
 import io.ktor.server.request.path
-import io.ktor.server.response.*
+import io.ktor.server.response.respondText
 import kotlinx.serialization.json.Json
+import org.fitverse.project.di.appModule
+import org.koin.ktor.plugin.Koin
 import org.slf4j.event.Level
 
 fun Application.configurePlugins() {
-
-    install(CallLogging){
+    install(Koin) {
+        modules(appModule)
+    }
+    install(CallLogging) {
         level = Level.INFO
         filter { call -> call.request.path().startsWith("/") }
         format { call ->
@@ -57,7 +63,6 @@ fun Application.configurePlugins() {
   """.trimMargin()
         }
     }
-
     install(ContentNegotiation) {
         json(
             Json {
@@ -67,18 +72,20 @@ fun Application.configurePlugins() {
             }
         )
     }
-
     install(StatusPages) {
         exception<Throwable> { call, cause ->
-            call.respond(
-                status = HttpStatusCode.InternalServerError,
-                message = mapOf(
-                    "error" to (cause.message ?: "Unknown error")
-                )
+            // ← adicione isso
+            call.application.log.error("Erro na requisição ${call.request.httpMethod.value} ${call.request.path()}", cause)
+
+            call.respondText(
+                text = Json.encodeToString(
+                    mapOf("error" to (cause.message ?: "Unknown error"))
+                ),
+                contentType = ContentType.Application.Json,
+                status = HttpStatusCode.InternalServerError
             )
         }
     }
-
     install(CORS) {
         anyHost()
         allowHeader(HttpHeaders.ContentType)

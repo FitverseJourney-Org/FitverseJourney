@@ -1,8 +1,5 @@
 package usecases.register
 
-import com.example.domain.model.authentication.register.RegisterMacros
-import com.example.domain.model.register.RegisterPageMacrosValidationType
-import com.example.domain.usecase.register.ValidateRegisterPageMacrosUseCase
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

@@ -1,0 +1,48 @@
+package com.example.mapper.exercise
+
+import com.example.domain.models.progress.Exercise
+import com.example.local.model.ExerciseEntity
+import com.example.remote.dto.exercise.ExerciseDto
+import kotlin.jvm.JvmName
+
+// ── Dto → Entity (remote → local) ────────────────────────────────────────────
+
+fun ExerciseDto.toEntity(): ExerciseEntity = ExerciseEntity(
+    id            = id,
+    name          = name,
+    muscleGroup   = muscleGroup,
+    trainingSplit = trainingSplit,
+    isActive      = isActive,
+)
+
+@JvmName("dtoListToEntity")
+fun List<ExerciseDto>.toEntity(): List<ExerciseEntity> =
+    map { it.toEntity() }
+
+// ── Entity → Domain (local → domínio) ────────────────────────────────────────
+
+fun ExerciseEntity.toDomain(): Exercise = Exercise(
+    id            = id,
+    name          = name,
+    muscleGroup   = muscleGroup,
+    trainingSplit = trainingSplit,
+    isActive      = isActive,
+)
+
+@JvmName("entityListToDomain")
+fun List<ExerciseEntity>.toDomain(): List<Exercise> =
+    map { it.toDomain() }
+
+// ── Dto → Domain (remote → domínio) ──────────────────────────────────────────
+
+fun ExerciseDto.toDomain(): Exercise = Exercise(
+    id            = id,
+    name          = name,
+    muscleGroup   = muscleGroup,
+    trainingSplit = trainingSplit,
+    isActive      = isActive,
+)
+
+@JvmName("dtoListToDomain")
+fun List<ExerciseDto>.toDomain(): List<Exercise> =
+    map { it.toDomain() }

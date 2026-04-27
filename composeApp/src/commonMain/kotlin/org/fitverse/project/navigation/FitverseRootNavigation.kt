@@ -117,6 +117,10 @@ fun FitverseRootNavigation(
                         rootBackStack.clear()
                         rootBackStack.add(NavRoutes.AuthFlow)
                     },
+                    toDashboard = {
+                        rootBackStack.clear()
+                        rootBackStack.add(NavRoutes.HomeFlow)
+                    }
                 )
             }
             entry<NavRoutes.AuthFlow>{
@@ -131,12 +135,7 @@ fun FitverseRootNavigation(
                 )
             }
             entry<NavRoutes.HomeFlow>{
-                HomeNavigation(
-                    onLogout = {
-                        rootBackStack.clear()
-                        rootBackStack.add(NavRoutes.AuthFlow)
-                    }
-                )
+                HomeNavigation()
             }
             entry<NavRoutes.LoadingLanguage>{
                 LoadingLanguageScreen(

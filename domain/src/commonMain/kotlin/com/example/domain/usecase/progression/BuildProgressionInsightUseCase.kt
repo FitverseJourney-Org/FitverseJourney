@@ -1,9 +1,9 @@
 package com.example.domain.usecase.progression
 
 import com.example.domain.expect.formatPercent
-import com.example.domain.model.progress.InsightLevel
-import com.example.domain.model.progress.LoadProgressionPoint
-import com.example.domain.model.progress.ProgressionInsight
+import com.example.domain.models.progress.InsightLevel
+import com.example.domain.models.progress.LoadProgressionPoint
+import com.example.domain.models.progress.ProgressionInsight
 
 /**
  * Gera um [ProgressionInsight] com base na variação percentual de carga.

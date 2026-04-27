@@ -1,6 +1,7 @@
 package com.example.domain.di
 
 
+import com.example.domain.usecase.activatePlan.ActivatePlanUseCase
 import com.example.domain.usecase.database.datastore.authentication.ObserveIsAuthenticatedUseCase
 import com.example.domain.usecase.database.datastore.authentication.SetIsAuthenticatedUseCase
 import com.example.domain.usecase.database.datastore.language.ChangeAppLanguageUseCase
@@ -15,13 +16,6 @@ import com.example.domain.usecase.progression.GetExercisesByTrainingSplitUseCase
 import com.example.domain.usecase.progression.GetProgressionDataUseCase
 import com.example.domain.usecase.progression.GetTrainingSplitsUseCase
 import com.example.domain.usecase.register.RegisterUseCase
-import com.example.domain.usecase.register.ValidateRegisterPageAvatarUseCase
-import com.example.domain.usecase.register.ValidateRegisterPageCredentialsUseCase
-import com.example.domain.usecase.register.ValidateRegisterPageExperienceLevelUseCase
-import com.example.domain.usecase.register.ValidateRegisterPageGenderUseCase
-import com.example.domain.usecase.register.ValidateRegisterPageGoalsUseCase
-import com.example.domain.usecase.register.ValidateRegisterPageIntroductionUseCase
-import com.example.domain.usecase.register.ValidateRegisterPageMacrosUseCase
 import com.example.domain.usecase.reset.ResetPasswordUseCase
 import com.example.domain.usecase.wiki.GetWikiArticlesUseCase
 import com.example.domain.usecase.wiki.SearchWikiArticlesUseCase
@@ -32,6 +26,7 @@ val domainModule = module {
 
     factory {
         LoginUseCase(
+            userRepository = get(),
             authRepository = get()
         )
     }
@@ -42,6 +37,7 @@ val domainModule = module {
     }
     factory {
         RegisterUseCase(
+            userRepository = get(),
             authRepository = get()
         )
     }
@@ -61,13 +57,6 @@ val domainModule = module {
     factory { GetLocaleLanguageAppUseCase(get()) }
 
     // register
-    factory { ValidateRegisterPageIntroductionUseCase() }
-    factory { ValidateRegisterPageExperienceLevelUseCase() }
-    factory { ValidateRegisterPageAvatarUseCase() }
-    factory { ValidateRegisterPageMacrosUseCase() }
-    factory { ValidateRegisterPageGenderUseCase() }
-    factory { ValidateRegisterPageGoalsUseCase() }
-    factory { ValidateRegisterPageCredentialsUseCase() }
 
     // progress
     factory { BuildProgressionInsightUseCase() }
@@ -79,5 +68,7 @@ val domainModule = module {
     factory { ToggleBookmarkUseCase(get()) }
     factory { SearchWikiArticlesUseCase(get()) }
     factory { GetWikiArticlesUseCase(get()) }
+
+    factory { ActivatePlanUseCase(get()) }
 
 }

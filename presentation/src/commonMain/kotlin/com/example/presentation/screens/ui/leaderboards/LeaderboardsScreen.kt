@@ -25,10 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.presentation.screens.widgets.FitverseIconBack
 import com.example.presentation.screens.widgets.FitverseTopAppBar
-import com.example.presentation.theme.PADDING_TOPAPPBAR_DEFAULT_HORIZONTAL
-import com.example.presentation.theme.PADDING_TOPAPPBAR_DEFAULT_VERTICAL
 
 // --- Modelos ---
 data class LeaderboardUser(

@@ -1,8 +1,5 @@
 package com.example.presentation.screens.ui.modal.planWorkout
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,7 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.expect.getDayOfWeek
+import com.example.expect.DateTimeFormatter.getDayOfWeek
 import kotlinx.datetime.DayOfWeek
 
 // --- MODELOS ---

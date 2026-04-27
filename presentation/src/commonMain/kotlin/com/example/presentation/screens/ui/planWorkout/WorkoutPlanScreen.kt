@@ -20,7 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.expect.getDayOfWeek
+import com.example.expect.DateTimeFormatter.getDayOfWeek
 import com.example.presentation.screens.widgets.FitverseTopAppBar
 import kotlinx.datetime.DayOfWeek
 

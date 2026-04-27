@@ -32,8 +32,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.example.domain.model.dashboard.TaskIcon
-import com.example.domain.model.dashboard.TaskItem
+import com.example.domain.models.dashboard.TaskIcon
+import com.example.domain.models.dashboard.TaskItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.example.presentation.screens.ui.helpSupport.SectionHeader
+import com.example.presentation.screens.ui.dashboard.components.SectionHeader
 import com.example.presentation.screens.widgets.FitVerseSpacer
 import com.example.presentation.screens.widgets.FitverseTopAppBar
 

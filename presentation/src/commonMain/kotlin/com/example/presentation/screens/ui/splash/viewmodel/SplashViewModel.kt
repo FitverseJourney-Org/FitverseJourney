@@ -2,15 +2,11 @@ package com.example.presentation.screens.ui.splash.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.repository.dbLocal.datastore.AppPreferencesRepository
 import com.example.domain.usecase.database.datastore.authentication.ObserveIsAuthenticatedUseCase
 import com.example.domain.usecase.database.datastore.onboarding.ObserveOnboardingCompletedUseCase
-import com.example.presentation.screens.ui.authentication.login.actions.LoginAction
 import com.example.presentation.navigationState.SplashNavigation
-import com.example.presentation.screens.ui.splash.actions.SplashActions
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch

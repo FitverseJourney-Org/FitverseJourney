@@ -1,6 +1,6 @@
 package com.example.domain.usecase.progression
 
-import com.example.domain.model.progress.ProgressionData
+import com.example.domain.models.progress.ProgressionData
 import com.example.domain.repository.ProgressionRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch

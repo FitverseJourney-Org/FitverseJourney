@@ -5,6 +5,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,17 +29,16 @@ fun DailyStreakCard(
     days: List<StreakDay>,
     modifier: Modifier = Modifier
 ) {
+    val cs = MaterialTheme.colorScheme
     // Cores baseadas no seu design (Laranja Vibrante do Streak)
     val streakColor = Color(0xFFFF3D00)
     val streakBackground = Color(0xFFFF3D00).copy(alpha = 0.15f)
-    val surfaceDark = Color(0xFF16171D)
-    val outlineColor = Color(0xFF2A2B36)
 
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .background(surfaceDark, RoundedCornerShape(24.dp))
-            .border(1.dp, outlineColor, RoundedCornerShape(24.dp))
+            .background(cs.surface.copy(alpha = .5f), RoundedCornerShape(24.dp))
+            .border(1.dp, color = Color(0xFF2a2a35), RoundedCornerShape(24.dp))
             .padding(20.dp)
     ) {
         // --- HEADER SECTION ---

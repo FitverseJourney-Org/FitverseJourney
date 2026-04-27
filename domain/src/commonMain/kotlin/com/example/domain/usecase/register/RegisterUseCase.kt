@@ -1,28 +1,25 @@
 package com.example.domain.usecase.register
 
-import com.example.domain.model.authentication.register.RegisterExperienceLevel
-import com.example.domain.model.authentication.register.RegisterGender
-import com.example.domain.model.authentication.register.RegisterGoal
+import com.example.domain.models.local.User
 import com.example.domain.repository.authentication.AuthRepository
+import com.example.domain.repository.dbLocal.sqldelight.user.UserRepository
 
 class RegisterUseCase(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val userRepository: UserRepository,
 ) {
     suspend operator fun invoke(
-        name: String,
         email: String,
         password: String,
-        registerGender: RegisterGender,
-        age: Int,
-        height: Int,
-        weight: Double,
-        experienceLevel: RegisterExperienceLevel,
-        goal: RegisterGoal
-    ): Result<Unit> {
-        authRepository.register(
-            email = email,
-            password = password,
-        )
-        return Result.success(Unit)
+        userData: User,
+    ): Result<User> = runCatching {
+        // 1. cria conta no Firebase Auth
+        val authResult = authRepository.register(email, password)
+
+        // 2. substitui uid vazio pelo uid real do Firebase
+        val userWithUid = userData.copy(uid = authResult.uid)
+
+        // 3. ✅ cria no Firestore + local (não update)
+        userRepository.createUser(userWithUid)
     }
 }

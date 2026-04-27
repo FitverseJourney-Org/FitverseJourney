@@ -1,5 +1,6 @@
 package com.example.di
 
+import com.example.domain.repository.ActivatePlanRepository
 import com.example.local.database.datastore.repository.AppAuthenticateRepositoryImpl
 import com.example.local.database.datastore.repository.AppLanguageRepositoryImpl
 import com.example.local.database.datastore.repository.AppOnboardingRepositoryImpl
@@ -13,6 +14,7 @@ import com.example.domain.repository.dbLocal.datastore.AppAuthenticateRepository
 import com.example.domain.repository.dbLocal.datastore.AppLanguageRepository
 import com.example.domain.repository.dbLocal.datastore.AppOnboardingRepository
 import com.example.domain.repository.dbLocal.sqldelight.configurations.ConfigTokenDataSourceDao
+import com.example.repository.activePlan.ActivatePlanRepositoryImpl
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
@@ -41,4 +43,6 @@ val repositoryModule = module {
 
     // MealRepository
     // singleOf(::MealRepositoryImpl) { bind<MealRepository>() }
+
+    singleOf(::ActivatePlanRepositoryImpl){ bind<ActivatePlanRepository>()}
 }

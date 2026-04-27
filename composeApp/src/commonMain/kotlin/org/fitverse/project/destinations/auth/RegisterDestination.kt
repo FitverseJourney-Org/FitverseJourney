@@ -1,86 +1,18 @@
 package org.fitverse.project.destinations.auth
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import com.example.presentation.components.snackbar.AppSnackbarHost
-import com.example.presentation.components.snackbar.SnackbarType
-import com.example.presentation.navigationState.RegisterNavigation
-import com.example.presentation.screens.ui.authentication.login.components.AnimatedLoginBackground
 import com.example.presentation.screens.ui.authentication.register.RegisterScreen
-import com.example.presentation.screens.ui.authentication.register.actions.RegisterAction
-import com.example.presentation.screens.ui.authentication.register.viewmodel.RegisterViewModel
-import kotlinx.coroutines.flow.collectLatest
+import com.example.presentation.screens.ui.authentication.register.RegisterViewModel
 import org.koin.compose.koinInject
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 
 @Composable
-fun RegisterDestination(toLogin: () -> Unit) {
+fun RegisterDestination(onBack: () -> Unit) {
     val viewmodel = koinInject<RegisterViewModel>()
-    val state by viewmodel.state.collectAsState()
-    val uiEvent by viewmodel.uiEvent.collectAsState(initial = null)
-    val snackBarHostState = remember { SnackbarHostState() }
 
-    LaunchedEffect(uiEvent) {
-        viewmodel.uiEvent.collect { event ->
-            when(event){
-                RegisterAction.Exit -> {
-                    println("valor EXIT")
-                    toLogin()
-                }
-                RegisterAction.Finish -> {
-                    println("valor FINISH")
-                    toLogin()
-                }
-                else -> {
-
-                }
-            }
-        }
-    }
-
-    LaunchedEffect(state.snackBarData) {
-        state.snackBarData?.let { event ->
-            snackBarHostState.showSnackbar(
-                message = event.message,
-                withDismissAction = true
-            )
-            viewmodel.consumeSnackBar()
-        }
-    }
-
-    LaunchedEffect(viewmodel.navigationState){
-        viewmodel.navigationState.collectLatest {
-            when(it){
-                is RegisterNavigation.ToLogin -> {
-                    toLogin()
-                }
-            }
-        }
-    }
-
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        AnimatedLoginBackground()
-        RegisterScreen(
-            state = state,
-            onAction = viewmodel::onAction,
-            snackBarHost = {
-                AppSnackbarHost(
-                    snackbarHostState = snackBarHostState,
-                    snackbarType = state.snackBarData?.type ?: SnackbarType.INFO
-                )
-            }
-        )
-    }
+    RegisterScreen(
+        onBack = {
+            onBack()
+        },
+        viewModel = viewmodel
+    )
 }

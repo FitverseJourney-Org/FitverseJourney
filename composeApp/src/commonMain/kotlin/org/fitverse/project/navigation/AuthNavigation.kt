@@ -69,9 +69,6 @@ fun AuthNavigation(
                     toForgotPassword = {
                         authBackStack.add(NavRoutes.AuthFlow.ResetPassword)
                     },
-                    onLoginSuccess = {
-                        toHomeFlow()
-                    },
                     toHome = {
                         toHomeFlow()
                     },
@@ -82,7 +79,7 @@ fun AuthNavigation(
             }
             entry<NavRoutes.AuthFlow.Register>{
                 RegisterDestination(
-                    toLogin = {
+                    onBack = {
                         authBackStack.removeLastOrNull()
                     }
                 )

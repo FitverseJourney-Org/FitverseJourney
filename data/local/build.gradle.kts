@@ -86,7 +86,7 @@ sqldelight {
             srcDirs.setFrom("src/commonMain/sqldelight")
             generateAsync.set(true)
             schemaOutputDirectory.set(file("src/commonMain/sqldelight"))
-            deriveSchemaFromMigrations.set(true)
+            deriveSchemaFromMigrations.set(false) // ✅ desativa
         }
     }
     linkSqlite.set(true)

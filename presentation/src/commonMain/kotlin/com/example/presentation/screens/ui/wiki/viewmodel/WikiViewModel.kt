@@ -2,9 +2,9 @@ package com.example.presentation.screens.ui.wiki.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.model.wiki.WikiCategory
-import com.example.domain.model.wiki.WikiUiEvent
-import com.example.domain.model.wiki.WikiUiState
+import com.example.domain.models.wiki.WikiCategory
+import com.example.domain.models.wiki.WikiUiEvent
+import com.example.domain.models.wiki.WikiUiState
 import com.example.domain.usecase.wiki.GetWikiArticlesUseCase
 import com.example.domain.usecase.wiki.SearchWikiArticlesUseCase
 import com.example.domain.usecase.wiki.ToggleBookmarkUseCase

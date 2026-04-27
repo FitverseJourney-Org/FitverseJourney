@@ -5,7 +5,9 @@ import org.fitverse.project.features.auth.models.UserToken
 import org.fitverse.project.features.auth.routes.RegisterRequest
 
 // auth/db/AuthRepository.kt
-class AuthRepository(private val firebaseAdmin: FirebaseApp) {
+class AuthRepository(
+    private val firebaseAdmin: FirebaseApp
+) {
     fun saveUser(data: RegisterRequest): Result<UserToken> {
         return try {
             // Lógica pesada de banco ou Firebase aqui

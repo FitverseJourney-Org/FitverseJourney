@@ -14,11 +14,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.presentation.screens.ui.authentication.login.components.AnimatedLoginBackground
 import kotlinx.coroutines.delay
 
 @Composable
-fun LoadingLanguageScreen(toBack: () -> Unit) {
+fun LoadingLanguageScreen(
+    toBack: () -> Unit
+) {
     LaunchedEffect(Unit) {
         delay(1500)
         toBack()
@@ -28,8 +29,6 @@ fun LoadingLanguageScreen(toBack: () -> Unit) {
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        // Mantemos o fundo animado para não quebrar a imersão
-        AnimatedLoginBackground()
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

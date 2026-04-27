@@ -3,9 +3,10 @@ package com.example.local.datasource.user
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToOneOrNull
 import app.cash.sqldelight.coroutines.mapToList
-import com.example.domain.model.local.User
-import com.example.local.mapper.UserMapper
+import com.example.domain.models.local.User
+import com.example.local.mapper.user.UserEntityMapper
 import com.journey.database.AppDatabase.AppDatabase
+import com.journey.database.migrations.UserEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
@@ -18,89 +19,75 @@ import kotlinx.coroutines.withContext
  */
 class UserLocalDataSourceImpl(
     database: AppDatabase,
-    private val userMapper: UserMapper
 ) : UserLocalDataSource {
 
     private val queries = database.appDatabaseQueries
 
-    override suspend fun insertUser(user: User): Unit = withContext(Dispatchers.IO) {
-        val entity = userMapper.mapDomainToEntity(user)
+    override suspend fun insertUser(entity: UserEntity): Unit = withContext(Dispatchers.IO) {
         queries.insertUser(
-            id = entity.id,
-            name = entity.name,
-            email = entity.email,
-            gender = entity.gender,
-            age = entity.age,
-            weight = entity.weight,
-            height = entity.height,
+            uid             = entity.uid,          // ✅ String
+            name            = entity.name,
+            email           = entity.email,
+            lastname        = entity.lastname,
+            username        = entity.username,
+            birthDate       = entity.birthDate,
+            gender          = entity.gender,
+            classType       = entity.classType,
+            weight          = entity.weight,
+            height          = entity.height,
             experienceLevel = entity.experienceLevel,
-            goals = entity.goals,
-            targetWeight = entity.targetWeight,
-            targetCalories = entity.targetCalories,
-            targetProtein = entity.targetProtein,
-            targetCarbs = entity.targetCarbs,
-            targetFat = entity.targetFat,
-            isPremium = entity.isPremium,
-            createdAt = entity.createdAt,
-            updatedAt = entity.updatedAt
+            goals           = entity.goals,
+            isPremium       = entity.isPremium,
+            targetWeight    = entity.targetWeight,
+            targetCalories  = entity.targetCalories,
+            targetProtein   = entity.targetProtein,
+            targetCarbs     = entity.targetCarbs,
+            targetFat       = entity.targetFat,
+            createdAt       = entity.createdAt,
+            updatedAt       = entity.updatedAt,
         )
     }
 
-    override suspend fun updateUser(user: User) : Unit = withContext(Dispatchers.IO) {
+    override suspend fun updateUser(entity: UserEntity): Unit = withContext(Dispatchers.IO) {
         queries.updateUser(
-            id = user.id ?: 0L,
-            name = user.name,
-            email = user.email,
-            gender = user.gender,
-            age = user.age.toLong(),
-            weight = user.weight,
-            height = user.height.toDouble(),
-            experienceLevel = user.experienceLevel,
-            goals = user.goals,
-            targetCalories = user.targetCalories.toLong(),
-            targetProtein = user.targetProtein,
-            targetCarbs = user.targetCarbs,
-            targetFat = user.targetFat,
-            isPremium = if (user.isPremium) 1L else 0L,
-            updatedAt = user.updatedAt,
-            targetWeight = user.weight
+            uid             = entity.uid,
+            name            = entity.name,
+            email           = entity.email,
+            lastname        = entity.lastname,
+            username        = entity.username,
+            birthDate       = entity.birthDate,
+            gender          = entity.gender,
+            classType       = entity.classType,
+            weight          = entity.weight,
+            height          = entity.height,
+            experienceLevel = entity.experienceLevel,
+            goals           = entity.goals,
+            isPremium       = entity.isPremium,
+            targetWeight    = entity.targetWeight,
+            targetCalories  = entity.targetCalories,
+            targetProtein   = entity.targetProtein,
+            targetCarbs     = entity.targetCarbs,
+            targetFat       = entity.targetFat,
+            updatedAt       = entity.updatedAt,
         )
     }
 
-    override suspend fun deleteUser(userId: Long): Unit = withContext(Dispatchers.IO) {
-        queries.deleteUser(userId)
+    override suspend fun deleteUser(userId: String): Unit = withContext(Dispatchers.IO) {
+        queries.deleteUser(userId)                 // ✅ String
     }
 
     override suspend fun deleteAllUsers(): Unit = withContext(Dispatchers.IO) {
         queries.deleteAllUsers()
     }
 
-    // ✅ Corrigido: .executeAsOneOrNull() + retorno nullable User?
-    override suspend fun getUserById(userId: Long): User? = withContext(Dispatchers.IO) {
-        queries.selectUserById(userId)
-            .executeAsOneOrNull()
-            ?.let { userMapper.mapEntityToDomain(it) }
+    // ✅ retorna UserEntity — sem mapper aqui
+    override suspend fun getUser(userId: String): UserEntity? = withContext(Dispatchers.IO) {
+        queries.selectUserByUid(userId).executeAsOneOrNull()
     }
 
-    // ✅ Corrigido: mapper agora recebe o tipo SQLDelight correto
-    override suspend fun getAllUsers(): List<User> = withContext(Dispatchers.IO) {
-        queries.selectAllUsers()
-            .executeAsList()
-            .let { userMapper.mapEntityListToDomainList(it) }
-    }
-
-    // OBSERVE — Flow reativo
-    override fun observeUser(userId: Long): Flow<User?> {
-        return queries.selectUserById(userId)
+    // ✅ retorna Flow<UserEntity?> — sem mapper aqui
+    override fun observeUser(userId: String): Flow<UserEntity?> =
+        queries.selectUserByUid(userId)
             .asFlow()
             .mapToOneOrNull(Dispatchers.IO)
-            .map { entity -> entity?.let { userMapper.mapEntityToDomain(it) } }
-    }
-
-    override fun observeAllUsers(): Flow<List<User>> {
-        return queries.selectAllUsers()
-            .asFlow()
-            .mapToList(Dispatchers.IO)
-            .map { userMapper.mapEntityListToDomainList(it) }
-    }
 }

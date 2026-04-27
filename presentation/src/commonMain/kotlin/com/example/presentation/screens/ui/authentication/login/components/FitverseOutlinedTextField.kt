@@ -1,6 +1,7 @@
 package com.example.presentation.screens.ui.authentication.login.components
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -19,11 +20,14 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.presentation.screens.widgets.FitVerseSpacer
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FitverseOutlinedTextField(
     value: String,
+    subtitle: String? = null,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
@@ -48,29 +52,41 @@ fun FitverseOutlinedTextField(
 ) {
 
     val internalInteractionSource = interactionSource ?: remember { MutableInteractionSource() }
+    val cs = MaterialTheme.colorScheme
+    Column(
+        modifier = modifier.fillMaxWidth()
+    ){
+        if (subtitle != null) {
+            Text(
+                text = subtitle,
+                style = MaterialTheme.typography.labelLarge.copy(color = cs.onSurfaceVariant),
+            )
+            FitVerseSpacer(vertical = true, value = 5.dp)
+        }
+        OutlinedTextField(
+            value = value,
+            onValueChange = onValueChange,
+            modifier = modifier.fillMaxWidth(),
+            enabled = enabled,
+            readOnly = readOnly,
+            textStyle = textStyle,
+            label = label?.let { { Text(it) } },
+            placeholder = placeholder?.let { { Text(it) } },
+            leadingIcon = leadingIcon,
+            trailingIcon = trailingIcon,
+            prefix = prefix,
+            suffix = suffix,
+            isError = isError,
+            visualTransformation = visualTransformation,
+            keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions,
+            singleLine = singleLine,
+            maxLines = maxLines,
+            minLines = minLines,
+            interactionSource = internalInteractionSource,
+            shape = shape,
+            colors = colors
+        )
+    }
 
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        modifier = modifier.fillMaxWidth(),
-        enabled = enabled,
-        readOnly = readOnly,
-        textStyle = textStyle,
-        label = label?.let { { Text(it) } },
-        placeholder = placeholder?.let { { Text(it) } },
-        leadingIcon = leadingIcon,
-        trailingIcon = trailingIcon,
-        prefix = prefix,
-        suffix = suffix,
-        isError = isError,
-        visualTransformation = visualTransformation,
-        keyboardOptions = keyboardOptions,
-        keyboardActions = keyboardActions,
-        singleLine = singleLine,
-        maxLines = maxLines,
-        minLines = minLines,
-        interactionSource = internalInteractionSource,
-        shape = shape,
-        colors = colors
-    )
 }

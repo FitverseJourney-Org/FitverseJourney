@@ -1,6 +1,5 @@
 package com.example.expect
 
-// src/iosMain/kotlin/PlatformDate.kt
 import platform.Foundation.*
 
 actual object PlatformDateFormatter {
@@ -22,7 +21,6 @@ actual object PlatformDateFormatter {
         // 3. Retorna a string final
         return formatter.stringFromDate(calculatedDate)
     }
-
     actual fun formatFullDate(timestamp: Long): String {
         val date = NSDate.dateWithTimeIntervalSince1970(timestamp / 1000.0)
         val formatter = NSDateFormatter()
