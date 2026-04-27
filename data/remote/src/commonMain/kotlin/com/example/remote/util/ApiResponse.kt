@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:data/remote/src/commonMain/kotlin/com/example/remote/util/ApiResponse.kt
 package com.example.remote.util
-========
-package com.example.domain.model.user.dto
->>>>>>>> 41bd98c79cb51e69517fff1e65b81a74b26d6f18:domain/src/commonMain/kotlin/com/example/domain/model/user/dto/ApiResponse.kt
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

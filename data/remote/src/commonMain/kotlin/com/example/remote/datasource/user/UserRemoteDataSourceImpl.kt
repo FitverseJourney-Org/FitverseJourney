@@ -1,5 +1,6 @@
 package com.example.remote.datasource.user
 
+import ApiResponse
 import com.example.remote.dto.user.UserDto
 import com.example.remote.dto.user.UserRequestDto
 import com.example.remote.util.ApiConstants
