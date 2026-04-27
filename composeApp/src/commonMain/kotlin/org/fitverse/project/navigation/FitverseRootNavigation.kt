@@ -45,7 +45,7 @@ fun FitverseRootNavigation(
                 }
             }
         },
-        NavRoutes.SplashScreen
+        NavRoutes.HomeFlow
     )
 
     NavDisplay(

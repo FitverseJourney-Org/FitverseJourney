@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.composeCompiler)
     id("com.google.gms.google-services")
     id("org.jetbrains.compose")
+    // ❌ REMOVA: kotlin("android") — não é mais necessário com AGP 9.0
 }
 
 android {
