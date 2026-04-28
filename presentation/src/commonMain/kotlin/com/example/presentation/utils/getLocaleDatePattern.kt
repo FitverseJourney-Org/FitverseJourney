@@ -1,7 +1,7 @@
 package com.example.presentation.utils
 
 import androidx.compose.runtime.Composable
-import com.example.expect.locale.LocalAppLocale
+import com.example.expect.LocalAppLocale
 
 @Composable
 fun getLocaleDate(): String {

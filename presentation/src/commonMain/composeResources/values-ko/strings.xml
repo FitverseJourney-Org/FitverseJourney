@@ -16,31 +16,64 @@
 
 
 
-    <string name="trial_flag_day_trial_title">7일 무료 체험</string>
-    <string name="trial_rocket">🚀</string>
-    <string name="trial_title_1">맞춤형 트레이닝 플랜을 잠금 해제하세요</string>
-    <string name="trial_description_1">7일 동안 Premium을 무료로 체험하세요 — 맞춤형 운동, 분석 및 프리미엄 플랜.</string>
-    <string name="trial_card_title">FITVERSE PREMIUM</string>
-    <string name="trial_card_description_1">개인화된 AI 운동</string>
-    <string name="trial_card_description_2">상세한 퍼포먼스 분석</string>
-    <string name="trial_card_description_3">독점 트레이닝 플랜 및 챌린지</string>
-    <string name="trial_card_description_4">광고 없는 경험</string>
-    <string name="trial_card_description_5">7일 무료 체험 — 언제든지 취소 가능</string>
-    <string name="trial_cta_text">7일 무료 체험 시작하기</string>
-    <string name="trial_trust_message_1">지금 결제 없음 • 언제든지 취소 가능</string>
-    <string name="trial_trust_message_2">이후 월 $9.99</string>
-    <string name="trial_footer_text">7일 동안 모든 기능을 무료로 사용하세요 — 언제든지 취소 가능.</string>
+    <!-- Trial Page -->
+    <string name="trial_title">플랜을 선택하세요</string>
+    <string name="trial_subtitle">당신의 잠재력을 최대로 발휘하세요</string>
+    <string name="trial_activate_button">플랜 활성화</string>
+    <string name="trial_dismiss">플랜 없이 계속하기</string>
+    <string name="trial_most_popular">가장 인기 있는</string>
+
+    <!-- Pricing -->
+    <string name="trial_price_free">무료</string>
+    <string name="trial_price_days">7일</string>
+    <string name="trial_price_month">/월</string>
+
+    <!-- Plan Names -->
+    <string name="trial_plan_name_trial">Trial</string>
+    <string name="trial_plan_name_pro">Pro</string>
+    <string name="trial_plan_name_elite">Elite</string>
+
+    <!-- Features — Trial -->
+    <string name="trial_feature_basic_access">기본 액세스</string>
+    <string name="trial_feature_workouts_per_week">주 3회 운동</string>
+    <string name="trial_feature_basic_missions">기본 미션</string>
+    <string name="trial_feature_community">커뮤니티</string>
+
+    <!-- Features — Pro -->
+    <string name="trial_feature_unlimited_workouts">무제한 운동</string>
+    <string name="trial_feature_ai_plans">AI 플랜</string>
+    <string name="trial_feature_all_features">모든 기능</string>
+    <string name="trial_feature_no_ads">광고 없음</string>
+
+    <!-- Features — Elite -->
+    <string name="trial_feature_everything_pro">PRO의 모든 것</string>
+    <string name="trial_feature_ai_nutritionist">AI 영양사</string>
+    <string name="trial_feature_coaching">1:1 코칭</string>
+    <string name="trial_feature_nft_badges">NFT 배지</string>
 
 
 
-    <string name="login_title">당신의 여정을 시작하세요!</string>
-    <string name="login_subtitle">자신의 페이스에 맞춰 훈련하세요.</string>
-    <string name="login_email_label">이메일</string>
-    <string name="login_password_label">비밀번호</string>
-    <string name="login_button_text">로그인</string>
-    <string name="login_not_account">계정이 없으신가요?</string>
-    <string name="login_sign_up">회원가입</string>
-    <string name="login_forget_password">비밀번호를 잊으셨나요?</string>
+    <!-- Login Page -->
+    <string name="login_welcome_title">환영합니다</string>
+    <string name="login_welcome_subtitle">돌아온 전사여</string>
+
+    <!-- Fields -->
+    <string name="login_field_email_label">이메일</string>
+    <string name="login_field_email_placeholder">your@email.com</string>
+    <string name="login_field_password_label">비밀번호</string>
+    <string name="login_field_password_placeholder">•••••••••••</string>
+
+    <!-- Actions -->
+    <string name="login_forgot_password">비밀번호를 잊으셨나요</string>
+    <string name="login_button_enter">로그인</string>
+    <string name="login_select_language">언어 선택</string>
+
+    <!-- Divider -->
+    <string name="login_or_continue_with">또는 다음으로 계속</string>
+
+    <!-- Sign up -->
+    <string name="login_no_account">계정이 없으신가요? </string>
+    <string name="login_create_account">계정 만들기</string>
 
 
 </resources>

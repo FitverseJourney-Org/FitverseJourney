@@ -15,32 +15,66 @@
     <string name="onboarding_description_4">Mantenha-se motivado compartilhando progresso e conquistas.\nTreine junto, desafie amigos e celebre cada marco.</string>
 
 
+    <!-- Trial Page Resources Strings -->
+    <string name="trial_flag_day_trial_title">ESCOLHA SEU PLANO</string>
 
-    <string name="trial_flag_day_trial_title">Teste grátis de 7 dias</string>
-    <string name="trial_rocket">🚀</string>
-    <string name="trial_title_1">Desbloqueie seu plano de treino personalizado</string>
-    <string name="trial_description_1">Experimente o Premium grátis por 7 dias — treinos personalizados, análises e planos premium.</string>
-    <string name="trial_card_title">FITVERSE PREMIUM</string>
-    <string name="trial_card_description_1">Treinos com IA personalizados</string>
-    <string name="trial_card_description_2">Análises detalhadas de desempenho</string>
-    <string name="trial_card_description_3">Planos de treino e desafios exclusivos</string>
-    <string name="trial_card_description_4">Experiência sem anúncios</string>
-    <string name="trial_card_description_5">Teste grátis de 7 dias — cancele quando quiser</string>
-    <string name="trial_cta_text">Iniciar teste grátis de 7 dias</string>
-    <string name="trial_trust_message_1">Nenhum pagamento agora • Cancele quando quiser</string>
-    <string name="trial_trust_message_2">Depois $9.99/mês</string>
-    <string name="trial_footer_text">Experimente tudo grátis por 7 dias — cancele quando quiser.</string>
+    <!-- Trial Page -->
+    <string name="trial_title">ESCOLHA SEU PLANO</string>
+    <string name="trial_subtitle">Desbloqueie todo o seu potencial</string>
+    <string name="trial_activate_button">Ativar Plano</string>
+    <string name="trial_dismiss">Continuar sem Plano</string>
+    <string name="trial_most_popular">MAIS POPULAR</string>
+
+    <!-- Pricing -->
+    <string name="trial_price_free">Grátis</string>
+    <string name="trial_price_days">7 dias</string>
+    <string name="trial_price_month">/mês</string>
+
+    <!-- Plan Names -->
+    <string name="trial_plan_name_trial">Trial</string>
+    <string name="trial_plan_name_pro">Pro</string>
+    <string name="trial_plan_name_elite">Elite</string>
+
+    <!-- Features — Trial -->
+    <string name="trial_feature_basic_access">Acesso básico</string>
+    <string name="trial_feature_workouts_per_week">3 treinos/semana</string>
+    <string name="trial_feature_basic_missions">Missões básicas</string>
+    <string name="trial_feature_community">Comunidade</string>
+
+    <!-- Features — Pro -->
+    <string name="trial_feature_unlimited_workouts">Treinos ilimitados</string>
+    <string name="trial_feature_ai_plans">IA de planos</string>
+    <string name="trial_feature_all_features">Todos os recursos</string>
+    <string name="trial_feature_no_ads">Sem anúncios</string>
+
+    <!-- Features — Elite -->
+    <string name="trial_feature_everything_pro">Tudo do PRO</string>
+    <string name="trial_feature_ai_nutritionist">Nutricionista IA</string>
+    <string name="trial_feature_coaching">Coaching 1:1</string>
+    <string name="trial_feature_nft_badges">NFT badges</string>
 
 
+    <!-- Login Page -->
+    <string name="login_welcome_title">BEM-VINDO</string>
+    <string name="login_welcome_subtitle">DE VOLTA, GUERREIRO</string>
 
-    <string name="login_title">Comece sua jornada!</string>
-    <string name="login_subtitle">Treine no seu próprio ritmo.</string>
-    <string name="login_email_label">E-mail</string>
-    <string name="login_password_label">Senha</string>
-    <string name="login_button_text">Entrar</string>
-    <string name="login_not_account">Ainda não tem uma conta?</string>
-    <string name="login_sign_up">Cadastrar-se</string>
-    <string name="login_forget_password">Esqueceu a senha?</string>
+    <!-- Fields -->
+    <string name="login_field_email_label">E-MAIL</string>
+    <string name="login_field_email_placeholder">seu@email.com</string>
+    <string name="login_field_password_label">SENHA</string>
+    <string name="login_field_password_placeholder">•••••••••••</string>
+
+    <!-- Actions -->
+    <string name="login_forgot_password">Esqueci minha senha</string>
+    <string name="login_button_enter">Entrar</string>
+    <string name="login_select_language">Selecionar idioma</string>
+
+    <!-- Divider -->
+    <string name="login_or_continue_with">ou continue com</string>
+
+    <!-- Sign up -->
+    <string name="login_no_account">Não tem conta? </string>
+    <string name="login_create_account">Criar conta</string>
 
 
 </resources>

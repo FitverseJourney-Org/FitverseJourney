@@ -131,10 +131,9 @@ val featuresModule = module {
 val globalModule = module {
     viewModel<LanguageViewModel> {
         LanguageViewModel(
-            appLanguageRepository = get(),
             getAppLanguageUseCase = get(),
             changeAppLanguageUseCase = get(),
-            getLocaleLanguageAppUseCase = get()
+            getSystemLocaleUseCase = get()
         )
     }
 }

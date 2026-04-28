@@ -11,10 +11,6 @@ import com.example.domain.usecase.db.datastore.authentication.SetIsAuthenticated
 import com.example.domain.usecase.db.datastore.onboarding.ObserveOnboardingCompletedUseCase
 import com.example.domain.usecase.db.datastore.onboarding.SetOnboardingCompletedUseCase
 // ── DataStore — Language ──────────────────────────────────────────────────────
-import com.example.domain.usecase.db.datastore.language.GetAppLanguageUseCase
-import com.example.domain.usecase.db.datastore.language.SetNewAppLanguageUseCase
-import com.example.domain.usecase.db.datastore.language.ChangeAppLanguageUseCase
-import com.example.domain.usecase.db.datastore.language.GetLocaleLanguageAppUseCase
 // ── Progression ───────────────────────────────────────────────────────────────
 import com.example.domain.usecase.progression.BuildProgressionInsightUseCase
 import com.example.domain.usecase.progression.GetExercisesByTrainingSplitUseCase
@@ -28,6 +24,10 @@ import com.example.domain.usecase.wiki.ToggleBookmarkUseCase
 
 // ── Plan ──────────────────────────────────────────────────────────────────────
 import com.example.domain.usecase.activatePlan.ActivatePlanUseCase
+import com.example.domain.usecase.db.datastore.language.ChangeAppLanguageUseCase
+import com.example.domain.usecase.db.datastore.language.GetAppLanguageUseCase
+import com.example.domain.usecase.db.datastore.language.GetCurrentLanguageUseCase
+import com.example.domain.usecase.db.datastore.language.GetSystemLocaleUseCase
 import org.koin.dsl.module
 
 
@@ -60,9 +60,9 @@ val datastoreUseCase = module {
 
     // ── DataStore — Language ──────────────────────────────────────────────────
     factory { GetAppLanguageUseCase(get()) }
-    factory { SetNewAppLanguageUseCase(get()) }
+    factory { GetSystemLocaleUseCase(get()) }
     factory { ChangeAppLanguageUseCase(get()) }
-    factory { GetLocaleLanguageAppUseCase(get()) }
+    factory { GetCurrentLanguageUseCase(get()) }
 }
 val progressionUseCase = module {
     factory { GetTrainingSplitsUseCase(exerciseRepository = get()) }

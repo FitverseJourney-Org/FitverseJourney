@@ -19,6 +19,7 @@ import androidx.savedstate.serialization.SavedStateConfiguration
 import com.example.presentation.screens.ui.LoadingLanguageScreen
 import com.example.presentation.screens.ui.onboarding.viewmodel.OnboardingViewModel
 import com.example.presentation.screens.ui.splash.viewmodel.SplashViewModel
+import com.example.presentation.screens.ui.trial.viewmodel.TrialViewModel
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import org.fitverse.project.destinations.onboading.OnboardingDestination
@@ -45,7 +46,7 @@ fun FitverseRootNavigation(
                 }
             }
         },
-        NavRoutes.HomeFlow
+        NavRoutes.SplashScreen
     )
 
     NavDisplay(
@@ -66,7 +67,6 @@ fun FitverseRootNavigation(
         },
         entryProvider = entryProvider {
             entry<NavRoutes.SplashScreen>{
-
                 val viewmodel = koinInject<SplashViewModel>()
 
                 SplashDestination(
@@ -90,7 +90,6 @@ fun FitverseRootNavigation(
                 )
             }
             entry<NavRoutes.OnboardingScreen>{
-
                 val viewmodel = koinInject<OnboardingViewModel>()
                 val state by viewmodel.state.collectAsStateWithLifecycle()
 
@@ -112,6 +111,9 @@ fun FitverseRootNavigation(
                 )
             }
             entry<NavRoutes.TrialScreen>{
+                val viewmodel = koinInject<TrialViewModel>()
+                val state by viewmodel.state.collectAsStateWithLifecycle()
+
                 TrialDestination(
                     toLogin = {
                         rootBackStack.clear()

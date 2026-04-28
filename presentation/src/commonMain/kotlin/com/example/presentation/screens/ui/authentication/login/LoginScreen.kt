@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -29,10 +30,6 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -52,36 +49,48 @@ import com.example.presentation.screens.widgets.FitverseDivider
 import com.example.presentation.theme.FitverseColors
 import fitversejourneyapp.presentation.generated.resources.Res
 import fitversejourneyapp.presentation.generated.resources.bg_girl_pose
+import fitversejourneyapp.presentation.generated.resources.login_button_enter
+import fitversejourneyapp.presentation.generated.resources.login_create_account
+import fitversejourneyapp.presentation.generated.resources.login_field_email_label
+import fitversejourneyapp.presentation.generated.resources.login_field_email_placeholder
+import fitversejourneyapp.presentation.generated.resources.login_field_password_label
+import fitversejourneyapp.presentation.generated.resources.login_field_password_placeholder
+import fitversejourneyapp.presentation.generated.resources.login_forgot_password
+import fitversejourneyapp.presentation.generated.resources.login_no_account
+import fitversejourneyapp.presentation.generated.resources.login_or_continue_with
+import fitversejourneyapp.presentation.generated.resources.login_select_language
+import fitversejourneyapp.presentation.generated.resources.login_welcome_subtitle
+import fitversejourneyapp.presentation.generated.resources.login_welcome_title
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 // ─── Entry point ─────────────────────────────────────────────────────────────
 
 @Composable
 fun LoginScreen(
-    state: LoginState,
+    state            : LoginState,
     snackBarHostState: SnackbarHostState,
-    onLogin: (email: String, password: String) -> Unit,
-    onForgotPassword: () -> Unit,
-    onCreateAccount: () -> Unit,
-    onSocialLogin: (provider: String) -> Unit,
-    onOpenLanguage: () -> Unit,
+    onLogin          : (email: String, password: String) -> Unit,
+    onForgotPassword : () -> Unit,
+    onCreateAccount  : () -> Unit,
+    onSocialLogin    : (provider: String) -> Unit,
+    onOpenLanguage   : () -> Unit,
 ) {
-    // Estado de formulário fica aqui — LoginScreenContent é puramente "burro"
-    var email    by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-
     LoginScreenContent(
-        snackBarHostState = snackBarHostState,
-        emailValue        = email,
-        passwordValue     = password,
-        onEmailChange     = { email = it },
-        onPasswordChange  = { password = it },
-        onLogin           = { onLogin(email, password) },
-        onForgotPassword  = onForgotPassword,
-        onCreateAccount   = onCreateAccount,
-        onSocialLogin     = onSocialLogin,
-        onOpenLanguage    = onOpenLanguage,
-        passwordVisualTransformation  = if (state.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+        snackBarHostState            = snackBarHostState,
+        emailValue                   = state.email,
+        passwordValue                = state.password,
+        onEmailChange                = { state.email = it },
+        onPasswordChange             = { state.password = it },
+        onLogin                      = { onLogin(state.email, state.password) },
+        onForgotPassword             = onForgotPassword,
+        onCreateAccount              = onCreateAccount,
+        onSocialLogin                = onSocialLogin,
+        onOpenLanguage               = onOpenLanguage,
+        passwordVisualTransformation = if (state.isPasswordVisible)
+            VisualTransformation.None
+        else
+            PasswordVisualTransformation(),
     )
 }
 
@@ -89,17 +98,17 @@ fun LoginScreen(
 
 @Composable
 fun LoginScreenContent(
-    snackBarHostState: SnackbarHostState,
-    emailValue: String,
-    passwordValue: String,
-    onEmailChange: (String) -> Unit,
-    onPasswordChange: (String) -> Unit,
-    onLogin: () -> Unit,
-    onForgotPassword: () -> Unit,
-    onCreateAccount: () -> Unit,
-    onSocialLogin: (provider: String) -> Unit,
-    onOpenLanguage: () -> Unit,
-    passwordVisualTransformation: VisualTransformation,
+    snackBarHostState            : SnackbarHostState,
+    emailValue                   : String,
+    passwordValue                : String,
+    onEmailChange                : (String) -> Unit,
+    onPasswordChange             : (String) -> Unit,
+    onLogin                      : () -> Unit,
+    onForgotPassword             : () -> Unit,
+    onCreateAccount              : () -> Unit,
+    onSocialLogin                : (provider: String) -> Unit,
+    onOpenLanguage               : () -> Unit,
+    passwordVisualTransformation : VisualTransformation,
 ) {
     Scaffold(
         containerColor = FitverseColors.Bg,
@@ -122,9 +131,9 @@ fun LoginScreenContent(
             ) {
                 FitverseOutlinedTextField(
                     value           = emailValue,
-                    subtitle        = "E-MAIL",
+                    subtitle        = stringResource(Res.string.login_field_email_label),
                     onValueChange   = onEmailChange,
-                    placeholder     = "seu@email.com",
+                    placeholder     = stringResource(Res.string.login_field_email_placeholder),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 )
 
@@ -132,29 +141,29 @@ fun LoginScreenContent(
 
                 FitverseOutlinedTextField(
                     value                = passwordValue,
-                    subtitle             = "SENHA",
+                    subtitle             = stringResource(Res.string.login_field_password_label),
                     onValueChange        = onPasswordChange,
-                    placeholder          = "••••••••",
+                    placeholder          = stringResource(Res.string.login_field_password_placeholder),
                     visualTransformation = passwordVisualTransformation,
                     trailingIcon = {
-                        if(passwordVisualTransformation == VisualTransformation.None){
-                            Icon(imageVector = Icons.Default.Visibility, contentDescription = "")
-                        }else {
-                            Icon(imageVector = Icons.Default.VisibilityOff, contentDescription = "")
-                        }
+                        val icon = if (passwordVisualTransformation == VisualTransformation.None)
+                            Icons.Default.Visibility
+                        else
+                            Icons.Default.VisibilityOff
+                        Icon(imageVector = icon, contentDescription = null)
                     },
-                    keyboardOptions      = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 )
 
                 FitVerseSpacer(vertical = true, value = 8.dp)
 
                 // Esqueci minha senha
                 Box(
-                    modifier        = Modifier.fillMaxWidth(),
+                    modifier         = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.CenterEnd,
                 ) {
                     Text(
-                        text       = "Esqueci minha senha",
+                        text       = stringResource(Res.string.login_forgot_password),
                         fontSize   = 14.sp,
                         fontWeight = FontWeight.SemiBold,
                         color      = FitverseColors.Accent,
@@ -165,13 +174,13 @@ fun LoginScreenContent(
                 FitVerseSpacer(vertical = true, value = 20.dp)
 
                 FitverseButton(
-                    text    = "Entrar",
+                    text    = stringResource(Res.string.login_button_enter),
                     onClick = onLogin,
                     enabled = emailValue.isNotBlank() && passwordValue.isNotBlank(),
                 )
 
                 FitVerseSpacer(vertical = true, value = 20.dp)
-                FitverseDivider(label = "ou continue com")
+                FitverseDivider(label = stringResource(Res.string.login_or_continue_with))
                 FitVerseSpacer(vertical = true, value = 14.dp)
 
                 SocialLoginRow(onSocialLogin = onSocialLogin)
@@ -183,9 +192,13 @@ fun LoginScreenContent(
                     modifier              = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center,
                 ) {
-                    Text("Não tem conta ? ", fontSize = 14.sp, color = FitverseColors.TextMuted)
                     Text(
-                        text       = "Criar conta",
+                        text     = stringResource(Res.string.login_no_account),
+                        fontSize = 14.sp,
+                        color    = FitverseColors.TextMuted,
+                    )
+                    Text(
+                        text       = stringResource(Res.string.login_create_account),
                         fontSize   = 14.sp,
                         fontWeight = FontWeight.Bold,
                         color      = FitverseColors.Accent,
@@ -207,7 +220,6 @@ private fun LoginHero(onOpenLanguage: () -> Unit) {
             .height(250.dp)
             .background(FitverseColors.Surface2),
     ) {
-        // Imagem de fundo
         Image(
             modifier           = Modifier.fillMaxWidth(),
             painter            = painterResource(Res.drawable.bg_girl_pose),
@@ -215,7 +227,6 @@ private fun LoginHero(onOpenLanguage: () -> Unit) {
             contentScale       = ContentScale.Crop,
         )
 
-        // Gradiente de legibilidade
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -233,7 +244,7 @@ private fun LoginHero(onOpenLanguage: () -> Unit) {
                 ),
         )
 
-        // ── Botão de idioma — canto superior direito dentro do Hero ──────────
+        // Botão de idioma — canto superior direito
         IconButton(
             onClick  = onOpenLanguage,
             modifier = Modifier
@@ -243,12 +254,12 @@ private fun LoginHero(onOpenLanguage: () -> Unit) {
                 .size(40.dp)
                 .background(
                     color = FitverseColors.Surface.copy(alpha = 0.55f),
-                    shape = androidx.compose.foundation.shape.CircleShape,
+                    shape = CircleShape,
                 ),
         ) {
             Icon(
                 imageVector        = Icons.Outlined.Language,
-                contentDescription = "Selecionar idioma",
+                contentDescription = stringResource(Res.string.login_select_language),
                 tint               = FitverseColors.TextPrimary,
                 modifier           = Modifier.size(22.dp),
             )
@@ -261,14 +272,14 @@ private fun LoginHero(onOpenLanguage: () -> Unit) {
                 .padding(start = 20.dp, bottom = 16.dp),
         ) {
             Text(
-                text       = "BEM-VINDO",
+                text       = stringResource(Res.string.login_welcome_title),
                 fontSize   = 36.sp,
                 fontWeight = FontWeight.Black,
                 color      = FitverseColors.TextPrimary,
                 lineHeight = 36.sp,
             )
             Text(
-                text          = "DE VOLTA, GUERREIRO",
+                text          = stringResource(Res.string.login_welcome_subtitle),
                 fontSize      = 16.sp,
                 fontWeight    = FontWeight.ExtraBold,
                 color         = FitverseColors.Accent,
@@ -282,7 +293,9 @@ private fun LoginHero(onOpenLanguage: () -> Unit) {
 
 @Composable
 private fun SocialLoginRow(onSocialLogin: (String) -> Unit) {
+    // Nomes de provedores são marcas — não são strings traduzíveis
     val providers = listOf("G" to "Google", "A" to "Apple", "F" to "Facebook")
+
     Row(
         modifier              = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(10.dp),

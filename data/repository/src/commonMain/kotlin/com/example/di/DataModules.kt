@@ -70,12 +70,14 @@ val dataSourceModule = module {
     // Remote
     single<UserRemoteDataSource> { UserRemoteDataSourceImpl(get()) }
     single<ProgressionRemoteDataSource> { ProgressionRemoteDataSourceImpl(networkDelayMs = 600L) }
-    single<ActivatePlanRemoteDataSource> { ActivatePlanRemoteDataSourceImpl(api = get()) }
+    single<ActivatePlanRemoteDataSource> { ActivatePlanRemoteDataSourceImpl() }
 }
 // ──────────────────────────────────────────────────────────────────────────────
 // ── Mappers ───────────────────────────────────────────────────────────────────
 // ──────────────────────────────────────────────────────────────────────────────
 val mapperModule = module {
+    single { UserEntityMapper() }
+    single { UserDtoMapper() }
     single<EntityMapper<UserEntity, User>> { UserEntityMapper() }
     single<DtoMapper<UserRequestDto, User>> { UserDtoMapper() }
 }

@@ -16,31 +16,64 @@
 
 
 
-    <string name="trial_flag_day_trial_title">Пробный период 7 дней</string>
-    <string name="trial_rocket">🚀</string>
-    <string name="trial_title_1">Откройте персональный план тренировок</string>
-    <string name="trial_description_1">Попробуйте Premium бесплатно в течение 7 дней — персональные тренировки, аналитика и премиум-планы.</string>
-    <string name="trial_card_title">FITVERSE PREMIUM</string>
-    <string name="trial_card_description_1">Персонализированные тренировки с ИИ</string>
-    <string name="trial_card_description_2">Подробная аналитика производительности</string>
-    <string name="trial_card_description_3">Эксклюзивные планы тренировок и челленджи</string>
-    <string name="trial_card_description_4">Без рекламы</string>
-    <string name="trial_card_description_5">Бесплатный пробный период 7 дней — отмена в любое время</string>
-    <string name="trial_cta_text">Начать бесплатный пробный период</string>
-    <string name="trial_trust_message_1">Оплата сейчас не требуется • Отмена в любое время</string>
-    <string name="trial_trust_message_2">Затем $9.99/месяц</string>
-    <string name="trial_footer_text">Попробуйте всё бесплатно 7 дней — отмена в любое время.</string>
+    <!-- Trial Page -->
+    <string name="trial_title">ВЫБЕРИТЕ СВОЙ ПЛАН</string>
+    <string name="trial_subtitle">Раскройте весь свой потенциал</string>
+    <string name="trial_activate_button">Активировать план</string>
+    <string name="trial_dismiss">Продолжить без плана</string>
+    <string name="trial_most_popular">САМЫЙ ПОПУЛЯРНЫЙ</string>
+
+    <!-- Pricing -->
+    <string name="trial_price_free">Бесплатно</string>
+    <string name="trial_price_days">7 дней</string>
+    <string name="trial_price_month">/месяц</string>
+
+    <!-- Plan Names -->
+    <string name="trial_plan_name_trial">Trial</string>
+    <string name="trial_plan_name_pro">Pro</string>
+    <string name="trial_plan_name_elite">Elite</string>
+
+    <!-- Features — Trial -->
+    <string name="trial_feature_basic_access">Базовый доступ</string>
+    <string name="trial_feature_workouts_per_week">3 тренировки/неделю</string>
+    <string name="trial_feature_basic_missions">Базовые миссии</string>
+    <string name="trial_feature_community">Сообщество</string>
+
+    <!-- Features — Pro -->
+    <string name="trial_feature_unlimited_workouts">Безлимитные тренировки</string>
+    <string name="trial_feature_ai_plans">ИИ-планы</string>
+    <string name="trial_feature_all_features">Все функции</string>
+    <string name="trial_feature_no_ads">Без рекламы</string>
+
+    <!-- Features — Elite -->
+    <string name="trial_feature_everything_pro">Всё из PRO</string>
+    <string name="trial_feature_ai_nutritionist">ИИ-нутрициолог</string>
+    <string name="trial_feature_coaching">Коучинг 1:1</string>
+    <string name="trial_feature_nft_badges">NFT-значки</string>
 
 
 
-    <string name="login_title">Начните свой путь!</string>
-    <string name="login_subtitle">Тренируйтесь в своем темпе.</string>
-    <string name="login_email_label">Электронная почта</string>
-    <string name="login_password_label">Пароль</string>
-    <string name="login_button_text">Войти</string>
-    <string name="login_not_account">Нет аккаунта?</string>
-    <string name="login_sign_up">Зарегистрироваться</string>
-    <string name="login_forget_password">Забыли пароль?</string>
+    <!-- Login Page -->
+    <string name="login_welcome_title">ДОБРО ПОЖАЛОВАТЬ</string>
+    <string name="login_welcome_subtitle">СНОВА, ВОИН</string>
+
+    <!-- Fields -->
+    <string name="login_field_email_label">Э-ПОЧТА</string>
+    <string name="login_field_email_placeholder">ваш@email.com</string>
+    <string name="login_field_password_label">ПАРОЛЬ</string>
+    <string name="login_field_password_placeholder">•••••••••••</string>
+
+    <!-- Actions -->
+    <string name="login_forgot_password">Забыл пароль</string>
+    <string name="login_button_enter">Войти</string>
+    <string name="login_select_language">Выбрать язык</string>
+
+    <!-- Divider -->
+    <string name="login_or_continue_with">или продолжить через</string>
+
+    <!-- Sign up -->
+    <string name="login_no_account">Нет аккаунта? </string>
+    <string name="login_create_account">Создать аккаунт</string>
 
 
 </resources>

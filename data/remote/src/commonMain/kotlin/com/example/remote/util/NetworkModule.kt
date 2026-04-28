@@ -17,6 +17,4 @@ val networkModule = module {
         )
     }
 
-    // NetworkMonitor (platform-specific)
-    // Será fornecido por cada plataforma
 }

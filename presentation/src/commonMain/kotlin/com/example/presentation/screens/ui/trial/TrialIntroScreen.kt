@@ -1,16 +1,27 @@
 package com.example.presentation.screens.ui.trial
 
-// TrialIntroScreen.kt
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,50 +38,98 @@ import com.example.presentation.screens.ui.trial.state.TrialUiState
 import com.example.presentation.screens.widgets.FitverseButton
 import com.example.presentation.theme.FitverseColors
 import com.example.presentation.ui.components.ShapeCard
+import fitversejourneyapp.presentation.generated.resources.Res
+import fitversejourneyapp.presentation.generated.resources.trial_activate_button
+import fitversejourneyapp.presentation.generated.resources.trial_dismiss
+import fitversejourneyapp.presentation.generated.resources.trial_feature_ai_nutritionist
+import fitversejourneyapp.presentation.generated.resources.trial_feature_ai_plans
+import fitversejourneyapp.presentation.generated.resources.trial_feature_all_features
+import fitversejourneyapp.presentation.generated.resources.trial_feature_basic_access
+import fitversejourneyapp.presentation.generated.resources.trial_feature_basic_missions
+import fitversejourneyapp.presentation.generated.resources.trial_feature_coaching
+import fitversejourneyapp.presentation.generated.resources.trial_feature_community
+import fitversejourneyapp.presentation.generated.resources.trial_feature_everything_pro
+import fitversejourneyapp.presentation.generated.resources.trial_feature_nft_badges
+import fitversejourneyapp.presentation.generated.resources.trial_feature_no_ads
+import fitversejourneyapp.presentation.generated.resources.trial_feature_unlimited_workouts
+import fitversejourneyapp.presentation.generated.resources.trial_feature_workouts_per_week
+import fitversejourneyapp.presentation.generated.resources.trial_most_popular
+import fitversejourneyapp.presentation.generated.resources.trial_plan_name_elite
+import fitversejourneyapp.presentation.generated.resources.trial_plan_name_pro
+import fitversejourneyapp.presentation.generated.resources.trial_plan_name_trial
+import fitversejourneyapp.presentation.generated.resources.trial_price_days
+import fitversejourneyapp.presentation.generated.resources.trial_price_free
+import fitversejourneyapp.presentation.generated.resources.trial_price_month
+import fitversejourneyapp.presentation.generated.resources.trial_subtitle
+import fitversejourneyapp.presentation.generated.resources.trial_title
+import org.jetbrains.compose.resources.stringResource
 
 // ── Models ────────────────────────────────────────────────────────────────────
 
-
-
 data class Plan(
-    val id: PlanId,
-    val name: String,
-    val nameColor: Color,
-    val priceLabel: String,
-    val priceSuffix: String,
-    val features: List<String>,
+    val id           : PlanId,
+    val name         : String,
+    val nameColor    : Color,
+    val priceLabel   : String,
+    val priceSuffix  : String,
+    val features     : List<String>,
     val isMostPopular: Boolean = false,
 )
 
-private val plans = listOf(
+/**
+ * [plans] era um val top-level com strings hardcoded.
+ * Como [stringResource] só pode ser chamado dentro de um Composable,
+ * foi convertido para uma função @Composable que retorna a lista.
+ *
+ * Preços (R$ 29,90 / R$ 49,90) são mantidos como literais pois
+ * dependem de lógica de billing/locale, não de tradução de copy.
+ */
+@Composable
+private fun rememberPlans(): List<Plan> = listOf(
     Plan(
         id          = PlanId.TRIAL,
-        name        = "Trial",
+        name        = stringResource(Res.string.trial_plan_name_trial),
         nameColor   = FitverseColors.TextMuted,
-        priceLabel  = "Grátis",
-        priceSuffix = "7 dias",
-        features    = listOf("Acesso básico", "3 treinos/semana", "Missões básicas", "Comunidade"),
+        priceLabel  = stringResource(Res.string.trial_price_free),
+        priceSuffix = stringResource(Res.string.trial_price_days),
+        features    = listOf(
+            stringResource(Res.string.trial_feature_basic_access),
+            stringResource(Res.string.trial_feature_workouts_per_week),
+            stringResource(Res.string.trial_feature_basic_missions),
+            stringResource(Res.string.trial_feature_community),
+        ),
     ),
     Plan(
-        id            = PlanId.PRO,
-        name          = "Pro",
-        nameColor     = FitverseColors.Accent,
-        priceLabel    = "R\$ 29,90",
-        priceSuffix   = "/mês",
-        features      = listOf("Treinos ilimitados", "IA de planos", "Todos os recursos", "Sem anúncios"),
+        id           = PlanId.PRO,
+        name         = stringResource(Res.string.trial_plan_name_pro),
+        nameColor    = FitverseColors.Accent,
+        priceLabel   = "R\$ 29,90",
+        priceSuffix  = stringResource(Res.string.trial_price_month),
+        features     = listOf(
+            stringResource(Res.string.trial_feature_unlimited_workouts),
+            stringResource(Res.string.trial_feature_ai_plans),
+            stringResource(Res.string.trial_feature_all_features),
+            stringResource(Res.string.trial_feature_no_ads),
+        ),
         isMostPopular = true,
     ),
     Plan(
         id          = PlanId.ELITE,
-        name        = "Elite",
+        name        = stringResource(Res.string.trial_plan_name_elite),
         nameColor   = FitverseColors.Blue,
         priceLabel  = "R\$ 49,90",
-        priceSuffix = "/mês",
-        features    = listOf("Tudo do PRO", "Nutricionista IA", "Coaching 1:1", "NFT badges"),
+        priceSuffix = stringResource(Res.string.trial_price_month),
+        features    = listOf(
+            stringResource(Res.string.trial_feature_everything_pro),
+            stringResource(Res.string.trial_feature_ai_nutritionist),
+            stringResource(Res.string.trial_feature_coaching),
+            stringResource(Res.string.trial_feature_nft_badges),
+        ),
     ),
 )
 
 // ── Screen ────────────────────────────────────────────────────────────────────
+
 @Composable
 fun TrialIntroScreen(
     state     : TrialUiState,
@@ -95,6 +154,8 @@ fun TrialIntroScreenContent(
     onDismiss    : () -> Unit,
     onSelect     : (PlanId) -> Unit,
 ) {
+    val plans = rememberPlans()
+
     LazyColumn(
         modifier            = Modifier.fillMaxSize().background(FitverseColors.Bg),
         contentPadding      = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
@@ -114,14 +175,14 @@ fun TrialIntroScreenContent(
         item {
             Spacer(Modifier.height(6.dp))
             FitverseButton(
-                text      = "Ativar Plano",
+                text      = stringResource(Res.string.trial_activate_button),
                 onClick   = onActivate,
                 isLoading = isLoading,
                 enabled   = !isLoading,
             )
             Spacer(Modifier.height(12.dp))
             Text(
-                text      = "Continuar sem Plano",
+                text      = stringResource(Res.string.trial_dismiss),
                 fontSize  = 12.sp,
                 color     = FitverseColors.TextMuted,
                 textAlign = TextAlign.Center,
@@ -134,50 +195,53 @@ fun TrialIntroScreenContent(
     }
 }
 
-// ── Plan card ─────────────────────────────────────────────────────────────────
+// ── Hero ──────────────────────────────────────────────────────────────────────
 
 @Composable
 fun HeroSection() {
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier            = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(Modifier.height(12.dp))
         Text("👑", fontSize = 48.sp)
         Spacer(Modifier.height(10.dp))
         Text(
-            text = "ESCOLHA SEU PLANO",
-            fontSize = 28.sp,
-            fontWeight = FontWeight.Black,
-            color = FitverseColors.TextPrimary,
-            textAlign = TextAlign.Center,
+            text          = stringResource(Res.string.trial_title),
+            fontSize      = 28.sp,
+            fontWeight    = FontWeight.Black,
+            color         = FitverseColors.TextPrimary,
+            textAlign     = TextAlign.Center,
             letterSpacing = 0.5.sp,
         )
         Spacer(Modifier.height(4.dp))
         Text(
-            text = "Desbloqueie todo o seu potencial",
-            fontSize = 13.sp,
-            color = FitverseColors.TextMuted,
+            text      = stringResource(Res.string.trial_subtitle),
+            fontSize  = 13.sp,
+            color     = FitverseColors.TextMuted,
             textAlign = TextAlign.Center,
         )
         Spacer(Modifier.height(20.dp))
     }
 }
+
+// ── Plan card ─────────────────────────────────────────────────────────────────
+
 @Composable
 private fun PlanCard(
-    plan: Plan,
+    plan     : Plan,
     isSelected: Boolean,
-    onSelect: () -> Unit,
-    modifier: Modifier = Modifier,
+    onSelect  : () -> Unit,
+    modifier  : Modifier = Modifier,
 ) {
     Box(modifier = modifier.fillMaxWidth()) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .border(
-                    width  = if (isSelected) 2.dp else 1.dp,
-                    color  = if (isSelected) FitverseColors.Accent else FitverseColors.Border,
-                    shape  = ShapeCard,
+                    width = if (isSelected) 2.dp else 1.dp,
+                    color = if (isSelected) FitverseColors.Accent else FitverseColors.Border,
+                    shape = ShapeCard,
                 )
                 .clip(ShapeCard)
                 .background(if (isSelected) FitverseColors.Surface2 else FitverseColors.Surface)
@@ -191,10 +255,10 @@ private fun PlanCard(
                 verticalAlignment     = Alignment.CenterVertically,
             ) {
                 Text(
-                    text       = plan.name.uppercase(),
-                    fontSize   = 18.sp,
-                    fontWeight = FontWeight.Black,
-                    color      = plan.nameColor,
+                    text          = plan.name.uppercase(),
+                    fontSize      = 18.sp,
+                    fontWeight    = FontWeight.Black,
+                    color         = plan.nameColor,
                     letterSpacing = 0.5.sp,
                 )
                 PlanRadio(isSelected = isSelected)
@@ -207,9 +271,9 @@ private fun PlanCard(
                 text = buildAnnotatedString {
                     append(plan.priceLabel)
                     withStyle(SpanStyle(
-                        fontSize  = 14.sp,
+                        fontSize   = 14.sp,
                         fontWeight = FontWeight.Normal,
-                        color     = FitverseColors.TextMuted,
+                        color      = FitverseColors.TextMuted,
                     )) { append("  ${plan.priceSuffix}") }
                 },
                 fontSize   = 28.sp,
@@ -241,7 +305,7 @@ private fun PlanCard(
                     .padding(horizontal = 14.dp, vertical = 4.dp),
             ) {
                 Text(
-                    text          = "MAIS POPULAR",
+                    text          = stringResource(Res.string.trial_most_popular),
                     fontSize      = 10.sp,
                     fontWeight    = FontWeight.ExtraBold,
                     letterSpacing = 0.8.sp,
