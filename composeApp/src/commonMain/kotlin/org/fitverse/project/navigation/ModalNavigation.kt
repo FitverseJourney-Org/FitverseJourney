@@ -38,7 +38,7 @@ fun ModalDrawerSheetMainScreen(
     val colors = MaterialTheme.colorScheme
 
     ModalNavigationDrawer(
-        drawerState = drawerState,
+        drawerState = if(gesturesEnabled) drawerState else DrawerState(DrawerValue.Closed),
         gesturesEnabled = gesturesEnabled,
         scrimColor = Color.Black.copy(alpha = 0.85f), // Scrim denso para foco no menu
         drawerContent = {
@@ -116,7 +116,7 @@ fun ModalDrawerSheetMainScreen(
                             title = "Free Plan",
                             subtitle = "Upgrade",
                             accentColor = colors.primary, // Roxo para ações de "Energia/Upgrade"
-                            onClick = { onNavigate(NavRoutes.PlanPaymentScreen) }
+                            onClick = { onNavigate(NavRoutes.PlanPayment) }
                         )
                         QuickActionWidget(
                             modifier = Modifier.weight(1f),
@@ -124,7 +124,7 @@ fun ModalDrawerSheetMainScreen(
                             title = "Referrals",
                             subtitle = "Earn Pts",
                             accentColor = colors.secondary, // Azul para utilitários
-                            onClick = { onNavigate(NavRoutes.PlanPaymentScreen) }
+                            onClick = { onNavigate(NavRoutes.PlanPayment) }
                         )
                     }
 

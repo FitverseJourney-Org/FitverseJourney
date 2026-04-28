@@ -1,67 +1,106 @@
 package com.example.di
 
-import com.example.presentation.screens.ui.LanguageViewModel
+// ── Auth ──────────────────────────────────────────────────────────────────────
 import com.example.presentation.screens.ui.authentication.login.LoginViewModel
 import com.example.presentation.screens.ui.authentication.register.RegisterViewModel
 import com.example.presentation.screens.ui.authentication.resetPassword.ResetPasswordViewModel
-import com.example.presentation.screens.ui.friends.viewmodel.FriendsViewModel
-import com.example.presentation.screens.ui.onboarding.viewmodel.OnboardingViewModel
-import com.example.presentation.screens.ui.progress.ProgressViewModel
+// ── Splash & Onboarding ───────────────────────────────────────────────────────
 import com.example.presentation.screens.ui.splash.viewmodel.SplashViewModel
+import com.example.presentation.screens.ui.onboarding.viewmodel.OnboardingViewModel
 import com.example.presentation.screens.ui.trial.viewmodel.TrialViewModel
+// ── Home ──────────────────────────────────────────────────────────────────────
+import com.example.presentation.screens.ui.dashboard.viewmodel.DashboardViewModel
+import com.example.presentation.screens.ui.workout.viewmodel.WorkoutViewModel
+import com.example.presentation.screens.ui.workout.viewmodel.WorkoutSessionViewModel
+import com.example.presentation.screens.ui.meals.viewmodel.NutritionViewModel
+import com.example.presentation.screens.ui.profile.ProfileViewModel
+// ── Modal / Features ──────────────────────────────────────────────────────────
+import com.example.presentation.screens.ui.planWorkout.viewmodel.WorkoutPlanViewModel
+import com.example.presentation.screens.ui.friends.viewmodel.FriendsViewModel
 import com.example.presentation.screens.ui.wiki.viewmodel.WikiViewModel
+import com.example.presentation.screens.ui.progress.viewmodel.ProgressViewModel
+// ── Global ────────────────────────────────────────────────────────────────────
+import com.example.presentation.screens.ui.LanguageViewModel
+import com.example.presentation.screens.ui.achievements.viewmodel.AchievementsViewModel
+import com.example.presentation.screens.ui.historic.viewmodel.HistoricViewModel
+import com.example.presentation.screens.ui.leaderboards.viewmodel.LeaderboardsViewModel
+import com.example.presentation.screens.ui.shopping.ShoppingViewModel
+import com.example.presentation.screens.ui.tasks.viewmodel.TasksViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
-val presentationModule = module {
-
+// =============================================================================
+// Auth Module
+// =============================================================================
+val authModule = module {
     viewModel<LoginViewModel> {
-        LoginViewModel(
-            loginUseCase = get(),
-        )
+        LoginViewModel(loginUseCase = get())
     }
     viewModel<RegisterViewModel> {
-        RegisterViewModel(
-            registerUseCase = get(),
-        )
+        RegisterViewModel(registerUseCase = get())
     }
+    viewModel<ResetPasswordViewModel> {
+        ResetPasswordViewModel(resetPasswordUseCase = get())
+    }
+}
 
-    viewModel<ResetPasswordViewModel> { ResetPasswordViewModel(resetPasswordUseCase = get()) }
-    viewModel<OnboardingViewModel> {
-        OnboardingViewModel(
-            setOnboardingCompletedUseCase = get()
-        )
-    }
-    //viewModel<CommunityViewModel>{ CommunityViewModel() }
+// =============================================================================
+// Splash / Onboarding / Trial Module
+// =============================================================================
+val onboardingModule = module {
     viewModel<SplashViewModel> {
         SplashViewModel(
             observeIsAuthenticatedUseCase = get(),
             observeOnboardingCompletedUseCase = get()
         )
     }
-
-    viewModel {
-        LanguageViewModel(
-            appLanguageRepository = get(),
-            getAppLanguageUseCase = get(),
-            changeAppLanguageUseCase = get(),
-            getLocaleLanguageAppUseCase = get()
-        )
+    viewModel<OnboardingViewModel> {
+        OnboardingViewModel(setOnboardingCompletedUseCase = get())
     }
-
-    viewModel {
-        FriendsViewModel(
-            friendsRepository = get()
-        )
+    viewModel<TrialViewModel> {
+        TrialViewModel(activatePlan = get())
     }
-    viewModel {
+}
+
+// =============================================================================
+// Home Module (Bottom Bar)
+// =============================================================================
+val homeModule = module {
+    viewModel<DashboardViewModel> {
+        DashboardViewModel()
+    }
+    viewModel<WorkoutViewModel> {
+        WorkoutViewModel()
+    }
+    viewModel<WorkoutSessionViewModel> {
+        WorkoutSessionViewModel()
+    }
+    viewModel<NutritionViewModel> {
+        NutritionViewModel()
+    }
+    viewModel<ProfileViewModel> {
+        ProfileViewModel()
+    }
+}
+
+// =============================================================================
+// Features Module (Modal / Telas avulsas)
+// =============================================================================
+val featuresModule = module {
+    viewModel<WorkoutPlanViewModel> {
+        WorkoutPlanViewModel()
+    }
+    viewModel<FriendsViewModel> {
+        FriendsViewModel(friendsRepository = get())
+    }
+    viewModel<WikiViewModel> {
         WikiViewModel(
             getWikiArticlesUseCase = get(),
             searchWikiArticlesUseCase = get(),
-            toggleBookmarkUseCase = get(),
+            toggleBookmarkUseCase = get()
         )
     }
-    viewModel {
+    viewModel<ProgressViewModel> {
         ProgressViewModel(
             getTrainingSplitsUseCase = get(),
             getExercisesByTrainingSplitUseCase = get(),
@@ -69,10 +108,45 @@ val presentationModule = module {
             buildProgressionInsightUseCase = get()
         )
     }
+    viewModel<HistoricViewModel>{
+        HistoricViewModel()
+    }
+    viewModel<AchievementsViewModel>{
+        AchievementsViewModel()
+    }
+    viewModel<TasksViewModel>{
+        TasksViewModel()
+    }
+    viewModel<ShoppingViewModel>{
+        ShoppingViewModel()
+    }
+    viewModel<LeaderboardsViewModel>{
+        LeaderboardsViewModel()
+    }
+}
 
-    viewModel {
-        TrialViewModel(
-            activatePlan = get()
+// =============================================================================
+// Global Module
+// =============================================================================
+val globalModule = module {
+    viewModel<LanguageViewModel> {
+        LanguageViewModel(
+            appLanguageRepository = get(),
+            getAppLanguageUseCase = get(),
+            changeAppLanguageUseCase = get(),
+            getLocaleLanguageAppUseCase = get()
         )
     }
 }
+
+// =============================================================================
+// presentationModule — agrega todos os módulos acima
+// Usado no Application: startKoin { modules(presentationModule) }
+// =============================================================================
+val presentationModules = listOf(
+    globalModule,
+    authModule,
+    onboardingModule,
+    homeModule,
+    featuresModule,
+)

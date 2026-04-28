@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.presentation.screens.ui.community.CommunityScreen
-import org.fitverse.project.destinations.homepage.dashboad.DarkGamifiedDashboardBackground
+import com.example.presentation.screens.ui.dashboard.DarkGamifiedDashboardBackground
 import org.koin.compose.koinInject
 
 @Composable

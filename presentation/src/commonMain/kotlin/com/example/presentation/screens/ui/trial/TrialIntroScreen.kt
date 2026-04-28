@@ -25,8 +25,8 @@ import androidx.compose.ui.unit.sp
 import com.example.domain.models.activePlan.PlanId
 import com.example.presentation.screens.ui.trial.state.TrialUiState
 import com.example.presentation.screens.widgets.FitverseButton
-import ui.components.*
-import ui.theme.FitverseColors
+import com.example.presentation.theme.FitverseColors
+import com.example.presentation.ui.components.ShapeCard
 
 // ── Models ────────────────────────────────────────────────────────────────────
 

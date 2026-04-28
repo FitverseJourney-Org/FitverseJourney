@@ -1,6 +1,13 @@
 package com.example.presentation.screens.ui.dashboard
 
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -24,12 +31,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.domain.models.dashboard.TaskIcon
-import com.example.domain.models.dashboard.TaskItem
 import com.example.presentation.screens.ui.dashboard.components.AnimatedStreakDialog
 import com.example.presentation.screens.ui.dashboard.components.CardStreakWeek
 import com.example.presentation.screens.ui.dashboard.components.HomeHeader
@@ -48,37 +57,6 @@ import kotlinx.datetime.daysUntil
 import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Clock
 
-
-fun sampleTasksDataV12(): List<TaskItem> = listOf(
-    TaskItem(
-        id = "t1",
-        title = "Morning Stretch",
-        description = "5–10 minutes to wake up your body",
-        xp = 10,
-        iconType = TaskIcon.WORKOUT
-    ),
-    TaskItem(
-        id = "t2",
-        title = "Log Water Intake",
-        description = "8 cups goal",
-        xp = 5,
-        iconType = TaskIcon.NUTRITION
-    ),
-    TaskItem(
-        id = "t3",
-        title = "30-min Cardio",
-        description = "Walk / Run / Bike",
-        xp = 30,
-        iconType = TaskIcon.RUN
-    ),
-    TaskItem(
-        id = "t4",
-        title = "Plan Meals",
-        description = "Set protein goals",
-        xp = 20,
-        iconType = TaskIcon.NUTRITION
-    ),
-)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -130,96 +108,187 @@ fun DashboardScreen(
             }
         )
     }
-    Scaffold(
-        contentWindowInsets = WindowInsets(0,0,0,0),
-        containerColor = Color.Transparent
-    ){
-        LazyColumn(
-            modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp),
-            contentPadding = PaddingValues(vertical = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp) // Espaço respirável
-        ) {
-            item {
-                HomeHeader(
-                    greeting = getGreeting(),
-                    userName = username,
-                    onEnergyClick = {  },
-                    onNotificationClick = onNotificationsClick,
-                )
-            }
-            item {
-                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    PlayerProfileCard()
-                    FitVerseSpacer(vertical = true, value = 16.dp)
-                }
-            }
-            item {
-                DailyStreakCard(
-                    currentStreak = totalStreakCount,
-                    days = listOf(
-                        StreakDay("S", isCompleted = true),
-                        StreakDay("T", isCompleted = true),
-                        StreakDay("Q", isCompleted = true),
-                        StreakDay("Q", isCompleted = true),
-                        StreakDay("S", isCompleted = true),
-                        StreakDay("S", isCompleted = true),
-                        StreakDay("D", isCompleted = true)
-                    )
-                )
-            }
-            item {
-                Column(
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    SectionHeader("Condição Física")
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        content = {
+            DarkGamifiedDashboardBackground()
+            Scaffold(
+                modifier = Modifier.fillMaxSize(),
+                contentWindowInsets = WindowInsets(0,0,0,0),
+                containerColor = Color.Transparent,
+                content = {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp),
+                        contentPadding = PaddingValues(top = 16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp) // Espaço respirável
+                    ) {
+                        item {
+                            HomeHeader(
+                                greeting = getGreeting(),
+                                userName = username,
+                                onEnergyClick = {  },
+                                onNotificationClick = onNotificationsClick,
+                            )
+                        }
+                        item {
+                            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                                PlayerProfileCard()
+                                FitVerseSpacer(vertical = true, value = 16.dp)
+                            }
+                        }
+                        item {
+                            DailyStreakCard(
+                                currentStreak = totalStreakCount,
+                                days = listOf(
+                                    StreakDay("S", isCompleted = true),
+                                    StreakDay("T", isCompleted = true),
+                                    StreakDay("Q", isCompleted = true),
+                                    StreakDay("Q", isCompleted = true),
+                                    StreakDay("S", isCompleted = true),
+                                    StreakDay("S", isCompleted = true),
+                                    StreakDay("D", isCompleted = true)
+                                )
+                            )
+                        }
+                        item {
+                            Column(
+                                modifier = Modifier.fillMaxSize()
+                            ) {
+                                SectionHeader("Condição Física")
 
-                    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                        MetricCard(
-                            title = "Passos", value = "6.5k", target = "10k",
-                            subtitle = "65% da meta", icon = Icons.Default.DirectionsRun,
-                            accentColor = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier.weight(1f)
-                        )
-                        MetricCard(
-                            title = "Água", value = "2.4", target = "3.5",
-                            subtitle = "Boa hidratação", icon = Icons.Default.Water,
-                            accentColor = MaterialTheme.colorScheme.secondary,
-                            modifier = Modifier.weight(1f)
-                        )
+                                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                                    MetricCard(
+                                        title = "Passos", value = "6.5k", target = "10k",
+                                        subtitle = "65% da meta", icon = Icons.Default.DirectionsRun,
+                                        accentColor = MaterialTheme.colorScheme.primary,
+                                        modifier = Modifier.weight(1f)
+                                    )
+                                    MetricCard(
+                                        title = "Água", value = "2.4", target = "3.5",
+                                        subtitle = "Boa hidratação", icon = Icons.Default.Water,
+                                        accentColor = MaterialTheme.colorScheme.secondary,
+                                        modifier = Modifier.weight(1f)
+                                    )
+                                }
+
+                                Spacer(Modifier.height(32.dp))
+
+                                SectionHeader("Missões Diárias", actionText = "Ver todas")
+
+                                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                                    MissionCard("Morning Stretch", "5–10 min • Aqueça seu corpo", 10) {
+                                        Text(
+                                            text = "\uD83E\uDD57\n"
+                                        )
+                                    }
+                                    MissionCard("Registrar Hidratação", "8 copos • Meta de água", null, isCompleted = true) {
+                                        Text(
+                                            text = "\uD83E\uDD57\n",
+                                            fontSize = 24.sp,
+                                            textAlign = TextAlign.Center
+                                        )
+                                    }
+                                    MissionCard("Cardio 30 min", "Caminhar • Correr • Bike", 30) {
+                                        Text(
+                                            text = "\uD83E\uDD57\n",
+                                            fontSize = 24.sp
+                                        )
+                                    }
+                                    MissionCard("Cardio 30 min", "Caminhar • Correr • Bike", 30) {
+                                        Text(
+                                            text = "\uD83E\uDD57\n",
+                                            fontSize = 24.sp
+                                        )
+                                    }
+                                }
+                            }
+                        }
                     }
-
-                    Spacer(Modifier.height(32.dp))
-
-                    SectionHeader("Missões Diárias", actionText = "Ver todas")
-
-                    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                        MissionCard("Morning Stretch", "5–10 min • Aqueça seu corpo", 10) {
-                            Text(
-                                text = "\uD83E\uDD57\n"
-                            )
-                        }
-                        MissionCard("Registrar Hidratação", "8 copos • Meta de água", null, isCompleted = true) {
-                            Text(
-                                text = "\uD83E\uDD57\n",
-                                fontSize = 24.sp,
-                                textAlign = TextAlign.Center
-                            )
-                        }
-                        MissionCard("Cardio 30 min", "Caminhar • Correr • Bike", 30) {
-                            Text(
-                                text = "\uD83E\uDD57\n",
-                                fontSize = 24.sp
-                            )
-                        }
-                        MissionCard("Cardio 30 min", "Caminhar • Correr • Bike", 30) {
-                            Text(
-                                text = "\uD83E\uDD57\n",
-                                fontSize = 24.sp
-                            )
-                        }
-                    }
                 }
-            }
+            )
         }
+    )
+
+}
+@Composable
+fun DarkGamifiedDashboardBackground(
+    modifier: Modifier = Modifier
+) {
+    val colors = MaterialTheme.colorScheme
+    val infinite = rememberInfiniteTransition(label = "TriadTransition")
+
+    // Animações independentes para cada zona (Paralaxe de brilho)
+    val topPulse by infinite.animateFloat(
+        initialValue = 0.6f, targetValue = 1f,
+        animationSpec = infiniteRepeatable(tween(12000), RepeatMode.Reverse), label = "top"
+    )
+    val midShift by infinite.animateFloat(
+        initialValue = -50f, targetValue = 50f,
+        animationSpec = infiniteRepeatable(tween(15000), RepeatMode.Reverse), label = "mid"
+    )
+
+    Canvas(modifier = modifier.fillMaxSize()) {
+        val w = size.width
+        val h = size.height
+
+        // 0. Fundo OLED Absoluto
+        drawRect(color = colors.background)
+
+        // 1. TOPO: Aura de Identidade (Roxo Primary)
+        // Foca no status do Avatar e XP
+        drawCircle(
+            brush = Brush.radialGradient(
+                colors = listOf(colors.primary.copy(alpha = 0.12f * topPulse), Color.Transparent),
+                center = Offset(w * 0.5f, h * 0.05f),
+                radius = w * 0.8f
+            ),
+            radius = w * 0.8f,
+            center = Offset(w * 0.5f, h * 0.05f)
+        )
+
+        // 2. MEIO: Vortex de Atividade (Azul Secondary)
+        // Cria profundidade atrás dos widgets principais
+        drawCircle(
+            brush = Brush.radialGradient(
+                colors = listOf(colors.secondary.copy(alpha = 0.06f), Color.Transparent),
+                center = Offset(w / 2f + midShift, h * 0.45f),
+                radius = w * 0.7f
+            ),
+            radius = w * 0.7f,
+            center = Offset(w / 2f + midShift, h * 0.45f),
+            blendMode = BlendMode.Screen
+        )
+
+        // 3. BOTTOM: Névoa de Estabilidade (PrimaryContainer/Deep Purple)
+        // Dá suporte visual para a NavigationBar transparente
+        val footerPath = Path().apply {
+            val footerY = h * 0.88f
+            moveTo(0f, footerY)
+            cubicTo(
+                w * 0.3f, footerY - 30f,
+                w * 0.7f, footerY + 30f,
+                w, footerY
+            )
+            lineTo(w, h)
+            lineTo(0f, h)
+            close()
+        }
+        drawPath(
+            path = footerPath,
+            brush = Brush.verticalGradient(
+                colors = listOf(
+                    colors.primaryContainer.copy(alpha = 0.15f),
+                    colors.background
+                )
+            )
+        )
+
+        // 4. DETALHE SÊNIOR: Micro-Glow de Acabamento (Verde Tertiary)
+        // Um pequeno "flare" de saúde que aparece e desaparece no canto
+        drawCircle(
+            color = colors.tertiary.copy(alpha = 0.03f),
+            radius = w * 0.4f,
+            center = Offset(w * 0.9f, h * 0.25f)
+        )
     }
 }

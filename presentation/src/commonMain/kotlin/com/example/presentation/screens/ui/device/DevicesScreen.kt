@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
@@ -35,11 +36,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import ui.components.FitverseScreenTitle
-import ui.components.FitverseTopBar
-import ui.components.SectionLabel
-import ui.components.ShapeCard
-import ui.theme.FitverseColors
+import com.example.presentation.theme.FitverseColors
+import com.example.presentation.ui.components.FitverseScreenTitle
+import com.example.presentation.ui.components.FitverseTopBar
+import com.example.presentation.ui.components.SectionLabel
+import com.example.presentation.ui.components.ShapeCard
 
 
 // ── Models ────────────────────────────────────────────────────────────────────
@@ -75,36 +76,44 @@ fun DevicesScreen(onBack: () -> Unit) {
         )
     }
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(FitverseColors.Bg),
-        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
-    ) {
-        item {
+    Scaffold(
+        containerColor = Color.Transparent,
+        topBar = {
             FitverseTopBar(onBack = onBack)
-            FitverseScreenTitle(
-                title    = "Dispositivos",
-                subtitle = "Conecte seus wearables e apps",
-            )
-            Spacer(Modifier.height(18.dp))
-            LiveMetricsCard(metrics = liveMetrics)
-            SectionLabel("Wearables")
+        }
+    ){
+        LazyColumn(
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize()
+                .background(FitverseColors.Bg),
+            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
+        ) {
+            item {
+                FitverseScreenTitle(
+                    title    = "Dispositivos",
+                    subtitle = "Conecte seus wearables e apps",
+                )
+                Spacer(Modifier.height(18.dp))
+                LiveMetricsCard(metrics = liveMetrics)
+                SectionLabel("Wearables")
+            }
+
+            items(devices, key = { it.name }) { device ->
+                DeviceRow(
+                    device   = device,
+                    onToggle = { toggled ->
+                        devices = devices.map {
+                            if (it.name == device.name) it.copy(isConnected = toggled) else it
+                        }
+                    },
+                    modifier = Modifier.padding(bottom = 8.dp),
+                )
+            }
+
+            item { Spacer(Modifier.height(24.dp)) }
         }
 
-        items(devices, key = { it.name }) { device ->
-            DeviceRow(
-                device   = device,
-                onToggle = { toggled ->
-                    devices = devices.map {
-                        if (it.name == device.name) it.copy(isConnected = toggled) else it
-                    }
-                },
-                modifier = Modifier.padding(bottom = 8.dp),
-            )
-        }
-
-        item { Spacer(Modifier.height(24.dp)) }
     }
 }
 

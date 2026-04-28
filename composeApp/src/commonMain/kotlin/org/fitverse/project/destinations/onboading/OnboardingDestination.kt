@@ -8,11 +8,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.example.presentation.navigationState.OnboardingNavigation
+import com.example.presentation.screens.ui.dashboard.DarkGamifiedDashboardBackground
 import com.example.presentation.screens.ui.onboarding.OnboardingScreen
 import com.example.presentation.screens.ui.onboarding.viewmodel.OnboardingViewModel
 import com.example.presentation.screens.ui.onboarding.state.OnboardingState
 import kotlinx.coroutines.flow.collectLatest
-import org.fitverse.project.destinations.homepage.dashboad.DarkGamifiedDashboardBackground
 import org.koin.compose.koinInject
 
 @Composable

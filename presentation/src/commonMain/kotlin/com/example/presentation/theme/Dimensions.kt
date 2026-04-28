@@ -14,7 +14,3 @@ object RegisterDimens {
     val buttonHeight     = 52.dp
     val stepBarHeight    = 3.dp
 }
-
-object LoginDimens {
-
-}

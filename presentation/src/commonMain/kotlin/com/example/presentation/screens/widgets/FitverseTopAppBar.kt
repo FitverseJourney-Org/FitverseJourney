@@ -20,49 +20,38 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun FitverseTopAppBar(
     title: String,
-    subtitle: @Composable () -> Unit? = { null },
+    subtitle: (@Composable () -> Unit)? = null,
+    actions: (@Composable () -> Unit)? = null,
     onBack: () -> Unit,
-    actions: @Composable () -> Unit? = { null },
     scrollBehavior: TopAppBarScrollBehavior? = null
 ) {
     val cs = MaterialTheme.colorScheme
 
-    // Envelopamos tudo em uma Column para anexar a barra no final
-    Column(
-        modifier = Modifier
-    ) {
-        TopAppBar(
-            modifier = Modifier
-                .padding(20.dp),
-            title = {
-                Column(
-                    modifier = Modifier.padding(start = 10.dp)
-                ) {
-                    Text(
-                        text = title,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Black,
-                        color = cs.onBackground,
-                        letterSpacing = 1.sp
-                    )
-                    subtitle()
-                }
-            },
-            windowInsets = WindowInsets(0, 0, 0, 0),
-            navigationIcon = {
-                FitverseIconBack(
-                    onBack = onBack
+    TopAppBar(
+        modifier = Modifier,
+        windowInsets = WindowInsets(0, 0, 0, 0),
+        scrollBehavior = scrollBehavior,
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = Color.Transparent,
+            scrolledContainerColor = Color.Transparent
+        ),
+        navigationIcon = {
+            FitverseIconBack(onBack = onBack)
+        },
+        title = {
+            Column(modifier = Modifier) {
+                Text(
+                    text = title,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Black,
+                    color = cs.onBackground,
+                    letterSpacing = 1.sp
                 )
-            },
-            actions = {
-                actions()
-            },
-            // Deixamos transparente para a Column ditar a cor de fundo real
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = Color.Transparent,
-                scrolledContainerColor = Color.Transparent
-            ),
-            scrollBehavior = scrollBehavior
-        )
-    }
+                subtitle?.invoke()
+            }
+        },
+        actions = {
+            actions?.invoke()
+        }
+    )
 }

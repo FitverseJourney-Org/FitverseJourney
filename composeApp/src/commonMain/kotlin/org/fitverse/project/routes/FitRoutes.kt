@@ -4,15 +4,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
-sealed class FitRoutes {
-    sealed class HomeFlowMenu : NavKey {
-        @Serializable data object Dashboard : HomeFlowMenu()
-        @Serializable data object Workout   : HomeFlowMenu()
-        @Serializable data object Nutrition : HomeFlowMenu()
-        @Serializable data object Community : HomeFlowMenu()
-        @Serializable data object Profile   : HomeFlowMenu()
-    }
-}
+
 object FitverseColors {
     val BgDark      = Color(0xFF0C0C0C)
     val Surface1    = Color(0xFF181818)

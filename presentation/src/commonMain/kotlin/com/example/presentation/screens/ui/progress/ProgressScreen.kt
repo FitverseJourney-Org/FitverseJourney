@@ -51,6 +51,7 @@ import com.example.presentation.screens.ui.progress.components.ProgressChartCard
 import com.example.presentation.screens.ui.progress.components.ProgressScreenSkeleton
 import com.example.presentation.screens.ui.progress.components.ProgressionStatsGrid
 import com.example.presentation.screens.ui.progress.components.SplitTabRow
+import com.example.presentation.screens.ui.progress.viewmodel.ProgressViewModel
 import com.example.presentation.screens.widgets.FitverseTopAppBar
 import kotlinx.coroutines.launch
 

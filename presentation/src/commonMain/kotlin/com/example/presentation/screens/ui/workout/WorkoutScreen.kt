@@ -85,7 +85,8 @@ private fun WorkoutHeader() {
 fun FitChip(
     text: String,
     color: Color,
-    textColor: Color = FitverseColors.BgDark
+    textColor: Color = FitverseColors.Bg
+
 ) {
     Box(
         modifier = Modifier
@@ -132,7 +133,8 @@ private fun WorkoutMainCard(onStart: () -> Unit) {
                         .background(FitverseColors.Accent)
                         .padding(horizontal = 10.dp, vertical = 6.dp)
                 ) {
-                    Text("42:15", color = FitverseColors.BgDark, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                    Text("42:15", color = FitverseColors.Bg
+                        , fontSize = 14.sp, fontWeight = FontWeight.Bold)
                 }
             }
 
@@ -155,7 +157,8 @@ private fun WorkoutMainCard(onStart: () -> Unit) {
             ) {
                 Text(
                     "▶  INICIAR TREINO",
-                    color = FitverseColors.BgDark,
+                    color = FitverseColors.Bg
+                    ,
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Black,
                     letterSpacing = 1.sp
@@ -185,7 +188,8 @@ private fun CategoryFilter(selected: Int, onSelect: (Int) -> Unit) {
             ) {
                 Text(
                     cat,
-                    color = if (isSelected) FitverseColors.BgDark else FitverseColors.TextMuted,
+                    color = if (isSelected) FitverseColors.Bg
+                    else FitverseColors.TextMuted,
                     fontSize = 13.sp,
                     fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
                 )

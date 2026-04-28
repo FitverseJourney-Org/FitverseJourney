@@ -15,8 +15,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import ui.components.ShapeButton
-import ui.theme.FitverseColors
+import com.example.presentation.theme.FitverseColors
+import com.example.presentation.ui.components.ShapeButton
 
 @Composable
 fun FitverseButton(

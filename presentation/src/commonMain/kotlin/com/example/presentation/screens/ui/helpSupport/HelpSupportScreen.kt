@@ -41,11 +41,11 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import ui.components.FitverseScreenTitle
-import ui.components.FitverseTopBar
-import ui.components.SectionLabel
-import ui.components.ShapeCard
-import ui.theme.FitverseColors
+import com.example.presentation.theme.FitverseColors
+import com.example.presentation.ui.components.FitverseScreenTitle
+import com.example.presentation.ui.components.FitverseTopBar
+import com.example.presentation.ui.components.SectionLabel
+import com.example.presentation.ui.components.ShapeCard
 
 // ── Models ────────────────────────────────────────────────────────────────────
 

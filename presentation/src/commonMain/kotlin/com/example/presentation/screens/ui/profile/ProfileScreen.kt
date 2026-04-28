@@ -92,7 +92,7 @@ private fun ProfileTopBar(onSettingsClick: () -> Unit) {
             modifier = Modifier
                 .size(40.dp)
                 .clip(RoundedCornerShape(10.dp))
-                .background(FitverseColors.Surface1),
+                .background(FitverseColors.Surface2),
             contentAlignment = Alignment.Center
         ) { Text("⚙️", fontSize = 18.sp) }
     }
@@ -112,7 +112,7 @@ private fun ProfileAvatar() {
             contentAlignment = Alignment.Center
         ) {
             Box(
-                modifier = Modifier.size(84.dp).clip(CircleShape).background(FitverseColors.Surface1),
+                modifier = Modifier.size(84.dp).clip(CircleShape).background(FitverseColors.Surface2),
                 contentAlignment = Alignment.Center
             ) { Text("⚔️", fontSize = 36.sp) }
         }
@@ -175,7 +175,7 @@ fun ProfileStatDivider() {
         modifier = Modifier
             .width(1.dp)
             .height(40.dp)
-            .background(FitverseColors.TextDim)
+            .background(FitverseColors.TextMuted)
     )
 }
 

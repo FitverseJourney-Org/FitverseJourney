@@ -6,5 +6,7 @@ import com.example.domain.repository.dbLocal.sqldelight.user.UserRepository
 class ResetPasswordUseCase(
     private val authRepository: AuthRepository
 ) {
-    suspend operator fun invoke(email: String): Result<Unit> = authRepository.resetPassword(email)
+    suspend operator fun invoke(
+        email: String
+    ): Result<Unit> = authRepository.resetPassword(email)
 }

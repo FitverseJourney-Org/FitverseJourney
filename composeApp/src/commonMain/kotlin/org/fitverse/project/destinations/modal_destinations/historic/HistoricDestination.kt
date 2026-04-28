@@ -12,7 +12,6 @@ import com.example.presentation.screens.ui.historic.HistoricScreen
 fun HistoricDestination(
     navigateBack: () -> Unit
 ) {
-
     HistoricScreen(
         onBack = navigateBack
     )

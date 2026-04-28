@@ -395,7 +395,7 @@ private fun MacrosSummaryCard() {
             }
 
             Spacer(Modifier.height(16.dp))
-            HorizontalDivider(color = FitverseColors.TextDim, thickness = 0.5.dp)
+            HorizontalDivider(color = FitverseColors.TextMuted, thickness = 0.5.dp)
             Spacer(Modifier.height(14.dp))
 
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {

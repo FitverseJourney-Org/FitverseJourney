@@ -20,8 +20,11 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import ui.components.*
-import ui.theme.FitverseColors
+import com.example.presentation.theme.FitverseColors
+import com.example.presentation.ui.components.FitverseScreenTitle
+import com.example.presentation.ui.components.FitverseTopBar
+import com.example.presentation.ui.components.ShapeCard
+import com.example.presentation.ui.components.ShapeTag
 
 // ── Models ────────────────────────────────────────────────────────────────────
 
@@ -65,32 +68,40 @@ fun WikiFitnessScreen(
         }
     }
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(FitverseColors.Bg),
-        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
-    ) {
-        item {
+    Scaffold(
+        containerColor = Color.Transparent,
+        topBar = {
             FitverseTopBar(onBack = onBack)
-            FitverseScreenTitle(title = "Wiki Fitness", subtitle = "Ciência aplicada ao seu treino")
-            Spacer(Modifier.height(18.dp))
-            WikiSearchBar(
-                query    = query,
-                onChange = { query = it },
-            )
-            Spacer(Modifier.height(4.dp))
+        }
+    ){
+        LazyColumn(
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize()
+                .background(FitverseColors.Bg),
+            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
+        ) {
+            item {
+                FitverseScreenTitle(title = "Wiki Fitness", subtitle = "Ciência aplicada ao seu treino")
+                Spacer(Modifier.height(18.dp))
+                WikiSearchBar(
+                    query    = query,
+                    onChange = { query = it },
+                )
+                Spacer(Modifier.height(20.dp))
+            }
+
+            items(filtered, key = { it.title }) { article ->
+                WikiArticleRow(
+                    article  = article,
+                    onClick  = { onArticleClick(article) },
+                    modifier = Modifier.padding(bottom = 10.dp),
+                )
+            }
+
+            item { Spacer(Modifier.height(24.dp)) }
         }
 
-        items(filtered, key = { it.title }) { article ->
-            WikiArticleRow(
-                article  = article,
-                onClick  = { onArticleClick(article) },
-                modifier = Modifier.padding(bottom = 10.dp),
-            )
-        }
-
-        item { Spacer(Modifier.height(24.dp)) }
     }
 }
 

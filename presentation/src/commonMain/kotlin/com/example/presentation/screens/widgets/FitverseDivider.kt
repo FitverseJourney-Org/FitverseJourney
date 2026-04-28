@@ -12,7 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import ui.theme.FitverseColors
+import com.example.presentation.theme.FitverseColors
 
 
 // ── Horizontal divider with label ─────────────────────────────────────────────

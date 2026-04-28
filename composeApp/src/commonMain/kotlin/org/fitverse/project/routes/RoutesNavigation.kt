@@ -3,121 +3,74 @@ package org.fitverse.project.routes
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable
 
+
 @Serializable
 sealed interface NavRoutes : NavKey {
-    @Serializable object SplashScreen : NavKey, NavRoutes
-    @Serializable object OnboardingScreen : NavRoutes
-    @Serializable object TrialScreen : NavKey,NavRoutes
-    @Serializable object LoadingLanguage : NavKey,NavRoutes
 
+    // ── Raiz ──────────────────────────────────────────────────
+    @Serializable data object SplashScreen     : NavRoutes
+    @Serializable data object OnboardingScreen : NavRoutes
+    @Serializable data object TrialScreen      : NavRoutes
+    @Serializable data object LoadingLanguage  : NavRoutes
 
-    @Serializable
-    data object AuthFlow : NavKey, NavRoutes {
-
-        @Serializable
-        data object Home : NavKey, NavRoutes
-
-        @Serializable
-        data object Login : NavKey, NavRoutes
-        @Serializable
-        data object Register : NavKey, NavRoutes
-        @Serializable
-        data object ResetPassword : NavKey, NavRoutes
+    // ── Auth ──────────────────────────────────────────────────
+    @Serializable data object AuthFlow : NavRoutes {
+        @Serializable data object Home          : NavRoutes
+        @Serializable data object Login         : NavRoutes
+        @Serializable data object Register      : NavRoutes
+        @Serializable data object ResetPassword : NavRoutes
     }
 
-    @Serializable
-    data object HomeFlowMenu : NavKey, NavRoutes {
-        @Serializable
-        data object Dashboard : NavKey, NavRoutes
+    // ── Home ──────────────────────────────────────────────────
+    @Serializable data object HomeFlow : NavRoutes {
 
-        @Serializable
-        data object Workout : NavKey, NavRoutes
+        // Bottom Bar
+        @Serializable data object Dashboard  : NavRoutes
+        @Serializable data object Workout    : NavRoutes
+        @Serializable data object Community  : NavRoutes
+        @Serializable data object Nutrition  : NavRoutes
+        @Serializable data object Profile    : NavRoutes
 
-        @Serializable
-        data object Community : NavKey, NavRoutes
-
-        @Serializable
-        data object Meals : NavKey, NavRoutes
-
-        @Serializable
-        data object Profile : NavKey, NavRoutes
+        // Telas internas da Home
+        @Serializable data object AddPost            : NavRoutes
+        @Serializable data object NotificationScreen : NavRoutes
     }
 
-    @Serializable
-    data object HomeFlow : NavKey, NavRoutes {
-        @Serializable
-        data object Dashboard : NavKey, NavRoutes
-        @Serializable
-        data object Meals : NavKey, NavRoutes
-
-        @Serializable
-        data object Community : NavKey, NavRoutes
-
-        @Serializable
-        data object AddPost : NavKey, NavRoutes
-
-        @Serializable
-        data object Workout : NavKey, NavRoutes
-        @Serializable
-        data object Profile : NavKey, NavRoutes
-        @Serializable object NotificationScreen : NavRoutes
-    }
-    @Serializable
-    data object WorkoutFlow : NavKey, NavRoutes {
-        @Serializable
-        data object Workout : NavKey, NavRoutes
-
-        @Serializable
-        data object WorkoutCompleted : NavKey, NavRoutes
-        @Serializable
-        data object WorkoutSession : NavKey, NavRoutes
+    // ── Workout ───────────────────────────────────────────────
+    @Serializable data object WorkoutFlow : NavRoutes {
+        @Serializable data object WorkoutSession   : NavRoutes
+        @Serializable data object WorkoutCompleted : NavRoutes
     }
 
-    @Serializable
-    data object PlanWorkoutFlow : NavKey, NavRoutes {
-        @Serializable
-        data object PlanList : NavKey, NavRoutes
-        @Serializable
-        data object Plan : NavKey, NavRoutes
-        @Serializable
-        data object Builder : NavKey, NavRoutes
-
-        @Serializable
-        data object Exercises : NavKey, NavRoutes
-        @Serializable
-        data object ExerciseDetails : NavKey, NavRoutes
-
-        @Serializable
-        data object PlanIA : NavRoutes
-
+    // ── Plano de Treino ───────────────────────────────────────
+    @Serializable data object PlanWorkoutFlow : NavRoutes {
+        @Serializable data object PlanList        : NavRoutes
+        @Serializable data object Plan            : NavRoutes
+        @Serializable data object Builder         : NavRoutes
+        @Serializable data object Exercises       : NavRoutes
+        @Serializable data object ExerciseDetails : NavRoutes
+        @Serializable data object PlanIA          : NavRoutes
     }
 
-    @Serializable
-    data object TasksFlow : NavKey, NavRoutes {
-        @Serializable
-        data object TasksList : NavKey, NavRoutes
-        @Serializable
-        data object TasksLibrary : NavKey, NavRoutes
+    // ── Tasks ─────────────────────────────────────────────────
+    @Serializable data object TasksFlow : NavRoutes {
+        @Serializable data object TasksList    : NavRoutes
+        @Serializable data object TasksLibrary : NavRoutes
     }
 
-
-
-
-    @Serializable object Shopping : NavRoutes
-
-    @Serializable object WikiFitness : NavRoutes
-
-    @Serializable object PlanPaymentScreen : NavRoutes
-    @Serializable object Devices : NavRoutes
-    @Serializable object WorkoutSession : NavRoutes
-    @Serializable object ActionsWorkout : NavRoutes
-    @Serializable object ActionsNutrition : NavRoutes
-    @Serializable object ActionsTasks : NavRoutes
-    @Serializable object Friends : NavRoutes
-    @Serializable object Leaderboards : NavRoutes
-    @Serializable object Historic : NavRoutes
-    @Serializable object Progress : NavRoutes
-    @Serializable object ActionsHistoric : NavRoutes
-    @Serializable object Achievements : NavRoutes
-    @Serializable object HelpSupport : NavRoutes
+    // ── Telas avulsas ─────────────────────────────────────────
+    @Serializable data object Shopping         : NavRoutes
+    @Serializable data object WikiFitness      : NavRoutes
+    @Serializable data object PlanPayment: NavRoutes
+    @Serializable data object Devices          : NavRoutes
+    @Serializable data object Friends          : NavRoutes
+    @Serializable data object Leaderboards     : NavRoutes
+    @Serializable data object Historic         : NavRoutes
+    @Serializable data object Progress         : NavRoutes
+    @Serializable data object Achievements     : NavRoutes
+    @Serializable data object HelpSupport      : NavRoutes
+    @Serializable data object ActionsWorkout   : NavRoutes
+    @Serializable data object ActionsNutrition : NavRoutes
+    @Serializable data object ActionsTasks     : NavRoutes
+    @Serializable data object ActionsHistoric  : NavRoutes
 }

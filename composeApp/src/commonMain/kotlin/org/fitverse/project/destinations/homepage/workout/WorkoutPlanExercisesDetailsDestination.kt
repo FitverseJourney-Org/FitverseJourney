@@ -3,7 +3,7 @@ package org.fitverse.project.destinations.homepage.workout
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.FitnessCenter
 import androidx.compose.runtime.Composable
-import com.example.presentation.screens.ui.planWorkout.ExerciseLibraryItem
+import com.example.domain.models.workout.workout_plan.ExerciseLibraryItem
 import com.example.presentation.screens.ui.planWorkout.WorkoutPLanExerciseDetailsScreen
 
 @Composable

@@ -83,13 +83,10 @@ fun CommunityScreen() {
 fun PostCard(post: Post) {
     val cs = MaterialTheme.colorScheme
     Column(
-        modifier = Modifier
-            .padding(horizontal = 20.dp)
+        modifier = Modifier.padding(horizontal = 20.dp)
             .border(width = 1.dp, color = Color(0xFF2a2a35), shape = RoundedCornerShape(16.dp))
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(16.dp))
-            .background(cs.surface)
-            .padding(16.dp)
+            .fillMaxWidth().clip(RoundedCornerShape(16.dp))
+            .background(cs.surface).padding(16.dp)
     ) {
         // Header: avatar + user info + tag
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
@@ -173,7 +170,7 @@ private fun StoryAvatar(name: String, isMe: Boolean) {
             modifier = Modifier
                 .size(56.dp)
                 .clip(CircleShape)
-                .border(2.dp, if (isMe) FitverseColors.Accent else FitverseColors.TextDim, CircleShape),
+                .border(2.dp, if (isMe) FitverseColors.Accent else FitverseColors.TextMuted, CircleShape),
             contentAlignment = Alignment.Center
         ) {
             Box(

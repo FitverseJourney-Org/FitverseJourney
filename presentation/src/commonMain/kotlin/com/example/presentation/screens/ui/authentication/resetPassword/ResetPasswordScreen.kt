@@ -40,9 +40,9 @@ import androidx.compose.ui.unit.sp
 import com.example.presentation.screens.ui.authentication.login.components.FitverseOutlinedTextField
 import com.example.presentation.screens.widgets.FitVerseSpacer
 import com.example.presentation.screens.widgets.FitverseButton
+import com.example.presentation.theme.FitverseColors
+import com.example.presentation.ui.components.FitverseTopBar
 import kotlinx.coroutines.delay
-import ui.components.FitverseTopBar
-import ui.theme.FitverseColors
 
 @Composable
 fun ResetPasswordScreen(

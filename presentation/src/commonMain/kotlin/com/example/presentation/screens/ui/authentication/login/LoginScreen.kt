@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -48,11 +49,10 @@ import com.example.presentation.screens.ui.authentication.login.components.Fitve
 import com.example.presentation.screens.widgets.FitVerseSpacer
 import com.example.presentation.screens.widgets.FitverseButton
 import com.example.presentation.screens.widgets.FitverseDivider
+import com.example.presentation.theme.FitverseColors
 import fitversejourneyapp.presentation.generated.resources.Res
 import fitversejourneyapp.presentation.generated.resources.bg_girl_pose
 import org.jetbrains.compose.resources.painterResource
-import ui.components.ShapeButton
-import ui.theme.FitverseColors
 
 // ─── Entry point ─────────────────────────────────────────────────────────────
 
@@ -291,8 +291,8 @@ private fun SocialLoginRow(onSocialLogin: (String) -> Unit) {
             Box(
                 modifier = Modifier
                     .weight(1f)
-                    .border(1.dp, FitverseColors.Border, ShapeButton)
-                    .clip(ShapeButton)
+                    .border(1.dp, FitverseColors.Border, RoundedCornerShape(15.dp))
+                    .clip(RoundedCornerShape(15.dp))
                     .background(FitverseColors.Surface)
                     .clickable { onSocialLogin(provider) }
                     .padding(vertical = 13.dp),

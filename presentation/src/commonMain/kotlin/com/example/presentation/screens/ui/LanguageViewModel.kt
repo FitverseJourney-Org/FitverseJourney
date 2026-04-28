@@ -3,13 +3,9 @@ package com.example.presentation.screens.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.repository.dbLocal.datastore.AppLanguageRepository
-import com.example.domain.usecase.database.datastore.language.ChangeAppLanguageUseCase
-import com.example.domain.usecase.database.datastore.language.GetAppLanguageUseCase
-import com.example.domain.usecase.database.datastore.language.GetLocaleLanguageAppUseCase
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
-import kotlinx.coroutines.flow.Flow
+import com.example.domain.usecase.db.datastore.language.ChangeAppLanguageUseCase
+import com.example.domain.usecase.db.datastore.language.GetAppLanguageUseCase
+import com.example.domain.usecase.db.datastore.language.GetLocaleLanguageAppUseCase
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
