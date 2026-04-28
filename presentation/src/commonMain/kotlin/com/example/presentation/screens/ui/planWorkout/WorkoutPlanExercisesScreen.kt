@@ -1,61 +1,45 @@
 package com.example.presentation.screens.ui.planWorkout
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.presentation.screens.ui.modal.planWorkout.EmptySearchState
-import com.example.presentation.screens.widgets.FitverseIconBack
+import com.example.domain.models.workout.workout_plan.ExerciseLibraryItem
+import com.example.domain.models.workout.workout_plan.mocks.libraryExercises
+import com.example.domain.models.workout.workout_plan.mocks.muscleGroups
+import com.example.presentation.screens.ui.planWorkout.components.EmptySearchState
+import com.example.presentation.screens.ui.planWorkout.components.ExerciseSelectionCard
 import com.example.presentation.screens.widgets.FitverseTopAppBar
-import com.example.presentation.theme.DarkGamifiedColors
 
-// --- MODELOS ---
-
-data class ExerciseLibraryItem(
-    val id: String,
-    val name: String,
-    val muscleGroup: String,
-    val description: String = "Execute o movimento de forma controlada, mantendo a postura e a contração muscular alvo durante toda a amplitude.",
-    val imageUrl: String = "", // Link para o GIF ou PNG
-    val icon: ImageVector = Icons.Rounded.FitnessCenter
-)
-
-// --- MOCKS (Limpados e Tipados) ---
-
-val muscleGroups = listOf("Todos", "Peito", "Costas", "Pernas", "Braços", "Ombros")
-
-val libraryExercises = listOf(
-    ExerciseLibraryItem("1", "Supino Reto", "Peito"),
-    ExerciseLibraryItem("2", "Puxada Alta", "Costas"),
-    ExerciseLibraryItem("3", "Agachamento Livre", "Pernas"),
-    ExerciseLibraryItem("4", "Rosca Direta", "Braços"),
-    ExerciseLibraryItem("5", "Elevação Lateral", "Ombros"),
-    ExerciseLibraryItem("6", "Leg Press 45", "Pernas"),
-    ExerciseLibraryItem("7", "Tríceps Pulley", "Braços"),
-    ExerciseLibraryItem("8", "Cadeira Extensora", "Pernas"),
-    ExerciseLibraryItem("9", "Rosca Inversa", "Braços"),
-    ExerciseLibraryItem("10", "Abdominal Infra", "Core"),
-    ExerciseLibraryItem("11", "Crucifixo", "Peito"),
-    ExerciseLibraryItem("12", "Remada Baixa", "Costas"),
-)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -169,93 +153,5 @@ fun WorkoutPlanExercisesScreen(
             }
         }
 
-    }
-}
-
-@Composable
-fun ExerciseSelectionCard(
-    exercise: ExerciseLibraryItem,
-    colors: ColorScheme,
-    onDetails: () -> Unit,
-    onAdd: () -> Unit
-) {
-    Surface(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp),
-        onClick = onDetails,
-        color = colors.surfaceVariant.copy(alpha = 0.6f), // Card background (#16171D)
-        border = BorderStroke(1.dp, colors.outline.copy(alpha = 0.2f))
-    ) {
-        Row(
-            modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // Ícone com Aura em Azul (Secondary)
-            Box(
-                modifier = Modifier
-                    .size(48.dp)
-                    .background(colors.secondary.copy(alpha = 0.1f), CircleShape),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    exercise.icon,
-                    null,
-                    tint = colors.secondary,
-                    modifier = Modifier.size(24.dp)
-                )
-            }
-
-            Column(modifier = Modifier.weight(1f).padding(horizontal = 16.dp)) {
-                Text(
-                    text = exercise.name.uppercase(),
-                    fontWeight = FontWeight.Black,
-                    fontSize = 15.sp,
-                    color = colors.onSurface
-                )
-                Text(
-                    text = exercise.muscleGroup.uppercase(),
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = colors.onSurfaceVariant // Cinza Muted
-                )
-            }
-
-            // Botão "Adicionar": Roxo (Primary) para combinar com a FAB da tela anterior
-            IconButton(
-                onClick = onAdd,
-                modifier = Modifier
-                    .background(colors.primary, RoundedCornerShape(12.dp))
-                    .size(40.dp)
-            ) {
-                Icon(
-                    Icons.Rounded.Add,
-                    null,
-                    tint = colors.onPrimary,
-                    modifier = Modifier.size(24.dp)
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun EmptySearchState(colors: ColorScheme) {
-    Column(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 80.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Icon(
-            Icons.Rounded.SearchOff,
-            null,
-            modifier = Modifier.size(64.dp),
-            tint = colors.onSurfaceVariant.copy(alpha = 0.1f)
-        )
-        Spacer(Modifier.height(16.dp))
-        Text(
-            "NENHUMA HABILIDADE ENCONTRADA",
-            fontWeight = FontWeight.Black,
-            fontSize = 14.sp,
-            color = colors.onSurfaceVariant.copy(alpha = 0.3f)
-        )
     }
 }

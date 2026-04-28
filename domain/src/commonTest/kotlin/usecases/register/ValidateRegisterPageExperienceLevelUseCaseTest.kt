@@ -1,8 +1,5 @@
 package usecases.register
 
-import com.example.domain.model.authentication.register.RegisterExperienceLevel
-import com.example.domain.model.register.RegisterPageExperienceLevelValidationType
-import com.example.domain.usecase.register.ValidateRegisterPageExperienceLevelUseCase
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

@@ -9,11 +9,12 @@ import com.journey.database.AppDatabase.AppDatabase
 
 actual class DatabaseFactory(private val context: Context) {
     actual fun createDriver(): SqlDriver {
+        val schema = AppDatabase.Schema.synchronous()
         return AndroidSqliteDriver(
-            schema = AppDatabase.Schema.synchronous(),
-            context = context,
-            name = "fitverse.db",
-            callback = object : AndroidSqliteDriver.Callback(AppDatabase.Schema.synchronous()) {
+            schema   = schema,
+            context  = context,
+            name     = "fitverse.db",
+            callback = object : AndroidSqliteDriver.Callback(schema) {
                 override fun onOpen(db: SupportSQLiteDatabase) {
                     super.onOpen(db)
                     db.setForeignKeyConstraintsEnabled(true)

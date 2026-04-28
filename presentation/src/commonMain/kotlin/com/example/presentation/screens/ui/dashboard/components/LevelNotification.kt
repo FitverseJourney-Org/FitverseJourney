@@ -13,19 +13,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.ErrorOutline
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Warning
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -45,10 +38,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.presentation.theme.CardBgDefaultColor
-import com.example.presentation.theme.DangerRed
-import com.example.presentation.theme.DarkGamifiedColors
-import com.example.presentation.theme.StaminaYellow
 
 
 enum class LevelNotification(
@@ -57,15 +46,15 @@ enum class LevelNotification(
 ){
     INFO(
         icon = Icons.Rounded.Info,
-        color = DarkGamifiedColors.Primary // Roxo Premium para logs normais
+        color = Color(0xFF2196F3) // Roxo Premium para logs normais
     ),
     WARNING(
         icon = Icons.Rounded.Warning,
-        color = StaminaYellow      // Dourado para alertas/atenção
+        color = Color(0xFFF57C00)      // Dourado para alertas/atenção
     ),
     URGENT(
         icon = Icons.Rounded.ErrorOutline,
-        color = DangerRed // Vermelho para perigo/falhas
+        color = Color(0xFFD32F2F) // Vermelho para perigo/falhas
     )
 }
 
@@ -98,7 +87,7 @@ fun NotificationCard(data: Notification) {
         // Borda reage ao estado: Brilha na cor do nível se expandido
         border = BorderStroke(
             width = if (isExpanded) 1.5.dp else 1.dp,
-            color = if (isExpanded) levelColor.copy(alpha = 0.6f) else DarkGamifiedColors.Outline.copy(alpha = 0.3f)
+            color = if (isExpanded) levelColor.copy(alpha = 0.6f) else Color(0xFF3F4458)
         )
     ) {
         Column(modifier = Modifier.padding(16.dp)) {

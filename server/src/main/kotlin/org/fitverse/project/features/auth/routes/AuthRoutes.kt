@@ -18,7 +18,6 @@ fun Route.authRouting() {
             authController.login(call)
         }
     }
-
 }
 @Serializable
 data class RegisterRequest(

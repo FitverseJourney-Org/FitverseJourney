@@ -8,10 +8,11 @@ import com.journey.database.AppDatabase.AppDatabase
 
 actual class DatabaseFactory {
     actual fun createDriver(): SqlDriver {
+        val schema = AppDatabase.Schema.synchronous()
         return NativeSqliteDriver(
-            schema = AppDatabase.Schema.synchronous(),
-            name = "fitverse.db",
-            onConfiguration = { config: DatabaseConfiguration ->
+            schema  = schema, // ← sem .synchronous()
+            name    = "fitverse.db",
+            onConfiguration = { config ->
                 config.copy(
                     extendedConfig = DatabaseConfiguration.Extended(
                         foreignKeyConstraints = true

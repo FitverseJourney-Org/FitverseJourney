@@ -1,8 +1,8 @@
 package org.fitverse.project.destinations.modal_destinations.tasks
 
 import androidx.compose.runtime.Composable
-import com.example.domain.model.dashboard.TaskIcon
-import com.example.domain.model.dashboard.TaskItem
+import com.example.domain.models.dashboard.TaskIcon
+import com.example.domain.models.dashboard.TaskItem
 import com.example.presentation.screens.ui.tasks.TaskLibraryScreen
 
 @Composable

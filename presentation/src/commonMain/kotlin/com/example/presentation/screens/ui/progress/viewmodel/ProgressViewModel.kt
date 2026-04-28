@@ -1,17 +1,21 @@
-package com.example.presentation.screens.ui.progress
+package com.example.presentation.screens.ui.progress.viewmodel
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.model.progress.ProgressionData
-import com.example.domain.model.progress.calculateProgressionStats
+import com.example.domain.models.progress.ProgressionData
+import com.example.domain.models.progress.calculateProgressionStats
 import com.example.domain.usecase.progression.BuildProgressionInsightUseCase
 import com.example.domain.usecase.progression.GetExercisesByTrainingSplitUseCase
 import com.example.domain.usecase.progression.GetProgressionDataUseCase
 import com.example.domain.usecase.progression.GetTrainingSplitsUseCase
 import com.example.expect.TimerManager
+import com.example.presentation.screens.ui.progress.PeriodFilter
+import com.example.presentation.screens.ui.progress.ProgressIntent
+import com.example.presentation.screens.ui.progress.ProgressUiEvent
+import com.example.presentation.screens.ui.progress.ProgressUiState
 import com.example.presentation.utils.MonthNames
 import com.example.presentation.utils.validatePeriod
 import ir.ehsannarmani.compose_charts.models.DotProperties
@@ -25,6 +29,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -51,10 +56,10 @@ import kotlinx.coroutines.launch
  * é cancelado automaticamente — evitando emissões obsoletas chegando à UI.
  *
  * ## Responsabilidades
- * - Reagir a [ProgressIntent]s atualizando os filtros internos.
- * - Combinar os dados de domínio em [ProgressUiState.Success].
+ * - Reagir a [com.example.presentation.screens.ui.progress.ProgressIntent]s atualizando os filtros internos.
+ * - Combinar os dados de domínio em [com.example.presentation.screens.ui.progress.ProgressUiState.Success].
  * - Construir as [Line]s do gráfico aqui (não na UI) para estabilidade de referência.
- * - Despachar [ProgressUiEvent]s pontuais via [Channel].
+ * - Despachar [com.example.presentation.screens.ui.progress.ProgressUiEvent]s pontuais via [Channel].
  *
  * @param getTrainingSplitsUseCase          Recupera fichas disponíveis.
  * @param getExercisesByTrainingSplitUseCase Recupera exercícios da ficha selecionada.
@@ -115,7 +120,7 @@ class ProgressViewModel(
     ) { exerciseId, period, year -> Triple(exerciseId, period, year) }
         .flatMapLatest { (exerciseId, period, year) ->
             if (exerciseId == null) {
-                kotlinx.coroutines.flow.flowOf(Result.success(
+                flowOf(Result.success(
                     ProgressionData(
                         emptyList(),
                         emptyList()
@@ -209,7 +214,7 @@ class ProgressViewModel(
 
     /**
      * Único método público de mutação — a UI nunca acessa outros métodos.
-     * O `when` exaustivo garante que novos [ProgressIntent]s quebrem compilação
+     * O `when` exaustivo garante que novos [com.example.presentation.screens.ui.progress.ProgressIntent]s quebrem compilação
      * se não forem tratados aqui.
      */
     fun onIntent(intent: ProgressIntent) {

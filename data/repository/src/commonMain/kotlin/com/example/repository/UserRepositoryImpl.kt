@@ -2,13 +2,15 @@ package com.example.repository
 
 import com.example.local.datasource.user.UserLocalDataSource
 import com.example.remote.datasource.user.UserRemoteDataSource
-import com.example.domain.model.user.dto.UserRequestDto
+import com.example.remote.dto.user.UserRequestDto
 import com.example.remote.expect.NetworkMonitor
-import com.example.domain.model.local.User
+import com.example.domain.models.local.User
 import com.example.domain.repository.authentication.AuthRepository
 import com.example.domain.repository.dbLocal.sqldelight.user.UserRepository
-import com.example.local.mapper.UserMapper
+import com.example.local.mapper.user.UserEntityMapper
+import com.example.remote.mapper.user.UserDtoMapper
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 /**
  * Implementação do UserRepository seguindo Clean Architecture
@@ -22,96 +24,65 @@ import kotlinx.coroutines.flow.Flow
  */
 class UserRepositoryImpl(
     private val localDataSource: UserLocalDataSource,
-    private val remoteDataSource: UserRemoteDataSource,  // Adicionar quando tiver API
-    private val userMapper: UserMapper,
-    private val authRepository: AuthRepository,
-    private val networkMonitor: NetworkMonitor  // Adicionar quando tiver rede
+    private val remoteDataSource: UserRemoteDataSource,
+    private val entityMapper: UserEntityMapper,
+    private val dtoMapper: UserDtoMapper,
+    private val networkMonitor: NetworkMonitor,  // ← authRepository removido
 ) : UserRepository {
 
-    override suspend fun login(email: String, password: String): User {
-        val authResult = authRepository.login(email, password)
+    // ✅ busca local primeiro, fallback remoto
+    override suspend fun getUser(userId: String): User {
+        val local = localDataSource.getUser(userId)
+        if (local != null) return entityMapper.mapEntityToDomain(local)
 
-        // Após auth, busca dados completos do usuário na sua API
-        val userDto = remoteDataSource.getUserById(authResult.uid)
-        val user = userMapper.mapDtoToDomain(userDto)
-
-        // Persiste localmente
-        localDataSource.insertUser(user)
+        val remote = remoteDataSource.getUserById(userId)
+        val user   = dtoMapper.mapDtoToDomain(remote)
+        localDataSource.insertUser(entityMapper.mapDomainToEntity(user))
         return user
     }
 
-    override suspend fun register(email: String, password: String, userData: User): User {
-        // 1. Cria no Firebase Authentication
-        val authResult = authRepository.register(email, password)
-
-        // 2. Cria na sua API com o uid do Firebase como ID
-        val requestDto = userMapper.mapDomainToDto(
-            domain = userData.copy(id = authResult.uid.toLongOrNull() ?: 0)
-        )
-
-        val createdDto = remoteDataSource.createUser(
-            user = UserRequestDto(
-                id = requestDto.id,
-                name = requestDto.name,
-                email = requestDto.email,
-                gender = requestDto.gender,
-                birthDate = requestDto.age.toString(),
-                heightCm = requestDto.height,
-                weightKg = requestDto.weight,
-                fitnessLevel = requestDto.experienceLevel,
-                fitnessGoal = requestDto.goals,
+    // ✅ local + remoto
+    override suspend fun updateUser(user: User): User {
+        localDataSource.updateUser(entityMapper.mapDomainToEntity(user))
+        if (networkMonitor.isConnected()) {
+            remoteDataSource.updateUser(
+                userId = user.uid,
+                user   = dtoMapper.mapDomainToRequestDto(user),
             )
-        )
-        val user = userMapper.mapDtoToDomain(createdDto)
-
-        // 3. Persiste localmente
-        localDataSource.insertUser(user)
+        }
         return user
     }
 
-    override suspend fun resetPassword(email: String): Result<Unit> {
-        return authRepository.resetPassword(email)
-    }
-
-    override suspend fun logout() {
-        authRepository.logout()
-        // limpar dados locais se necessário
+    // ✅ local + remoto
+    override suspend fun deleteUser(userId: String) {
+        localDataSource.deleteUser(userId)
+        if (networkMonitor.isConnected()) {
+            remoteDataSource.deleteUser(userId)
+        }
     }
 
     override suspend fun createUser(user: User): User {
-        return try {
-            localDataSource.insertUser(user)
-            user
-        } catch (e: Exception) {
-            println("Erro ao criar usuário: ${e.message}")
-            throw e
-        }
+        // ✅ salva no Firestore via remote
+        remoteDataSource.createUser(dtoMapper.mapDomainToRequestDto(user))
+
+        // ✅ salva local
+        localDataSource.insertUser(entityMapper.mapDomainToEntity(user))
+
+        return user
     }
 
-    override suspend fun updateUser(user: User): User {
-        return try {
-            localDataSource.updateUser(user)
-            user
-        } catch (e: Exception) {
-            println("Erro ao atualizar usuário: ${e.message}")
-            throw e
-        }
-    }
+    // ✅ stream local mapeado
+    override fun observeUser(userId: String): Flow<User?> =
+        localDataSource.observeUser(userId)
+            .map { entity -> entity?.let { entityMapper.mapEntityToDomain(it) } }
 
-    override suspend fun deleteUser(userId: Long) {
-        try {
-            localDataSource.deleteUser(userId)
-        } catch (e: Exception) {
-            println("Erro ao deletar usuário: ${e.message}")
-            throw e
-        }
-    }
-
-    override fun observeUser(userId: Long): Flow<User?> = localDataSource.observeUser(userId)
-
-    override suspend fun syncOfflineData(dto: User) {
-        val dto = userMapper.mapDomainToDto(dto)    // Domínio → API
-        val user = userMapper.mapDtoToDomain(dto)            // API → Domínio
-        localDataSource.insertUser(user)                     // Domínio → Local
+    // ✅ sync quando volta conexão
+    override suspend fun syncOfflineData(user: User) {
+        if (!networkMonitor.isConnected()) return
+        remoteDataSource.updateUser(
+            userId = user.uid,
+            user   = dtoMapper.mapDomainToRequestDto(user),
+        )
+        localDataSource.insertUser(entityMapper.mapDomainToEntity(user))
     }
 }

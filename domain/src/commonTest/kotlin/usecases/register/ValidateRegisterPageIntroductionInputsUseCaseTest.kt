@@ -1,7 +1,5 @@
 package usecases.register
 
-import com.example.domain.model.register.RegisterPageIntroductionValidationType
-import com.example.domain.usecase.register.ValidateRegisterPageIntroductionUseCase
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

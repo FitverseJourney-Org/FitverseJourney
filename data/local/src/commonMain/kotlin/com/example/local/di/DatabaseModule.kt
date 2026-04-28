@@ -21,8 +21,6 @@ val databaseModule = module {
     // SQLDELIGHT
     single { DatabaseSqlDeLightHelper(driverFactory = get()) }
 
-    singleOf(::DatabaseSqlDeLightHelper) { bind<DatabaseSqlDeLightHelper>() }
-
     // DATASTORE
     single<DataStore<Preferences>> { DataStoreFactory.dataStore }
 }

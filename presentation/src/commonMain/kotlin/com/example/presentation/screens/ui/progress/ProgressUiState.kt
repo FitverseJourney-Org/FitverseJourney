@@ -1,9 +1,9 @@
 package com.example.presentation.screens.ui.progress
 
 import androidx.compose.runtime.Immutable
-import com.example.domain.model.progress.Exercise
-import com.example.domain.model.progress.ProgressionInsight
-import com.example.domain.model.progress.ProgressionStats
+import com.example.domain.models.progress.Exercise
+import com.example.domain.models.progress.ProgressionInsight
+import com.example.domain.models.progress.ProgressionStats
 import ir.ehsannarmani.compose_charts.models.Line
 
 /**

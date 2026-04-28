@@ -2,9 +2,9 @@ package com.example.remote.util
 
 object ApiConstants {
     // Base URLs
-    const val BASE_URL = "http://localhost:8080"
+    //const val BASE_URL = "http://localhost:8080"
     const val BASE_URL_DEV = "https://dev-api.fitverseapp.com/v1"
-
+    const val BASE_URL = "http://10.0.2.2:8080"
     // Endpoints
     object Endpoints {
         // User

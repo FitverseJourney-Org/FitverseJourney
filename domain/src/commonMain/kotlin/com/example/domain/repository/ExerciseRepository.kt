@@ -1,6 +1,6 @@
 package com.example.domain.repository
 
-import com.example.domain.model.progress.Exercise
+import com.example.domain.models.progress.Exercise
 import kotlinx.coroutines.flow.Flow
 
 /**

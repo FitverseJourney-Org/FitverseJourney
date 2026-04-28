@@ -2,9 +2,7 @@ package com.example.presentation.screens.ui.onboarding.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.repository.dbLocal.datastore.AppPreferencesRepository
-import com.example.domain.usecase.database.datastore.onboarding.ObserveOnboardingCompletedUseCase
-import com.example.domain.usecase.database.datastore.onboarding.SetOnboardingCompletedUseCase
+import com.example.domain.usecase.db.datastore.onboarding.SetOnboardingCompletedUseCase
 import com.example.presentation.navigationState.OnboardingNavigation
 import com.example.presentation.screens.ui.onboarding.state.OnboardingState
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -12,7 +10,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 

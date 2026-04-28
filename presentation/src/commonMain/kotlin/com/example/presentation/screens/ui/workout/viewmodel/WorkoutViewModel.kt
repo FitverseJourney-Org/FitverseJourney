@@ -1,5 +1,7 @@
 package com.example.presentation.screens.ui.workout.viewmodel
 
-class WorkoutViewModel() {
+import androidx.lifecycle.ViewModel
+
+class WorkoutViewModel() : ViewModel() {
 
 }

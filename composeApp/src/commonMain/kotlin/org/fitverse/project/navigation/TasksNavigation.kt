@@ -9,8 +9,8 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
-import com.example.domain.model.dashboard.TaskIcon
-import com.example.domain.model.dashboard.TaskItem
+import com.example.domain.models.dashboard.TaskIcon
+import com.example.domain.models.dashboard.TaskItem
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import org.fitverse.project.destinations.modal_destinations.tasks.TasksDestination

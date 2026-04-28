@@ -1,7 +1,5 @@
 package usecases.register
 
-import com.example.domain.model.register.RegisterPageCredentialsValidationType
-import com.example.domain.usecase.register.ValidateRegisterPageCredentialsUseCase
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

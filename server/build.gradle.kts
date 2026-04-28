@@ -17,6 +17,7 @@ application {
 }
 
 dependencies {
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
     // Ktor Core & Engine
     implementation(libs.ktor.server.core)
     implementation(libs.ktor.server.netty)
@@ -28,9 +29,12 @@ dependencies {
     implementation(libs.ktor.server.cors)
     implementation(libs.ktor.serialization.kotlinx.json.jvm)
 
+
+
     // firebase
     implementation(libs.firebase.admin)
     implementation(libs.kotlinx.coroutines.core)
+    // kotlinx-coroutines-play-services
 
     // koin
     implementation(project.dependencies.platform(libs.koin.bom))

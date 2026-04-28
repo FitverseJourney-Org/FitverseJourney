@@ -1,8 +1,5 @@
 package usecases.register
 
-import com.example.domain.model.authentication.register.RegisterGoal
-import com.example.domain.model.register.RegisterPageGoalsValidationType
-import com.example.domain.usecase.register.ValidateRegisterPageGoalsUseCase
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

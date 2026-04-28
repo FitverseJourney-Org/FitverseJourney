@@ -13,22 +13,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.Assignment
 import androidx.compose.material.icons.automirrored.rounded.Help
 import androidx.compose.material.icons.automirrored.rounded.Logout
-import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.rounded.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation3.runtime.NavKey
-import com.example.presentation.theme.DarkGamifiedColors
 import org.fitverse.project.routes.NavRoutes
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,7 +38,7 @@ fun ModalDrawerSheetMainScreen(
     val colors = MaterialTheme.colorScheme
 
     ModalNavigationDrawer(
-        drawerState = drawerState,
+        drawerState = if(gesturesEnabled) drawerState else DrawerState(DrawerValue.Closed),
         gesturesEnabled = gesturesEnabled,
         scrimColor = Color.Black.copy(alpha = 0.85f), // Scrim denso para foco no menu
         drawerContent = {
@@ -121,7 +116,7 @@ fun ModalDrawerSheetMainScreen(
                             title = "Free Plan",
                             subtitle = "Upgrade",
                             accentColor = colors.primary, // Roxo para ações de "Energia/Upgrade"
-                            onClick = { onNavigate(NavRoutes.PlanPaymentScreen) }
+                            onClick = { onNavigate(NavRoutes.PlanPayment) }
                         )
                         QuickActionWidget(
                             modifier = Modifier.weight(1f),
@@ -129,7 +124,7 @@ fun ModalDrawerSheetMainScreen(
                             title = "Referrals",
                             subtitle = "Earn Pts",
                             accentColor = colors.secondary, // Azul para utilitários
-                            onClick = { onNavigate(NavRoutes.PlanPaymentScreen) }
+                            onClick = { onNavigate(NavRoutes.PlanPayment) }
                         )
                     }
 

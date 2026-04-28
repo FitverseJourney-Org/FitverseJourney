@@ -53,6 +53,18 @@
     <string name="login_forget_password">Forgot password?</string>
 
 
+    <!-- Register Resources Strings -->
+    <string name="register_title">Create your account</string>
+    <!-- ERRORS -->
+    <string name="error_blank">This field cannot be blank</string>
+    <string name="error_too_short">Value is too short</string>
+    <string name="error_too_long">Value is too long</string>
+    <string name="error_invalid_format">Invalid format</string>
+    <string name="error_invalid_age">Age must be between 13 and 100 years</string>
+    <string name="error_out_of_range">Value out of allowed range</string>
+    <string name="error_invalid_date">Invalid date</string>
+    <string name="error_required">This field is required</string>
+
 
     <!-- FRIENDS -->
     <!-- Screen titles -->

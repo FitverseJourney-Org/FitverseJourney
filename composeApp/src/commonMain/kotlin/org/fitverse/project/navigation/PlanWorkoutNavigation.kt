@@ -9,10 +9,10 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
+import com.example.domain.models.workout.workout_plan.WorkoutPlanItem
+import com.example.domain.models.workout.workout_plan.WorkoutScreenState
 import com.example.presentation.screens.ui.planWorkout.WorkoutAiPlanGenerationDestination
-import com.example.presentation.screens.ui.planWorkout.WorkoutPlanItem
 import com.example.presentation.screens.ui.planWorkout.WorkoutPlanListScreen
-import com.example.presentation.screens.ui.planWorkout.WorkoutScreenState
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import org.fitverse.project.destinations.homepage.workout.WorkoutPlanBuilderDestination

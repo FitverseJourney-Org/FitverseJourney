@@ -14,7 +14,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import com.example.presentation.theme.DarkGamifiedColors
 import kotlin.random.Random
 import kotlin.math.PI
 import kotlin.math.sin

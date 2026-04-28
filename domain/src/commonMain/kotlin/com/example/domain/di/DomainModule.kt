@@ -1,83 +1,88 @@
 package com.example.domain.di
 
-
-import com.example.domain.usecase.database.datastore.authentication.ObserveIsAuthenticatedUseCase
-import com.example.domain.usecase.database.datastore.authentication.SetIsAuthenticatedUseCase
-import com.example.domain.usecase.database.datastore.language.ChangeAppLanguageUseCase
-import com.example.domain.usecase.database.datastore.language.GetAppLanguageUseCase
-import com.example.domain.usecase.database.datastore.language.GetLocaleLanguageAppUseCase
-import com.example.domain.usecase.database.datastore.language.SetNewAppLanguageUseCase
-import com.example.domain.usecase.database.datastore.onboarding.ObserveOnboardingCompletedUseCase
-import com.example.domain.usecase.database.datastore.onboarding.SetOnboardingCompletedUseCase
+// ── Auth ──────────────────────────────────────────────────────────────────────
 import com.example.domain.usecase.login.LoginUseCase
+import com.example.domain.usecase.register.RegisterUseCase
+import com.example.domain.usecase.reset.ResetPasswordUseCase
+// ── DataStore — Authentication ────────────────────────────────────────────────
+import com.example.domain.usecase.db.datastore.authentication.ObserveIsAuthenticatedUseCase
+import com.example.domain.usecase.db.datastore.authentication.SetIsAuthenticatedUseCase
+// ── DataStore — Onboarding ────────────────────────────────────────────────────
+import com.example.domain.usecase.db.datastore.onboarding.ObserveOnboardingCompletedUseCase
+import com.example.domain.usecase.db.datastore.onboarding.SetOnboardingCompletedUseCase
+// ── DataStore — Language ──────────────────────────────────────────────────────
+import com.example.domain.usecase.db.datastore.language.GetAppLanguageUseCase
+import com.example.domain.usecase.db.datastore.language.SetNewAppLanguageUseCase
+import com.example.domain.usecase.db.datastore.language.ChangeAppLanguageUseCase
+import com.example.domain.usecase.db.datastore.language.GetLocaleLanguageAppUseCase
+// ── Progression ───────────────────────────────────────────────────────────────
 import com.example.domain.usecase.progression.BuildProgressionInsightUseCase
 import com.example.domain.usecase.progression.GetExercisesByTrainingSplitUseCase
 import com.example.domain.usecase.progression.GetProgressionDataUseCase
 import com.example.domain.usecase.progression.GetTrainingSplitsUseCase
-import com.example.domain.usecase.register.RegisterUseCase
-import com.example.domain.usecase.register.ValidateRegisterPageAvatarUseCase
-import com.example.domain.usecase.register.ValidateRegisterPageCredentialsUseCase
-import com.example.domain.usecase.register.ValidateRegisterPageExperienceLevelUseCase
-import com.example.domain.usecase.register.ValidateRegisterPageGenderUseCase
-import com.example.domain.usecase.register.ValidateRegisterPageGoalsUseCase
-import com.example.domain.usecase.register.ValidateRegisterPageIntroductionUseCase
-import com.example.domain.usecase.register.ValidateRegisterPageMacrosUseCase
-import com.example.domain.usecase.reset.ResetPasswordUseCase
+// ── Wiki ──────────────────────────────────────────────────────────────────────
 import com.example.domain.usecase.wiki.GetWikiArticlesUseCase
 import com.example.domain.usecase.wiki.SearchWikiArticlesUseCase
 import com.example.domain.usecase.wiki.ToggleBookmarkUseCase
+// ── Friends ───────────────────────────────────────────────────────────────────
+
+// ── Plan ──────────────────────────────────────────────────────────────────────
+import com.example.domain.usecase.activatePlan.ActivatePlanUseCase
 import org.koin.dsl.module
 
-val domainModule = module {
 
+
+val AuthUseCase = module {
     factory {
         LoginUseCase(
-            authRepository = get()
-        )
-    }
-    factory {
-        ResetPasswordUseCase(
+            userRepository = get(),
             authRepository = get()
         )
     }
     factory {
         RegisterUseCase(
+            userRepository = get(),
             authRepository = get()
         )
     }
-
-    // authentication
+    factory {
+        ResetPasswordUseCase(authRepository = get())
+    }
+}
+val datastoreUseCase = module {
+    // ── DataStore — Authentication ────────────────────────────────────────────
     factory { ObserveIsAuthenticatedUseCase(repository = get()) }
-    factory { ObserveOnboardingCompletedUseCase(repository = get()) }
-
-    // onboarding
     factory { SetIsAuthenticatedUseCase(repository = get()) }
+
+    // ── DataStore — Onboarding ────────────────────────────────────────────────
+    factory { ObserveOnboardingCompletedUseCase(repository = get()) }
     factory { SetOnboardingCompletedUseCase(repository = get()) }
 
-    // languages
+    // ── DataStore — Language ──────────────────────────────────────────────────
     factory { GetAppLanguageUseCase(get()) }
     factory { SetNewAppLanguageUseCase(get()) }
     factory { ChangeAppLanguageUseCase(get()) }
     factory { GetLocaleLanguageAppUseCase(get()) }
-
-    // register
-    factory { ValidateRegisterPageIntroductionUseCase() }
-    factory { ValidateRegisterPageExperienceLevelUseCase() }
-    factory { ValidateRegisterPageAvatarUseCase() }
-    factory { ValidateRegisterPageMacrosUseCase() }
-    factory { ValidateRegisterPageGenderUseCase() }
-    factory { ValidateRegisterPageGoalsUseCase() }
-    factory { ValidateRegisterPageCredentialsUseCase() }
-
-    // progress
-    factory { BuildProgressionInsightUseCase() }
+}
+val progressionUseCase = module {
+    factory { GetTrainingSplitsUseCase(exerciseRepository = get()) }
     factory { GetExercisesByTrainingSplitUseCase(exerciseRepository = get()) }
     factory { GetProgressionDataUseCase(progressionRepository = get()) }
-    factory { GetTrainingSplitsUseCase(exerciseRepository = get()) }
-
-    // wiki
-    factory { ToggleBookmarkUseCase(get()) }
-    factory { SearchWikiArticlesUseCase(get()) }
-    factory { GetWikiArticlesUseCase(get()) }
-
+    factory { BuildProgressionInsightUseCase() }
 }
+val wikiUseCase = module {
+    factory { GetWikiArticlesUseCase(get()) }
+    factory { SearchWikiArticlesUseCase(get()) }
+    factory { ToggleBookmarkUseCase(get()) }
+}
+val planUseCase = module {
+    factory { ActivatePlanUseCase(get()) }
+}
+
+val domainModule = listOf(
+    AuthUseCase,
+    datastoreUseCase,
+    progressionUseCase,
+    wikiUseCase,
+    planUseCase
+)

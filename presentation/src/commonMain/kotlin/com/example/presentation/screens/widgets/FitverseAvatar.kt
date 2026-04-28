@@ -45,8 +45,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.presentation.screens.ui.dashboard.AvatarState
-import com.example.presentation.theme.DarkGamifiedColors
+import com.example.presentation.screens.ui.dashboard.state.AvatarState
 
 @Composable
 fun FitverseAvatarCard(

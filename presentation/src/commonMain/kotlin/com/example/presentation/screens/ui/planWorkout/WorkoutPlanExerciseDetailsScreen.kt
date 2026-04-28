@@ -36,6 +36,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.domain.models.workout.workout_plan.ExerciseLibraryItem
+import com.example.presentation.screens.ui.planWorkout.components.MuscleTag
 import com.example.presentation.screens.widgets.FitverseTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -181,20 +183,3 @@ fun WorkoutPLanExerciseDetailsScreen(
     }
 }
 
-@Composable
-fun MuscleTag(name: String, isPrimary: Boolean) {
-    val color = if (isPrimary) MaterialTheme.colorScheme.secondary else Color.Gray.copy(alpha = 0.5f)
-    Surface(
-        shape = CircleShape,
-        color = color.copy(alpha = 0.1f),
-        border = BorderStroke(1.dp, color.copy(alpha = 0.5f))
-    ) {
-        Text(
-            name.uppercase(),
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
-            fontSize = 10.sp,
-            fontWeight = FontWeight.Bold,
-            color = if (isPrimary) color else Color.White
-        )
-    }
-}

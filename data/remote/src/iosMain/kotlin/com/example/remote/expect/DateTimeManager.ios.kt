@@ -1,10 +1,8 @@
 package com.example.remote.expect
 
-import com.example.domain.models.PlatformDate
 import platform.Foundation.NSCalendar
 import platform.Foundation.NSCalendarUnitYear
 import platform.Foundation.NSDate
-import platform.Foundation.NSDateComponents
 import platform.Foundation.NSDateFormatter
 import platform.Foundation.NSTimeZone
 import platform.Foundation.dateWithTimeIntervalSince1970
@@ -26,23 +24,6 @@ actual object DateTimeManager {
         formatter.dateFormat = "dd/MM/yyyy"
         formatter.timeZone = NSTimeZone.timeZoneWithName("UTC")!!
         return formatter.stringFromDate(date)
-    }
-
-    actual fun dateTimeCreate(
-        day: Int,
-        month: Int,
-        year: Int
-    ): PlatformDate {
-        val components = NSDateComponents()
-        components.day = day.toLong()
-        components.month = month.toLong()
-        components.year = year.toLong()
-
-        val calendar = NSCalendar.currentCalendar
-        val date = calendar.dateFromComponents(components) ?: NSDate()
-        val epochDay = (date.timeIntervalSince1970 / 86400).toLong()
-
-        return PlatformDate(day, month, year, epochDay)
     }
 
     actual fun dateTimeNowMillis(): Long {

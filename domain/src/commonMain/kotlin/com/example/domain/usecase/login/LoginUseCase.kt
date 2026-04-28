@@ -1,29 +1,19 @@
 package com.example.domain.usecase.login
 
-import com.example.domain.model.authentication.login.UserToken
+import com.example.domain.models.local.User
 import com.example.domain.repository.authentication.AuthRepository
+import com.example.domain.repository.dbLocal.sqldelight.user.UserRepository
 
 class LoginUseCase(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val userRepository: UserRepository,
 ) {
-    suspend operator fun invoke(email: String, password: String): Result<UserToken> {
-        // 1. Valide PRIMEIRO
-        if (email.isBlank() || password.isBlank()) {
-            return Result.failure(Exception("Preencha todos os campos"))
-        }
+    suspend operator fun invoke(email: String, password: String): Result<User> =
+        runCatching {
+            // 1. autentica e obtém o uid
+            val authResult = authRepository.login(email, password)
 
-        // 2. Tente a operação de rede apenas se os dados forem válidos
-        return try {
-            val result = authRepository.login(email, password)
-
-            if (result.token == null) {
-                Result.failure(Exception("Login failed: Token nulo"))
-            } else {
-                Result.success(UserToken(result.token))
-            }
-        } catch (e: Exception) {
-            // Captura erros do Firebase (credenciais inválidas, rede, etc)
-            Result.failure(e)
+            // 2. busca o perfil do usuário
+            userRepository.getUser(authResult.uid)
         }
-    }
 }

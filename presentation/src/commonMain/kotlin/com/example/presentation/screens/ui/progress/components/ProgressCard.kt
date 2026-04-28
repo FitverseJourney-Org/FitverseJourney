@@ -7,12 +7,9 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -33,9 +30,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.domain.model.progress.InsightLevel
-import com.example.domain.model.progress.ProgressionInsight
-import com.example.domain.model.progress.ProgressionStats
+import com.example.domain.models.progress.InsightLevel
+import com.example.domain.models.progress.ProgressionInsight
+import com.example.domain.models.progress.ProgressionStats
 import com.example.presentation.utils.formatDecimalKmp
 
 // ─────────────────────────────────────────────────────────────────────────────

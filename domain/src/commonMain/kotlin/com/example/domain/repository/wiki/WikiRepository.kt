@@ -1,7 +1,7 @@
 package com.example.domain.repository.wiki
 
-import com.example.domain.model.wiki.WikiArticle
-import com.example.domain.model.wiki.WikiCategory
+import com.example.domain.models.wiki.WikiArticle
+import com.example.domain.models.wiki.WikiCategory
 import kotlinx.coroutines.flow.Flow
 
 /**
