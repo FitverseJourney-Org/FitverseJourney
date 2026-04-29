@@ -108,9 +108,7 @@ fun DashboardScreen(
             }
         )
     }
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        content = {
+    Box(modifier = Modifier.fillMaxSize(), content = {
             DarkGamifiedDashboardBackground()
             Scaffold(
                 modifier = Modifier.fillMaxSize(),
@@ -206,9 +204,7 @@ fun DashboardScreen(
                     }
                 }
             )
-        }
-    )
-
+        })
 }
 @Composable
 fun DarkGamifiedDashboardBackground(

@@ -2,55 +2,75 @@
 <resources>
     <string name="app_name">FitverseJourneyApp</string>
 
+
     <!-- Onboarding Resources Strings -->
-
-
     <string name="onboarding_title_1">Track your workouts</string>
     <string name="onboarding_description_1">Easily log your exercises, sets, and repetitions.\nTrack your progress and stay consistent with your training.</string>
-
     <string name="onboarding_title_2">Fuel your body properly</string>
     <string name="onboarding_description_2">Get smart nutrition tips tailored to your goals.\nLearn what, when, and how to eat to improve your performance.</string>
-
     <string name="onboarding_title_3">Train with AI</string>
     <string name="onboarding_description_3">Personalized workouts powered by artificial intelligence.\nAdapt your training to performance, recovery, and progress.</string>
-
     <string name="onboarding_title_4">Share with friends</string>
     <string name="onboarding_description_4">Stay motivated by sharing progress and achievements.\nTrain together, challenge friends, and celebrate every milestone.</string>
 
-    <!-- Trial Resources Strings -->
-    <string name="trial_flag_day_trial_title">7-day trial</string>
-    <string name="trial_rocket">🚀</string>
-    <string name="trial_title_1">Unlock your personalized training plan</string>
-    <string name="trial_description_1">Try Premium free for 7 days — personalized workouts, insights and premium plans.</string>
 
-    <string name="trial_card_title">FITVERSE PREMIUM</string>
-    <string name="trial_card_description_1">Personalized AI workouts</string>
-    <string name="trial_card_description_2">Detailed performance analytics</string>
-    <string name="trial_card_description_3">Exclusive training plans &amp; challenges</string>
-    <string name="trial_card_description_4">Ad-free experience</string>
-    <string name="trial_card_description_5">7-day free trial — cancel anytime</string>
-    <string name="trial_cta_text">Start 7-day Free Trial</string>
-    <string name="trial_trust_message_1">No payment now • Cancel anytime</string>
-    <string name="trial_trust_message_2">Then $9.99/month</string>
-    <string name="trial_footer_text">Try everything free for 7 days — cancel anytime.</string>
+    <!-- Trial Page -->
+    <string name="trial_title">CHOOSE YOUR PLAN</string>
+    <string name="trial_subtitle">Unlock your full potential</string>
+    <string name="trial_activate_button">Activate Plan</string>
+    <string name="trial_dismiss">Continue without a Plan</string>
+    <string name="trial_most_popular">MOST POPULAR</string>
 
-    <!-- Authentication Resources Strings -->
-    <string name="home_auth_title">Train like a hero.\nLog your journey</string>
-    <string name="home_auth_btn_signUp">SIGN UP FREE</string>
-    <string name="home_auth_btn_google">Continue with Google</string>
-    <string name="home_auth_btn_facebook">Continue with Facebook</string>
-    <string name="home_auth_btn_apple">Continue with Apple</string>
-    <string name="home_auth_btn_loginIn">Log in</string>
+    <!-- Pricing -->
+    <string name="trial_price_free">Free</string>
+    <string name="trial_price_days">7 days</string>
+    <string name="trial_price_month">/month</string>
+
+    <!-- Plan Names -->
+    <string name="trial_plan_name_trial">Trial</string>
+    <string name="trial_plan_name_pro">Pro</string>
+    <string name="trial_plan_name_elite">Elite</string>
+
+    <!-- Features — Trial -->
+    <string name="trial_feature_basic_access">Basic access</string>
+    <string name="trial_feature_workouts_per_week">3 workouts/week</string>
+    <string name="trial_feature_basic_missions">Basic missions</string>
+    <string name="trial_feature_community">Community</string>
+
+    <!-- Features — Pro -->
+    <string name="trial_feature_unlimited_workouts">Unlimited workouts</string>
+    <string name="trial_feature_ai_plans">AI plans</string>
+    <string name="trial_feature_all_features">All features</string>
+    <string name="trial_feature_no_ads">No ads</string>
+
+    <!-- Features — Elite -->
+    <string name="trial_feature_everything_pro">Everything in PRO</string>
+    <string name="trial_feature_ai_nutritionist">AI Nutritionist</string>
+    <string name="trial_feature_coaching">1:1 Coaching</string>
+    <string name="trial_feature_nft_badges">NFT badges</string>
 
 
-    <string name="login_title">Start your journey!</string>
-    <string name="login_subtitle">Train at your own pace.</string>
-    <string name="login_email_label">Email</string>
-    <string name="login_password_label">Password</string>
-    <string name="login_button_text">Enter</string>
-    <string name="login_not_account">Don’t have an account?</string>
-    <string name="login_sign_up">Sign Up</string>
-    <string name="login_forget_password">Forgot password?</string>
+    <!-- Login Page -->
+    <string name="login_welcome_title">WELCOME</string>
+    <string name="login_welcome_subtitle">BACK, WARRIOR</string>
+
+    <!-- Fields -->
+    <string name="login_field_email_label">E-MAIL</string>
+    <string name="login_field_email_placeholder">your@email.com</string>
+    <string name="login_field_password_label">PASSWORD</string>
+    <string name="login_field_password_placeholder">•••••••••••</string>
+
+    <!-- Actions -->
+    <string name="login_forgot_password">Forgot my password</string>
+    <string name="login_button_enter">Sign in</string>
+    <string name="login_select_language">Select language</string>
+
+    <!-- Divider -->
+    <string name="login_or_continue_with">or continue with</string>
+
+    <!-- Sign up -->
+    <string name="login_no_account">Don\'t have an account? </string>
+    <string name="login_create_account">Create account</string>
 
 
     <!-- Register Resources Strings -->

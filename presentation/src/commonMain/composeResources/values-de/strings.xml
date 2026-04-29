@@ -2,6 +2,10 @@
 <resources>
     <string name="app_name">Fitverse Journey</string>
 
+
+    <!-- =============================================================== -->
+    <!-- Onboarding Page -->
+    <!-- =============================================================== -->
     <string name="onboarding_title_1">Trainings verfolgen</string>
     <string name="onboarding_description_1">Erfasse deine Übungen, Sätze und Wiederholungen ganz einfach.\nVerfolge deinen Fortschritt und bleibe konstant bei deinem Training.</string>
 
@@ -15,31 +19,66 @@
     <string name="onboarding_description_4">Bleibe motiviert, indem du Fortschritte und Erfolge teilst.\nTrainiere gemeinsam, fordere Freunde heraus und feiere jeden Meilenstein.</string>
 
 
-    <string name="trial_flag_day_trial_title">7 Tage Testversion</string>
-    <string name="trial_rocket">🚀</string>
-    <string name="trial_title_1">Schalte deinen personalisierten Trainingsplan frei</string>
-    <string name="trial_description_1">Teste Premium 7 Tage kostenlos — personalisierte Workouts, Analysen und Premium-Pläne.</string>
-    <string name="trial_card_title">FITVERSE PREMIUM</string>
-    <string name="trial_card_description_1">Personalisierte KI-Workouts</string>
-    <string name="trial_card_description_2">Detaillierte Leistungsanalysen</string>
-    <string name="trial_card_description_3">Exklusive Trainingspläne &amp; Challenges</string>
-    <string name="trial_card_description_4">Werbefreies Erlebnis</string>
-    <string name="trial_card_description_5">7 Tage kostenlos testen — jederzeit kündbar</string>
-    <string name="trial_cta_text">7 Tage kostenlos testen</string>
-    <string name="trial_trust_message_1">Keine Zahlung jetzt • Jederzeit kündbar</string>
-    <string name="trial_trust_message_2">Danach 9,99 $/Monat</string>
-    <string name="trial_footer_text">Teste alles 7 Tage kostenlos — jederzeit kündbar.</string>
+    <!-- =============================================================== -->
+    <!-- Trial Page -->
+    <!-- =============================================================== -->
+    <string name="trial_title">WÄHLE DEINEN PLAN</string>
+    <string name="trial_subtitle">Entfalte dein volles Potenzial</string>
+    <string name="trial_activate_button">Plan aktivieren</string>
+    <string name="trial_dismiss">Ohne Plan fortfahren</string>
+    <string name="trial_most_popular">AM BELIEBTESTEN</string>
 
+    <!-- Pricing -->
+    <string name="trial_price_free">Kostenlos</string>
+    <string name="trial_price_days">7 Tage</string>
+    <string name="trial_price_month">/Monat</string>
 
+    <!-- Plan Names -->
+    <string name="trial_plan_name_trial">Trial</string>
+    <string name="trial_plan_name_pro">Pro</string>
+    <string name="trial_plan_name_elite">Elite</string>
 
-    <string name="login_title">Starte deine Reise!</string>
-    <string name="login_subtitle">Trainiere in deinem eigenen Tempo.</string>
-    <string name="login_email_label">E-Mail</string>
-    <string name="login_password_label">Passwort</string>
-    <string name="login_button_text">Einloggen</string>
-    <string name="login_not_account">Noch kein Konto?</string>
-    <string name="login_sign_up">Registrieren</string>
-    <string name="login_forget_password">Passwort vergessen?</string>
+    <!-- Features — Trial -->
+    <string name="trial_feature_basic_access">Basiszugang</string>
+    <string name="trial_feature_workouts_per_week">3 Trainings/Woche</string>
+    <string name="trial_feature_basic_missions">Grundlegende Missionen</string>
+    <string name="trial_feature_community">Gemeinschaft</string>
+
+    <!-- Features — Pro -->
+    <string name="trial_feature_unlimited_workouts">Unbegrenzte Trainings</string>
+    <string name="trial_feature_ai_plans">KI-Pläne</string>
+    <string name="trial_feature_all_features">Alle Funktionen</string>
+    <string name="trial_feature_no_ads">Keine Werbung</string>
+
+    <!-- Features — Elite -->
+    <string name="trial_feature_everything_pro">Alles aus PRO</string>
+    <string name="trial_feature_ai_nutritionist">KI-Ernährungsberater</string>
+    <string name="trial_feature_coaching">1:1 Coaching</string>
+    <string name="trial_feature_nft_badges">NFT-Abzeichen</string>
+
+    <!-- =============================================================== -->
+    <!-- Login Page -->
+    <!-- =============================================================== -->
+    <string name="login_welcome_title">WILLKOMMEN</string>
+    <string name="login_welcome_subtitle">ZURÜCK, KRIEGER</string>
+
+    <!-- Fields -->
+    <string name="login_field_email_label">E-MAIL</string>
+    <string name="login_field_email_placeholder">deine@email.com</string>
+    <string name="login_field_password_label">PASSWORT</string>
+    <string name="login_field_password_placeholder">•••••••••••</string>
+
+    <!-- Actions -->
+    <string name="login_forgot_password">Passwort vergessen</string>
+    <string name="login_button_enter">Anmelden</string>
+    <string name="login_select_language">Sprache auswählen</string>
+
+    <!-- Divider -->
+    <string name="login_or_continue_with">oder weiter mit</string>
+
+    <!-- Sign up -->
+    <string name="login_no_account">Noch kein Konto? </string>
+    <string name="login_create_account">Konto erstellen</string>
 
 
 </resources>

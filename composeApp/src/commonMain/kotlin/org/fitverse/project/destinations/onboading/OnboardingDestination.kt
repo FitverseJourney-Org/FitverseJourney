@@ -3,17 +3,11 @@ package org.fitverse.project.destinations.onboading
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import com.example.presentation.navigationState.OnboardingNavigation
 import com.example.presentation.screens.ui.dashboard.DarkGamifiedDashboardBackground
 import com.example.presentation.screens.ui.onboarding.OnboardingScreen
-import com.example.presentation.screens.ui.onboarding.viewmodel.OnboardingViewModel
 import com.example.presentation.screens.ui.onboarding.state.OnboardingState
-import kotlinx.coroutines.flow.collectLatest
-import org.koin.compose.koinInject
+import com.example.presentation.screens.ui.onboarding.viewmodel.OnboardingViewModel
 
 @Composable
 fun OnboardingDestination(
@@ -24,25 +18,28 @@ fun OnboardingDestination(
     toLogin: () -> Unit
 
 ) {
-    Box(modifier = Modifier.fillMaxSize()){
-        DarkGamifiedDashboardBackground()
-        OnboardingScreen(
-            state = state,
-            viewmodel = viewmodel,
-            emitToTrial = {
-                viewmodel.emitToTrial()
-            },
-            emitToNewAccount = {
-                viewmodel.emitToNewAccount()
-            },
-            emitToLogin = {
-                viewmodel.emitToLogin()
-            },
-            toTrial = toTrial,
-            toNewAccount = toNewAccount,
-            toLogin = toLogin
-        )
-    }
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        content = {
+            DarkGamifiedDashboardBackground()
+            OnboardingScreen(
+                state = state,
+                viewmodel = viewmodel,
+                emitToTrial = {
+                    viewmodel.emitToTrial()
+                },
+                emitToNewAccount = {
+                    viewmodel.emitToNewAccount()
+                },
+                emitToLogin = {
+                    viewmodel.emitToLogin()
+                },
+                toTrial = toTrial,
+                toNewAccount = toNewAccount,
+                toLogin = toLogin
+            )
+        }
+    )
 }
 
 
