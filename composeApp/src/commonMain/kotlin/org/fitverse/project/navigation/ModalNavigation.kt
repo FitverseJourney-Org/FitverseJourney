@@ -38,7 +38,7 @@ fun ModalDrawerSheetMainScreen(
     val colors = MaterialTheme.colorScheme
 
     ModalNavigationDrawer(
-        drawerState = if(gesturesEnabled) drawerState else DrawerState(DrawerValue.Closed),
+        drawerState = drawerState,
         gesturesEnabled = gesturesEnabled,
         scrimColor = Color.Black.copy(alpha = 0.85f), // Scrim denso para foco no menu
         drawerContent = {

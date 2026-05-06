@@ -5,13 +5,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.presentation.screens.ui.dashboard.DarkGamifiedDashboardBackground
-import com.example.presentation.screens.ui.meals.MealsScreen
+import com.example.presentation.ui.meals.MealsScreen
+import com.example.presentation.widgets.DarkGamifiedDashboardBackground
 
 @Composable
-fun MealsDestination() {
+fun MealsDestination(onBottomSheetOpen: (Boolean) -> Unit = {}) {
     Box(modifier = Modifier.fillMaxSize()){
         DarkGamifiedDashboardBackground()
-        MealsScreen()
+        MealsScreen(onBottomSheetOpen = onBottomSheetOpen)
     }
 }

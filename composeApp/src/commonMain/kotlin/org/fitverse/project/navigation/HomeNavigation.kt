@@ -5,8 +5,10 @@ import LeaderboardsDestination
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -28,6 +30,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -44,16 +50,19 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
-import com.example.presentation.screens.ui.achievements.viewmodel.AchievementsViewModel
-import com.example.presentation.screens.ui.community.CommunityScreen
-import com.example.presentation.screens.ui.friends.viewmodel.FriendsViewModel
-import com.example.presentation.screens.ui.historic.viewmodel.HistoricViewModel
-import com.example.presentation.screens.ui.meals.viewmodel.NutritionViewModel
-import com.example.presentation.screens.ui.notification.NotificationViewModel
-import com.example.presentation.screens.ui.progress.viewmodel.ProgressViewModel
-import com.example.presentation.screens.ui.wiki.viewmodel.WikiViewModel
-import com.example.presentation.screens.ui.workout.viewmodel.WorkoutSessionViewModel
-import com.example.presentation.screens.ui.workout.viewmodel.WorkoutViewModel
+import com.example.domain.models.levelUp.LevelUpData
+import com.example.domain.repository.authentication.AuthRepository
+import com.example.presentation.ui.achievements.viewmodel.AchievementsViewModel
+import org.fitverse.project.destinations.homepage.community.CommunityDestination
+import com.example.presentation.ui.friends.viewmodel.FriendsViewModel
+import com.example.presentation.ui.historic.viewmodel.HistoricViewModel
+import com.example.presentation.ui.meals.viewmodel.NutritionViewModel
+import com.example.presentation.ui.notification.NotificationViewModel
+import com.example.presentation.ui.progress.viewmodel.ProgressViewModel
+import com.example.presentation.ui.wiki.viewmodel.WikiViewModel
+import com.example.presentation.ui.workout.viewmodel.WorkoutSessionViewModel
+import com.example.presentation.ui.workout.viewmodel.WorkoutViewModel
+import com.example.presentation.widgets.LevelUpScreen
 import kotlinx.coroutines.launch
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
@@ -69,7 +78,6 @@ import org.fitverse.project.destinations.modal_destinations.device.DevicesDestin
 import org.fitverse.project.destinations.modal_destinations.friends.FriendsDestination
 import org.fitverse.project.destinations.modal_destinations.helpSupport.HelpSupportDestination
 import org.fitverse.project.destinations.modal_destinations.progress.ProgressDestination
-import org.fitverse.project.destinations.modal_destinations.tasks.TasksDestination
 import org.fitverse.project.destinations.payments.PlanPaymentDestination
 import org.fitverse.project.destinations.shopping.ShoppingDestination
 import org.fitverse.project.destinations.wiki.WikiFitnessDestination
@@ -78,7 +86,9 @@ import org.fitverse.project.routes.NavRoutes
 import org.koin.compose.koinInject
 
 @Composable
-fun HomeNavigation() {
+fun HomeNavigation(
+    logout: () -> Unit
+) {
     val rootBackStack = rememberNavBackStack(
         SavedStateConfiguration {
             serializersModule = SerializersModule {
@@ -90,7 +100,8 @@ fun HomeNavigation() {
                     subclass(NavRoutes.HomeFlow.Nutrition::class,              NavRoutes.HomeFlow.Nutrition.serializer())
                     subclass(NavRoutes.HomeFlow.Profile::class,                NavRoutes.HomeFlow.Profile.serializer())
                     subclass(NavRoutes.HomeFlow.AddPost::class,                NavRoutes.HomeFlow.AddPost.serializer())
-                    subclass(NavRoutes.HomeFlow.NotificationScreen::class,     NavRoutes.HomeFlow.NotificationScreen.serializer())
+                    subclass(NavRoutes.HomeFlow.Notification::class,           NavRoutes.HomeFlow.Notification.serializer())
+                    subclass(NavRoutes.HomeFlow.UserLevelUp::class,            NavRoutes.HomeFlow.UserLevelUp.serializer())
                     // ── Workout Flow ──────────────────────────────────────
                     subclass(NavRoutes.WorkoutFlow.WorkoutSession::class,      NavRoutes.WorkoutFlow.WorkoutSession.serializer())
                     subclass(NavRoutes.WorkoutFlow.WorkoutCompleted::class,    NavRoutes.WorkoutFlow.WorkoutCompleted.serializer())
@@ -104,8 +115,6 @@ fun HomeNavigation() {
                     subclass(NavRoutes.PlanWorkoutFlow.PlanIA::class,          NavRoutes.PlanWorkoutFlow.PlanIA.serializer())
                     // ── Tasks Flow ────────────────────────────────────────
                     subclass(NavRoutes.TasksFlow::class,                       NavRoutes.TasksFlow.serializer())
-                    subclass(NavRoutes.TasksFlow.TasksList::class,             NavRoutes.TasksFlow.TasksList.serializer())
-                    subclass(NavRoutes.TasksFlow.TasksLibrary::class,          NavRoutes.TasksFlow.TasksLibrary.serializer())
                     // ── Telas avulsas ─────────────────────────────────────
                     subclass(NavRoutes.WikiFitness::class,                     NavRoutes.WikiFitness.serializer())
                     subclass(NavRoutes.Shopping::class,                        NavRoutes.Shopping.serializer())
@@ -131,10 +140,14 @@ fun HomeNavigation() {
         NavRoutes.HomeFlow.Profile,
     )
 
-    val showBottomBar = rootBackStack.lastOrNull() in bottomBarItems
+    var isMealsSheetOpen by remember { mutableStateOf(false) }
+    val showBottomBar = rootBackStack.lastOrNull() in bottomBarItems && !isMealsSheetOpen
 
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
+    val authRepository = koinInject<AuthRepository>()
+
+
 
     ModalDrawerSheetMainScreen(
         drawerState = drawerState,
@@ -144,7 +157,10 @@ fun HomeNavigation() {
             coroutineScope.launch { drawerState.close() }
         },
         onLogout = {
-            rootBackStack.clear()
+            coroutineScope.launch {
+                authRepository.logout()
+                logout()
+            }
         },
         content = {
             Scaffold(
@@ -152,8 +168,8 @@ fun HomeNavigation() {
                 bottomBar = {
                     AnimatedVisibility(
                         visible = showBottomBar,
-                        enter = fadeIn(animationSpec = tween(250, easing = FastOutSlowInEasing)),
-                        exit  = fadeOut(animationSpec = tween(200))
+                        enter = fadeIn(animationSpec = tween(250, easing = FastOutSlowInEasing)) + expandVertically(animationSpec = tween(250, easing = FastOutSlowInEasing)),
+                        exit  = fadeOut(animationSpec = tween(200)) + shrinkVertically(animationSpec = tween(200))
                     ) {
                         FitVerseBottomBar(items = bottomBarItems, backStack = rootBackStack)
                     }
@@ -174,7 +190,21 @@ fun HomeNavigation() {
 
                         entry<NavRoutes.HomeFlow.Dashboard> {
                             DashboardDestination(
-                                toNotification = { rootBackStack.add(NavRoutes.HomeFlow.NotificationScreen) }
+                                toNotification = { rootBackStack.add(NavRoutes.HomeFlow.Notification) },
+                                toEnergy = { rootBackStack.add(NavRoutes.HomeFlow.UserLevelUp) }
+                            )
+                        }
+                        entry<NavRoutes.HomeFlow.UserLevelUp> {
+                            LevelUpScreen(
+                                data = LevelUpData(
+                                    userName = "Alex",
+                                    level = 24,
+                                    className = "Warrior",
+                                    xpGained = 200
+                                ),
+                                onContinue = {
+                                    rootBackStack.removeLastOrNull()
+                                }
                             )
                         }
                         entry<NavRoutes.HomeFlow.Workout> {
@@ -184,12 +214,15 @@ fun HomeNavigation() {
                             )
                         }
                         entry<NavRoutes.HomeFlow.Community> {
-                            CommunityScreen()
+                            CommunityDestination(
+                                toAddPost = { rootBackStack.add(NavRoutes.HomeFlow.AddPost) }
+                            )
                         }
                         entry<NavRoutes.HomeFlow.Nutrition> {
                             val viewModel = koinInject<NutritionViewModel>()
                             MealsDestination(
                                 //viewModel = viewModel
+                                onBottomSheetOpen = { isMealsSheetOpen = it }
                             )
                         }
                         entry<NavRoutes.HomeFlow.Profile> {
@@ -200,7 +233,7 @@ fun HomeNavigation() {
                                 toBack = { rootBackStack.removeLastOrNull() }
                             )
                         }
-                        entry<NavRoutes.HomeFlow.NotificationScreen> {
+                        entry<NavRoutes.HomeFlow.Notification> {
                             val viewModel = koinInject<NotificationViewModel>()
                             NotificationDestination(
                                 //viewModel = viewModel,
@@ -282,9 +315,8 @@ fun HomeNavigation() {
                             )
                         }
                         entry<NavRoutes.TasksFlow> {
-                            TasksDestination(
-                                toBack = { rootBackStack.removeLastOrNull() },
-                                toLibrary = { rootBackStack.add(NavRoutes.TasksFlow.TasksLibrary) },
+                            TasksNavigation(
+                                toBack = { rootBackStack.removeLastOrNull() }
                             )
                         }
                     }
@@ -293,9 +325,6 @@ fun HomeNavigation() {
         }
     )
 }
-
-
-
 
 fun handleHomeBackPress(backStack: MutableList<NavKey>): Boolean {
     return when (backStack.lastOrNull()) {
