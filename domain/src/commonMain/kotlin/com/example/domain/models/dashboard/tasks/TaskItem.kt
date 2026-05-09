@@ -1,4 +1,4 @@
-package com.example.domain.models.dashboard
+package com.example.domain.models.dashboard.tasks
 
 
 

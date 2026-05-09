@@ -1,6 +1,6 @@
 package com.example.remote.datasource.friends
 
-import com.example.domain.models.friends.UserProfile
+import com.example.domain.models.dashboard.UserProfile
 import com.example.domain.repository.FakeFriendsRepository
 import com.example.domain.repository.FriendsRepository
 import kotlinx.coroutines.flow.Flow

@@ -1,9 +1,8 @@
 package com.example.remote.mapper.user
 
-import com.example.domain.models.local.ClassType
-import com.example.domain.models.local.Genero
-import com.example.domain.models.local.User
-import com.example.remote.dto.user.UserDto
+import com.example.domain.models.user.ClassType
+import com.example.domain.models.user.Genero
+import com.example.domain.models.user.User
 import com.example.remote.dto.user.UserRequestDto
 import com.example.remote.mapper.DtoMapper
 
@@ -16,7 +15,7 @@ class UserDtoMapper : DtoMapper<UserRequestDto, User> {
         lastname        = dto.lastname,
         username        = dto.username,
         birthDate       = dto.birthDate,
-        gender          = Genero.valueOf(dto.gender),
+        genero          = Genero.valueOf(dto.gender),
         classType       = ClassType.valueOf(dto.classType),
         weight          = dto.weight,
         height          = dto.height,
@@ -41,7 +40,7 @@ class UserDtoMapper : DtoMapper<UserRequestDto, User> {
         lastname = domain.lastname,
         username = domain.username,
         birthDate = domain.birthDate,
-        gender = domain.gender.name,
+        gender = domain.genero.name,
         classType = domain.classType.name,
         weight = domain.weight,
         height = domain.height,
@@ -55,7 +54,5 @@ class UserDtoMapper : DtoMapper<UserRequestDto, User> {
         targetFat = domain.targetFat,
         createdAt = "",
         updatedAt = ""
-
     )
-
 }

@@ -2,6 +2,10 @@
 <resources>
     <string name="app_name">Fitverse Journey</string>
 
+
+    <!-- ================================================================================ -->
+    <!-- ================================= ONBOARDING Page   ============================= -->
+    <!-- ================================================================================ -->
     <string name="onboarding_title_1">운동 기록하기</string>
     <string name="onboarding_description_1">운동, 세트 및 반복 횟수를 쉽게 기록하세요.\n진행 상황을 추적하고 꾸준히 훈련을 이어가세요.</string>
 
@@ -16,7 +20,9 @@
 
 
 
-    <!-- Trial Page -->
+    <!-- ================================================================================ -->
+    <!-- ================================= TRIAL Page ================================ -->
+    <!-- ================================================================================ -->
     <string name="trial_title">플랜을 선택하세요</string>
     <string name="trial_subtitle">당신의 잠재력을 최대로 발휘하세요</string>
     <string name="trial_activate_button">플랜 활성화</string>
@@ -53,7 +59,9 @@
 
 
 
-    <!-- Login Page -->
+    <!-- ================================================================================ -->
+    <!-- ================================= LOGIN Page   ================================ -->
+    <!-- ================================================================================ -->
     <string name="login_welcome_title">환영합니다</string>
     <string name="login_welcome_subtitle">돌아온 전사여</string>
 
@@ -76,6 +84,165 @@
     <string name="login_create_account">계정 만들기</string>
 
 
+
+    <!-- ================================================================================ -->
+    <!-- ================================= FRIENDS Page   ================================ -->
+    <!-- ================================================================================ -->
+    <string name="friends_title">FRIENDS</string>
+
+    <!-- Add Friend Section -->
+    <string name="add_friend_title">Adicionar conexão</string>
+    <string name="add_friend_code_hint">Ex: FIT-1234</string>
+
+    <!-- Suggestions -->
+    <string name="suggestions_title">Pessoas que você talvez conheça</string>
+    <string name="mutual_connections">%1$d em comum</string>
+
+    <!-- Friends List -->
+    <string name="friends_list_title">Seus Amigos (%1$d)</string>
+
+    <!-- Actions -->
+    <string name="action_add">Adicionar</string>
+    <string name="action_ok">OK</string>
+    <string name="action_cancel">Cancelar</string>
+
+    <!-- Errors -->
+    <string name="error_title">Erro</string>
+    <string name="error_network">Erro de conexão. Verifique sua internet.</string>
+    <string name="error_user_not_found">Usuário com código %1$s não encontrado.</string>
+    <string name="error_unknown">Ocorreu um erro inesperado.</string>
+    <string name="error_invalid_code">Código inválido. Use o formato FIT-XXXX</string>
+
+    <!-- Empty States -->
+    <string name="empty_friends_title">Você ainda não tem amigos</string>
+    <string name="empty_friends_message">Adicione amigos para ver suas atividades e competir!</string>
+
+    <!-- Content Descriptions (Accessibility) -->
+    <string name="cd_navigate_back">Voltar</string>
+    <string name="cd_qr_code_scanner">Escanear código QR</string>
+    <string name="cd_add_friend">Adicionar amigo</string>
+    <string name="cd_sort_ascending">Ordenar de A a Z</string>
+    <string name="cd_sort_descending">Ordenar de Z a A</string>
+    <string name="cd_user_avatar">Avatar do usuário</string>
+    <string name="cd_streak_indicator">Indicador de sequência</string>
+
+    <!-- Sort -->
+    <string name="sort_a_z">A-Z</string>
+    <string name="sort_z_a">Z-A</string>
+
+
+
+    <!-- ================================================================================ -->
+    <!-- ================================= REGISTER PAGE  ================================ -->
+    <!-- ================================================================================ -->
+    <string name="register_screen_title">계정 만들기</string>
+    <string name="register_choose_class_title">클래스 선택</string>
+
+    <!-- ContaStep -->
+    <string name="register_conta_first_name_label">이름</string>
+    <string name="register_conta_first_name_placeholder">홍</string>
+    <string name="register_conta_last_name_label">성</string>
+    <string name="register_conta_last_name_placeholder">길동</string>
+    <string name="register_conta_email_label">이메일</string>
+    <string name="register_conta_email_placeholder">your@email.com</string>
+    <string name="register_conta_password_label">비밀번호</string>
+    <string name="register_conta_password_placeholder">최소 8자 이상</string>
+    <string name="register_conta_password_hint">문자, 숫자, 기호를 사용하세요</string>
+
+    <!-- PerfilStep -->
+    <string name="register_perfil_subtitle">모험가 프로필을 설정하세요.</string>
+    <string name="register_perfil_username_label">사용자 이름</string>
+    <string name="register_perfil_username_placeholder">@닉네임</string>
+    <string name="register_perfil_birthdate_label">생년월일</string>
+    <string name="register_perfil_weight_label">체중</string>
+    <string name="register_perfil_height_label">키</string>
+    <string name="register_perfil_gender_label">성별</string>
+    <string name="register_perfil_gender_hint">건강 목표 계산에 사용됩니다.</string>
+
+    <!-- ClasseStep -->
+    <string name="register_classe_subtitle">당신의 원형은 여정을 정의합니다 — 한계가 아닌.\n나중에 변경할 수 있습니다.</string>
+    <string name="register_classe_level_change_hint">레벨 10에서 클래스를 변경할 수 있습니다.</string>
+    <string name="register_button_confirm_class">클래스 확인</string>
+
+    <!-- ObjetivosStep -->
+    <string name="register_objetivos_goal_title">주요 목표가 무엇인가요?</string>
+    <string name="register_objetivos_level_title">경험 수준:</string>
+    <string name="register_objetivos_class_level">%1$s – 레벨 1</string>
+    <string name="register_objetivos_class_frame">%1$s · 프레임 \"%2$s\"</string>
+
+    <!-- Shared buttons -->
+    <string name="register_button_next">다음 →</string>
+    <string name="register_button_create_account">내 계정 만들기</string>
+
+    <!-- Register Steps -->
+    <string name="register_step_conta">계정</string>
+    <string name="register_step_perfil">프로필</string>
+    <string name="register_step_classe">클래스</string>
+    <string name="register_step_objetivos">목표</string>
+
+    <!-- ClassType — 타이탄 -->
+    <string name="class_tita_display_name">타이탄</string>
+    <string name="class_tita_subtitle">힘의 전사</string>
+    <string name="class_tita_quote">들기 위해 태어났다. 매 kg는 당신의 완벽한 형태를 향한 한 걸음이다.</string>
+    <string name="class_tita_bonus_1">근력 및 웨이트 트레이닝에서 XP +20%</string>
+    <string name="class_tita_bonus_2">레벨 1부터 최대 HP +20%</string>
+    <string name="class_tita_bonus_3">전용 프로필 프레임 \"살아있는 강철\"</string>
+    <string name="class_tita_frame_label">살아있는 강철</string>
+
+    <!-- ClassType — 현자 -->
+    <string name="class_sabio_display_name">현자</string>
+    <string name="class_sabio_subtitle">영양의 마법사</string>
+    <string name="class_sabio_quote">몸은 마음의 결과다. 먹는 것을 이해하는 자가 먼저 이긴다.</string>
+    <string name="class_sabio_bonus_1">영양 및 식사 미션에서 XP +20%</string>
+    <string name="class_sabio_bonus_2">처음부터 피트니스 위키 해금</string>
+    <string name="class_sabio_bonus_3">전용 프로필 프레임 \"지식의 연결\"</string>
+    <string name="class_sabio_frame_label">지식의 연결</string>
+
+    <!-- ClassType — 유목민 -->
+    <string name="class_nomade_display_name">유목민</string>
+    <string name="class_nomade_subtitle">일관성의 궁수</string>
+    <string name="class_nomade_quote">가장 강하거나 가장 현명한 자가 아니다 — 절대 멈추지 않는 자다. 꾸준함이 모든 재능을 이긴다.</string>
+    <string name="class_nomade_bonus_1">걸음 수, 유산소 및 수분 섭취에서 XP +20%</string>
+    <string name="class_nomade_bonus_2">주당 1개의 \"스트릭 방패\"</string>
+    <string name="class_nomade_bonus_3">전용 프로필 프레임 \"자유로운 지평선\"</string>
+    <string name="class_nomade_frame_label">자유로운 지평선</string>
+
+    <!-- Objetivo -->
+    <string name="objetivo_perder_peso">체중 감량</string>
+    <string name="objetivo_ganhar_massa">근육 증가</string>
+    <string name="objetivo_melhorar_condicao">체력 향상</string>
+    <string name="objetivo_vida_saudavel">건강한 생활</string>
+    <string name="objetivo_performance">퍼포먼스</string>
+
+    <!-- NivelExperiencia -->
+    <string name="nivel_iniciante">초보자</string>
+    <string name="nivel_intermediario">중급자</string>
+    <string name="nivel_avancado">고급자</string>
+
+    <!-- Genero -->
+    <string name="genero_masculino">남성</string>
+    <string name="genero_feminino">여성</string>
+
+    <!-- Stats -->
+    <string name="stat_forca">근력</string>
+    <string name="stat_resistencia">지구력</string>
+    <string name="stat_nutricao">영양</string>
+
+
+
+    <!-- ================================================================================ -->
+    <!-- ================================= RECOVER PAGE   ================================ -->
+    <!-- ================================================================================ -->
+    <string name="reset_title">접근 복구</string>
+    <string name="reset_subtitle">이메일을 입력하시면 비밀번호 재설정 링크를 보내드립니다.</string>
+    <string name="reset_email_label">이메일</string>
+    <string name="reset_email_placeholder">your@email.com</string>
+    <string name="reset_button_send">링크 보내기</string>
+
+    <!-- ResetPassword — Success State -->
+    <string name="reset_success_content_description">성공</string>
+    <string name="reset_success_title">이메일이 전송되었습니다!</string>
+    <string name="reset_success_subtitle">받은 편지함을 확인하세요.</string>
 </resources>
 
 

@@ -1,13 +1,11 @@
 package org.fitverse.project.destinations.modal_destinations.achievement
 
 import androidx.compose.runtime.Composable
-import com.example.presentation.screens.ui.achievements.AchievementsScreen
+import com.example.presentation.widgets.AchievementsScreen
 
 @Composable
 fun AchievementDestination(toBack: () -> Unit) {
     AchievementsScreen(
-        navigateBack = {
-            toBack()
-        }
+        onBack = toBack
     )
 }

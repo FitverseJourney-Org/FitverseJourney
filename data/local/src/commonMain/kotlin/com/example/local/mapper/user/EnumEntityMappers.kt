@@ -1,4 +1,9 @@
 package com.example.local.mapper.user
 
-class EnumEntityMappers {
-}
+import com.example.domain.models.user.Objetivo
+
+
+
+
+
+

@@ -47,8 +47,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.domain.models.dashboard.TaskIcon
-import com.example.domain.models.dashboard.TaskItem
+import com.example.domain.models.dashboard.tasks.TaskIcon
+import com.example.domain.models.dashboard.tasks.TaskItem
 import com.example.presentation.widgets.FitverseTaskItem
 import com.example.presentation.widgets.FitverseTopAppBar
 

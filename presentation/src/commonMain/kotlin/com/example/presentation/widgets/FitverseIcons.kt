@@ -115,7 +115,7 @@ fun FitverseIconBack(
     IconButton(
         onClick = { onBack() },
         modifier = Modifier
-            .size(40.dp)
+            .size(45.dp)
             .clip(RoundedCornerShape(12.dp))
     ) {
         Icon(Icons.Default.ChevronLeft, contentDescription = "Back", tint = Color.White)

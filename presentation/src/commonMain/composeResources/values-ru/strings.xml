@@ -2,6 +2,11 @@
 <resources>
     <string name="app_name">Fitverse Journey</string>
 
+
+
+    <!-- ================================================================================ -->
+    <!-- ================================= ONBOARDING Page   ============================= -->
+    <!-- ================================================================================ -->
     <string name="onboarding_title_1">Отслеживайте тренировки</string>
     <string name="onboarding_description_1">Легко записывайте упражнения, подходы и повторения.\nОтслеживайте прогресс и сохраняйте регулярность тренировок.</string>
 
@@ -16,7 +21,9 @@
 
 
 
-    <!-- Trial Page -->
+    <!-- ================================================================================ -->
+    <!-- ================================= TRIAL Page ================================ -->
+    <!-- ================================================================================ -->
     <string name="trial_title">ВЫБЕРИТЕ СВОЙ ПЛАН</string>
     <string name="trial_subtitle">Раскройте весь свой потенциал</string>
     <string name="trial_activate_button">Активировать план</string>
@@ -53,7 +60,9 @@
 
 
 
-    <!-- Login Page -->
+    <!-- ================================================================================ -->
+    <!-- ================================= LOGIN Page   ================================ -->
+    <!-- ================================================================================ -->
     <string name="login_welcome_title">ДОБРО ПОЖАЛОВАТЬ</string>
     <string name="login_welcome_subtitle">СНОВА, ВОИН</string>
 
@@ -76,5 +85,162 @@
     <string name="login_create_account">Создать аккаунт</string>
 
 
+
+    <!-- ================================================================================ -->
+    <!-- ================================= FRIENDS Page   ================================ -->
+    <!-- ================================================================================ -->
+    <string name="friends_title">FRIENDS</string>
+
+    <!-- Add Friend Section -->
+    <string name="add_friend_title">Adicionar conexão</string>
+    <string name="add_friend_code_hint">Ex: FIT-1234</string>
+
+    <!-- Suggestions -->
+    <string name="suggestions_title">Pessoas que você talvez conheça</string>
+    <string name="mutual_connections">%1$d em comum</string>
+
+    <!-- Friends List -->
+    <string name="friends_list_title">Seus Amigos (%1$d)</string>
+
+    <!-- Actions -->
+    <string name="action_add">Adicionar</string>
+    <string name="action_ok">OK</string>
+    <string name="action_cancel">Cancelar</string>
+
+    <!-- Errors -->
+    <string name="error_title">Erro</string>
+    <string name="error_network">Erro de conexão. Verifique sua internet.</string>
+    <string name="error_user_not_found">Usuário com código %1$s não encontrado.</string>
+    <string name="error_unknown">Ocorreu um erro inesperado.</string>
+    <string name="error_invalid_code">Código inválido. Use o formato FIT-XXXX</string>
+
+    <!-- Empty States -->
+    <string name="empty_friends_title">Você ainda não tem amigos</string>
+    <string name="empty_friends_message">Adicione amigos para ver suas atividades e competir!</string>
+
+    <!-- Content Descriptions (Accessibility) -->
+    <string name="cd_navigate_back">Voltar</string>
+    <string name="cd_qr_code_scanner">Escanear código QR</string>
+    <string name="cd_add_friend">Adicionar amigo</string>
+    <string name="cd_sort_ascending">Ordenar de A a Z</string>
+    <string name="cd_sort_descending">Ordenar de Z a A</string>
+    <string name="cd_user_avatar">Avatar do usuário</string>
+    <string name="cd_streak_indicator">Indicador de sequência</string>
+
+    <!-- Sort -->
+    <string name="sort_a_z">A-Z</string>
+    <string name="sort_z_a">Z-A</string>
+
+
+
+    <!-- ================================================================================ -->
+    <!-- ================================= REGISTER PAGE  ================================ -->
+    <!-- ================================================================================ -->
+    <string name="register_screen_title">СОЗДАТЬ АККАУНТ</string>
+    <string name="register_choose_class_title">ВЫБЕРИТЕ КЛАСС</string>
+
+    <!-- ContaStep -->
+    <string name="register_conta_first_name_label">ИМЯ</string>
+    <string name="register_conta_first_name_placeholder">Иван</string>
+    <string name="register_conta_last_name_label">ФАМИЛИЯ</string>
+    <string name="register_conta_last_name_placeholder">Иванов</string>
+    <string name="register_conta_email_label">Э-ПОЧТА</string>
+    <string name="register_conta_email_placeholder">ваш@email.com</string>
+    <string name="register_conta_password_label">ПАРОЛЬ</string>
+    <string name="register_conta_password_placeholder">Минимум 8 символов</string>
+    <string name="register_conta_password_hint">Используйте буквы, цифры и символы</string>
+
+    <!-- PerfilStep -->
+    <string name="register_perfil_subtitle">Настройте профиль искателя приключений.</string>
+    <string name="register_perfil_username_label">ИМЯ ПОЛЬЗОВАТЕЛЯ</string>
+    <string name="register_perfil_username_placeholder">@ваш_ник</string>
+    <string name="register_perfil_birthdate_label">ДАТА РОЖДЕНИЯ</string>
+    <string name="register_perfil_weight_label">ВЕС</string>
+    <string name="register_perfil_height_label">РОСТ</string>
+    <string name="register_perfil_gender_label">ПОЛ</string>
+    <string name="register_perfil_gender_hint">Используется для расчёта целей здоровья.</string>
+
+    <!-- ClasseStep -->
+    <string name="register_classe_subtitle">Ваш архетип определяет путешествие — не ограничения.\nВы можете изменить его позже.</string>
+    <string name="register_classe_level_change_hint">Вы сможете сменить класс на 10 уровне.</string>
+    <string name="register_button_confirm_class">ПОДТВЕРДИТЬ КЛАСС</string>
+
+    <!-- ObjetivosStep -->
+    <string name="register_objetivos_goal_title">Какова ваша основная цель?</string>
+    <string name="register_objetivos_level_title">Ваш уровень опыта:</string>
+    <string name="register_objetivos_class_level">%1$s – УРОВЕНЬ 1</string>
+    <string name="register_objetivos_class_frame">%1$s · Рамка \"%2$s\"</string>
+
+    <!-- Shared buttons -->
+    <string name="register_button_next">ДАЛЕЕ →</string>
+    <string name="register_button_create_account">СОЗДАТЬ МОЙ АККАУНТ</string>
+
+    <!-- Register Steps -->
+    <string name="register_step_conta">АККАУНТ</string>
+    <string name="register_step_perfil">ПРОФИЛЬ</string>
+    <string name="register_step_classe">КЛАСС</string>
+    <string name="register_step_objetivos">ЦЕЛИ</string>
+
+    <!-- ClassType — ТИТАН -->
+    <string name="class_tita_display_name">ТИТАН</string>
+    <string name="class_tita_subtitle">ВОИН СИЛЫ</string>
+    <string name="class_tita_quote">Рождён поднимать. Каждый кг — шаг к твоей окончательной форме.</string>
+    <string name="class_tita_bonus_1">+20% XP в силовых и бодибилдинг тренировках</string>
+    <string name="class_tita_bonus_2">Макс. HP +20% с 1 уровня</string>
+    <string name="class_tita_bonus_3">Эксклюзивная рамка профиля \"Живая Сталь\"</string>
+    <string name="class_tita_frame_label">Живая Сталь</string>
+
+    <!-- ClassType — МУДРЕЦ -->
+    <string name="class_sabio_display_name">МУДРЕЦ</string>
+    <string name="class_sabio_subtitle">МАГ ПИТАНИЯ</string>
+    <string name="class_sabio_quote">Тело — результат разума. Кто понимает, что ест, побеждает раньше остальных.</string>
+    <string name="class_sabio_bonus_1">+20% XP в миссиях по питанию и приёмам пищи</string>
+    <string name="class_sabio_bonus_2">Фитнес-вики разблокирована с самого начала</string>
+    <string name="class_sabio_bonus_3">Эксклюзивная рамка профиля \"Узел Знаний\"</string>
+    <string name="class_sabio_frame_label">Узел Знаний</string>
+
+    <!-- ClassType — КОЧЕВНИК -->
+    <string name="class_nomade_display_name">КОЧЕВНИК</string>
+    <string name="class_nomade_subtitle">ЛУЧНИК ПОСТОЯНСТВА</string>
+    <string name="class_nomade_quote">Не самый сильный и не самый мудрый — тот, кто никогда не останавливается. Постоянство побеждает любой талант.</string>
+    <string name="class_nomade_bonus_1">+20% XP за шаги, кардио и гидратацию</string>
+    <string name="class_nomade_bonus_2">1 \"щит серии\" в неделю</string>
+    <string name="class_nomade_bonus_3">Эксклюзивная рамка профиля \"Свободный Горизонт\"</string>
+    <string name="class_nomade_frame_label">Свободный Горизонт</string>
+
+    <!-- Objetivo -->
+    <string name="objetivo_perder_peso">Похудеть</string>
+    <string name="objetivo_ganhar_massa">Набрать мышцы</string>
+    <string name="objetivo_melhorar_condicao">Улучшить форму</string>
+    <string name="objetivo_vida_saudavel">Здоровый образ жизни</string>
+    <string name="objetivo_performance">Производительность</string>
+
+    <!-- NivelExperiencia -->
+    <string name="nivel_iniciante">Новичок</string>
+    <string name="nivel_intermediario">Средний уровень</string>
+    <string name="nivel_avancado">Продвинутый</string>
+
+    <!-- Genero -->
+    <string name="genero_masculino">Мужской</string>
+    <string name="genero_feminino">Женский</string>
+    <string name="stat_forca">Сила</string>
+    <string name="stat_resistencia">Выносливость</string>
+    <string name="stat_nutricao">Питание</string>
+
+
+
+    <!-- ================================================================================ -->
+    <!-- ================================= RECOVER PAGE   ================================ -->
+    <!-- ================================================================================ -->
+    <string name="reset_title">ВОССТАНОВИТЬ ДОСТУП</string>
+    <string name="reset_subtitle">Введите e-mail и мы отправим вам ссылку для сброса пароля.</string>
+    <string name="reset_email_label">Э-ПОЧТА</string>
+    <string name="reset_email_placeholder">ваш@email.com</string>
+    <string name="reset_button_send">Отправить ссылку</string>
+
+    <!-- ResetPassword — Success State -->
+    <string name="reset_success_content_description">Успех</string>
+    <string name="reset_success_title">E-MAIL ОТПРАВЛЕН!</string>
+    <string name="reset_success_subtitle">Проверьте свой почтовый ящик.</string>
 </resources>
 

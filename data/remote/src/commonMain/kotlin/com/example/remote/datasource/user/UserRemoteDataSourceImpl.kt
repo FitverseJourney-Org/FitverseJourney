@@ -22,12 +22,16 @@ class UserRemoteDataSourceImpl(
         }.body<ApiResponse<UserRequestDto>>().data
     }
 
-    override suspend fun createUser(user: UserRequestDto): UserRequestDto {
-        return httpClient.post {
+    override suspend fun createUser(user: UserRequestDto) {
+        httpClient.post {
             url("${ApiConstants.BASE_URL}${ApiConstants.Endpoints.USERS}")
             contentType(ContentType.Application.Json)
             setBody(user)
-        }.body<ApiResponse<UserRequestDto>>().data
+        }.also { response ->
+            if (!response.status.isSuccess()) {
+                error("Erro ao criar usuário: ${response.status}")
+            }
+        }
     }
 
     override suspend fun updateUser(userId: String, user: UserRequestDto): UserRequestDto {

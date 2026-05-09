@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.example.expect.AppEnvironment
-import com.example.presentation.screens.ui.LanguageViewModel
+import com.example.presentation.ui.LanguageViewModel
 import com.example.presentation.theme.FitVerseJourneyTheme
 import org.fitverse.project.navigation.FitverseRootNavigation
 import org.koin.compose.koinInject

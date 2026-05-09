@@ -6,7 +6,7 @@ import com.example.domain.models.friends.FriendsError
 import com.example.domain.models.friends.FriendsEvent
 import com.example.domain.models.friends.FriendsUiState
 import com.example.domain.models.friends.SortOrder
-import com.example.domain.models.friends.UserProfile
+import com.example.domain.models.dashboard.UserProfile
 import com.example.domain.repository.FriendsRepository
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch

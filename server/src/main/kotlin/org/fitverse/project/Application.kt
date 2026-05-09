@@ -5,7 +5,6 @@ import io.ktor.server.engine.connector
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.server.routing.routing
-import org.fitverse.project.features.auth.routes.authRouting
 import org.fitverse.project.features.user.routes.userRouting
 import org.fitverse.project.plugins.configurePlugins
 
@@ -31,7 +30,6 @@ fun Application.module() {
 
 fun Application.routing() {
     routing {
-        authRouting()
         userRouting()
     }
 }

@@ -15,5 +15,5 @@ val androidRemotePlatformModule = module {
     single<AuthMapper>{ AuthMapper() }
     single<FirebaseAuth> { FirebaseAuth.getInstance() }
     single<FirebaseUser?> { FirebaseAuth.getInstance().currentUser }
-    single<AuthRepository> {FirebaseAuthRepositoryImpl(firebaseAuth = get(), authMapper = get())}
+    single<AuthRepository> {FirebaseAuthRepositoryImpl(firebaseAuth = get(), authMapper = get(), appAuthenticateRepository = get())}
 }

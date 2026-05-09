@@ -1,13 +1,11 @@
 package com.example.repository
 
-import com.example.local.datasource.user.UserLocalDataSource
-import com.example.remote.datasource.user.UserRemoteDataSource
-import com.example.remote.dto.user.UserRequestDto
-import com.example.remote.expect.NetworkMonitor
-import com.example.domain.models.local.User
-import com.example.domain.repository.authentication.AuthRepository
+import com.example.domain.models.user.User
 import com.example.domain.repository.dbLocal.sqldelight.user.UserRepository
+import com.example.local.datasource.user.UserLocalDataSource
 import com.example.local.mapper.user.UserEntityMapper
+import com.example.remote.datasource.user.UserRemoteDataSource
+import com.example.remote.expect.NetworkMonitor
 import com.example.remote.mapper.user.UserDtoMapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -61,14 +59,11 @@ class UserRepositoryImpl(
         }
     }
 
-    override suspend fun createUser(user: User): User {
+    override suspend fun createUser(user: User) {
         // ✅ salva no Firestore via remote
         remoteDataSource.createUser(dtoMapper.mapDomainToRequestDto(user))
-
         // ✅ salva local
         localDataSource.insertUser(entityMapper.mapDomainToEntity(user))
-
-        return user
     }
 
     // ✅ stream local mapeado

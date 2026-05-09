@@ -4,10 +4,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.presentation.screens.ui.dashboard.DarkGamifiedDashboardBackground
-import com.example.presentation.screens.ui.onboarding.OnboardingScreen
-import com.example.presentation.screens.ui.onboarding.state.OnboardingState
-import com.example.presentation.screens.ui.onboarding.viewmodel.OnboardingViewModel
+import com.example.presentation.ui.onboarding.OnboardingScreen
+import com.example.presentation.ui.onboarding.state.OnboardingState
+import com.example.presentation.ui.onboarding.viewmodel.OnboardingViewModel
+import com.example.presentation.widgets.DarkGamifiedDashboardBackground
 
 @Composable
 fun OnboardingDestination(

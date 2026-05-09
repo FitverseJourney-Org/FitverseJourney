@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.navigation3.runtime.NavKey
-import com.example.presentation.screens.ui.device.DevicesScreen
+import com.example.presentation.ui.device.DevicesScreen
 
 @Composable
 fun DevicesDestination(toBack: () -> NavKey?) {

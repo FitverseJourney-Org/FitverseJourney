@@ -1,6 +1,6 @@
 package com.example.di
 
-import com.example.domain.models.local.User
+import com.example.domain.models.user.User
 import com.example.domain.repository.ActivatePlanRepository
 import com.example.domain.repository.ExerciseRepository
 import com.example.domain.repository.FakeFriendsRepository
@@ -9,12 +9,14 @@ import com.example.domain.repository.ProgressionRepository
 import com.example.domain.repository.dbLocal.datastore.AppAuthenticateRepository
 import com.example.domain.repository.dbLocal.datastore.AppLanguageRepository
 import com.example.domain.repository.dbLocal.datastore.AppOnboardingRepository
+import com.example.domain.repository.dbLocal.datastore.AppTrialRepository
 import com.example.domain.repository.dbLocal.sqldelight.configurations.ConfigTokenDataSourceDao
 import com.example.domain.repository.dbLocal.sqldelight.user.UserRepository
 import com.example.domain.repository.wiki.WikiRepository
 import com.example.local.database.datastore.repository.AppAuthenticateRepositoryImpl
 import com.example.local.database.datastore.repository.AppLanguageRepositoryImpl
 import com.example.local.database.datastore.repository.AppOnboardingRepositoryImpl
+import com.example.local.database.datastore.repository.AppTrialRepositoryImpl
 import com.example.local.database.sqldelight.repository.configuration.ConfigLanguageDataSourceDao
 import com.example.local.database.sqldelight.repository.configuration.ConfigOnboardingDataSourceDao
 import com.example.local.database.sqldelight.repository.configuration.ConfigTokenDaoDataSourceImpl
@@ -26,7 +28,7 @@ import com.example.local.datasource.user.UserLocalDataSource
 import com.example.local.datasource.user.UserLocalDataSourceImpl
 import com.example.local.di.databaseModule
 import com.example.local.mapper.EntityMapper
-import com.example.remote.util.networkModule
+import com.example.util.networkModule
 import com.example.local.mapper.user.UserEntityMapper
 import com.example.remote.datasource.activePlan.ActivatePlanRemoteDataSource
 import com.example.remote.datasource.activePlan.ActivatePlanRemoteDataSourceImpl
@@ -47,6 +49,7 @@ import com.journey.database.migrations.UserEntity
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
+
 
 // ──────────────────────────────────────────────────────────────────────────────
 // ── DataStore ─────────────────────────────────────────────────────────────────
@@ -85,41 +88,27 @@ val mapperModule = module {
 // ── Repositories ──────────────────────────────────────────────────────────────
 // ──────────────────────────────────────────────────────────────────────────────
 val repositoryModule = module {
-    //── App Config ────────────────────────────────────────────────────────────|
+    // ── AppOnboarding ─────────────────────────────────────────────────────────────|
     singleOf(::AppOnboardingRepositoryImpl) { bind<AppOnboardingRepository>() }
+    // ── AppAuthenticate ─────────────────────────────────────────────────────────────|
     singleOf(::AppAuthenticateRepositoryImpl) { bind<AppAuthenticateRepository>() }
+    // ── AppLanguage ─────────────────────────────────────────────────────────────|
     singleOf(::AppLanguageRepositoryImpl) { bind<AppLanguageRepository>() }
-
-
+    // ── AppTrial ─────────────────────────────────────────────────────────────|
+    singleOf(::AppTrialRepositoryImpl) { bind<AppTrialRepository>() }
     // ── ActivePlan ───────────────────────────────────────────────────────────|
     singleOf(::ActivatePlanRepositoryImpl) { bind<ActivatePlanRepository>() }
-
-
     // ── User ─────────────────────────────────────────────────────────────────|
     singleOf(::UserRepositoryImpl) { bind<UserRepository>() }
-
-
     // ── Exercise ─────────────────────────────────────────────────────────────|
     singleOf(::ExerciseRepositoryImpl) { bind<ExerciseRepository>() }
-
-
     // ── Progression ──────────────────────────────────────────────────────────|
     singleOf(::ProgressionRepositoryImpl) { bind<ProgressionRepository>() }
-
-
     // ── Leaderboards ─────────────────────────────────────────────────────────|
-
-
     // ── Friends ──────────────────────────────────────────────────────────────|
     singleOf(::FriendsRemoteDataSourceImpl) { bind<FriendsRepository>() }
-
-
     // ── Tasks ────────────────────────────────────────────────────────────────|
-
-
     // ── Shopping ─────────────────────────────────────────────────────────────|
-
-
     // ── Wiki ─────────────────────────────────────────────────────────────────|
     singleOf(::WikiRepositoryImpl) { bind<WikiRepository>() }
 }

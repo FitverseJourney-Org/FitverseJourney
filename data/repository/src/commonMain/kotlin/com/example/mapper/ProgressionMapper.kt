@@ -1,8 +1,8 @@
 package com.example.mapper
 
-import com.example.data.model.dto.progression.ProgressionPointDto
 import com.example.domain.expect.toPlatformDate
-import com.example.domain.model.progress.LoadProgressionPoint
+import com.example.domain.models.progression.LoadProgressionPoint
+import com.example.remote.dto.progression.ProgressionPointDto
 
 /**
  * Funções de extensão para conversão [ProgressionPointDto] ↔ [LoadProgressionPoint].
@@ -16,8 +16,8 @@ import com.example.domain.model.progress.LoadProgressionPoint
  */
 
 fun ProgressionPointDto.toDomain(): LoadProgressionPoint = LoadProgressionPoint(
-    date           = epochMillis.toPlatformDate(),
-    weight         = weightKg,
+    date = epochMillis.toPlatformDate(),
+    weight = weightKg,
     estimatedOneRm = estimatedOneRm,
 )
 

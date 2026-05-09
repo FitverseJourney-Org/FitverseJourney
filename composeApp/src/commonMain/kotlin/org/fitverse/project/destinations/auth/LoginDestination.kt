@@ -40,12 +40,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.domain.models.auth.login.LoginAction
-import com.example.presentation.navigationState.LoginNavigation
-import com.example.presentation.screens.ui.LanguageViewModel
-import com.example.presentation.screens.ui.authentication.login.LoginScreen
-import com.example.presentation.screens.ui.authentication.login.LoginViewModel
-import com.example.presentation.screens.ui.setupLanguage.SetupLanguageScreen
+ import com.example.presentation.navigationState.LoginNavigation
+import com.example.presentation.ui.LanguageViewModel
+import com.example.presentation.ui.authentication.login.LoginScreen
+import com.example.presentation.ui.authentication.login.LoginViewModel
+import com.example.presentation.ui.authentication.login.states.LoginAction
+import com.example.presentation.ui.setupLanguage.SetupLanguageScreen
 import com.example.presentation.utils.LanguageAvailableApp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -94,12 +94,6 @@ fun LoginDestination(
             viewmodel.consumeSnackBar()
         }
     }
-
-    // Navegação pós-login
-    LaunchedEffect(state.processLogin) {
-        if (state.processLogin) toHome()
-    }
-
     // Navegação via ViewModel
     LaunchedEffect(Unit) {
         viewmodel.navigationState.collectLatest {
@@ -130,6 +124,7 @@ fun LoginDestination(
         LoginScreen(
             state = state,
             snackBarHostState = snackBarHostState,
+            onAction          = viewmodel::onAction,  // ou { viewModel.onAction(it) }
             onLogin = { _, _ ->
                 viewmodel.onLoginClick()
                 keyboardController?.hide()

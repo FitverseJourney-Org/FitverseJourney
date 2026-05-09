@@ -3,9 +3,8 @@ package org.fitverse.project.destinations.splash
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import com.example.presentation.navigationState.SplashNavigation
-import com.example.presentation.screens.ui.splash.AppSplashScreen
-import com.example.presentation.screens.ui.splash.viewmodel.SplashViewModel
-import org.koin.compose.koinInject
+import com.example.presentation.ui.splash.AppSplashScreen
+import com.example.presentation.ui.splash.viewmodel.SplashViewModel
 
 @Composable
 fun SplashDestination(

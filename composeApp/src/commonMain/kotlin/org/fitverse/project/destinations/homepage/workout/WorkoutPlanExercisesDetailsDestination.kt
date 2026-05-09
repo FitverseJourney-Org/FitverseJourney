@@ -4,7 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.FitnessCenter
 import androidx.compose.runtime.Composable
 import com.example.domain.models.workout.workout_plan.ExerciseLibraryItem
-import com.example.presentation.screens.ui.planWorkout.WorkoutPLanExerciseDetailsScreen
+import com.example.presentation.ui.planWorkout.WorkoutPLanExerciseDetailsScreen
 
 @Composable
 fun WorkoutPlanExercisesDetailsDestination(

@@ -1,6 +1,6 @@
 package com.example.mapper.exercise
 
-import com.example.domain.models.progress.Exercise
+import com.example.domain.models.progression.Exercise
 import com.example.local.model.ExerciseEntity
 import com.example.remote.dto.exercise.ExerciseDto
 import kotlin.jvm.JvmName

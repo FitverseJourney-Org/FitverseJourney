@@ -1,6 +1,6 @@
 package com.example.presentation.ui.trial.state
 
-import com.example.domain.models.activePlan.PlanId
+import com.example.domain.models.plan.PlanId
 
 data class TrialUiState(
     val selectedPlan : PlanId = PlanId.PRO,

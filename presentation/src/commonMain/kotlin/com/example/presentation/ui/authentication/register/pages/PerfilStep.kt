@@ -16,7 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.example.domain.models.local.Genero
+import com.example.domain.models.user.Genero
 import com.example.presentation.ui.authentication.register.DateVisualTransformation
 import com.example.presentation.ui.authentication.register.HeightVisualTransformation
 import com.example.presentation.ui.authentication.register.WeightVisualTransformation

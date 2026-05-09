@@ -5,8 +5,8 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.models.progress.ProgressionData
-import com.example.domain.models.progress.calculateProgressionStats
+import com.example.domain.models.progression.ProgressionData
+import com.example.domain.models.progression.calculateProgressionStats
 import com.example.domain.usecase.progression.BuildProgressionInsightUseCase
 import com.example.domain.usecase.progression.GetExercisesByTrainingSplitUseCase
 import com.example.domain.usecase.progression.GetProgressionDataUseCase
@@ -272,6 +272,8 @@ class ProgressViewModel(
                     curvedEdges = true,
                     drawStyle = DrawStyle.Stroke(width = 2.dp),
                     dotProperties = DotProperties(enabled = false),
+                    firstGradientFillColor = Color(0xFFEF5350).copy(alpha = 0.20f),
+                    secondGradientFillColor = Color.Transparent,
                 )
             )
         }
@@ -284,6 +286,8 @@ class ProgressViewModel(
                     curvedEdges = true,
                     drawStyle = DrawStyle.Stroke(width = 2.5.dp),
                     dotProperties = DotProperties(enabled = false),
+                    firstGradientFillColor = Color.White.copy(alpha = 0.15f),
+                    secondGradientFillColor = Color.Transparent,
                 )
             )
         }

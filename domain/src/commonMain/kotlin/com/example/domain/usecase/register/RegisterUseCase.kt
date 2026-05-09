@@ -1,6 +1,6 @@
 package com.example.domain.usecase.register
 
-import com.example.domain.models.local.User
+import com.example.domain.models.user.User
 import com.example.domain.repository.authentication.AuthRepository
 import com.example.domain.repository.dbLocal.sqldelight.user.UserRepository
 
@@ -12,14 +12,13 @@ class RegisterUseCase(
         email: String,
         password: String,
         userData: User,
-    ): Result<User> = runCatching {
-        // 1. cria conta no Firebase Auth
+    ): Result<Unit> = runCatching {
+
+        // runCatching já envolve tudo em try/catch
+        // qualquer exceção vira Result.failure automaticamente
         val authResult = authRepository.register(email, password)
-
-        // 2. substitui uid vazio pelo uid real do Firebase
         val userWithUid = userData.copy(uid = authResult.uid)
-
-        // 3. ✅ cria no Firestore + local (não update)
         userRepository.createUser(userWithUid)
+        // Unit é retornado implicitamente — runCatching vira Result.success(Unit)
     }
 }

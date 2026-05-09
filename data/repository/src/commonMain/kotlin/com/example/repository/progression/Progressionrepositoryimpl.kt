@@ -1,6 +1,6 @@
 package com.example.repository.progression
 
-import com.example.domain.models.progress.LoadProgressionPoint
+import com.example.domain.models.progression.LoadProgressionPoint
 import com.example.domain.repository.ProgressionRepository
 import com.example.local.datasource.progression.ProgressionLocalDataSource
 import com.example.local.mapper.progression.toDomain

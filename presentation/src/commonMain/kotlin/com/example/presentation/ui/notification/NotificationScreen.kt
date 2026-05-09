@@ -17,66 +17,146 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.domain.models.notification.NotificationStyle
+import com.example.domain.models.notification.NotificationType
 import com.example.presentation.widgets.FitverseTopAppBar
 import com.example.presentation.theme.FitverseColors
 import com.example.presentation.theme.ShapeCard
 
 // ── Models ────────────────────────────────────────────────────────────────────
-
 data class Notification(
-    val icon: String,
-    val iconBg: Color,
+    val type: NotificationType,          // novo — fonte do estilo
     val title: String,
     val description: String,
     val time: String,
     val isUnread: Boolean = false,
-    val dotColor: Color? = null,
-    val borderAccent: Color? = null,
+    // visuais derivados do tipo (não precisam ser definidos manualmente)
+    val icon: String        = NotificationStyles.from(type).icon,
+    val iconBg: Color       = NotificationStyles.from(type).iconBg,
+    val dotColor: Color?    = if (isUnread) NotificationStyles.from(type).dotColor else null,
+    val borderAccent: Color? = if (isUnread) NotificationStyles.from(type).borderAccent else null,
 )
 
-private val sampleNotifications = listOf(
+object NotificationStyles {
+    fun from(type: NotificationType): NotificationStyle = when (type) {
+        NotificationType.XP -> NotificationStyle(
+            icon        = "✨",
+            iconBg      = FitverseColors.PurpleDim,
+            dotColor    = FitverseColors.Purple,
+            borderAccent = FitverseColors.Purple.copy(alpha = 0.30f),
+        )
+        NotificationType.STREAK -> NotificationStyle(
+            icon        = "🔥",
+            iconBg      = FitverseColors.OrangeDim,
+            dotColor    = FitverseColors.Orange,
+            borderAccent = FitverseColors.Orange.copy(alpha = 0.30f),
+        )
+        NotificationType.CURTIDA -> NotificationStyle(
+            icon        = "❤️",
+            iconBg      = FitverseColors.RedDim,
+            dotColor    = null,
+            borderAccent = null,
+        )
+        NotificationType.COMENTARIO -> NotificationStyle(
+            icon        = "💬",
+            iconBg      = FitverseColors.BlueDim,
+            dotColor    = FitverseColors.Blue,
+            borderAccent = FitverseColors.Blue.copy(alpha = 0.30f),
+        )
+        NotificationType.TREINO -> NotificationStyle(
+            icon        = "💪",
+            iconBg      = FitverseColors.GreenDim,
+            dotColor    = null,
+            borderAccent = null,
+        )
+        NotificationType.CONQUISTA -> NotificationStyle(
+            icon        = "🏆",
+            iconBg      = Color(0x1AC8FF00),
+            dotColor    = null,
+            borderAccent = null,
+        )
+        NotificationType.DESAFIO -> NotificationStyle(
+            icon        = "🎯",
+            iconBg      = FitverseColors.TealDim,
+            dotColor    = FitverseColors.Teal,
+            borderAccent = FitverseColors.Teal.copy(alpha = 0.30f),
+        )
+        NotificationType.RANKING -> NotificationStyle(
+            icon        = "👑",
+            iconBg      = FitverseColors.AmberDim,
+            dotColor    = FitverseColors.Amber,
+            borderAccent = FitverseColors.Amber.copy(alpha = 0.30f),
+        )
+        NotificationType.SISTEMA -> NotificationStyle(
+            icon        = "⚙️",
+            iconBg      = FitverseColors.GrayDim,
+            dotColor    = null,
+            borderAccent = null,
+        )
+    }
+}
+val sampleNotifications = listOf(
     Notification(
-        icon        = "✨",
-        iconBg      = FitverseColors.PurpleDim,
+        type        = NotificationType.XP,
         title       = "XP Ganho!",
         description = "Você ganhou +30 XP pela missão de cardio.",
         time        = "2 min",
         isUnread    = true,
-        dotColor    = FitverseColors.Purple,
-        borderAccent = Color(0x4D9D6FFF),
     ),
     Notification(
-        icon        = "🔥",
-        iconBg      = FitverseColors.OrangeDim,
+        type        = NotificationType.STREAK,
         title       = "Streak Ativo!",
         description = "Você está há 7 dias em sequência. Incrível!",
         time        = "10 min",
         isUnread    = true,
-        dotColor    = FitverseColors.Orange,
-        borderAccent = Color(0x4DFF6B35),
     ),
     Notification(
-        icon        = "❤️",
-        iconBg      = FitverseColors.RedDim,
+        type        = NotificationType.COMENTARIO,
+        title       = "Max comentou seu post",
+        description = "\"Que treino insano cara! Como você faz?\"",
+        time        = "5 min",
+        isUnread    = true,
+    ),
+    Notification(
+        type        = NotificationType.CURTIDA,
         title       = "Luna curtiu seu post",
         description = "\"Treino de peito arrasado! 💪\"",
         time        = "1h",
     ),
     Notification(
-        icon        = "💪",
-        iconBg      = FitverseColors.GreenDim,
+        type        = NotificationType.TREINO,
         title       = "Hora do treino!",
         description = "Seu treino Hypertrophy A aguarda você.",
         time        = "2h",
     ),
     Notification(
-        icon        = "🏆",
-        iconBg      = Color(0x1AC8FF00),
+        type        = NotificationType.CONQUISTA,
         title       = "Nova Conquista!",
         description = "Você desbloqueou \"Iron Will\" — 100 treinos!",
         time        = "1 dia",
+    ),
+    Notification(
+        type        = NotificationType.DESAFIO,
+        title       = "Desafio disponível!",
+        description = "30 dias de treino — participe e ganhe 500 XP!",
+        time        = "agora",
+        isUnread    = true,
+    ),
+    Notification(
+        type        = NotificationType.RANKING,
+        title       = "Subiu no ranking!",
+        description = "Você está em 5º na Liga Ouro desta semana.",
+        time        = "3h",
+        isUnread    = true,
+    ),
+    Notification(
+        type        = NotificationType.SISTEMA,
+        title       = "Atualização disponível",
+        description = "Versão 2.4 com novidades no treino e nutrição.",
+        time        = "hoje",
     ),
 )
 
@@ -84,93 +164,66 @@ private val sampleNotifications = listOf(
 
 @Composable
 fun NotificationScreen(onBack: () -> Unit) {
-    val unreadCount = sampleNotifications.count { it.isUnread }
-
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(FitverseColors.Bg),
-        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
-    ) {
-        item {
+    Scaffold(
+        containerColor = FitverseColors.Bg,
+        topBar = {
             FitverseTopAppBar(
                 title = "Notificações",
                 onBack = onBack
             )
-
-            // Title row with unread badge
-            Row(
-                modifier              = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment     = Alignment.CenterVertically,
+        },
+        content = {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(FitverseColors.Bg)
+                    .padding(it),
+                contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
-                Text(
-                    text       = "NOTIFICAÇÕES",
-                    style      = MaterialTheme.typography.displayLarge,
-                    color      = FitverseColors.TextPrimary,
-                )
-                if (unreadCount > 0) {
-                    UnreadBadge(count = unreadCount)
+                items(sampleNotifications, key = { it.title }) { notif ->
+                    NotificationRow(notif    = notif)
                 }
             }
-
-            Spacer(Modifier.height(16.dp))
         }
-
-        items(sampleNotifications, key = { it.title }) { notif ->
-            NotificationRow(
-                notif    = notif,
-                modifier = Modifier.padding(bottom = 8.dp),
-            )
-        }
-
-        item { Spacer(Modifier.height(24.dp)) }
-    }
-}
-
-// ── Unread badge ──────────────────────────────────────────────────────────────
-
-@Composable
-private fun UnreadBadge(count: Int) {
-    Box(
-        modifier = Modifier
-            .clip(RoundedCornerShape(20.dp))
-            .background(FitverseColors.Orange)
-            .padding(horizontal = 12.dp, vertical = 5.dp),
-        contentAlignment = Alignment.Center,
-    ) {
-        Text(
-            text       = "$count novas",
-            fontSize   = 12.sp,
-            fontWeight = FontWeight.ExtraBold,
-            color      = Color.White,
-            letterSpacing = 0.3.sp,
-        )
-    }
+    )
 }
 
 // ── Notification row ──────────────────────────────────────────────────────────
 
 @Composable
-private fun NotificationRow(
+fun NotificationRow(
     notif: Notification,
     modifier: Modifier = Modifier,
 ) {
-    Box(
+    val style = NotificationStyles.from(notif.type)
+    val accentColor = style.dotColor ?: FitverseColors.TextMuted2
+
+    Row(
         modifier = modifier
             .fillMaxWidth()
-            .border(
-                width  = 1.dp,
-                color  = notif.borderAccent ?: FitverseColors.Border,
-                shape  = ShapeCard,
-            )
+            .height(IntrinsicSize.Min)          // faz a barra esticar com o card
             .clip(ShapeCard)
-            .background(FitverseColors.Surface)
-            .padding(13.dp),
+            .border(0.5.dp, FitverseColors.Border, ShapeCard)
+            .background(FitverseColors.Surface),
     ) {
+
+        // ── Left accent bar ───────────────────────────────────
+        Box(
+            modifier = Modifier
+                .width(4.dp)
+                .fillMaxHeight()
+                .background(accentColor),
+        )
+
+        // ── Icon + Content ────────────────────────────────────
         Row(
+            modifier = Modifier
+                .weight(1f)
+                .padding(13.dp),
             verticalAlignment = Alignment.Top,
         ) {
+
             // Icon
             Box(
                 modifier = Modifier
@@ -186,38 +239,91 @@ private fun NotificationRow(
 
             // Content
             Column(Modifier.weight(1f)) {
-                Text(
-                    text       = notif.title,
-                    fontSize   = 14.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color      = FitverseColors.TextPrimary,
-                )
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text(
+                        text       = notif.title,
+                        fontSize   = 14.sp,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        fontWeight = FontWeight.SemiBold,
+                        color      = FitverseColors.TextPrimary,
+                        modifier   = Modifier.weight(1f),
+                    )
+                    Spacer(Modifier.width(6.dp))
+
+                    // Dot — apenas unread
+                    if (notif.isUnread && style.dotColor != null) {
+                        Box(
+                            modifier = Modifier
+                                .size(7.dp)
+                                .clip(CircleShape)
+                                .background(accentColor),
+                        )
+                        Spacer(Modifier.width(4.dp))
+                    }
+
+                    Text(
+                        text     = notif.time,
+                        fontSize = 11.sp,
+                        color    = FitverseColors.TextMuted2,
+                    )
+                }
+
                 Spacer(Modifier.height(3.dp))
+
                 Text(
                     text       = notif.description,
                     fontSize   = 12.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                     color      = FitverseColors.TextMuted,
                     lineHeight = 17.sp,
                 )
+
+                Spacer(Modifier.height(8.dp))
+
+                NotificationTypeChip(notif.type, style)
             }
-
-            Spacer(Modifier.width(8.dp))
-            Text(
-                text  = notif.time,
-                fontSize = 11.sp,
-                color = FitverseColors.TextMuted2,
-            )
         }
+    }
+}
 
-        // Unread dot
-        if (notif.dotColor != null) {
-            Box(
-                modifier = Modifier
-                    .align(Alignment.TopEnd)
-                    .size(8.dp)
-                    .clip(CircleShape)
-                    .background(notif.dotColor),
-            )
-        }
+// ── Type chip ─────────────────────────────────────────────────────────────────
+
+@Composable
+private fun NotificationTypeChip(
+    type: NotificationType,
+    style: NotificationStyle,
+) {
+    val label = when (type) {
+        NotificationType.XP          -> "#xp"
+        NotificationType.STREAK      -> "#streak"
+        NotificationType.CURTIDA     -> "#curtida"
+        NotificationType.COMENTARIO  -> "#comentário"
+        NotificationType.TREINO      -> "#treino"
+        NotificationType.CONQUISTA   -> "#conquista"
+        NotificationType.DESAFIO     -> "#desafio"
+        NotificationType.RANKING     -> "#ranking"
+        NotificationType.SISTEMA     -> "#sistema"
+    }
+
+    val chipColor = style.dotColor ?: FitverseColors.TextMuted2
+
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(20.dp))
+            .background(chipColor.copy(alpha = 0.12f))
+            .padding(horizontal = 8.dp, vertical = 3.dp),
+    ) {
+        Text(
+            text       = label,
+            fontSize   = 10.sp,
+            color      = chipColor,
+            fontWeight = FontWeight.Medium,
+        )
     }
 }

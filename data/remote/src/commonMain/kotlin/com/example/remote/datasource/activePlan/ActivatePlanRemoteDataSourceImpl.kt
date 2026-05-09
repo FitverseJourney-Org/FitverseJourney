@@ -1,6 +1,6 @@
 package com.example.remote.datasource.activePlan
 
-import com.example.domain.models.activePlan.PlanId
+import com.example.domain.models.plan.PlanId
 
 class ActivatePlanRemoteDataSourceImpl : ActivatePlanRemoteDataSource {
 

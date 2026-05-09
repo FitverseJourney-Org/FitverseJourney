@@ -5,6 +5,5 @@ import org.fitverse.project.navigation.FitverseRootNavigation
 
 
 fun MainViewController() = ComposeUIViewController {
-    FitverseRootNavigation(
-    )
+
 }

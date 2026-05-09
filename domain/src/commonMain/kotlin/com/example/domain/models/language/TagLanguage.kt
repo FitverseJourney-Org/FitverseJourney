@@ -1,4 +1,4 @@
-package com.example.domain.models.local.language
+package com.example.domain.models.language
 
 enum class TagLanguage(val iso: String) {
 

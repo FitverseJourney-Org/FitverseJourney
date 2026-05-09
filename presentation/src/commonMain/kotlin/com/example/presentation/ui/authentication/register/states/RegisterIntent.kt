@@ -1,9 +1,9 @@
 package com.example.presentation.ui.authentication.register.states
 
-import com.example.domain.models.local.ClassType
-import com.example.domain.models.local.Genero
-import com.example.domain.models.local.NivelExperiencia
-import com.example.domain.models.local.Objetivo
+import com.example.domain.models.user.ClassType
+import com.example.domain.models.user.Genero
+import com.example.domain.models.user.NivelExperiencia
+import com.example.domain.models.user.Objetivo
 
 sealed interface RegisterIntent {
     // Step 1

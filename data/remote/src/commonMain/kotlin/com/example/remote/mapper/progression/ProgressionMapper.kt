@@ -2,7 +2,7 @@ package com.example.remote.mapper.progression
 // data/remote/src/commonMain/kotlin/com/example/remote/mapper/progression/ProgressionMapper.kt
 
 import com.example.domain.expect.toPlatformDate
-import com.example.domain.models.progress.LoadProgressionPoint
+import com.example.domain.models.progression.LoadProgressionPoint
 import com.example.remote.dto.progression.ProgressionPointDto
 
 // ── Dto → Entity (remote → local) ────────────────────────────────────────────

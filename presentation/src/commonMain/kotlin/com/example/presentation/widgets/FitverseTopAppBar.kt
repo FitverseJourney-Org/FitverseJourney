@@ -40,7 +40,7 @@ fun FitverseTopAppBar(
             Column(modifier = Modifier) {
                 Text(
                     text = title,
-                    fontSize = 14.sp,
+                    fontSize = 16.sp,
                     fontWeight = FontWeight.Black,
                     color = cs.onBackground,
                     letterSpacing = 1.sp

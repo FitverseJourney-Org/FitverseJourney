@@ -12,7 +12,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.example.domain.models.friends.UserProfile
+import com.example.domain.models.dashboard.UserProfile
 
 /**
  * Item de lista de amigo otimizado

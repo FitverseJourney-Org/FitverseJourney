@@ -6,6 +6,8 @@ import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavKey
@@ -14,12 +16,14 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
+import com.example.presentation.ui.authentication.resetPassword.ResetPasswordViewModel
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import org.fitverse.project.destinations.auth.LoginDestination
 import org.fitverse.project.destinations.auth.RegisterDestination
 import org.fitverse.project.destinations.auth.ResetPasswordDestination
 import org.fitverse.project.routes.NavRoutes
+import org.koin.compose.koinInject
 import kotlin.collections.listOf
 
 @Composable
@@ -85,8 +89,12 @@ fun AuthNavigation(
                 )
             }
             entry<NavRoutes.AuthFlow.ResetPassword>{
+                val viewmodel = koinInject<ResetPasswordViewModel>()
+                val state by viewmodel.state.collectAsState()
                 ResetPasswordDestination(
-                    toLogin = {
+                    viewmodel = viewmodel,
+                    state = state,
+                    onNavigateBack = {
                         authBackStack.removeLastOrNull()
                     }
                 )

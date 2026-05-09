@@ -1,7 +1,7 @@
 package org.fitverse.fitverseJourney
 
 import android.app.Application
-import com.example.local.database.androidLocalPlatformModule
+import com.example.local.di.androidLocalPlatformModule
 import com.example.local.database.datastore.DataStoreFactory
 import com.example.remote.androidRemotePlatformModule
 import com.google.firebase.FirebaseApp

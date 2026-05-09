@@ -3,8 +3,8 @@ package com.example.presentation.ui.wiki.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.models.wiki.WikiCategory
-import com.example.domain.models.wiki.WikiUiEvent
-import com.example.domain.models.wiki.WikiUiState
+import com.example.presentation.ui.wiki.state.WikiUiEvent
+import com.example.presentation.ui.wiki.state.WikiUiState
 import com.example.domain.usecase.wiki.GetWikiArticlesUseCase
 import com.example.domain.usecase.wiki.SearchWikiArticlesUseCase
 import com.example.domain.usecase.wiki.ToggleBookmarkUseCase

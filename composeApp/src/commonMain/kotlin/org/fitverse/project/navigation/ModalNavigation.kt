@@ -18,6 +18,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
@@ -225,7 +226,7 @@ fun MenuCardContainer(content: @Composable ColumnScope.() -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(colors.surface.copy(alpha = 0.5f), RoundedCornerShape(24.dp))
+            .background(colors.surface.copy(alpha = 0.5f))
             .border(0.5.dp, colors.outline.copy(alpha = 0.1f), RoundedCornerShape(24.dp))
             .padding(vertical = 4.dp),
         content = content
@@ -247,7 +248,8 @@ fun ActionRow(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onClick() }
-            .padding(horizontal = 20.dp, vertical = 14.dp),
+            .padding(horizontal = 20.dp, vertical = 14.dp)
+            .clip(RoundedCornerShape(16.dp)),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(icon, null, tint = iconColor, modifier = Modifier.size(20.dp))

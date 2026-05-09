@@ -6,8 +6,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.example.domain.models.dashboard.TaskIcon
-import com.example.domain.models.dashboard.TaskItem
+import com.example.domain.models.dashboard.tasks.TaskIcon
+import com.example.domain.models.dashboard.tasks.TaskItem
 
 @Composable
 fun TasksDestination(toBack: () -> Unit, toLibrary: () -> Unit) {

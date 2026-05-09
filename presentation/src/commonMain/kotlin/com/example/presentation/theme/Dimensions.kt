@@ -1,5 +1,6 @@
 package com.example.presentation.theme
 
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -14,3 +15,8 @@ object RegisterDimens {
     val buttonHeight     = 52.dp
     val stepBarHeight    = 3.dp
 }
+
+val ShapeCard   = RoundedCornerShape(14.dp)
+val ShapeButton = RoundedCornerShape(10.dp)
+val ShapeSmall  = RoundedCornerShape(8.dp)
+val ShapeTag    = RoundedCornerShape(8.dp)

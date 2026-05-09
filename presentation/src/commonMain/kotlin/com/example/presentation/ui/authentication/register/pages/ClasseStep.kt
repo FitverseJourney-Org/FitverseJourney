@@ -15,7 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.domain.models.local.ClassType
+import com.example.domain.models.user.ClassType
 import com.example.presentation.ui.authentication.register.components.ClassCard
 import com.example.presentation.ui.authentication.register.components.RegisterPrimaryButton
 import com.example.presentation.ui.authentication.register.states.RegisterIntent

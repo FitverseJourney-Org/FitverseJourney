@@ -80,7 +80,7 @@ fun DevicesScreen(onBack: () -> Unit) {
     }
 
     Scaffold(
-        containerColor = Color.Transparent,
+        containerColor = FitverseColors.Bg,
         topBar = {
             FitverseTopAppBar(
                 title = "Dispositivos",
@@ -89,10 +89,7 @@ fun DevicesScreen(onBack: () -> Unit) {
         }
     ){
         LazyColumn(
-            modifier = Modifier
-                .padding(it)
-                .fillMaxSize()
-                .background(FitverseColors.Bg),
+            modifier = Modifier.padding(it).fillMaxSize(),
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
         ) {
             item {

@@ -1,6 +1,6 @@
 package com.example.repository.activePlan
 
-import com.example.domain.models.activePlan.PlanId
+import com.example.domain.models.plan.PlanId
 import com.example.domain.repository.ActivatePlanRepository
 import com.example.remote.datasource.activePlan.ActivatePlanRemoteDataSource
 

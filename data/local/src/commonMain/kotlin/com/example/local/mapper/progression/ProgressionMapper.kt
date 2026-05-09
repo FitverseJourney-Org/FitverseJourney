@@ -1,7 +1,7 @@
 package com.example.local.mapper.progression
 
 import com.example.domain.expect.toPlatformDate
-import com.example.domain.models.progress.LoadProgressionPoint
+import com.example.domain.models.progression.LoadProgressionPoint
 import com.example.local.model.ProgressionPointEntity
 import kotlin.jvm.JvmName
 

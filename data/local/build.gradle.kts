@@ -62,6 +62,9 @@ kotlin {
             // DataStore (persistência local)
             implementation(libs.datastore)
             implementation(libs.datastore.preferences)
+
+            implementation("com.russhwolf:multiplatform-settings:1.3.0")
+
         }
 
         commonTest.dependencies {
@@ -72,6 +75,9 @@ kotlin {
             implementation(project.dependencies.platform(libs.koin.bom))
             implementation(libs.koin.android)
             implementation(libs.sqldelight.android.driver)
+
+            // EncryptedSharedPreferences
+            implementation("androidx.security:security-crypto:1.1.0-alpha06")
         }
 
         iosMain.dependencies {

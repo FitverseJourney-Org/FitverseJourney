@@ -1,6 +1,6 @@
 package com.example.local.mapper.exercise
 
-import com.example.domain.models.progress.Exercise
+import com.example.domain.models.progression.Exercise
 import com.example.local.model.ExerciseEntity
 
 fun ExerciseEntity.toDomain(): Exercise = Exercise(

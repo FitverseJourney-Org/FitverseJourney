@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.example.presentation.components.background.ModernFitverseBackground
-import com.example.presentation.screens.ui.community.AddNewPostScreen
+import com.example.presentation.ui.community.AddNewPostScreen
 
 @Composable
 fun AddPostDestination(toBack: () -> Unit) {

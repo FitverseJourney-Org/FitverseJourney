@@ -1,10 +1,10 @@
 package com.example.domain.repository.dbLocal.sqldelight.user
 
-import com.example.domain.models.local.User
+import com.example.domain.models.user.User
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
-    suspend fun createUser(user: User): User
+    suspend fun createUser(user: User): Unit
     fun observeUser(userId: String): Flow<User?>       // Stream local (Room/SQLDelight)
     suspend fun getUser(userId: String): User          // Busca remota/local
     suspend fun updateUser(user: User): User           // Atualiza local + remote

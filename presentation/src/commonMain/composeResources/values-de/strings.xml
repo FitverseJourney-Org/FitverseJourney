@@ -3,25 +3,23 @@
     <string name="app_name">Fitverse Journey</string>
 
 
-    <!-- =============================================================== -->
-    <!-- Onboarding Page -->
-    <!-- =============================================================== -->
+    <!-- ================================================================================ -->
+    <!-- ================================= ONBOARDING Page   ============================= -->
+    <!-- ================================================================================ -->
     <string name="onboarding_title_1">Trainings verfolgen</string>
     <string name="onboarding_description_1">Erfasse deine Übungen, Sätze und Wiederholungen ganz einfach.\nVerfolge deinen Fortschritt und bleibe konstant bei deinem Training.</string>
-
     <string name="onboarding_title_2">Ernähre deinen Körper richtig</string>
     <string name="onboarding_description_2">Erhalte intelligente Ernährungstipps, die auf deine Ziele abgestimmt sind.\nLerne, was, wann und wie du essen solltest, um deine Leistung zu steigern.</string>
-
     <string name="onboarding_title_3">Trainiere mit KI</string>
     <string name="onboarding_description_3">Personalisierte Workouts mit künstlicher Intelligenz.\nPasse dein Training an Leistung, Erholung und Fortschritt an.</string>
-
     <string name="onboarding_title_4">Mit Freunden teilen</string>
     <string name="onboarding_description_4">Bleibe motiviert, indem du Fortschritte und Erfolge teilst.\nTrainiere gemeinsam, fordere Freunde heraus und feiere jeden Meilenstein.</string>
 
 
-    <!-- =============================================================== -->
-    <!-- Trial Page -->
-    <!-- =============================================================== -->
+
+    <!-- ================================================================================ -->
+    <!-- ================================= TRIAL Page ================================ -->
+    <!-- ================================================================================ -->
     <string name="trial_title">WÄHLE DEINEN PLAN</string>
     <string name="trial_subtitle">Entfalte dein volles Potenzial</string>
     <string name="trial_activate_button">Plan aktivieren</string>
@@ -56,9 +54,11 @@
     <string name="trial_feature_coaching">1:1 Coaching</string>
     <string name="trial_feature_nft_badges">NFT-Abzeichen</string>
 
-    <!-- =============================================================== -->
-    <!-- Login Page -->
-    <!-- =============================================================== -->
+
+
+    <!-- ================================================================================ -->
+    <!-- ================================= LOGIN Page   ================================ -->
+    <!-- ================================================================================ -->
     <string name="login_welcome_title">WILLKOMMEN</string>
     <string name="login_welcome_subtitle">ZURÜCK, KRIEGER</string>
 
@@ -81,5 +81,164 @@
     <string name="login_create_account">Konto erstellen</string>
 
 
+
+    <!-- ================================================================================ -->
+    <!-- ================================= FRIENDS Page   ================================ -->
+    <!-- ================================================================================ -->
+    <string name="friends_title">FRIENDS</string>
+
+    <!-- Add Friend Section -->
+    <string name="add_friend_title">Adicionar conexão</string>
+    <string name="add_friend_code_hint">Ex: FIT-1234</string>
+
+    <!-- Suggestions -->
+    <string name="suggestions_title">Pessoas que você talvez conheça</string>
+    <string name="mutual_connections">%1$d em comum</string>
+
+    <!-- Friends List -->
+    <string name="friends_list_title">Seus Amigos (%1$d)</string>
+
+    <!-- Actions -->
+    <string name="action_add">Adicionar</string>
+    <string name="action_ok">OK</string>
+    <string name="action_cancel">Cancelar</string>
+
+    <!-- Errors -->
+    <string name="error_title">Erro</string>
+    <string name="error_network">Erro de conexão. Verifique sua internet.</string>
+    <string name="error_user_not_found">Usuário com código %1$s não encontrado.</string>
+    <string name="error_unknown">Ocorreu um erro inesperado.</string>
+    <string name="error_invalid_code">Código inválido. Use o formato FIT-XXXX</string>
+
+    <!-- Empty States -->
+    <string name="empty_friends_title">Você ainda não tem amigos</string>
+    <string name="empty_friends_message">Adicione amigos para ver suas atividades e competir!</string>
+
+    <!-- Content Descriptions (Accessibility) -->
+    <string name="cd_navigate_back">Voltar</string>
+    <string name="cd_qr_code_scanner">Escanear código QR</string>
+    <string name="cd_add_friend">Adicionar amigo</string>
+    <string name="cd_sort_ascending">Ordenar de A a Z</string>
+    <string name="cd_sort_descending">Ordenar de Z a A</string>
+    <string name="cd_user_avatar">Avatar do usuário</string>
+    <string name="cd_streak_indicator">Indicador de sequência</string>
+
+    <!-- Sort -->
+    <string name="sort_a_z">A-Z</string>
+    <string name="sort_z_a">Z-A</string>
+
+
+
+    <!-- ================================================================================ -->
+    <!-- ================================= REGISTER PAGE  ================================ -->
+    <!-- ================================================================================ -->
+    <string name="register_screen_title">KONTO ERSTELLEN</string>
+    <string name="register_choose_class_title">WÄHLE DEINE KLASSE</string>
+
+    <!-- ContaStep -->
+    <string name="register_conta_first_name_label">VORNAME</string>
+    <string name="register_conta_first_name_placeholder">Max</string>
+    <string name="register_conta_last_name_label">NACHNAME</string>
+    <string name="register_conta_last_name_placeholder">Mustermann</string>
+    <string name="register_conta_email_label">E-MAIL</string>
+    <string name="register_conta_email_placeholder">deine@email.com</string>
+    <string name="register_conta_password_label">PASSWORT</string>
+    <string name="register_conta_password_placeholder">Mindestens 8 Zeichen</string>
+    <string name="register_conta_password_hint">Verwende Buchstaben, Zahlen und Symbole</string>
+
+    <!-- PerfilStep -->
+    <string name="register_perfil_subtitle">Personalisiere dein Abenteurerprofil.</string>
+    <string name="register_perfil_username_label">BENUTZERNAME</string>
+    <string name="register_perfil_username_placeholder">@dein_nick</string>
+    <string name="register_perfil_birthdate_label">GEBURTSDATUM</string>
+    <string name="register_perfil_weight_label">GEWICHT</string>
+    <string name="register_perfil_height_label">GRÖSSE</string>
+    <string name="register_perfil_gender_label">GESCHLECHT</string>
+    <string name="register_perfil_gender_hint">Wird zur Berechnung deiner Gesundheitsziele verwendet.</string>
+
+    <!-- ClasseStep -->
+    <string name="register_classe_subtitle">Dein Archetyp definiert deine Reise — nicht deine Grenzen.\nDu kannst ihn später ändern.</string>
+    <string name="register_classe_level_change_hint">Du kannst deine Klasse auf Level 10 wechseln.</string>
+    <string name="register_button_confirm_class">KLASSE BESTÄTIGEN</string>
+
+    <!-- ObjetivosStep -->
+    <string name="register_objetivos_goal_title">Was ist dein Hauptziel?</string>
+    <string name="register_objetivos_level_title">Dein Erfahrungslevel:</string>
+    <string name="register_objetivos_class_level">%1$s – LEVEL 1</string>
+    <string name="register_objetivos_class_frame">%1$s · Frame \"%2$s\"</string>
+
+    <!-- Shared buttons -->
+    <string name="register_button_next">WEITER →</string>
+    <string name="register_button_create_account">MEIN KONTO ERSTELLEN</string>
+
+    <!-- Register Steps -->
+    <string name="register_step_conta">KONTO</string>
+    <string name="register_step_perfil">PROFIL</string>
+    <string name="register_step_classe">KLASSE</string>
+    <string name="register_step_objetivos">ZIELE</string>
+
+    <!-- ClassType — TITAN -->
+    <string name="class_tita_display_name">TITAN</string>
+    <string name="class_tita_subtitle">KRIEGER DER STÄRKE</string>
+    <string name="class_tita_quote">Geboren um zu heben. Jedes kg ist ein Schritt zu deiner endgültigen Form.</string>
+    <string name="class_tita_bonus_1">+20% XP bei Kraft- und Muskeltraining</string>
+    <string name="class_tita_bonus_2">Max. LP +20% ab Level 1</string>
+    <string name="class_tita_bonus_3">Exklusiver Profilrahmen \"Lebendiger Stahl\"</string>
+    <string name="class_tita_frame_label">Lebendiger Stahl</string>
+
+    <!-- ClassType — WEISER -->
+    <string name="class_sabio_display_name">WEISER</string>
+    <string name="class_sabio_subtitle">MAGIER DER ERNÄHRUNG</string>
+    <string name="class_sabio_quote">Der Körper ist das Ergebnis des Geistes. Wer versteht, was er isst, gewinnt vor allen anderen.</string>
+    <string name="class_sabio_bonus_1">+20% XP bei Ernährungs- und Mahlzeitenmissionen</string>
+    <string name="class_sabio_bonus_2">Fitness-Wiki von Anfang an freigeschaltet</string>
+    <string name="class_sabio_bonus_3">Exklusiver Profilrahmen \"Wissensnexus\"</string>
+    <string name="class_sabio_frame_label">Wissensnexus</string>
+
+    <!-- ClassType — NOMADE -->
+    <string name="class_nomade_display_name">NOMADE</string>
+    <string name="class_nomade_subtitle">BOGENSCHÜTZE DER BESTÄNDIGKEIT</string>
+    <string name="class_nomade_quote">Nicht der Stärkste noch der Klügste — derjenige, der nie aufhört. Beständigkeit schlägt jedes Talent.</string>
+    <string name="class_nomade_bonus_1">+20% XP bei Schritten, Cardio und Hydration</string>
+    <string name="class_nomade_bonus_2">1 \"Streak-Schild\" pro Woche</string>
+    <string name="class_nomade_bonus_3">Exklusiver Profilrahmen \"Freier Horizont\"</string>
+    <string name="class_nomade_frame_label">Freier Horizont</string>
+
+    <!-- Objetivo -->
+    <string name="objetivo_perder_peso">Gewicht verlieren</string>
+    <string name="objetivo_ganhar_massa">Muskeln aufbauen</string>
+    <string name="objetivo_melhorar_condicao">Fitness verbessern</string>
+    <string name="objetivo_vida_saudavel">Gesunder Lebensstil</string>
+    <string name="objetivo_performance">Leistung</string>
+
+    <!-- NivelExperiencia -->
+    <string name="nivel_iniciante">Anfänger</string>
+    <string name="nivel_intermediario">Fortgeschritten</string>
+    <string name="nivel_avancado">Experte</string>
+
+    <!-- Genero -->
+    <string name="genero_masculino">Männlich</string>
+    <string name="genero_feminino">Weiblich</string>
+
+    <!-- Stats -->
+    <string name="stat_forca">Stärke</string>
+    <string name="stat_resistencia">Ausdauer</string>
+    <string name="stat_nutricao">Ernährung</string>
+
+
+
+    <!-- ================================================================================ -->
+    <!-- ================================= RECOVER PAGE   ================================ -->
+    <!-- ================================================================================ -->
+    <string name="reset_title">ZUGANG WIEDERHERSTELLEN</string>
+    <string name="reset_subtitle">Gib deine E-Mail ein und wir senden dir einen Link zum Zurücksetzen des Passworts.</string>
+    <string name="reset_email_label">E-MAIL</string>
+    <string name="reset_email_placeholder">deine@email.com</string>
+    <string name="reset_button_send">Link senden</string>
+
+    <!-- ResetPassword — Success State -->
+    <string name="reset_success_content_description">Erfolg</string>
+    <string name="reset_success_title">E-MAIL GESENDET!</string>
+    <string name="reset_success_subtitle">Überprüfe deinen Posteingang.</string>
 </resources>
 

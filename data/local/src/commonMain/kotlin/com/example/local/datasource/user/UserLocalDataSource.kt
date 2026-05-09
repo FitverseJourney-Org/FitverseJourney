@@ -1,6 +1,5 @@
 package com.example.local.datasource.user
 
-import com.example.domain.models.local.User
 import com.journey.database.migrations.UserEntity
 import kotlinx.coroutines.flow.Flow
 

@@ -6,28 +6,25 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.presentation.screens.ui.trial.TrialIntroScreen
-import com.example.presentation.screens.ui.trial.event.TrialEvent
-import com.example.presentation.screens.ui.trial.viewmodel.TrialViewModel
-import kotlinx.coroutines.flow.collectLatest
-import org.koin.compose.koinInject
+import com.example.presentation.ui.trial.TrialIntroScreen
+import com.example.presentation.ui.trial.event.TrialEvent
+import com.example.presentation.ui.trial.viewmodel.TrialViewModel
 
 @Composable
 fun TrialDestination(
-    toDashboard : () -> Unit,
-    toLogin     : () -> Unit,
+    viewModel: TrialViewModel,
+    onNavigateToDashboard: () -> Unit,
+    onNavigateToLogin: () -> Unit,
 ) {
-    val viewModel       = koinInject<TrialViewModel>()
-    val state           by viewModel.state.collectAsStateWithLifecycle()
-    val snackbarHost    = remember { SnackbarHostState() }
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
-    // ── Eventos one-shot ──────────────────────────────────────────────────────
+    // Eventos one-shot do Canal
     LaunchedEffect(Unit) {
-        viewModel.events.collectLatest { event ->
+        viewModel.events.collect { event ->
             when (event) {
-                is TrialEvent.NavigateToDashboard      -> toDashboard()
-                is TrialEvent.NavigateToLogin          -> toLogin()
-                is TrialEvent.ShowSnackbar          -> snackbarHost.showSnackbar(event.message)
+                TrialEvent.NavigateToDashboard -> onNavigateToDashboard()
+                TrialEvent.NavigateToLogin     -> onNavigateToLogin()
+                is TrialEvent.ShowSnackbar     -> { /* mostrar snackbar */ }
             }
         }
     }

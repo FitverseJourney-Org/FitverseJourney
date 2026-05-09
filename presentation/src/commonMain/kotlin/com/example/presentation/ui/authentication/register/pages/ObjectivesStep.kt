@@ -20,8 +20,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.example.domain.models.local.NivelExperiencia
-import com.example.domain.models.local.Objetivo
+import com.example.domain.models.user.NivelExperiencia
+import com.example.domain.models.user.Objetivo
 import com.example.presentation.ui.authentication.register.components.RadioChip
 import com.example.presentation.ui.authentication.register.components.RegisterPrimaryButton
 import com.example.presentation.ui.authentication.register.components.SelectionChip
@@ -29,6 +29,11 @@ import com.example.presentation.ui.authentication.register.helpers.label
 import com.example.presentation.ui.authentication.register.states.RegisterIntent
 import com.example.presentation.ui.authentication.register.states.RegisterUiState
 import com.example.presentation.theme.RegisterDimens
+import com.example.presentation.ui.authentication.register.helpers.accentColor
+import com.example.presentation.ui.authentication.register.helpers.displayName
+import com.example.presentation.ui.authentication.register.helpers.frameLabel
+import com.example.presentation.ui.authentication.register.helpers.iconEmoji
+import com.example.presentation.ui.authentication.register.helpers.subtitle
 import fitversejourneyapp.presentation.generated.resources.Res
 import fitversejourneyapp.presentation.generated.resources.register_button_create_account
 import fitversejourneyapp.presentation.generated.resources.register_objetivos_class_frame
@@ -63,19 +68,19 @@ fun GoalsStep(
                     .fillMaxWidth()
                     .clip(shapes.medium)
                     .background(colors.surfaceVariant)
-                    .border(1.dp, classe.accentColor.copy(alpha = 0.4f), shapes.medium)
+                    .border(1.dp, classe.accentColor().copy(alpha = 0.4f), shapes.medium)
                     .padding(16.dp),
                 verticalAlignment     = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                Text(text = classe.iconEmoji, style = type.titleLarge)
+                Text(text = classe.iconEmoji(), style = type.titleLarge)
                 Column {
                     Text(
-                        text  = stringResource(Res.string.register_objetivos_class_level, classe.displayName),
-                        style = type.titleLarge.copy(color = classe.accentColor),
+                        text  = stringResource(Res.string.register_objetivos_class_level, classe.displayName()),
+                        style = type.titleLarge.copy(color = classe.accentColor()),
                     )
                     Text(
-                        text  = stringResource(Res.string.register_objetivos_class_frame, classe.subtitle, classe.frameLabel),
+                        text  = stringResource(Res.string.register_objetivos_class_frame, classe.subtitle(), classe.frameLabel()),
                         style = type.bodySmall.copy(color = colors.onSurfaceVariant),
                     )
                 }

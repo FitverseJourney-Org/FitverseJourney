@@ -1,6 +1,6 @@
 package com.example.domain.repository
 
-import com.example.domain.models.activePlan.PlanId
+import com.example.domain.models.plan.PlanId
 
 
 interface ActivatePlanRepository {

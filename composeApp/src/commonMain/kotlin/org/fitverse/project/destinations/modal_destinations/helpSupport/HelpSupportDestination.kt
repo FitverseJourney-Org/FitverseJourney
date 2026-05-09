@@ -7,7 +7,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import com.example.presentation.screens.ui.helpSupport.SupportScreen
+import com.example.presentation.ui.helpSupport.SupportScreen
 
 @Composable
 fun HelpSupportDestination(toBack: () -> Unit) {

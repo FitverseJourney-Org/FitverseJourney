@@ -2,11 +2,11 @@ package com.example.presentation.ui.authentication.register.helpers
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import com.example.domain.models.local.ClassType
-import com.example.domain.models.local.ClassType.*
-import com.example.domain.models.local.Genero
-import com.example.domain.models.local.NivelExperiencia
-import com.example.domain.models.local.Objetivo
+import com.example.domain.models.user.ClassType
+import com.example.domain.models.user.ClassType.*
+import com.example.domain.models.user.Genero
+import com.example.domain.models.user.NivelExperiencia
+import com.example.domain.models.user.Objetivo
 import fitversejourneyapp.presentation.generated.resources.Res
 import fitversejourneyapp.presentation.generated.resources.class_nomade_bonus_1
 import fitversejourneyapp.presentation.generated.resources.class_nomade_bonus_2
@@ -65,78 +65,78 @@ fun Objetivo.label(): String = when (this) {
 
 @Composable
 fun ClassType.frameLabel(): String = when (this) {
-    ClassType.TITA   -> stringResource(Res.string.class_tita_frame_label)
-    ClassType.SABIO  -> stringResource(Res.string.class_sabio_frame_label)
-    ClassType.NOMADE -> stringResource(Res.string.class_nomade_frame_label)
+    TITAN -> stringResource(Res.string.class_tita_frame_label)
+    SAGE -> stringResource(Res.string.class_sabio_frame_label)  // era SABIO
+    NOMAD -> stringResource(Res.string.class_nomade_frame_label) // era NOMADE
 }
 
 @Composable
 fun ClassType.bonuses(): List<String> = when (this) {
-    TITA -> listOf(
+    TITAN -> listOf(
         stringResource(Res.string.class_tita_bonus_1),
         stringResource(Res.string.class_tita_bonus_2),
         stringResource(Res.string.class_tita_bonus_3),
     )
-    SABIO -> listOf(
+    SAGE -> listOf(
         stringResource(Res.string.class_sabio_bonus_1),
         stringResource(Res.string.class_sabio_bonus_2),
         stringResource(Res.string.class_sabio_bonus_3),
     )
-    NOMADE -> listOf(
+    NOMAD -> listOf(
         stringResource(Res.string.class_nomade_bonus_1),
         stringResource(Res.string.class_nomade_bonus_2),
         stringResource(Res.string.class_nomade_bonus_3),
     )
+
 }
 
 @Composable
 fun ClassType.quote(): String = when (this) {
-    ClassType.TITA   -> stringResource(Res.string.class_tita_quote)
-    ClassType.SABIO  -> stringResource(Res.string.class_sabio_quote)
-    ClassType.NOMADE -> stringResource(Res.string.class_nomade_quote)
+    ClassType.TITAN   -> stringResource(Res.string.class_tita_quote)
+    ClassType.SAGE  -> stringResource(Res.string.class_sabio_quote)
+    ClassType.NOMAD -> stringResource(Res.string.class_nomade_quote)
 }
 
 @Composable
 fun ClassType.displayName(): String = when (this) {
-    ClassType.TITA   -> stringResource(Res.string.class_tita_display_name)
-    ClassType.SABIO  -> stringResource(Res.string.class_sabio_display_name)
-    ClassType.NOMADE -> stringResource(Res.string.class_nomade_display_name)
+    ClassType.TITAN   -> stringResource(Res.string.class_tita_display_name)
+    ClassType.SAGE  -> stringResource(Res.string.class_sabio_display_name)
+    ClassType.NOMAD -> stringResource(Res.string.class_nomade_display_name)
 }
 
 @Composable
 fun ClassType.subtitle(): String = when (this) {
-    ClassType.TITA   -> stringResource(Res.string.class_tita_subtitle)
-    ClassType.SABIO  -> stringResource(Res.string.class_sabio_subtitle)
-    ClassType.NOMADE -> stringResource(Res.string.class_nomade_subtitle)
+    ClassType.TITAN   -> stringResource(Res.string.class_tita_subtitle)
+    ClassType.SAGE  -> stringResource(Res.string.class_sabio_subtitle)
+    ClassType.NOMAD -> stringResource(Res.string.class_nomade_subtitle)
 }
 
-enum class ClassType(
-    val iconEmoji   : String,
-    val forca       : Int,
-    val resistencia : Int,
-    val nutricao    : Int,
-    val accentColor : Color,
-) {
-    TITAN(
-        iconEmoji   = "⚔️",
-        forca       = 5,
-        resistencia = 3,
-        nutricao    = 2,
-        accentColor = Color(0xFFFF4500),
-    ),
-    SABIO(
-        iconEmoji   = "🔮",
-        forca       = 2,
-        resistencia = 3,
-        nutricao    = 5,
-        accentColor = Color(0xFF7B5CF5),
-    ),
-    NOMADE(
-        iconEmoji   = "🏹",
-        forca       = 3,
-        resistencia = 5,
-        nutricao    = 3,
-        accentColor = Color(0xFF22C55E),
-    ),
+fun ClassType.accentColor(): Color = when (this) {
+    ClassType.TITAN -> Color(0xFFFF4500)
+    ClassType.SAGE  -> Color(0xFF7B5CF5)
+    ClassType.NOMAD -> Color(0xFF22C55E)
 }
 
+fun ClassType.iconEmoji(): String = when (this) {
+    ClassType.TITAN -> "⚔️"
+    ClassType.SAGE  -> "🔮"
+    ClassType.NOMAD -> "🏹"
+}
+
+fun ClassType.forca(): Int = when (this) {
+    ClassType.TITAN -> 5
+    ClassType.SAGE  -> 2
+    ClassType.NOMAD -> 3
+}
+
+fun ClassType.resistencia(): Int = when (this) {
+    ClassType.TITAN -> 3
+    ClassType.SAGE  -> 3
+    ClassType.NOMAD -> 5
+}
+
+fun ClassType.nutricao(): Int = when (this) {
+    ClassType.TITAN -> 2
+    ClassType.SAGE  -> 5
+    ClassType.NOMAD -> 3
+}

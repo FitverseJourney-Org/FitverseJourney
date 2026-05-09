@@ -24,12 +24,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.domain.models.local.ClassType
+import com.example.domain.models.user.ClassType
 import com.example.presentation.ui.authentication.register.helpers.bonuses
 import com.example.presentation.ui.authentication.register.helpers.displayName
 import com.example.presentation.ui.authentication.register.helpers.quote
 import com.example.presentation.ui.authentication.register.helpers.subtitle
 import com.example.presentation.theme.RegisterDimens
+import com.example.presentation.ui.authentication.register.helpers.accentColor
+import com.example.presentation.ui.authentication.register.helpers.forca
+import com.example.presentation.ui.authentication.register.helpers.iconEmoji
+import com.example.presentation.ui.authentication.register.helpers.nutricao
+import com.example.presentation.ui.authentication.register.helpers.resistencia
 import fitversejourneyapp.presentation.generated.resources.Res
 import fitversejourneyapp.presentation.generated.resources.stat_forca
 import fitversejourneyapp.presentation.generated.resources.stat_nutricao
@@ -48,12 +53,12 @@ fun ClassCard(
     val shapes = MaterialTheme.shapes
 
     val borderColor by animateColorAsState(
-        targetValue   = if (isSelected) classType.accentColor else colors.outline,
+        targetValue   = if (isSelected) classType.accentColor() else colors.outline,
         animationSpec = tween(250),
         label         = "border_${classType.name}",
     )
     val bgColor by animateColorAsState(
-        targetValue   = if (isSelected) classType.accentColor.copy(alpha = 0.08f)
+        targetValue   = if (isSelected) classType.accentColor().copy(alpha = 0.08f)
         else colors.surfaceVariant,
         animationSpec = tween(250),
         label         = "bg_${classType.name}",
@@ -75,10 +80,10 @@ fun ClassCard(
                 modifier = Modifier
                     .size(44.dp)
                     .clip(shapes.small)
-                    .background(classType.accentColor.copy(alpha = 0.18f)),
+                    .background(classType.accentColor().copy(alpha = 0.18f)),
                 contentAlignment = Alignment.Center,
             ) {
-                Text(text = classType.iconEmoji, style = type.titleLarge)
+                Text(text = classType.iconEmoji(), style = type.titleLarge)
             }
             Spacer(Modifier.width(12.dp))
             Column(modifier = Modifier.weight(1f)) {
@@ -100,10 +105,10 @@ fun ClassCard(
                     .clip(CircleShape)
                     .border(
                         2.dp,
-                        if (isSelected) classType.accentColor else colors.outline,
+                        if (isSelected) classType.accentColor() else colors.outline,
                         CircleShape,
                     )
-                    .background(if (isSelected) classType.accentColor else Color.Transparent),
+                    .background(if (isSelected) classType.accentColor() else Color.Transparent),
             )
         }
 
@@ -114,14 +119,14 @@ fun ClassCard(
         )
 
         Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            StatBar(stringResource(Res.string.stat_forca),       classType.forca,       activeColor = classType.accentColor, modifier = Modifier.fillMaxWidth())
-            StatBar(stringResource(Res.string.stat_resistencia), classType.resistencia, activeColor = classType.accentColor, modifier = Modifier.fillMaxWidth())
-            StatBar(stringResource(Res.string.stat_nutricao),    classType.nutricao,    activeColor = classType.accentColor, modifier = Modifier.fillMaxWidth())
+            StatBar(stringResource(Res.string.stat_forca),       classType.forca(),       activeColor = classType.accentColor(), modifier = Modifier.fillMaxWidth())
+            StatBar(stringResource(Res.string.stat_resistencia), classType.resistencia(), activeColor = classType.accentColor(), modifier = Modifier.fillMaxWidth())
+            StatBar(stringResource(Res.string.stat_nutricao),    classType.nutricao(),    activeColor = classType.accentColor(), modifier = Modifier.fillMaxWidth())
         }
 
         // Bonuses
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            classType.bonuses.forEachIndexed { index, _ ->
+            classType.bonuses().forEachIndexed { index, _ ->
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalAlignment     = Alignment.CenterVertically,
@@ -130,7 +135,7 @@ fun ClassCard(
                         modifier = Modifier
                             .size(6.dp)
                             .clip(CircleShape)
-                            .background(classType.accentColor),
+                            .background(classType.accentColor()),
                     )
                     Text(text = classType.bonuses()[index], style = type.bodySmall.copy(color = colors.onBackground))
                 }

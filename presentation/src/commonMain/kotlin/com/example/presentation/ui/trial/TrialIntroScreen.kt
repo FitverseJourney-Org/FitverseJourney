@@ -33,7 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.domain.models.activePlan.PlanId
+import com.example.domain.models.plan.PlanId
 import com.example.presentation.ui.trial.state.TrialUiState
 import com.example.presentation.widgets.FitverseButton
 import com.example.presentation.theme.FitverseColors
@@ -188,7 +188,9 @@ fun TrialIntroScreenContent(
                 textAlign = TextAlign.Center,
                 modifier  = Modifier
                     .fillMaxWidth()
-                    .clickable(enabled = !isLoading, onClick = onDismiss),
+                    .clickable(enabled = !isLoading, onClick = {
+                        onDismiss()
+                    }),
             )
             Spacer(Modifier.height(24.dp))
         }

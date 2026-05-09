@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.presentation.screens.ui.planWorkout.WorkoutPlanScreen
+import com.example.presentation.ui.planWorkout.WorkoutPlanScreen
 
 @Composable
 fun WorkoutPlanDestination(

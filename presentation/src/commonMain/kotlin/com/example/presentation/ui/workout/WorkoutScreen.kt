@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -22,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.presentation.theme.FitverseColors
+import com.example.presentation.widgets.DarkGamifiedDashboardBackground
 
 private val categories = listOf("Força", "Cardio", "Hipertrofia", "HIIT")
 
@@ -37,28 +39,49 @@ fun WorkoutScreen(
 ) {
     var selectedCategory by remember { mutableStateOf(0) }
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize(),
-        contentPadding = PaddingValues(bottom = 16.dp)
-    ) {
-        item { WorkoutHeader() }
-        item { WorkoutMainCard(onStart = onStartWorkout) }
-        item { CategoryFilter(selected = selectedCategory, onSelect = { selectedCategory = it }) }
-        item { SectionTitle("RECOMENDADOS PARA VOCÊ") }
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        content = {
+            DarkGamifiedDashboardBackground()
+            Scaffold(
+                modifier = Modifier.fillMaxSize(),
+                contentWindowInsets = WindowInsets(0,0,0,0),
+                containerColor = Color.Transparent,
+                content = {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        item { WorkoutHeader() }
+                        item { WorkoutMainCard(onStart = onStartWorkout) }
+                        item {
+                            CategoryFilter(
+                                selected = selectedCategory,
+                                onSelect = { selectedCategory = it })
+                        }
+                        item { SectionTitle("RECOMENDADOS PARA VOCÊ") }
 
-        items(recommendedWorkouts) { (emoji, name, detail) ->
-            WorkoutCard(emoji = emoji, name = name, subtitle = detail.first, xp = detail.second)
-            Spacer(Modifier.height(10.dp))
+                        items(recommendedWorkouts) { (emoji, name, detail) ->
+                            WorkoutCard(
+                                emoji = emoji,
+                                name = name,
+                                subtitle = detail.first,
+                                xp = detail.second
+                            )
+                        }
+                    }
+                }
+            )
         }
-    }
+    )
 }
 
 // ── Sub-composables privados ──────────────────
 
 @Composable
 private fun WorkoutHeader() {
-    Column(Modifier.padding(horizontal = 20.dp, vertical = 24.dp)) {
+    Column{
         Text(
             text = "SEGUNDA-FEIRA",
             color = FitverseColors.TextMuted,
@@ -108,7 +131,6 @@ private fun WorkoutMainCard(onStart: () -> Unit) {
     val cs = MaterialTheme.colorScheme
     Box(
         modifier = Modifier
-            .padding(horizontal = 20.dp)
             .border(width = 1.dp, color = Color(0xFF2a2a35), shape = RoundedCornerShape(20.dp))
             .fillMaxWidth()
             .clip(RoundedCornerShape(20.dp))
@@ -173,7 +195,6 @@ private fun WorkoutMainCard(onStart: () -> Unit) {
 private fun CategoryFilter(selected: Int, onSelect: (Int) -> Unit) {
     val cs = MaterialTheme.colorScheme
     LazyRow(
-        contentPadding = PaddingValues(horizontal = 20.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         itemsIndexed(categories) { index, cat ->
@@ -223,7 +244,6 @@ fun WorkoutCard(
     val cs = MaterialTheme.colorScheme
     Row(
         modifier = Modifier
-            .padding(horizontal = 20.dp)
             .border(width = 1.dp, color = Color(0xFF2a2a35), shape = RoundedCornerShape(20.dp))
             .fillMaxWidth()
             .clip(RoundedCornerShape(14.dp))

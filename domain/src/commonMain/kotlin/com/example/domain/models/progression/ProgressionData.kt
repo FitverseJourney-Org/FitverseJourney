@@ -1,4 +1,4 @@
-package com.example.domain.models.progress
+package com.example.domain.models.progression
 
 import androidx.compose.runtime.Immutable
 

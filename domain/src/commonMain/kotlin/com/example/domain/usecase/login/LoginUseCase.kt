@@ -1,6 +1,6 @@
 package com.example.domain.usecase.login
 
-import com.example.domain.models.local.User
+import com.example.domain.models.user.User
 import com.example.domain.repository.authentication.AuthRepository
 import com.example.domain.repository.dbLocal.sqldelight.user.UserRepository
 
@@ -12,7 +12,6 @@ class LoginUseCase(
         runCatching {
             // 1. autentica e obtém o uid
             val authResult = authRepository.login(email, password)
-
             // 2. busca o perfil do usuário
             userRepository.getUser(authResult.uid)
         }

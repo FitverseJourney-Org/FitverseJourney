@@ -13,8 +13,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AutoGraph
+import androidx.compose.material.icons.filled.EmojiEvents
+import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.Lightbulb
+import androidx.compose.material.icons.filled.RepeatOne
+import androidx.compose.material.icons.filled.TrendingDown
+import androidx.compose.material.icons.filled.TrendingUp
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -30,9 +34,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.domain.models.progress.InsightLevel
-import com.example.domain.models.progress.ProgressionInsight
-import com.example.domain.models.progress.ProgressionStats
+import com.example.domain.models.progression.InsightLevel
+import com.example.domain.models.progression.ProgressionInsight
+import com.example.domain.models.progression.ProgressionStats
 import com.example.presentation.utils.formatDecimalKmp
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -59,21 +63,21 @@ fun ProgressionStatsGrid(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            // Recorde pessoal — destaque visual máximo
-            GlassStatCard(
+            // Recorde pessoal — destaque visual máximo com animação de contagem
+            AnimatedGlassStatCard(
                 modifier = Modifier.weight(1f),
-                icon = Icons.Default.AutoGraph,
+                icon = Icons.Default.EmojiEvents,
                 label = "Recorde",
-                value = stats.personalRecord.formatDecimalKmp(),
+                rawValue = stats.personalRecord,
                 unit = "kg",
                 accentColor = accentColor,
                 isHighlighted = true,
             )
-            GlassStatCard(
+            AnimatedGlassStatCard(
                 modifier = Modifier.weight(1f),
-                icon = Icons.Default.AutoGraph,
+                icon = Icons.Default.FitnessCenter,
                 label = "Carga Atual",
-                value = stats.currentLoad.formatDecimalKmp(),
+                rawValue = stats.currentLoad,
                 unit = "kg",
                 accentColor = Color.White.copy(alpha = 0.7f),
             )
@@ -84,11 +88,12 @@ fun ProgressionStatsGrid(
         ) {
             val isPositive = stats.evolutionDelta >= 0
             val deltaColor = if (isPositive) Color(0xFF66BB6A) else Color(0xFFEF5350)
+            val deltaIcon  = if (isPositive) Icons.Default.TrendingUp else Icons.Default.TrendingDown
             val sign = if (isPositive) "+" else ""
 
             GlassStatCard(
                 modifier = Modifier.weight(1f),
-                icon = Icons.Default.AutoGraph,
+                icon = deltaIcon,
                 label = "Evolução",
                 value = "$sign${stats.evolutionDelta.formatDecimalKmp()}",
                 unit = "kg",
@@ -96,7 +101,7 @@ fun ProgressionStatsGrid(
             )
             GlassStatCard(
                 modifier = Modifier.weight(1f),
-                icon = Icons.Default.AutoGraph,
+                icon = Icons.Default.RepeatOne,
                 label = "Treinos",
                 value = stats.sessionCount.toString(),
                 unit = "sessões",

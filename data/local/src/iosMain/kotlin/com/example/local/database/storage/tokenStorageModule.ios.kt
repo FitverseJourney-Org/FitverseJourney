@@ -1,6 +1,6 @@
-package com.example.local.expect
+package com.example.local.database.storage
 
-import com.example.local.database.datastore.storage.TokenStorage
+import com.example.local.datasource.token.TokenStorageImpl
 import com.russhwolf.settings.ExperimentalSettingsImplementation
 import com.russhwolf.settings.KeychainSettings
 import com.russhwolf.settings.Settings
@@ -12,5 +12,5 @@ val localIosModule = module {
         @OptIn(ExperimentalSettingsImplementation::class)
         KeychainSettings(service = "com.example.app.token")
     }
-    single { TokenStorage(settings = get()) }
+    single { TokenStorageImpl(settings = get()) }
 }

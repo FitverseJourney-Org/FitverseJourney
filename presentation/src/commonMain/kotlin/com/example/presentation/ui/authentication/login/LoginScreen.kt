@@ -34,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -86,18 +87,19 @@ fun LoginScreen(
         onEmailChange                = { onAction(LoginAction.EmailChanged(it)) },
         onPasswordChange             = { onAction(LoginAction.PasswordChanged(it)) },
         onLogin                      = { onLogin(state.email, state.password) },
+        onPasswordChangeVisibility   = { onAction(LoginAction.TogglePasswordVisibility) },
         onForgotPassword             = onForgotPassword,
         onCreateAccount              = onCreateAccount,
         onSocialLogin                = onSocialLogin,
         onOpenLanguage               = onOpenLanguage,
-        passwordVisualTransformation = if (state.isPasswordVisible) {
-            VisualTransformation.None
-        } else PasswordVisualTransformation(),
+        passwordVisualTransformation = if (state.isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+        icon = if (state.isPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
     )
 }
 
 // ─── Content (stateless / testável) ──────────────────────────────────────────
 
+@Suppress("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun LoginScreenContent(
     snackBarHostState            : SnackbarHostState,
@@ -106,12 +108,14 @@ fun LoginScreenContent(
     isLoading                    : Boolean,
     onEmailChange                : (String) -> Unit,
     onPasswordChange             : (String) -> Unit,
+    onPasswordChangeVisibility   : () -> Unit,
     onLogin                      : () -> Unit,
     onForgotPassword             : () -> Unit,
     onCreateAccount              : () -> Unit,
     onSocialLogin                : (provider: String) -> Unit,
     onOpenLanguage               : () -> Unit,
     passwordVisualTransformation : VisualTransformation,
+    icon                         : ImageVector,
 ) {
     Scaffold(
         containerColor = FitverseColors.Bg,
@@ -135,6 +139,7 @@ fun LoginScreenContent(
                     value = emailValue,
                     subtitle = stringResource(Res.string.login_field_email_label),
                     onValueChange = onEmailChange,
+                    maxLines = 1,
                     placeholder = stringResource(Res.string.login_field_email_placeholder),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                 )
@@ -147,12 +152,14 @@ fun LoginScreenContent(
                     onValueChange = onPasswordChange,
                     placeholder = stringResource(Res.string.login_field_password_placeholder),
                     visualTransformation = passwordVisualTransformation,
+                    maxLines = 1,
                     trailingIcon = {
-                        val icon = if (passwordVisualTransformation == VisualTransformation.None)
-                            Icons.Default.Visibility
-                        else
-                            Icons.Default.VisibilityOff
-                        Icon(imageVector = icon, contentDescription = null)
+                        IconButton(
+                            onClick = { onPasswordChangeVisibility() },
+                            content = {
+                                Icon(imageVector = icon, contentDescription = null)
+                            }
+                        )
                     },
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                 )

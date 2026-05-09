@@ -1,12 +1,7 @@
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import com.example.presentation.screens.ui.leaderboards.LeaderboardsScreen
+import com.example.presentation.widgets.LeaderboardScreen
 
 @Composable
 fun LeaderboardsDestination(
@@ -14,12 +9,7 @@ fun LeaderboardsDestination(
 ) {
     val cs = MaterialTheme.colorScheme
 
-    Box(
-        modifier = Modifier.fillMaxSize()
-            .background(Brush.verticalGradient(listOf(cs.surface, cs.background)))
-    ) {
-        LeaderboardsScreen(
-            onBack = navigateBack
-        )
-    }
+    LeaderboardScreen(
+        onBack = navigateBack
+    )
 }

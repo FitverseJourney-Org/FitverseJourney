@@ -12,6 +12,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.presentation.widgets.FitverseTextButton
 
 @Composable
 fun SectionHeader(
@@ -21,7 +23,7 @@ fun SectionHeader(
 ) {
     val cs = MaterialTheme.colorScheme
     Row(
-        modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp),
+        modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ){
@@ -32,17 +34,15 @@ fun SectionHeader(
             color = cs.onSurfaceVariant
         )
         if(actionText != null) {
-            TextButton(
+            FitverseTextButton(
+                text = actionText,
                 onClick = {
                     onActionClick?.invoke()
-                }
-            ){
-                Text(
-                    text = actionText,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = cs.primary
+                },
+                style = MaterialTheme.typography.labelSmall.copy(
+                    color = cs.primary,
                 )
-            }
+            )
         }
     }
 

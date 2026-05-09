@@ -1,7 +1,8 @@
 package com.example.mapper
 
-import com.example.data.model.dto.progression.ExerciseDto
-import com.example.domain.model.progress.Exercise
+import com.example.domain.models.progression.Exercise
+import com.example.mapper.exercise.toDomain
+import com.example.remote.dto.exercise.ExerciseDto
 
 /**
  * Funções de extensão puras para conversão [ExerciseDto] ↔ [Exercise].

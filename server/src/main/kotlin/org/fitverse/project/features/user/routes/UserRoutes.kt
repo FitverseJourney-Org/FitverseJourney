@@ -14,18 +14,18 @@ fun Route.userRouting() {
 
     route("/users") {
         post {
-            userController.create(call)      // POST   /users
+            userController.create(call)
         }
 
         route("/{uid}") {
             get {
-                userController.get(call)     // GET    /users/{uid}
+                userController.get(call)
             }
             put {
-                userController.update(call)  // PUT    /users/{uid}
+                userController.update(call)
             }
             delete {
-                userController.delete(call)  // DELETE /users/{uid}
+                userController.delete(call)
             }
         }
     }

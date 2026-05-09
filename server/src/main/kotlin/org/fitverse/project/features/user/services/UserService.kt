@@ -11,15 +11,12 @@ class UserService(
     suspend fun createUser(request: UserRequest): Result<UserDocument> = runCatching {
         userRepository.saveUser(request.toDocument())
     }
-
     suspend fun getUser(uid: String): Result<UserDocument> = runCatching {
         userRepository.getUser(uid) ?: throw Exception("Usuário não encontrado")
     }
-
     suspend fun updateUser(uid: String, request: UserRequest): Result<UserDocument> = runCatching {
         userRepository.updateUser(uid, request.toDocument())
     }
-
     suspend fun deleteUser(uid: String): Result<Unit> = runCatching {
         userRepository.deleteUser(uid)
     }

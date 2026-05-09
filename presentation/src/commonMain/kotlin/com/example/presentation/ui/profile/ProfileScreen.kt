@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -24,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.presentation.ui.workout.FitChip
 import com.example.presentation.theme.FitverseColors
+import com.example.presentation.ui.dashboard.components.SectionHeader
 
 private data class Achievement(val emoji: String, val title: String, val subtitle: String)
 
@@ -40,33 +42,43 @@ private val achievements = listOf(
 fun ProfileScreen(
     onSettingsClick: () -> Unit = {}
 ) {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize(),
-        contentPadding = PaddingValues(bottom = 24.dp)
-    ) {
-        item { ProfileTopBar(onSettingsClick) }
-        item { ProfileAvatar() }
-        item { StatsCard() }
-        item { XpProgressCard() }
-        item { AchievementsSection() }
+    Box(modifier = Modifier.fillMaxSize()) {
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            contentWindowInsets = WindowInsets(0,0,0,0),
+            containerColor = Color.Transparent,
+            content = {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(16.dp)
+                ) {
+                    item { ProfileTopBar(onSettingsClick) }
+                    item { ProfileAvatar() }
+                    item { StatsCard() }
+                    item { XpProgressCard() }
+                    item {
+                        SectionHeader(title = "CONQUISTAS", actionText = "TODAS")
+                    }
 
-        items(achievements.chunked(3)) { row ->
-            Row(
-                modifier = Modifier.padding(horizontal = 20.dp).fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                row.forEach { achievement ->
-                    AchievementCard(
-                        emoji    = achievement.emoji,
-                        title    = achievement.title,
-                        subtitle = achievement.subtitle,
-                        modifier = Modifier.weight(1f)
-                    )
+                    items(achievements.chunked(3)) { row ->
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        ) {
+                            row.forEach { achievement ->
+                                AchievementCard(
+                                    emoji    = achievement.emoji,
+                                    title    = achievement.title,
+                                    subtitle = achievement.subtitle,
+                                    modifier = Modifier.weight(1f)
+                                )
+                            }
+                        }
+                        Spacer(Modifier.height(10.dp))
+                    }
                 }
             }
-            Spacer(Modifier.height(10.dp))
-        }
+        )
     }
 }
 
@@ -75,9 +87,7 @@ fun ProfileScreen(
 @Composable
 private fun ProfileTopBar(onSettingsClick: () -> Unit) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp, vertical = 24.dp),
+        modifier = Modifier.fillMaxWidth().padding(vertical = 24.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -149,7 +159,6 @@ private fun StatsCard() {
     val cs = MaterialTheme.colorScheme
     Row(
         modifier = Modifier
-            .padding(horizontal = 20.dp)
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
             .background(cs.surface)
@@ -217,7 +226,7 @@ fun AchievementCard(
 private fun XpProgressCard() {
     val cs = MaterialTheme.colorScheme
     ElevatedCard(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
+        modifier = Modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp
         ),
@@ -259,27 +268,4 @@ private fun XpProgressCard() {
         }
     }
     Spacer(Modifier.height(20.dp))
-}
-
-@Composable
-private fun AchievementsSection() {
-    Row(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            "CONQUISTAS",
-            color = FitverseColors.TextMuted,
-            fontSize = 11.sp,
-            fontWeight = FontWeight.SemiBold,
-            letterSpacing = 1.sp
-        )
-        TextButton(
-            onClick = {}
-        ){
-            Text("Ver todas", color = FitverseColors.Accent, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
-        }
-    }
-    Spacer(Modifier.height(12.dp))
 }

@@ -1,31 +1,32 @@
 package com.example.di
 
 // ── Auth ──────────────────────────────────────────────────────────────────────
-import com.example.presentation.screens.ui.authentication.login.LoginViewModel
-import com.example.presentation.screens.ui.authentication.register.RegisterViewModel
-import com.example.presentation.screens.ui.authentication.resetPassword.ResetPasswordViewModel
+import com.example.presentation.ui.authentication.login.LoginViewModel
+import com.example.presentation.ui.authentication.register.RegisterViewModel
+import com.example.presentation.ui.authentication.resetPassword.ResetPasswordViewModel
 // ── Splash & Onboarding ───────────────────────────────────────────────────────
-import com.example.presentation.screens.ui.splash.viewmodel.SplashViewModel
-import com.example.presentation.screens.ui.onboarding.viewmodel.OnboardingViewModel
-import com.example.presentation.screens.ui.trial.viewmodel.TrialViewModel
+import com.example.presentation.ui.splash.viewmodel.SplashViewModel
+import com.example.presentation.ui.onboarding.viewmodel.OnboardingViewModel
+import com.example.presentation.ui.trial.viewmodel.TrialViewModel
 // ── Home ──────────────────────────────────────────────────────────────────────
-import com.example.presentation.screens.ui.dashboard.viewmodel.DashboardViewModel
-import com.example.presentation.screens.ui.workout.viewmodel.WorkoutViewModel
-import com.example.presentation.screens.ui.workout.viewmodel.WorkoutSessionViewModel
-import com.example.presentation.screens.ui.meals.viewmodel.NutritionViewModel
-import com.example.presentation.screens.ui.profile.ProfileViewModel
+import com.example.presentation.ui.dashboard.viewmodel.DashboardViewModel
+import com.example.presentation.ui.notification.NotificationViewModel
+import com.example.presentation.ui.workout.viewmodel.WorkoutViewModel
+import com.example.presentation.ui.workout.viewmodel.WorkoutSessionViewModel
+import com.example.presentation.ui.meals.viewmodel.NutritionViewModel
+import com.example.presentation.ui.profile.ProfileViewModel
 // ── Modal / Features ──────────────────────────────────────────────────────────
-import com.example.presentation.screens.ui.planWorkout.viewmodel.WorkoutPlanViewModel
-import com.example.presentation.screens.ui.friends.viewmodel.FriendsViewModel
-import com.example.presentation.screens.ui.wiki.viewmodel.WikiViewModel
-import com.example.presentation.screens.ui.progress.viewmodel.ProgressViewModel
+import com.example.presentation.ui.planWorkout.viewmodel.WorkoutPlanViewModel
+import com.example.presentation.ui.friends.viewmodel.FriendsViewModel
+import com.example.presentation.ui.wiki.viewmodel.WikiViewModel
+import com.example.presentation.ui.progress.viewmodel.ProgressViewModel
 // ── Global ────────────────────────────────────────────────────────────────────
-import com.example.presentation.screens.ui.LanguageViewModel
-import com.example.presentation.screens.ui.achievements.viewmodel.AchievementsViewModel
-import com.example.presentation.screens.ui.historic.viewmodel.HistoricViewModel
-import com.example.presentation.screens.ui.leaderboards.viewmodel.LeaderboardsViewModel
-import com.example.presentation.screens.ui.shopping.ShoppingViewModel
-import com.example.presentation.screens.ui.tasks.viewmodel.TasksViewModel
+import com.example.presentation.ui.LanguageViewModel
+import com.example.presentation.ui.achievements.viewmodel.AchievementsViewModel
+import com.example.presentation.ui.historic.viewmodel.HistoricViewModel
+import com.example.presentation.ui.leaderboards.viewmodel.LeaderboardsViewModel
+import com.example.presentation.ui.shopping.ShoppingViewModel
+import com.example.presentation.ui.tasks.viewmodel.TasksViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
@@ -51,14 +52,18 @@ val onboardingModule = module {
     viewModel<SplashViewModel> {
         SplashViewModel(
             observeIsAuthenticatedUseCase = get(),
-            observeOnboardingCompletedUseCase = get()
+            observeOnboardingCompletedUseCase = get(),
+            observeTrialCompletedUseCase = get()
         )
     }
     viewModel<OnboardingViewModel> {
         OnboardingViewModel(setOnboardingCompletedUseCase = get())
     }
     viewModel<TrialViewModel> {
-        TrialViewModel(activatePlan = get())
+        TrialViewModel(
+            activatePlan = get(),
+            setIsTrialCompletedUseCase = get()
+        )
     }
 }
 
@@ -68,6 +73,9 @@ val onboardingModule = module {
 val homeModule = module {
     viewModel<DashboardViewModel> {
         DashboardViewModel()
+    }
+    viewModel<NotificationViewModel> {
+        NotificationViewModel()
     }
     viewModel<WorkoutViewModel> {
         WorkoutViewModel()

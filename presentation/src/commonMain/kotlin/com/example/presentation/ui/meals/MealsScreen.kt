@@ -105,7 +105,7 @@ fun MealsScreen(onBottomSheetOpen: (Boolean) -> Unit = {}) {
                 ) {
                     item { NutritionHeader() }
                     item { MacrosSummaryCard() }
-                    item {  SectionHeader(title = "REFEIÇÕES DO DIA",actionText = "+ ADICIONAR")}
+                    item { SectionHeader(title = "REFEIÇÕES DO DIA",actionText = "+ ADICIONAR")}
                     items(meals) { meal ->
                         MealCard(
                             meal = meal,

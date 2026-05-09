@@ -23,7 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.example.domain.models.local.language.AppLanguageItem
+import com.example.domain.models.language.AppLanguageItem
 import org.jetbrains.compose.resources.painterResource
 
 @Composable

@@ -1,5 +1,6 @@
-package com.example.remote.util
+package com.example.util
 
+import com.example.local.datasource.token.TokenStorageImpl
 import com.example.remote.datasource.HttpClientFactory
 import io.ktor.client.*
 import org.koin.dsl.module
@@ -7,20 +8,19 @@ import org.koin.dsl.module
 val networkModule = module {
 
     single<HttpClient> {
+        val tokenStorageImpl = get<TokenStorageImpl>()
 
         HttpClientFactory.create(
             enableLogging = true,
 
-            // ✅ lê o token do Keychain/EncryptedPrefs a cada request
+            // ✅ retorna o token diretamente
             tokenProvider = {
-//                tokenStorage.getToken()
-                ""
+                tokenStorageImpl.getToken()
             },
 
-            // ✅ chamado quando API retorna 401
+            // ✅ limpa sessão Firebase no 401
             onUnauthorized = {
-//                tokenStorage.clearToken()
-                // Opcional: emitir evento global de logout via SharedFlow
+                tokenStorageImpl.clearToken()
                 // get<SessionEventBus>().emitLogout()
             }
         )

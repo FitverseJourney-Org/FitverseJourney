@@ -7,8 +7,6 @@ import com.example.local.database.sqldelight.DatabaseFactory
 import com.example.local.database.sqldelight.DatabaseSqlDeLightHelper
 import com.example.local.database.sqldelight.createDatabase
 import com.journey.database.AppDatabase.AppDatabase
-import org.koin.core.module.dsl.bind
-import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 val databaseModule = module {
@@ -23,4 +21,7 @@ val databaseModule = module {
 
     // DATASTORE
     single<DataStore<Preferences>> { DataStoreFactory.dataStore }
+
+
+
 }

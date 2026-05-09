@@ -2,8 +2,9 @@ package com.example.presentation.ui.trial.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.models.activePlan.PlanId
+import com.example.domain.models.plan.PlanId
 import com.example.domain.usecase.activatePlan.ActivatePlanUseCase
+import com.example.domain.usecase.db.datastore.trial.SetIsTrialCompletedUseCase
 import com.example.presentation.ui.trial.event.TrialEvent
 import com.example.presentation.ui.trial.state.TrialUiState
 import kotlinx.coroutines.channels.Channel
@@ -16,6 +17,7 @@ import kotlinx.coroutines.launch
 
 class TrialViewModel(
     private val activatePlan: ActivatePlanUseCase,
+    private val setIsTrialCompletedUseCase: SetIsTrialCompletedUseCase
 ) : ViewModel() {
 
     // ── State ─────────────────────────────────────────────────────────────────
@@ -42,6 +44,8 @@ class TrialViewModel(
 
             activatePlan(planId)
                 .onSuccess {
+                    // marca trial como concluído antes de navegar
+                    setIsTrialCompletedUseCase(true)
                     _events.send(TrialEvent.NavigateToDashboard)
                 }
                 .onFailure { throwable ->
@@ -55,6 +59,16 @@ class TrialViewModel(
     }
 
     fun onDismiss() {
-        viewModelScope.launch { _events.send(TrialEvent.NavigateToLogin) }
+        viewModelScope.launch {
+            // ✅ corrigido: era setIsTrialCompleted(true) — função inexistente
+            setIsTrialCompletedUseCase(true)
+            _events.send(TrialEvent.NavigateToLogin)
+        }
+    }
+
+    fun onTrialAccepted() {
+        viewModelScope.launch {
+            setIsTrialCompletedUseCase(true)
+        }
     }
 }

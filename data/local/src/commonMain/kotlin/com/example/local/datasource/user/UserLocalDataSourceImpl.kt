@@ -2,15 +2,11 @@ package com.example.local.datasource.user
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToOneOrNull
-import app.cash.sqldelight.coroutines.mapToList
-import com.example.domain.models.local.User
-import com.example.local.mapper.user.UserEntityMapper
 import com.journey.database.AppDatabase.AppDatabase
 import com.journey.database.migrations.UserEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 /**

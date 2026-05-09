@@ -7,7 +7,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.expect.AgeCalculator
-import com.example.domain.models.local.User
+import com.example.domain.models.user.User
 import com.example.domain.usecase.register.RegisterUseCase
 import com.example.expect.NumberFormatter
 import com.example.expect.TimerManager
@@ -105,6 +105,11 @@ class RegisterViewModel(
             is RegisterIntent.Leave -> _uiState.update { it.copy(registrationCancellable = true) }
 
         }
+    }
+
+    fun formatterBirthDate(value: String) {
+        val digitsOnly = value.filter { it.isDigit() }.take(8)
+        _uiState.update { it.copy(birthDate = digitsOnly, birthDateError = null) }
     }
 
     private fun validateCurrentStep(): Boolean {
@@ -232,9 +237,13 @@ class RegisterViewModel(
         _uiState.update { it.copy(birthDatePattern = pattern) }
     }
 
-    fun formatterBirthDate(value: String) {
-        val digitsOnly = value.filter { it.isDigit() }.take(8)
-        _uiState.update { it.copy(birthDate = digitsOnly, birthDateError = null) }
+    private fun formatBirthDate(digits: String): String {
+        val pattern = _uiState.value.birthDatePattern
+        return when (pattern) {
+            "YYYY/MM/DD" -> "${digits.substring(6, 8)}/${digits.substring(4, 6)}/${digits.take(4)}"
+            "MM/DD/YYYY" -> "${digits.substring(2, 4)}/${digits.take(2)}/${digits.substring(4, 8)}"
+            else         -> "${digits.take(2)}/${digits.substring(2, 4)}/${digits.substring(4, 8)}"
+        }
     }
 
 
@@ -264,13 +273,7 @@ class RegisterViewModel(
     }
 
     private fun isValidAge(digits: String): Boolean {
-        val pattern = _uiState.value.birthDatePattern
-        val formatted = when (pattern) {
-            "YYYY/MM/DD" -> "${digits.substring(6, 8)}/${digits.substring(4, 6)}/${digits.take(4)}"
-            "MM/DD/YYYY" -> "${digits.substring(2, 4)}/${digits.take(2)}/${digits.substring(4, 8)}"
-            else         -> "${digits.take(2)}/${digits.substring(2, 4)}/${digits.substring(4, 8)}"
-        }
-        val age = AgeCalculator.fromBirthDate(formatted)
+        val age = AgeCalculator.fromBirthDate(formatBirthDate(digits))
         return age in 13..100
     }
 
@@ -280,20 +283,20 @@ class RegisterViewModel(
         val now = TimerManager.nowMillis()
 
         val userData = User(
-            name = state.nome,
-            lastname = state.lastname,
-            email = state.email,
-            username = state.username,
-            birthDate = state.birthDate,
-            weight = state.weight.toDouble(),
-            height = state.height.toInt(),
-            gender = state.genero,
-            classType = state.selectedClass!!,
-            goals = state.selectedObjetivos.joinToString(", ") { it.name },
+            name            = state.nome,
+            lastname        = state.lastname,
+            email           = state.email,
+            username        = state.username,
+            birthDate       = formatBirthDate(state.birthDate),
+            weight          = state.weight.toDouble(),
+            height          = state.height.toInt(),
+            genero          = state.genero,
+            classType       = state.selectedClass!!,
+            goals           = state.selectedObjetivos.joinToString(", ") { it.name },
             experienceLevel = state.nivelExperiencia!!.name,
-            updatedAt = now,
-            createdAt = now,
-            isPremium = false,
+            updatedAt       = now,
+            createdAt       = now,
+            isPremium       = false,
         )
 
         _uiState.update { it.copy(isLoading = true) }

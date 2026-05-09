@@ -32,12 +32,17 @@ sealed interface NavRoutes : NavKey {
         @Serializable data object Profile    : NavRoutes
 
         // Telas internas da Home
-        @Serializable data object AddPost            : NavRoutes
-        @Serializable data object NotificationScreen : NavRoutes
+
+        object SubFlow : NavRoutes {
+            @Serializable data object AddPost            : NavRoutes
+            @Serializable data object Notification : NavRoutes
+            @Serializable data object UserLevelUp        : NavRoutes
+        }
     }
 
     // ── Workout ───────────────────────────────────────────────
     @Serializable data object WorkoutFlow : NavRoutes {
+        @Serializable data object Main   : NavRoutes
         @Serializable data object WorkoutSession   : NavRoutes
         @Serializable data object WorkoutCompleted : NavRoutes
     }

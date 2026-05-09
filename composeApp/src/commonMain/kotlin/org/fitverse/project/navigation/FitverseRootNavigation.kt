@@ -16,10 +16,10 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
-import com.example.presentation.screens.ui.LoadingLanguageScreen
-import com.example.presentation.screens.ui.onboarding.viewmodel.OnboardingViewModel
-import com.example.presentation.screens.ui.splash.viewmodel.SplashViewModel
-import com.example.presentation.screens.ui.trial.viewmodel.TrialViewModel
+import com.example.presentation.ui.LoadingLanguageScreen
+import com.example.presentation.ui.onboarding.viewmodel.OnboardingViewModel
+import com.example.presentation.ui.splash.viewmodel.SplashViewModel
+import com.example.presentation.ui.trial.viewmodel.TrialViewModel
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import org.fitverse.project.destinations.onboading.OnboardingDestination
@@ -111,18 +111,18 @@ fun FitverseRootNavigation(
                 )
             }
             entry<NavRoutes.TrialScreen>{
-                val viewmodel = koinInject<TrialViewModel>()
-                val state by viewmodel.state.collectAsStateWithLifecycle()
+                val viewModel = koinInject<TrialViewModel>()
 
                 TrialDestination(
-                    toLogin = {
+                    viewModel             = viewModel,
+                    onNavigateToDashboard = {
+                        rootBackStack.clear()
+                        rootBackStack.add(NavRoutes.HomeFlow)
+                    },
+                    onNavigateToLogin = {
                         rootBackStack.clear()
                         rootBackStack.add(NavRoutes.AuthFlow)
                     },
-                    toDashboard = {
-                        rootBackStack.clear()
-                        rootBackStack.add(NavRoutes.HomeFlow)
-                    }
                 )
             }
             entry<NavRoutes.AuthFlow>{
@@ -137,7 +137,15 @@ fun FitverseRootNavigation(
                 )
             }
             entry<NavRoutes.HomeFlow>{
-                HomeNavigation()
+                HomeNavigation(
+                    logout = {
+                        rootBackStack.clear()
+                        rootBackStack.add(NavRoutes.AuthFlow)
+                    },
+                    toLoadingLanguage = {
+                        rootBackStack.add(NavRoutes.LoadingLanguage)
+                    }
+                )
             }
             entry<NavRoutes.LoadingLanguage>{
                 LoadingLanguageScreen(

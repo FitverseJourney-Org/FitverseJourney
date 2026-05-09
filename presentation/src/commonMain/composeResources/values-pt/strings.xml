@@ -2,6 +2,10 @@
 <resources>
     <string name="app_name">Fitverse Journey</string>
 
+
+    <!-- ================================================================================ -->
+    <!-- ================================= ONBOARDING Page   ============================= -->
+    <!-- ================================================================================ -->
     <string name="onboarding_title_1">Acompanhe seus treinos</string>
     <string name="onboarding_description_1">Registre facilmente seus exercícios, séries e repetições.\nAcompanhe seu progresso e mantenha consistência no treino.</string>
 
@@ -15,10 +19,9 @@
     <string name="onboarding_description_4">Mantenha-se motivado compartilhando progresso e conquistas.\nTreine junto, desafie amigos e celebre cada marco.</string>
 
 
-    <!-- Trial Page Resources Strings -->
-    <string name="trial_flag_day_trial_title">ESCOLHA SEU PLANO</string>
-
-    <!-- Trial Page -->
+    <!-- ================================================================================ -->
+    <!-- ================================= TRIAL Page ================================ -->
+    <!-- ================================================================================ -->
     <string name="trial_title">ESCOLHA SEU PLANO</string>
     <string name="trial_subtitle">Desbloqueie todo o seu potencial</string>
     <string name="trial_activate_button">Ativar Plano</string>
@@ -54,7 +57,9 @@
     <string name="trial_feature_nft_badges">NFT badges</string>
 
 
-    <!-- Login Page -->
+    <!-- ================================================================================ -->
+    <!-- ================================= LOGIN Page   ================================ -->
+    <!-- ================================================================================ -->
     <string name="login_welcome_title">BEM-VINDO</string>
     <string name="login_welcome_subtitle">DE VOLTA, GUERREIRO</string>
 
@@ -77,6 +82,164 @@
     <string name="login_create_account">Criar conta</string>
 
 
+
+    <!-- ================================================================================ -->
+    <!-- ================================= FRIENDS Page   ================================ -->
+    <!-- ================================================================================ -->
+    <string name="friends_title">FRIENDS</string>
+
+    <!-- Add Friend Section -->
+    <string name="add_friend_title">Adicionar conexão</string>
+    <string name="add_friend_code_hint">Ex: FIT-1234</string>
+
+    <!-- Suggestions -->
+    <string name="suggestions_title">Pessoas que você talvez conheça</string>
+    <string name="mutual_connections">%1$d em comum</string>
+
+    <!-- Friends List -->
+    <string name="friends_list_title">Seus Amigos (%1$d)</string>
+
+    <!-- Actions -->
+    <string name="action_add">Adicionar</string>
+    <string name="action_ok">OK</string>
+    <string name="action_cancel">Cancelar</string>
+
+    <!-- Errors -->
+    <string name="error_title">Erro</string>
+    <string name="error_network">Erro de conexão. Verifique sua internet.</string>
+    <string name="error_user_not_found">Usuário com código %1$s não encontrado.</string>
+    <string name="error_unknown">Ocorreu um erro inesperado.</string>
+    <string name="error_invalid_code">Código inválido. Use o formato FIT-XXXX</string>
+
+    <!-- Empty States -->
+    <string name="empty_friends_title">Você ainda não tem amigos</string>
+    <string name="empty_friends_message">Adicione amigos para ver suas atividades e competir!</string>
+
+    <!-- Content Descriptions (Accessibility) -->
+    <string name="cd_navigate_back">Voltar</string>
+    <string name="cd_qr_code_scanner">Escanear código QR</string>
+    <string name="cd_add_friend">Adicionar amigo</string>
+    <string name="cd_sort_ascending">Ordenar de A a Z</string>
+    <string name="cd_sort_descending">Ordenar de Z a A</string>
+    <string name="cd_user_avatar">Avatar do usuário</string>
+    <string name="cd_streak_indicator">Indicador de sequência</string>
+
+    <!-- Sort -->
+    <string name="sort_a_z">A-Z</string>
+    <string name="sort_z_a">Z-A</string>
+
+
+
+    <!-- ================================================================================ -->
+    <!-- ================================= REGISTER PAGE  ================================ -->
+    <!-- ================================================================================ -->
+    <string name="register_screen_title">CRIAR CONTA</string>
+    <string name="register_choose_class_title">ESCOLHA SUA CLASSE</string>
+
+    <!-- ContaStep -->
+    <string name="register_conta_first_name_label">PRIMEIRO NOME</string>
+    <string name="register_conta_first_name_placeholder">João</string>
+    <string name="register_conta_last_name_label">SOBRENOME</string>
+    <string name="register_conta_last_name_placeholder">Silva</string>
+    <string name="register_conta_email_label">E-MAIL</string>
+    <string name="register_conta_email_placeholder">seu@email.com</string>
+    <string name="register_conta_password_label">SENHA</string>
+    <string name="register_conta_password_placeholder">Mínimo 8 caracteres</string>
+    <string name="register_conta_password_hint">Use letras, números e símbolos</string>
+
+    <!-- PerfilStep -->
+    <string name="register_perfil_subtitle">Personalize seu perfil de aventureiro.</string>
+    <string name="register_perfil_username_label">NOME DE USUÁRIO</string>
+    <string name="register_perfil_username_placeholder">@seu_nick</string>
+    <string name="register_perfil_birthdate_label">DATA DE NASCIMENTO</string>
+    <string name="register_perfil_weight_label">PESO</string>
+    <string name="register_perfil_height_label">ALTURA</string>
+    <string name="register_perfil_gender_label">GÊNERO</string>
+    <string name="register_perfil_gender_hint">Usado para calcular suas metas de saúde.</string>
+
+    <!-- ClasseStep -->
+    <string name="register_classe_subtitle">Seu arquétipo define sua jornada — não sua limitação.\nVocê pode mudar depois.</string>
+    <string name="register_classe_level_change_hint">Você poderá trocar de classe no nível 10.</string>
+    <string name="register_button_confirm_class">CONFIRMAR CLASSE</string>
+
+    <!-- ObjetivosStep -->
+    <string name="register_objetivos_goal_title">Qual é o seu principal objetivo?</string>
+    <string name="register_objetivos_level_title">Seu nível de experiência:</string>
+    <string name="register_objetivos_class_level">%1$s – NÍVEL 1</string>
+    <string name="register_objetivos_class_frame">%1$s · Frame \"%2$s\"</string>
+
+    <!-- Shared buttons -->
+    <string name="register_button_next">PRÓXIMO →</string>
+    <string name="register_button_create_account">CRIAR MINHA CONTA</string>
+
+    <!-- Register Steps -->
+    <string name="register_step_conta">CONTA</string>
+    <string name="register_step_perfil">PERFIL</string>
+    <string name="register_step_classe">CLASSE</string>
+    <string name="register_step_objetivos">OBJETIVOS</string>
+
+    <!-- ClassType — TITÃ -->
+    <string name="class_tita_display_name">TITÃ</string>
+    <string name="class_tita_subtitle">GUERREIRO DA FORÇA</string>
+    <string name="class_tita_quote">Nascido para levantar. Cada kg é um passo rumo à sua forma definitiva.</string>
+    <string name="class_tita_bonus_1">+20% XP em treinos de musculação e força</string>
+    <string name="class_tita_bonus_2">Vida máxima +20% desde o nível 1</string>
+    <string name="class_tita_bonus_3">Frame de perfil exclusivo \"Aço Vivo\"</string>
+    <string name="class_tita_frame_label">Aço Vivo</string>
+
+    <!-- ClassType — SÁBIO -->
+    <string name="class_sabio_display_name">SÁBIO</string>
+    <string name="class_sabio_subtitle">MAGO DA NUTRIÇÃO</string>
+    <string name="class_sabio_quote">O corpo é resultado da mente. Quem entende o que come vence antes dos outros.</string>
+    <string name="class_sabio_bonus_1">+20% XP em missões de nutrição e refeições</string>
+    <string name="class_sabio_bonus_2">Wiki Fitness desbloqueada desde o início</string>
+    <string name="class_sabio_bonus_3">Frame de perfil exclusivo \"Nexo do Saber\"</string>
+    <string name="class_sabio_frame_label">Nexo do Saber</string>
+
+    <!-- ClassType — NÔMADE -->
+    <string name="class_nomade_display_name">NÔMADE</string>
+    <string name="class_nomade_subtitle">ARQUEIRO DA CONSISTÊNCIA</string>
+    <string name="class_nomade_quote">Não é o mais forte nem o mais sábio — é quem nunca para. A consistência vence todo talento.</string>
+    <string name="class_nomade_bonus_1">+20% XP em passos, cardio e hidratação</string>
+    <string name="class_nomade_bonus_2">1 \"escudo de streak\" por semana</string>
+    <string name="class_nomade_bonus_3">Frame de perfil exclusivo \"Horizonte Livre\"</string>
+    <string name="class_nomade_frame_label">Horizonte Livre</string>
+
+    <!-- Objetivo -->
+    <string name="objetivo_perder_peso">Perder Peso</string>
+    <string name="objetivo_ganhar_massa">Ganhar Massa</string>
+    <string name="objetivo_melhorar_condicao">Melhorar Condição</string>
+    <string name="objetivo_vida_saudavel">Vida Saudável</string>
+    <string name="objetivo_performance">Performance</string>
+
+    <!-- NivelExperiencia -->
+    <string name="nivel_iniciante">Iniciante</string>
+    <string name="nivel_intermediario">Intermediário</string>
+    <string name="nivel_avancado">Avançado</string>
+
+    <!-- Genero -->
+    <string name="genero_masculino">Masculino</string>
+    <string name="genero_feminino">Feminino</string>
+
+    <!-- Stats -->
+    <string name="stat_forca">Força</string>
+    <string name="stat_resistencia">Resistência</string>
+    <string name="stat_nutricao">Nutrição</string>
+
+
+    <!-- ================================================================================ -->
+    <!-- ================================= RECOVER PAGE   ================================ -->
+    <!-- ================================================================================ -->
+    <string name="reset_title">RECUPERAR ACESSO</string>
+    <string name="reset_subtitle">Insira seu e-mail e enviaremos um link de redefinição de senha.</string>
+    <string name="reset_email_label">E-MAIL</string>
+    <string name="reset_email_placeholder">seu@email.com</string>
+    <string name="reset_button_send">Enviar Link</string>
+
+    <!-- ResetPassword — Success State -->
+    <string name="reset_success_content_description">Sucesso</string>
+    <string name="reset_success_title">E-MAIL ENVIADO!</string>
+    <string name="reset_success_subtitle">Verifique sua caixa de entrada.</string>
 </resources>
 
 

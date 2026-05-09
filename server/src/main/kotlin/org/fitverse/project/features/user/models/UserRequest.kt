@@ -12,18 +12,20 @@ data class UserRequest(
     @SerialName("username")         val username: String,
     @SerialName("birth_date")       val birthDate: String,
     @SerialName("gender")           val gender: String,
-    @SerialName("class_type")       val classType: String,
+    @SerialName("class_type")       val classType: ClassType,
     @SerialName("height")           val height: Int,
     @SerialName("weight")           val weight: Double,
     @SerialName("experience_level") val experienceLevel: String,
     @SerialName("goals")            val goals: String,
-    @SerialName("is_premium")       val isPremium: Boolean,
+    @SerialName("is_premium")       val isPremium: Boolean = false,
     @SerialName("target_weight")    val targetWeight: Double? = null,
     @SerialName("target_calories")  val targetCalories: Int? = null,
     @SerialName("target_protein")   val targetProtein: Double? = null,
     @SerialName("target_carbs")     val targetCarbs: Double? = null,
     @SerialName("target_fat")       val targetFat: Double? = null,
 )
+
+
 
 
 fun UserRequest.toDocument(): UserDocument = UserDocument(
@@ -34,12 +36,12 @@ fun UserRequest.toDocument(): UserDocument = UserDocument(
     username        = username,
     birthDate       = birthDate,
     gender          = gender,
-    classType       = classType,
+    classType       = classType.name,
     height          = height,
     weight          = weight,
     experienceLevel = experienceLevel,
     goals           = goals,
-    isPremium       = isPremium,
+    premium         = isPremium,
     targetWeight    = targetWeight,
     targetCalories  = targetCalories,
     targetProtein   = targetProtein,

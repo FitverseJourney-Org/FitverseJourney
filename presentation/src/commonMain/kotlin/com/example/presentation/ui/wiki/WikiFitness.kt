@@ -71,7 +71,7 @@ fun WikiFitnessScreen(
     }
 
     Scaffold(
-        containerColor = Color.Transparent,
+        containerColor = FitverseColors.Bg,
         topBar = {
             FitverseTopAppBar(
                 title = "Wiki Fitness",

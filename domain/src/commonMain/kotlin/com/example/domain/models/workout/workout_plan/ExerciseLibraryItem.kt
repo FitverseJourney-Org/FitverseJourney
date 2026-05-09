@@ -9,6 +9,6 @@ data class ExerciseLibraryItem(
     val name: String,
     val muscleGroup: String,
     val description: String = "Execute o movimento de forma controlada, mantendo a postura e a contração muscular alvo durante toda a amplitude.",
-    val imageUrl: String = "", // Link para o GIF ou PNG
+    val imageUrl: String = "",
     val icon: ImageVector = Icons.Rounded.FitnessCenter
 )

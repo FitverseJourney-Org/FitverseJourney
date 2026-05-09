@@ -1,4 +1,4 @@
-package com.example.local.database
+package com.example.local.di
 
 import com.example.local.database.sqldelight.DatabaseFactory
 import org.koin.core.module.dsl.singleOf

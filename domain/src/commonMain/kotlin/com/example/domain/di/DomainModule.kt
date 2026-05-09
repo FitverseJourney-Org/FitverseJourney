@@ -28,6 +28,8 @@ import com.example.domain.usecase.db.datastore.language.ChangeAppLanguageUseCase
 import com.example.domain.usecase.db.datastore.language.GetAppLanguageUseCase
 import com.example.domain.usecase.db.datastore.language.GetCurrentLanguageUseCase
 import com.example.domain.usecase.db.datastore.language.GetSystemLocaleUseCase
+import com.example.domain.usecase.db.datastore.trial.ObserveIsTrialCompletedUseCase
+import com.example.domain.usecase.db.datastore.trial.SetIsTrialCompletedUseCase
 import org.koin.dsl.module
 
 
@@ -56,7 +58,12 @@ val datastoreUseCase = module {
 
     // ── DataStore — Onboarding ────────────────────────────────────────────────
     factory { ObserveOnboardingCompletedUseCase(repository = get()) }
+
     factory { SetOnboardingCompletedUseCase(repository = get()) }
+
+    // ── DataStore — Trial ─────────────────────────────────────────────────────
+    factory { ObserveIsTrialCompletedUseCase(repository = get()) }
+    factory { SetIsTrialCompletedUseCase(repository = get()) }
 
     // ── DataStore — Language ──────────────────────────────────────────────────
     factory { GetAppLanguageUseCase(get()) }

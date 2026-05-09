@@ -6,4 +6,5 @@ interface AppOnboardingRepository {
     // Onboarding
     val isOnboardingCompleted: Flow<Boolean>
     suspend fun setOnboardingCompleted(isCompleted: Boolean)
+
 }

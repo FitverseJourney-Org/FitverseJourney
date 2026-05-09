@@ -47,8 +47,8 @@ class LoginViewModel(
     }
 
     fun onLoginClick() {
-        val email = _state.value.email
-        val password = _state.value.password
+        val email = _state.value.email.trim()
+        val password = _state.value.password.trim()
 
         // Validação de UI preventiva
         if (email.isBlank() || password.isBlank()) {
@@ -64,9 +64,9 @@ class LoginViewModel(
 
         viewModelScope.launch {
             _state.update { it.copy(isLoading = true) }
-
             loginUseCase(email, password).fold(
-                onSuccess = {
+                onSuccess = { user ->
+                    println("User: $user")
                     _state.update { it.copy(isLoading = false) }
                     _navigationState.emit(LoginNavigation.ToHome)
                 },

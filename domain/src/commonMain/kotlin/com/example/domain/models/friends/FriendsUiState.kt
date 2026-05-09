@@ -1,6 +1,7 @@
 package com.example.domain.models.friends
 
 import androidx.compose.runtime.Immutable
+import com.example.domain.models.dashboard.UserProfile
 
 /**
  * Estado da UI seguindo padrão UiState

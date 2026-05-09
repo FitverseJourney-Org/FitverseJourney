@@ -1,6 +1,6 @@
 package com.example.domain.models.user
 
-enum class Gender {
+enum class Genero {
     MASCULINO,
     FEMININO;
 }

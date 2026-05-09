@@ -1,6 +1,6 @@
 package com.example.domain.repository
 
-import com.example.domain.models.progress.LoadProgressionPoint
+import com.example.domain.models.progression.LoadProgressionPoint
 import kotlinx.coroutines.flow.Flow
 
 /**

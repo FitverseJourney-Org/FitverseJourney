@@ -11,8 +11,8 @@ import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
 import com.example.domain.models.workout.workout_plan.WorkoutPlanItem
 import com.example.domain.models.workout.workout_plan.WorkoutScreenState
-import com.example.presentation.screens.ui.planWorkout.WorkoutAiPlanGenerationDestination
-import com.example.presentation.screens.ui.planWorkout.WorkoutPlanListScreen
+import com.example.presentation.ui.planWorkout.WorkoutAiPlanGenerationDestination
+import com.example.presentation.ui.planWorkout.WorkoutPlanListScreen
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import org.fitverse.project.destinations.homepage.workout.WorkoutPlanBuilderDestination

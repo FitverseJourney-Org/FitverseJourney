@@ -16,6 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.ui.unit.sp
 import com.example.presentation.theme.FitverseColors
 import androidx.compose.ui.graphics.Color
@@ -55,35 +56,43 @@ private val stories = listOf(
 
 @Composable
 fun CommunityScreen() {
-    LazyColumn(
+    Scaffold(
         modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(bottom = 16.dp)
-    ) {
-        item {
-            Text(
-                "COMUNIDADE",
-                color = FitverseColors.TextPrimary,
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Black,
-                letterSpacing = (-0.5).sp,
-                modifier = Modifier.padding(horizontal = 20.dp, vertical = 24.dp)
-            )
-        }
+        contentWindowInsets = WindowInsets(0,0,0,0),
+        containerColor = Color.Transparent,
+        content ={
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                item {
+                    Text(
+                        "COMUNIDADE",
+                        color = FitverseColors.TextPrimary,
+                        fontSize = 28.sp,
+                        fontWeight = FontWeight.Black,
+                        letterSpacing = (-0.5).sp,
+                        modifier = Modifier
+                    )
+                }
 
-        item { StoriesRow() }
+                item { StoriesRow() }
 
-        items(samplePosts) { post ->
-            PostCard(post)
-            Spacer(Modifier.height(10.dp))
+                items(samplePosts) { post ->
+                    PostCard(post)
+                }
+            }
         }
-    }
+    )
+
 }
 
 @Composable
 fun PostCard(post: Post) {
     val cs = MaterialTheme.colorScheme
     Column(
-        modifier = Modifier.padding(horizontal = 20.dp)
+        modifier = Modifier
             .border(width = 1.dp, color = Color(0xFF2a2a35), shape = RoundedCornerShape(16.dp))
             .fillMaxWidth().clip(RoundedCornerShape(16.dp))
             .background(cs.surface).padding(16.dp)
@@ -153,7 +162,6 @@ private fun PostStat(icon: String, count: Int, iconSize: Int) {
 @Composable
 private fun StoriesRow() {
     LazyRow(
-        contentPadding = PaddingValues(horizontal = 20.dp),
         horizontalArrangement = Arrangement.spacedBy(14.dp)
     ) {
         items(stories) { (name, isMe) ->

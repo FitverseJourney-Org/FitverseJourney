@@ -26,7 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.domain.models.dashboard.TaskItem
+import com.example.domain.models.dashboard.tasks.TaskItem
 import com.example.presentation.theme.DarkGamifiedColors
 
 @OptIn(ExperimentalAnimationApi::class)

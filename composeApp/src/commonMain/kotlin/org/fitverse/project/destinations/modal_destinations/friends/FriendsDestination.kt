@@ -3,8 +3,8 @@ package org.fitverse.project.destinations.modal_destinations.friends
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.presentation.screens.ui.friends.FriendsScreen
-import com.example.presentation.screens.ui.friends.viewmodel.FriendsViewModel
+import com.example.presentation.ui.friends.viewmodel.FriendsViewModel
+import com.example.presentation.widgets.FriendsScreen
 
 @Composable
 fun FriendsDestination(
@@ -15,9 +15,6 @@ fun FriendsDestination(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     FriendsScreen(
-        uiState = uiState,
-        onEvent = viewModel::onEvent,
-        onBack = onBack,
-        onNavigateToQrScanner = onNavigateToQrScanner
+        onBack = onBack
     )
 }
