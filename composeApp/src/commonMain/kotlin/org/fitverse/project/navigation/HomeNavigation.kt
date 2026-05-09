@@ -33,8 +33,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -50,29 +50,15 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
-import com.example.domain.models.levelUp.LevelUpData
 import com.example.domain.repository.authentication.AuthRepository
 import com.example.presentation.ui.achievements.viewmodel.AchievementsViewModel
-import org.fitverse.project.destinations.homepage.community.CommunityDestination
 import com.example.presentation.ui.friends.viewmodel.FriendsViewModel
 import com.example.presentation.ui.historic.viewmodel.HistoricViewModel
-import com.example.presentation.ui.meals.viewmodel.NutritionViewModel
-import com.example.presentation.ui.notification.NotificationViewModel
 import com.example.presentation.ui.progress.viewmodel.ProgressViewModel
 import com.example.presentation.ui.wiki.viewmodel.WikiViewModel
-import com.example.presentation.ui.workout.viewmodel.WorkoutSessionViewModel
-import com.example.presentation.ui.workout.viewmodel.WorkoutViewModel
-import com.example.presentation.widgets.LevelUpScreen
 import kotlinx.coroutines.launch
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
-import org.fitverse.project.destinations.homepage.community.AddPostDestination
-import org.fitverse.project.destinations.homepage.dashboad.DashboardDestination
-import org.fitverse.project.destinations.homepage.dashboad.NotificationDestination
-import org.fitverse.project.destinations.homepage.meals.MealsDestination
-import org.fitverse.project.destinations.homepage.profile.ProfileDestination
-import org.fitverse.project.destinations.homepage.workout.WorkoutDestination
-import org.fitverse.project.destinations.homepage.workout.WorkoutSessionDestination
 import org.fitverse.project.destinations.modal_destinations.achievement.AchievementDestination
 import org.fitverse.project.destinations.modal_destinations.device.DevicesDestination
 import org.fitverse.project.destinations.modal_destinations.friends.FriendsDestination
@@ -87,45 +73,33 @@ import org.koin.compose.koinInject
 
 @Composable
 fun HomeNavigation(
-    logout: () -> Unit
+    logout: () -> Unit,
+    toLoadingLanguage: () -> Unit
 ) {
     val rootBackStack = rememberNavBackStack(
         SavedStateConfiguration {
             serializersModule = SerializersModule {
                 polymorphic(NavKey::class) {
-                    // ── Home Flow ─────────────────────────────────────────
-                    subclass(NavRoutes.HomeFlow.Dashboard::class,              NavRoutes.HomeFlow.Dashboard.serializer())
-                    subclass(NavRoutes.HomeFlow.Workout::class,                NavRoutes.HomeFlow.Workout.serializer())
-                    subclass(NavRoutes.HomeFlow.Community::class,              NavRoutes.HomeFlow.Community.serializer())
-                    subclass(NavRoutes.HomeFlow.Nutrition::class,              NavRoutes.HomeFlow.Nutrition.serializer())
-                    subclass(NavRoutes.HomeFlow.Profile::class,                NavRoutes.HomeFlow.Profile.serializer())
-                    subclass(NavRoutes.HomeFlow.AddPost::class,                NavRoutes.HomeFlow.AddPost.serializer())
-                    subclass(NavRoutes.HomeFlow.Notification::class,           NavRoutes.HomeFlow.Notification.serializer())
-                    subclass(NavRoutes.HomeFlow.UserLevelUp::class,            NavRoutes.HomeFlow.UserLevelUp.serializer())
-                    // ── Workout Flow ──────────────────────────────────────
-                    subclass(NavRoutes.WorkoutFlow.WorkoutSession::class,      NavRoutes.WorkoutFlow.WorkoutSession.serializer())
-                    subclass(NavRoutes.WorkoutFlow.WorkoutCompleted::class,    NavRoutes.WorkoutFlow.WorkoutCompleted.serializer())
-                    // ── Plan Workout Flow ─────────────────────────────────
-                    subclass(NavRoutes.PlanWorkoutFlow::class,                 NavRoutes.PlanWorkoutFlow.serializer())
-                    subclass(NavRoutes.PlanWorkoutFlow.PlanList::class,        NavRoutes.PlanWorkoutFlow.PlanList.serializer())
-                    subclass(NavRoutes.PlanWorkoutFlow.Plan::class,            NavRoutes.PlanWorkoutFlow.Plan.serializer())
-                    subclass(NavRoutes.PlanWorkoutFlow.Builder::class,         NavRoutes.PlanWorkoutFlow.Builder.serializer())
-                    subclass(NavRoutes.PlanWorkoutFlow.Exercises::class,       NavRoutes.PlanWorkoutFlow.Exercises.serializer())
-                    subclass(NavRoutes.PlanWorkoutFlow.ExerciseDetails::class, NavRoutes.PlanWorkoutFlow.ExerciseDetails.serializer())
-                    subclass(NavRoutes.PlanWorkoutFlow.PlanIA::class,          NavRoutes.PlanWorkoutFlow.PlanIA.serializer())
-                    // ── Tasks Flow ────────────────────────────────────────
-                    subclass(NavRoutes.TasksFlow::class,                       NavRoutes.TasksFlow.serializer())
-                    // ── Telas avulsas ─────────────────────────────────────
-                    subclass(NavRoutes.WikiFitness::class,                     NavRoutes.WikiFitness.serializer())
-                    subclass(NavRoutes.Shopping::class,                        NavRoutes.Shopping.serializer())
-                    subclass(NavRoutes.Historic::class,                        NavRoutes.Historic.serializer())
-                    subclass(NavRoutes.Progress::class,                        NavRoutes.Progress.serializer())
-                    subclass(NavRoutes.Achievements::class,                    NavRoutes.Achievements.serializer())
-                    subclass(NavRoutes.Leaderboards::class,                    NavRoutes.Leaderboards.serializer())
-                    subclass(NavRoutes.Friends::class,                         NavRoutes.Friends.serializer())
-                    subclass(NavRoutes.Devices::class,                         NavRoutes.Devices.serializer())
-                    subclass(NavRoutes.HelpSupport::class,                     NavRoutes.HelpSupport.serializer())
-                    subclass(NavRoutes.PlanPayment::class,                     NavRoutes.PlanPayment.serializer())
+                    // ── Tabs ──────────────────────────────────────────────────
+                    subclass(NavRoutes.HomeFlow.Dashboard::class,  NavRoutes.HomeFlow.Dashboard.serializer())
+                    subclass(NavRoutes.HomeFlow.Workout::class,    NavRoutes.HomeFlow.Workout.serializer())
+                    subclass(NavRoutes.HomeFlow.Community::class,  NavRoutes.HomeFlow.Community.serializer())
+                    subclass(NavRoutes.HomeFlow.Nutrition::class,  NavRoutes.HomeFlow.Nutrition.serializer())
+                    subclass(NavRoutes.HomeFlow.Profile::class,    NavRoutes.HomeFlow.Profile.serializer())
+                    // ── Telas avulsas (drawer) ────────────────────────────────
+                    subclass(NavRoutes.WikiFitness::class,         NavRoutes.WikiFitness.serializer())
+                    subclass(NavRoutes.Shopping::class,            NavRoutes.Shopping.serializer())
+                    subclass(NavRoutes.Historic::class,            NavRoutes.Historic.serializer())
+                    subclass(NavRoutes.Progress::class,            NavRoutes.Progress.serializer())
+                    subclass(NavRoutes.Achievements::class,        NavRoutes.Achievements.serializer())
+                    subclass(NavRoutes.Leaderboards::class,        NavRoutes.Leaderboards.serializer())
+                    subclass(NavRoutes.Friends::class,             NavRoutes.Friends.serializer())
+                    subclass(NavRoutes.Devices::class,             NavRoutes.Devices.serializer())
+                    subclass(NavRoutes.HelpSupport::class,         NavRoutes.HelpSupport.serializer())
+                    subclass(NavRoutes.PlanPayment::class,         NavRoutes.PlanPayment.serializer())
+                    // ── Sub-navegações ────────────────────────────────────────
+                    subclass(NavRoutes.PlanWorkoutFlow::class,     NavRoutes.PlanWorkoutFlow.serializer())
+                    subclass(NavRoutes.TasksFlow::class,           NavRoutes.TasksFlow.serializer())
                 }
             }
         },
@@ -141,13 +115,18 @@ fun HomeNavigation(
     )
 
     var isMealsSheetOpen by remember { mutableStateOf(false) }
-    val showBottomBar = rootBackStack.lastOrNull() in bottomBarItems && !isMealsSheetOpen
+    var isWorkoutFullScreen by remember { mutableStateOf(false) }
+    var isDashboardSubScreen by remember { mutableStateOf(false) }
+    var isCommunitySubScreen by remember { mutableStateOf(false) }
+    val showBottomBar = rootBackStack.lastOrNull() in bottomBarItems &&
+        !isMealsSheetOpen &&
+        !isWorkoutFullScreen &&
+        !isDashboardSubScreen &&
+        !isCommunitySubScreen
 
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
     val authRepository = koinInject<AuthRepository>()
-
-
 
     ModalDrawerSheetMainScreen(
         drawerState = drawerState,
@@ -187,70 +166,34 @@ fun HomeNavigation(
                         if (!consumed) rootBackStack.removeLastOrNull()
                     },
                     entryProvider = entryProvider {
-
+                        // ── Feature navigations (tabs) ────────────────────────
                         entry<NavRoutes.HomeFlow.Dashboard> {
-                            DashboardDestination(
-                                toNotification = { rootBackStack.add(NavRoutes.HomeFlow.Notification) },
-                                toEnergy = { rootBackStack.add(NavRoutes.HomeFlow.UserLevelUp) }
-                            )
-                        }
-                        entry<NavRoutes.HomeFlow.UserLevelUp> {
-                            LevelUpScreen(
-                                data = LevelUpData(
-                                    userName = "Alex",
-                                    level = 24,
-                                    className = "Warrior",
-                                    xpGained = 200
-                                ),
-                                onContinue = {
-                                    rootBackStack.removeLastOrNull()
-                                }
+                            DashboardNavigation(
+                                onSubScreenChange = { isDashboardSubScreen = it }
                             )
                         }
                         entry<NavRoutes.HomeFlow.Workout> {
-                            val viewModel = koinInject<WorkoutViewModel>()
-                            WorkoutDestination(
-                                //viewModel = viewModel
+                            WorkoutNavigation(
+                                onFullScreen = { isWorkoutFullScreen = it }
                             )
                         }
                         entry<NavRoutes.HomeFlow.Community> {
-                            CommunityDestination(
-                                toAddPost = { rootBackStack.add(NavRoutes.HomeFlow.AddPost) }
+                            CommunityNavigation(
+                                onSubScreenChange = { isCommunitySubScreen = it }
                             )
                         }
                         entry<NavRoutes.HomeFlow.Nutrition> {
-                            val viewModel = koinInject<NutritionViewModel>()
-                            MealsDestination(
-                                //viewModel = viewModel
-                                onBottomSheetOpen = { isMealsSheetOpen = it }
+                            NutritionNavigation(
+                                onSheetStateChange = { isMealsSheetOpen = it }
                             )
                         }
                         entry<NavRoutes.HomeFlow.Profile> {
-                            ProfileDestination()
+                            ProfileNavigation()
                         }
-                        entry<NavRoutes.HomeFlow.AddPost> {
-                            AddPostDestination(
-                                toBack = { rootBackStack.removeLastOrNull() }
-                            )
-                        }
-                        entry<NavRoutes.HomeFlow.Notification> {
-                            val viewModel = koinInject<NotificationViewModel>()
-                            NotificationDestination(
-                                //viewModel = viewModel,
-                                toDashboard = { rootBackStack.removeLastOrNull() }
-                            )
-                        }
-                        entry<NavRoutes.WorkoutFlow.WorkoutSession> {
-                            val viewModel = koinInject<WorkoutSessionViewModel>()
-                            WorkoutSessionDestination(
-                                //viewModel = viewModel,
-                                toCompletedWorkout = { rootBackStack.add(NavRoutes.WorkoutFlow.WorkoutCompleted) }
-                            )
-                        }
+                        // ── Telas avulsas (drawer) ────────────────────────────
                         entry<NavRoutes.Historic> {
                             val viewModel = koinInject<HistoricViewModel>()
                             HistoricDestination(
-                                //viewModel = viewModel,
                                 navigateBack = { rootBackStack.removeLastOrNull() }
                             )
                         }
@@ -309,6 +252,7 @@ fun HomeNavigation(
                                 toBack = { rootBackStack.removeLastOrNull() }
                             )
                         }
+                        // ── Sub-navegações ────────────────────────────────────
                         entry<NavRoutes.PlanWorkoutFlow> {
                             PlanWorkoutNavigation(
                                 toBack = { rootBackStack.removeLastOrNull() }
@@ -334,7 +278,7 @@ fun handleHomeBackPress(backStack: MutableList<NavKey>): Boolean {
         NavRoutes.HomeFlow.Nutrition,
         NavRoutes.HomeFlow.Profile -> {
             backStack.clear()
-            backStack.add(NavRoutes.HomeFlow.Dashboard) // ✅ volta para Dashboard
+            backStack.add(NavRoutes.HomeFlow.Dashboard)
             true
         }
         else -> { backStack.removeLastOrNull(); true }
@@ -376,7 +320,6 @@ fun FitVerseBottomBar(items: List<NavKey>, backStack: MutableList<NavKey>) {
                     onClick = {
                         if (!isSelected) {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            // ✅ Substitui em vez de empilhar
                             backStack.removeAll { it in items }
                             backStack.add(item)
                         }
