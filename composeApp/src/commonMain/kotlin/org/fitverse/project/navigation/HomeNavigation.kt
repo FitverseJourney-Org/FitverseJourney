@@ -51,6 +51,7 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
 import com.example.domain.repository.authentication.AuthRepository
+import com.example.presentation.theme.FitverseColors
 import com.example.presentation.ui.achievements.viewmodel.AchievementsViewModel
 import com.example.presentation.ui.friends.viewmodel.FriendsViewModel
 import com.example.presentation.ui.historic.viewmodel.HistoricViewModel
@@ -67,7 +68,6 @@ import org.fitverse.project.destinations.modal_destinations.progress.ProgressDes
 import org.fitverse.project.destinations.payments.PlanPaymentDestination
 import org.fitverse.project.destinations.shopping.ShoppingDestination
 import org.fitverse.project.destinations.wiki.WikiFitnessDestination
-import org.fitverse.project.routes.FitverseColors
 import org.fitverse.project.routes.NavRoutes
 import org.koin.compose.koinInject
 
@@ -130,7 +130,7 @@ fun HomeNavigation(
 
     ModalDrawerSheetMainScreen(
         drawerState = drawerState,
-        gesturesEnabled = rootBackStack.lastOrNull() in bottomBarItems,
+        gesturesEnabled = showBottomBar,
         onNavigate = {
             rootBackStack.add(it)
             coroutineScope.launch { drawerState.close() }
@@ -143,7 +143,7 @@ fun HomeNavigation(
         },
         content = {
             Scaffold(
-                containerColor = FitverseColors.BgDark,
+                containerColor = FitverseColors.Bg,
                 bottomBar = {
                     AnimatedVisibility(
                         visible = showBottomBar,
