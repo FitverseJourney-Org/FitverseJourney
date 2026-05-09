@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -32,8 +33,10 @@ fun MissionCard(
     title: String,
     description: String,
     xp: Int?,
+    icon: ImageVector,
+    iconColor: Color,
     isCompleted: Boolean = false,
-    icon: @Composable () -> Unit
+    onClaim: (() -> Unit)? = null
 ) {
     val alpha = if (isCompleted) 0.5f else 1f
     val cs = MaterialTheme.colorScheme
@@ -48,45 +51,55 @@ fun MissionCard(
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Icon Container
             Box(
                 modifier = Modifier
-                    .size(56.dp)
-                    .background(Color.Black.copy(alpha = 0.3f), RoundedCornerShape(12.dp))
-                    .border(1.dp, cs.primary.copy(alpha = 0.3f), RoundedCornerShape(12.dp)),
+                    .size(52.dp)
+                    .background(iconColor.copy(alpha = 0.12f), RoundedCornerShape(14.dp))
+                    .border(1.dp, iconColor.copy(alpha = 0.35f), RoundedCornerShape(14.dp)),
                 contentAlignment = Alignment.Center
-            ) { icon() }
+            ) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    tint = iconColor,
+                    modifier = Modifier.size(26.dp)
+                )
+            }
 
-            Column(modifier = Modifier.weight(1f).padding(horizontal = 16.dp)) {
-                Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = Color.White)
-                Text(description, style = MaterialTheme.typography.bodySmall, color = Color.Gray)
+            Column(modifier = Modifier.weight(1f).padding(horizontal = 14.dp)) {
+                Text(
+                    title,
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
+                Text(
+                    description,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color.Gray
+                )
             }
 
             if (isCompleted) {
                 Icon(
-                    modifier = Modifier.padding(12.dp),
                     imageVector = Icons.Default.Check,
                     contentDescription = null,
-                    tint = cs.primary
+                    tint = cs.primary,
+                    modifier = Modifier.size(20.dp)
                 )
-            }else {
-                Box(
-                    modifier = Modifier,
-                    contentAlignment = Alignment.Center
-                ){
-                    Text(
-                        modifier = Modifier
-                            .clickable(role = Role.Button){
-                                println("XP ganho: $xp")
-                            }
-                            .clip(RoundedCornerShape(12.dp))
-                            .background(cs.primary.copy(.75f), RoundedCornerShape(12.dp))
-                            .padding(12.dp),
-                        text = "$xp XP",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = Color.Black
-                    )
-                }
+            } else {
+                Text(
+                    modifier = Modifier
+                        .clickable(role = Role.Button) { onClaim?.invoke() }
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(iconColor.copy(alpha = 0.15f), RoundedCornerShape(10.dp))
+                        .border(1.dp, iconColor.copy(alpha = 0.3f), RoundedCornerShape(10.dp))
+                        .padding(horizontal = 10.dp, vertical = 6.dp),
+                    text = "+${xp} XP",
+                    style = MaterialTheme.typography.labelSmall,
+                    fontWeight = FontWeight.Black,
+                    color = iconColor
+                )
             }
         }
     }
