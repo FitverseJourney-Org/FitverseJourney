@@ -25,6 +25,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.example.presentation.ui.dashboard.DailyMission.Companion.defaultDailyMissions
+import com.example.presentation.ui.dashboard.MissionType
 import com.example.presentation.ui.dashboard.components.AnimatedStreakDialog
 import com.example.presentation.ui.dashboard.components.CardStreakWeek
 import com.example.presentation.ui.dashboard.components.HomeHeader
@@ -202,6 +204,7 @@ fun ContentDashboardScreen(
                             icon = mission.type.icon,
                             iconColor = mission.type.color,
                             isCompleted = mission.isCompleted,
+                            isChallengeType = mission.type == MissionType.CHALLENGE,
                             onClaim = { println("XP ganho: ${mission.xp}") }
                         )
                     }

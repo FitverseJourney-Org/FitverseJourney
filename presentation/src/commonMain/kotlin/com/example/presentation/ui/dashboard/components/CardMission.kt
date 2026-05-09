@@ -1,5 +1,11 @@
 package com.example.presentation.ui.dashboard.components
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,15 +24,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.example.presentation.theme.FitverseColors
 
 @Composable
 fun MissionCard(
@@ -36,16 +45,47 @@ fun MissionCard(
     icon: ImageVector,
     iconColor: Color,
     isCompleted: Boolean = false,
+    isChallengeType: Boolean = false,
     onClaim: (() -> Unit)? = null
 ) {
-    val alpha = if (isCompleted) 0.5f else 1f
+    val cardAlpha = if (isCompleted) 0.5f else 1f
     val cs = MaterialTheme.colorScheme
+    val shape = RoundedCornerShape(20.dp)
+
+    val animatedBorderModifier: Modifier = if (isChallengeType && !isCompleted) {
+        val pulse = rememberInfiniteTransition(label = "challenge_border")
+        val borderAlpha by pulse.animateFloat(
+            initialValue = 0.45f,
+            targetValue = 1f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(900, easing = FastOutSlowInEasing),
+                repeatMode = RepeatMode.Reverse
+            ),
+            label = "border_pulse"
+        )
+        Modifier.border(
+            width = 1.5.dp,
+            brush = Brush.horizontalGradient(
+                listOf(
+                    FitverseColors.Red.copy(alpha = borderAlpha * 0.5f),
+                    FitverseColors.Red.copy(alpha = borderAlpha),
+                    FitverseColors.Red.copy(alpha = borderAlpha * 0.5f),
+                )
+            ),
+            shape = shape
+        )
+    } else Modifier
 
     Surface(
-        modifier = Modifier.fillMaxWidth().alpha(alpha),
-        shape = RoundedCornerShape(20.dp),
-        color = cs.surface.copy(.5f),
-        border = BorderStroke(1.dp, color = Color(0xFF2a2a35))
+        modifier = Modifier
+            .fillMaxWidth()
+            .alpha(cardAlpha)
+            .then(animatedBorderModifier),
+        shape = shape,
+        color = if (isChallengeType) FitverseColors.Red.copy(alpha = 0.06f)
+                else cs.surface.copy(alpha = 0.5f),
+        border = if (isChallengeType) null
+                 else BorderStroke(1.dp, Color(0xFF2a2a35))
     ) {
         Row(
             modifier = Modifier.padding(16.dp),
@@ -68,13 +108,13 @@ fun MissionCard(
 
             Column(modifier = Modifier.weight(1f).padding(horizontal = 14.dp)) {
                 Text(
-                    title,
+                    text = title,
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
                     color = Color.White
                 )
                 Text(
-                    description,
+                    text = description,
                     style = MaterialTheme.typography.bodySmall,
                     color = Color.Gray
                 )

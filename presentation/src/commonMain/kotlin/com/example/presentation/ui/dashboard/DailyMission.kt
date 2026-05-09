@@ -32,38 +32,46 @@ data class DailyMission(
     val xp: Int?,
     val type: MissionType,
     val isCompleted: Boolean = false
-)
-
-val defaultDailyMissions = listOf(
-    DailyMission(
-        title = "Morning Stretch",
-        description = "5–10 min • Aqueça seu corpo",
-        xp = 10,
-        type = MissionType.STRETCH
-    ),
-    DailyMission(
-        title = "Registrar Hidratação",
-        description = "8 copos • Meta diária de água",
-        xp = 15,
-        type = MissionType.HYDRATION,
-        isCompleted = true
-    ),
-    DailyMission(
-        title = "Cardio 30 min",
-        description = "Caminhar • Correr • Bike",
-        xp = 30,
-        type = MissionType.CARDIO
-    ),
-    DailyMission(
-        title = "Treino de Força",
-        description = "3 séries • Membros superiores",
-        xp = 50,
-        type = MissionType.STRENGTH
-    ),
-    DailyMission(
-        title = "Refeição Saudável",
-        description = "Registre suas 3 refeições do dia",
-        xp = 20,
-        type = MissionType.NUTRITION
-    ),
-)
+){
+    companion object {
+        val defaultDailyMissions = listOf(
+            DailyMission(
+                title = "Desafio do Dia",
+                description = "Complete 100 agachamentos hoje",
+                xp = 100,
+                type = MissionType.CHALLENGE
+            ),
+            DailyMission(
+                title = "Morning Stretch",
+                description = "5–10 min • Aqueça seu corpo",
+                xp = 10,
+                type = MissionType.STRETCH
+            ),
+            DailyMission(
+                title = "Registrar Hidratação",
+                description = "8 copos • Meta diária de água",
+                xp = 15,
+                type = MissionType.HYDRATION,
+                isCompleted = true
+            ),
+            DailyMission(
+                title = "Cardio 30 min",
+                description = "Caminhar • Correr • Bike",
+                xp = 30,
+                type = MissionType.CARDIO
+            ),
+            DailyMission(
+                title = "Treino de Força",
+                description = "3 séries • Membros superiores",
+                xp = 50,
+                type = MissionType.STRENGTH
+            ),
+            DailyMission(
+                title = "Refeição Saudável",
+                description = "Registre suas 3 refeições do dia",
+                xp = 20,
+                type = MissionType.NUTRITION
+            ),
+        ).sortedByDescending { it.type == MissionType.CHALLENGE }
+    }
+}
