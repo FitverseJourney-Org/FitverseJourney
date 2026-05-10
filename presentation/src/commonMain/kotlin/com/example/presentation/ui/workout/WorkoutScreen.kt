@@ -30,13 +30,19 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Bolt
 import androidx.compose.material.icons.rounded.CheckCircle
+import androidx.compose.material.icons.rounded.ChevronRight
+import androidx.compose.material.icons.rounded.DirectionsRun
 import androidx.compose.material.icons.rounded.EmojiEvents
+import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.FitnessCenter
+import androidx.compose.material.icons.rounded.PlayArrow
 import androidx.compose.material.icons.rounded.Timer
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
@@ -59,13 +65,55 @@ import androidx.compose.ui.unit.sp
 import com.example.presentation.theme.FitverseColors
 import com.example.presentation.ui.dashboard.components.SectionHeader
 
+// ── Data ─────────────────────────────────────────────────────────────────────
+
+data class RecommendedWorkout(
+    val icon: ImageVector,
+    val iconColor: Color,
+    val name: String,
+    val difficulty: String,
+    val difficultyColor: Color,
+    val duration: String,
+    val sets: String,
+    val reward: String,
+)
+
 val categories = listOf("Força", "Cardio", "Hipertrofia", "HIIT")
 
 val recommendedWorkouts = listOf(
-    Triple("💪", "PEITO & TRÍCEPS", "Intermediário · 45 min · 18 séries" to "+150 PTS"),
-    Triple("🏋️", "COSTAS & BÍCEPS", "Intermediário · 50 min · 20 séries" to "+160 PTS"),
-    Triple("🦵", "PERNAS COMPLETO",  "Avançado · 60 min · 24 séries"      to "+200 PTS"),
+    RecommendedWorkout(
+        icon           = Icons.Rounded.FitnessCenter,
+        iconColor      = FitverseColors.Accent,
+        name           = "PEITO & TRÍCEPS",
+        difficulty     = "Intermediário",
+        difficultyColor= FitverseColors.Amber,
+        duration       = "45 min",
+        sets           = "18 séries",
+        reward         = "+150 PTS"
+    ),
+    RecommendedWorkout(
+        icon           = Icons.Rounded.FitnessCenter,
+        iconColor      = FitverseColors.Blue,
+        name           = "COSTAS & BÍCEPS",
+        difficulty     = "Intermediário",
+        difficultyColor= FitverseColors.Amber,
+        duration       = "50 min",
+        sets           = "20 séries",
+        reward         = "+160 PTS"
+    ),
+    RecommendedWorkout(
+        icon           = Icons.Rounded.DirectionsRun,
+        iconColor      = FitverseColors.Orange,
+        name           = "PERNAS COMPLETO",
+        difficulty     = "Avançado",
+        difficultyColor= FitverseColors.Red,
+        duration       = "60 min",
+        sets           = "24 séries",
+        reward         = "+200 PTS"
+    ),
 )
+
+// ── Screen ───────────────────────────────────────────────────────────────────
 
 @Composable
 fun WorkoutScreen(
@@ -100,11 +148,8 @@ fun ContentWorkoutScreen(
         item { WorkoutHeader() }
 
         item {
-            if (workoutCompletedToday) {
-                WorkoutDoneCard()
-            } else {
-                WorkoutMainCard(onStart = onStartWorkout)
-            }
+            if (workoutCompletedToday) WorkoutDoneCard()
+            else WorkoutMainCard(onStart = onStartWorkout)
         }
 
         item {
@@ -114,24 +159,19 @@ fun ContentWorkoutScreen(
             )
         }
 
-        item { SectionHeader("RECOMENDADOS") }
+        item { SectionHeader("RECOMENDADOS", actionText = "VER TODOS") }
 
-        items(recommendedWorkouts) { (emoji, name, detail) ->
-            WorkoutCard(
-                emoji = emoji,
-                name = name,
-                subtitle = detail.first,
-                reward = detail.second
-            )
+        items(recommendedWorkouts) { workout ->
+            WorkoutCard(workout = workout)
         }
     }
 }
 
-// ── Sub-composables ───────────────────────────────────────────────────────────
+// ── Header ────────────────────────────────────────────────────────────────────
 
 @Composable
 private fun WorkoutHeader() {
-    Column {
+    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Text(
             text = "SEGUNDA-FEIRA",
             color = FitverseColors.TextMuted,
@@ -146,13 +186,66 @@ private fun WorkoutHeader() {
             fontWeight = FontWeight.Black,
             letterSpacing = (-0.5).sp
         )
-        Spacer(Modifier.height(10.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             FitChip("LEVEL 23", FitverseColors.Purple)
             FitChip("+150 PTS", FitverseColors.AccentDim, textColor = FitverseColors.Accent)
         }
+        Spacer(Modifier.height(4.dp))
+        WeekPlanDots()
     }
 }
+
+@Composable
+private fun WeekPlanDots() {
+    // label / done / isToday — mock: Mon–Wed done, Thu = today
+    val days = listOf(
+        Triple("S", true,  false),
+        Triple("T", true,  false),
+        Triple("Q", true,  false),
+        Triple("Q", false, true),
+        Triple("S", false, false),
+        Triple("S", false, false),
+        Triple("D", false, false),
+    )
+    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+        days.forEach { (label, done, isToday) ->
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Text(
+                    text = label,
+                    color = when {
+                        isToday -> FitverseColors.Accent
+                        done    -> FitverseColors.TextMuted
+                        else    -> FitverseColors.TextMuted2
+                    },
+                    fontSize = 10.sp,
+                    fontWeight = if (isToday) FontWeight.Black else FontWeight.Medium,
+                    letterSpacing = 0.5.sp
+                )
+                Box(
+                    modifier = Modifier
+                        .size(6.dp)
+                        .clip(CircleShape)
+                        .background(
+                            when {
+                                done    -> FitverseColors.Accent
+                                isToday -> FitverseColors.AccentDim
+                                else    -> FitverseColors.Surface2
+                            }
+                        )
+                        .then(
+                            if (isToday) Modifier.border(1.dp, FitverseColors.Accent.copy(alpha = 0.6f), CircleShape)
+                            else Modifier
+                        )
+                )
+            }
+        }
+    }
+}
+
+// ── Chip ─────────────────────────────────────────────────────────────────────
 
 @Composable
 fun FitChip(
@@ -170,6 +263,8 @@ fun FitChip(
     }
 }
 
+// ── Main card (workout not done today) ────────────────────────────────────────
+
 @Composable
 private fun WorkoutMainCard(onStart: () -> Unit) {
     val cs = MaterialTheme.colorScheme
@@ -179,58 +274,148 @@ private fun WorkoutMainCard(onStart: () -> Unit) {
             .fillMaxWidth()
             .clip(RoundedCornerShape(20.dp))
             .background(cs.surface)
-            .padding(20.dp)
     ) {
         Column {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    "HYPERTROPHY A",
-                    color = FitverseColors.TextPrimary,
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.Black
-                )
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(FitverseColors.Accent)
-                        .padding(horizontal = 10.dp, vertical = 6.dp)
+            // Accent gradient top strip
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(3.dp)
+                    .background(
+                        Brush.horizontalGradient(
+                            listOf(
+                                Color.Transparent,
+                                FitverseColors.Accent.copy(alpha = 0.6f),
+                                FitverseColors.Accent,
+                                FitverseColors.Accent.copy(alpha = 0.6f),
+                                Color.Transparent,
+                            )
+                        )
+                    )
+            )
+
+            Column(modifier = Modifier.padding(20.dp)) {
+                // Title row
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text("42:15", color = FitverseColors.Bg, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                    Column {
+                        Text(
+                            "HYPERTROPHY A",
+                            color = FitverseColors.TextPrimary,
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Black,
+                            letterSpacing = (-0.3).sp
+                        )
+                        Text(
+                            "Fase 2 · Semana 3",
+                            color = FitverseColors.TextMuted,
+                            fontSize = 13.sp
+                        )
+                    }
+                    Box(
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(FitverseColors.Accent)
+                            .padding(horizontal = 12.dp, vertical = 8.dp)
+                    ) {
+                        Text(
+                            "42:15",
+                            color = FitverseColors.Bg,
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Black
+                        )
+                    }
                 }
-            }
 
-            Text("Fase 2 · Semana 3", color = FitverseColors.TextMuted, fontSize = 13.sp)
-            Spacer(Modifier.height(16.dp))
+                Spacer(Modifier.height(16.dp))
 
-            Row(horizontalArrangement = Arrangement.spacedBy(28.dp)) {
-                WorkoutStat("18",   "Séries")
-                WorkoutStat("8.4k", "Volume")
-                WorkoutStat("134",  "BPM")
-            }
-
-            Spacer(Modifier.height(20.dp))
-
-            Button(
-                onClick = onStart,
-                modifier = Modifier.fillMaxWidth().height(52.dp),
-                shape = RoundedCornerShape(14.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = FitverseColors.Accent)
-            ) {
-                Text(
-                    "▶  INICIAR TREINO",
-                    color = FitverseColors.Bg,
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Black,
-                    letterSpacing = 1.sp
+                // Plan progress
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        "Progresso do plano",
+                        color = FitverseColors.TextMuted,
+                        fontSize = 11.sp
+                    )
+                    Text(
+                        "37%",
+                        color = FitverseColors.Accent,
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.Black
+                    )
+                }
+                Spacer(Modifier.height(6.dp))
+                LinearProgressIndicator(
+                    progress = { 0.37f },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(4.dp)
+                        .clip(RoundedCornerShape(2.dp)),
+                    color = FitverseColors.Accent,
+                    trackColor = FitverseColors.Surface2,
                 )
+
+                Spacer(Modifier.height(20.dp))
+
+                // Stats
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    WorkoutStat(Icons.Rounded.FitnessCenter, "18",   "Séries", FitverseColors.Accent)
+                    Box(
+                        modifier = Modifier
+                            .width(1.dp)
+                            .height(36.dp)
+                            .background(Color(0xFF2a2a35))
+                    )
+                    WorkoutStat(Icons.Rounded.Bolt,          "8.4k", "Volume", FitverseColors.Blue)
+                    Box(
+                        modifier = Modifier
+                            .width(1.dp)
+                            .height(36.dp)
+                            .background(Color(0xFF2a2a35))
+                    )
+                    WorkoutStat(Icons.Rounded.Favorite,      "134",  "BPM",    FitverseColors.Red)
+                }
+
+                Spacer(Modifier.height(20.dp))
+
+                // CTA
+                Button(
+                    onClick = onStart,
+                    modifier = Modifier.fillMaxWidth().height(52.dp),
+                    shape = RoundedCornerShape(14.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = FitverseColors.Accent)
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.PlayArrow,
+                        contentDescription = null,
+                        tint = FitverseColors.Bg,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Text(
+                        "INICIAR TREINO",
+                        color = FitverseColors.Bg,
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Black,
+                        letterSpacing = 1.sp
+                    )
+                }
             }
         }
     }
 }
+
+// ── Done card (workout completed today) ───────────────────────────────────────
 
 @Composable
 private fun WorkoutDoneCard(
@@ -272,7 +457,7 @@ private fun WorkoutDoneCard(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // ── Ícone de conclusão ────────────────────────────────────────
+            // Completion icon with glow
             Box(contentAlignment = Alignment.Center) {
                 Box(
                     modifier = Modifier
@@ -297,7 +482,6 @@ private fun WorkoutDoneCard(
 
             Spacer(Modifier.height(16.dp))
 
-            // ── Título ────────────────────────────────────────────────────
             Text(
                 text = "TREINO CONCLUÍDO",
                 color = FitverseColors.Green,
@@ -321,21 +505,21 @@ private fun WorkoutDoneCard(
 
             Spacer(Modifier.height(24.dp))
 
-            // ── Métricas ──────────────────────────────────────────────────
+            // Metrics
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                DoneStat(icon = Icons.Rounded.Timer,        value = duration,      label = "Duração")
+                DoneStat(icon = Icons.Rounded.Timer,         value = duration,     label = "Duração")
                 DoneStatDivider()
                 DoneStat(icon = Icons.Rounded.FitnessCenter, value = sets,         label = "Séries")
                 DoneStatDivider()
-                DoneStat(icon = Icons.Rounded.EmojiEvents,  value = pointsEarned,  label = "Pontos")
+                DoneStat(icon = Icons.Rounded.EmojiEvents,   value = pointsEarned, label = "Pontos")
             }
 
             Spacer(Modifier.height(24.dp))
 
-            // ── CTAs ──────────────────────────────────────────────────────
+            // CTAs
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -408,6 +592,8 @@ private fun DoneStatDivider() {
     )
 }
 
+// ── Category filter ───────────────────────────────────────────────────────────
+
 @Composable
 private fun CategoryFilter(selected: Int, onSelect: (Int) -> Unit) {
     val cs = MaterialTheme.colorScheme
@@ -416,9 +602,12 @@ private fun CategoryFilter(selected: Int, onSelect: (Int) -> Unit) {
             val isSelected = index == selected
             Box(
                 modifier = Modifier
-                    .border(1.dp, Color(0xFF2a2a35), RoundedCornerShape(50.dp))
                     .clip(RoundedCornerShape(50.dp))
                     .background(if (isSelected) FitverseColors.Accent else cs.surface)
+                    .then(
+                        if (isSelected) Modifier
+                        else Modifier.border(1.dp, Color(0xFF2a2a35), RoundedCornerShape(50.dp))
+                    )
                     .clickable { onSelect(index) }
                     .padding(horizontal = 18.dp, vertical = 10.dp)
             ) {
@@ -433,12 +622,11 @@ private fun CategoryFilter(selected: Int, onSelect: (Int) -> Unit) {
     }
 }
 
+// ── Recommended workout card ──────────────────────────────────────────────────
+
 @Composable
 fun WorkoutCard(
-    emoji: String,
-    name: String,
-    subtitle: String,
-    reward: String,
+    workout: RecommendedWorkout,
     onClick: () -> Unit = {}
 ) {
     val cs = MaterialTheme.colorScheme
@@ -446,47 +634,105 @@ fun WorkoutCard(
         modifier = Modifier
             .border(1.dp, Color(0xFF2a2a35), RoundedCornerShape(20.dp))
             .fillMaxWidth()
-            .clip(RoundedCornerShape(14.dp))
+            .clip(RoundedCornerShape(20.dp))
             .background(cs.surface.copy(alpha = .5f))
             .clickable(onClick = onClick)
             .padding(14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        // Icon box
         Box(
             modifier = Modifier
                 .size(52.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .background(FitverseColors.Surface2),
+                .clip(RoundedCornerShape(14.dp))
+                .background(workout.iconColor.copy(alpha = 0.10f))
+                .border(1.dp, workout.iconColor.copy(alpha = 0.25f), RoundedCornerShape(14.dp)),
             contentAlignment = Alignment.Center
         ) {
-            Text(emoji, fontSize = 24.sp)
+            Icon(
+                imageVector = workout.icon,
+                contentDescription = null,
+                tint = workout.iconColor,
+                modifier = Modifier.size(26.dp)
+            )
         }
 
         Spacer(Modifier.width(14.dp))
 
         Column(Modifier.weight(1f)) {
-            Text(name,     color = FitverseColors.TextPrimary, fontSize = 15.sp, fontWeight = FontWeight.Bold)
-            Text(subtitle, color = FitverseColors.TextMuted,   fontSize = 12.sp)
+            Text(
+                workout.name,
+                color = FitverseColors.TextPrimary,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(Modifier.height(4.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(5.dp)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(5.dp)
+                        .clip(CircleShape)
+                        .background(workout.difficultyColor)
+                )
+                Text(
+                    "${workout.difficulty} · ${workout.duration} · ${workout.sets}",
+                    color = FitverseColors.TextMuted,
+                    fontSize = 11.sp
+                )
+            }
         }
+
+        Spacer(Modifier.width(8.dp))
 
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(8.dp))
-                .background(FitverseColors.AccentDim.copy(alpha = 0.2f))
-                .padding(horizontal = 10.dp, vertical = 5.dp)
+                .background(FitverseColors.AccentDim)
+                .border(1.dp, FitverseColors.Accent.copy(alpha = 0.25f), RoundedCornerShape(8.dp))
+                .padding(horizontal = 8.dp, vertical = 5.dp)
         ) {
-            Text(reward, color = FitverseColors.Accent, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+            Text(
+                workout.reward,
+                color = FitverseColors.Accent,
+                fontSize = 11.sp,
+                fontWeight = FontWeight.Black
+            )
         }
 
-        Spacer(Modifier.width(8.dp))
-        Text("›", color = FitverseColors.TextMuted, fontSize = 18.sp)
+        Spacer(Modifier.width(4.dp))
+
+        Icon(
+            imageVector = Icons.Rounded.ChevronRight,
+            contentDescription = null,
+            tint = FitverseColors.TextMuted2,
+            modifier = Modifier.size(20.dp)
+        )
     }
 }
 
+// ── Shared stat composable ────────────────────────────────────────────────────
+
 @Composable
-fun WorkoutStat(value: String, label: String) {
-    Column {
-        Text(value, color = FitverseColors.TextPrimary, fontSize = 22.sp, fontWeight = FontWeight.Bold)
-        Text(label, color = FitverseColors.TextMuted,   fontSize = 12.sp)
+fun WorkoutStat(
+    icon: ImageVector,
+    value: String,
+    label: String,
+    iconColor: Color = FitverseColors.TextMuted
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(2.dp)
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = iconColor.copy(alpha = 0.75f),
+            modifier = Modifier.size(14.dp)
+        )
+        Text(value, color = FitverseColors.TextPrimary, fontSize = 20.sp, fontWeight = FontWeight.Black)
+        Text(label, color = FitverseColors.TextMuted, fontSize = 11.sp)
     }
 }
