@@ -10,6 +10,8 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -57,6 +59,7 @@ import com.example.presentation.ui.friends.viewmodel.FriendsViewModel
 import com.example.presentation.ui.historic.viewmodel.HistoricViewModel
 import com.example.presentation.ui.progress.viewmodel.ProgressViewModel
 import com.example.presentation.ui.wiki.viewmodel.WikiViewModel
+import com.example.presentation.widgets.DarkGamifiedDashboardBackground
 import kotlinx.coroutines.launch
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
@@ -142,129 +145,156 @@ fun HomeNavigation(
             }
         },
         content = {
-            Scaffold(
-                containerColor = FitverseColors.Bg,
-                bottomBar = {
-                    AnimatedVisibility(
-                        visible = showBottomBar,
-                        enter = fadeIn(animationSpec = tween(250, easing = FastOutSlowInEasing)) + expandVertically(animationSpec = tween(250, easing = FastOutSlowInEasing)),
-                        exit  = fadeOut(animationSpec = tween(200)) + shrinkVertically(animationSpec = tween(200))
-                    ) {
-                        FitVerseBottomBar(items = bottomBarItems, backStack = rootBackStack)
-                    }
+            Box(modifier = Modifier.fillMaxSize()){
+                if(showBottomBar){
+                    DarkGamifiedDashboardBackground()
                 }
-            ) { innerPadding ->
-                NavDisplay(
-                    modifier = Modifier.padding(innerPadding),
-                    backStack = rootBackStack,
-                    entryDecorators = listOf(
-                        rememberSaveableStateHolderNavEntryDecorator(),
-                        rememberViewModelStoreNavEntryDecorator()
-                    ),
-                    onBack = {
-                        val consumed = handleHomeBackPress(rootBackStack)
-                        if (!consumed) rootBackStack.removeLastOrNull()
-                    },
-                    entryProvider = entryProvider {
-                        // ── Feature navigations (tabs) ────────────────────────
-                        entry<NavRoutes.HomeFlow.Dashboard> {
-                            DashboardNavigation(
-                                onSubScreenChange = { isDashboardSubScreen = it }
-                            )
-                        }
-                        entry<NavRoutes.HomeFlow.Workout> {
-                            WorkoutNavigation(
-                                onFullScreen = { isWorkoutFullScreen = it }
-                            )
-                        }
-                        entry<NavRoutes.HomeFlow.Community> {
-                            CommunityNavigation(
-                                onSubScreenChange = { isCommunitySubScreen = it }
-                            )
-                        }
-                        entry<NavRoutes.HomeFlow.Nutrition> {
-                            NutritionNavigation(
-                                onSheetStateChange = { isMealsSheetOpen = it }
-                            )
-                        }
-                        entry<NavRoutes.HomeFlow.Profile> {
-                            ProfileNavigation()
-                        }
-                        // ── Telas avulsas (drawer) ────────────────────────────
-                        entry<NavRoutes.Historic> {
-                            val viewModel = koinInject<HistoricViewModel>()
-                            HistoricDestination(
-                                navigateBack = { rootBackStack.removeLastOrNull() }
-                            )
-                        }
-                        entry<NavRoutes.WikiFitness> {
-                            val viewModel = koinInject<WikiViewModel>()
-                            WikiFitnessDestination(
-                                viewModel = viewModel,
-                                onBack = { rootBackStack.removeLastOrNull() },
-                                onNavigateToArticle = {}
-                            )
-                        }
-                        entry<NavRoutes.Friends> {
-                            val viewModel = koinInject<FriendsViewModel>()
-                            FriendsDestination(
-                                viewModel = viewModel,
-                                onBack = { rootBackStack.removeLastOrNull() },
-                                onNavigateToQrScanner = {}
-                            )
-                        }
-                        entry<NavRoutes.Shopping> {
-                            ShoppingDestination(
-                                toBack = { rootBackStack.removeLastOrNull() }
-                            )
-                        }
-                        entry<NavRoutes.Progress> {
-                            val viewModel = koinInject<ProgressViewModel>()
-                            ProgressDestination(
-                                viewmodel = viewModel,
-                                toBack = { rootBackStack.removeLastOrNull() }
-                            )
-                        }
-                        entry<NavRoutes.Achievements> {
-                            val viewModel = koinInject<AchievementsViewModel>()
-                            AchievementDestination(
-                                toBack = { rootBackStack.removeLastOrNull() }
-                            )
-                        }
-                        entry<NavRoutes.Leaderboards> {
-                            val viewModel = koinInject<AchievementsViewModel>()
-                            LeaderboardsDestination(
-                                navigateBack = { rootBackStack.removeLastOrNull() }
-                            )
-                        }
-                        entry<NavRoutes.Devices> {
-                            DevicesDestination(
-                                toBack = { rootBackStack.removeLastOrNull() }
-                            )
-                        }
-                        entry<NavRoutes.HelpSupport> {
-                            HelpSupportDestination(
-                                toBack = { rootBackStack.removeLastOrNull() }
-                            )
-                        }
-                        entry<NavRoutes.PlanPayment> {
-                            PlanPaymentDestination(
-                                toBack = { rootBackStack.removeLastOrNull() }
-                            )
-                        }
-                        // ── Sub-navegações ────────────────────────────────────
-                        entry<NavRoutes.PlanWorkoutFlow> {
-                            PlanWorkoutNavigation(
-                                toBack = { rootBackStack.removeLastOrNull() }
-                            )
-                        }
-                        entry<NavRoutes.TasksFlow> {
-                            TasksNavigation(
-                                toBack = { rootBackStack.removeLastOrNull() }
-                            )
+                Scaffold(
+                    containerColor = Color.Transparent,
+                    bottomBar = {
+                        AnimatedVisibility(
+                            visible = showBottomBar,
+                            enter = fadeIn(animationSpec = tween(250, easing = FastOutSlowInEasing)) + expandVertically(animationSpec = tween(250, easing = FastOutSlowInEasing)),
+                            exit  = fadeOut(animationSpec = tween(200)) + shrinkVertically(animationSpec = tween(200))
+                        ) {
+                            FitVerseBottomBar(items = bottomBarItems, backStack = rootBackStack)
                         }
                     }
-                )
+                ) { paddingValues ->
+                    NavDisplay(
+                        modifier = Modifier,
+                        backStack = rootBackStack,
+                        entryDecorators = listOf(
+                            rememberSaveableStateHolderNavEntryDecorator(),
+                            rememberViewModelStoreNavEntryDecorator()
+                        ),
+                        onBack = {
+                            val consumed = handleHomeBackPress(rootBackStack)
+                            if (!consumed) rootBackStack.removeLastOrNull()
+                        },
+                        entryProvider = entryProvider {
+                            // ── Feature navigations (tabs) ────────────────────────
+                            entry<NavRoutes.HomeFlow.Dashboard> {
+                                DashboardNavigation(
+                                    modifier = Modifier.padding(paddingValues),
+                                    onSubScreenChange = { isDashboardSubScreen = it },
+                                    onNavigateToWorkout = {
+                                        rootBackStack.removeAll { it in bottomBarItems }
+                                        rootBackStack.add(NavRoutes.HomeFlow.Workout)
+                                    }
+                                )
+                            }
+                            entry<NavRoutes.HomeFlow.Workout> {
+                                WorkoutNavigation(
+                                    modifier = Modifier.padding(paddingValues),
+                                    onFullScreen = { isWorkoutFullScreen = it }
+                                )
+                            }
+                            entry<NavRoutes.HomeFlow.Community> {
+                                CommunityNavigation(
+                                    modifier = Modifier.padding(paddingValues),
+                                    onSubScreenChange = { isCommunitySubScreen = it }
+                                )
+                            }
+                            entry<NavRoutes.HomeFlow.Nutrition> {
+                                NutritionNavigation(
+                                    modifier = Modifier.padding(paddingValues),
+                                    onSheetStateChange = { isMealsSheetOpen = it }
+                                )
+                            }
+                            entry<NavRoutes.HomeFlow.Profile> {
+                                ProfileNavigation(
+                                    modifier = Modifier.padding(paddingValues),
+                                )
+                            }
+                            // ── Telas avulsas (drawer) ────────────────────────────
+                            entry<NavRoutes.Historic> {
+                                val viewModel = koinInject<HistoricViewModel>()
+                                HistoricDestination(
+                                    modifier = Modifier.padding(paddingValues),
+                                    navigateBack = { rootBackStack.removeLastOrNull() }
+                                )
+                            }
+                            entry<NavRoutes.WikiFitness> {
+                                val viewModel = koinInject<WikiViewModel>()
+                                WikiFitnessDestination(
+                                    modifier = Modifier.padding(paddingValues),
+                                    viewModel = viewModel,
+                                    onBack = { rootBackStack.removeLastOrNull() },
+                                    onNavigateToArticle = {}
+                                )
+                            }
+                            entry<NavRoutes.Friends> {
+                                val viewModel = koinInject<FriendsViewModel>()
+                                FriendsDestination(
+                                    modifier = Modifier.padding(paddingValues),
+                                    viewModel = viewModel,
+                                    onBack = { rootBackStack.removeLastOrNull() },
+                                    onNavigateToQrScanner = {}
+                                )
+                            }
+                            entry<NavRoutes.Shopping> {
+                                ShoppingDestination(
+                                    modifier = Modifier.padding(paddingValues),
+                                    toBack = { rootBackStack.removeLastOrNull() }
+                                )
+                            }
+                            entry<NavRoutes.Progress> {
+                                val viewModel = koinInject<ProgressViewModel>()
+                                ProgressDestination(
+                                    modifier = Modifier.padding(paddingValues),
+                                    viewmodel = viewModel,
+                                    toBack = { rootBackStack.removeLastOrNull() }
+                                )
+                            }
+                            entry<NavRoutes.Achievements> {
+                                val viewModel = koinInject<AchievementsViewModel>()
+                                AchievementDestination(
+                                    modifier = Modifier.padding(paddingValues),
+                                    toBack = { rootBackStack.removeLastOrNull() }
+                                )
+                            }
+                            entry<NavRoutes.Leaderboards> {
+                                val viewModel = koinInject<AchievementsViewModel>()
+                                LeaderboardsDestination(
+                                    modifier = Modifier.padding(paddingValues),
+                                    navigateBack = { rootBackStack.removeLastOrNull() }
+                                )
+                            }
+                            entry<NavRoutes.Devices> {
+                                DevicesDestination(
+                                    modifier = Modifier.padding(paddingValues),
+                                    toBack = { rootBackStack.removeLastOrNull() }
+                                )
+                            }
+                            entry<NavRoutes.HelpSupport> {
+                                HelpSupportDestination(
+                                    modifier = Modifier.padding(paddingValues),
+                                    toBack = { rootBackStack.removeLastOrNull() }
+                                )
+                            }
+                            entry<NavRoutes.PlanPayment> {
+                                PlanPaymentDestination(
+                                    modifier = Modifier.padding(paddingValues),
+                                    toBack = { rootBackStack.removeLastOrNull() }
+                                )
+                            }
+                            // ── Sub-navegações ────────────────────────────────────
+                            entry<NavRoutes.PlanWorkoutFlow> {
+                                PlanWorkoutNavigation(
+                                    modifier = Modifier.padding(paddingValues),
+                                    toBack = { rootBackStack.removeLastOrNull() }
+                                )
+                            }
+                            entry<NavRoutes.TasksFlow> {
+                                TasksNavigation(
+                                    modifier = Modifier.padding(paddingValues),
+                                    toBack = { rootBackStack.removeLastOrNull() }
+                                )
+                            }
+                        }
+                    )
+                }
             }
         }
     )

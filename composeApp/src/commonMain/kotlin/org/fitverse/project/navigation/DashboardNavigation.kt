@@ -3,6 +3,7 @@ package org.fitverse.project.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
@@ -20,7 +21,9 @@ import org.fitverse.project.routes.NavRoutes
 
 @Composable
 fun DashboardNavigation(
-    onSubScreenChange: (Boolean) -> Unit = {}
+    modifier: Modifier,
+    onSubScreenChange: (Boolean) -> Unit = {},
+    onNavigateToWorkout: () -> Unit = {}
 ) {
     val backStack = rememberNavBackStack(
         SavedStateConfiguration {
@@ -42,6 +45,7 @@ fun DashboardNavigation(
     DisposableEffect(Unit) { onDispose { onSubScreenChange(false) } }
 
     NavDisplay(
+        modifier = modifier,
         backStack = backStack,
         entryDecorators = listOf(
             rememberSaveableStateHolderNavEntryDecorator(),
@@ -51,7 +55,8 @@ fun DashboardNavigation(
             entry<NavRoutes.HomeFlow.Dashboard> {
                 DashboardDestination(
                     toNotification = { backStack.add(NavRoutes.HomeFlow.SubFlow.Notification) },
-                    toEnergy = { backStack.add(NavRoutes.HomeFlow.SubFlow.UserLevelUp) }
+                    toEnergy = { backStack.add(NavRoutes.HomeFlow.SubFlow.UserLevelUp) },
+                    onNavigateToWorkout = onNavigateToWorkout
                 )
             }
             entry<NavRoutes.HomeFlow.SubFlow.Notification> {
