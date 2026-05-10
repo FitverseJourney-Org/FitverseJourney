@@ -7,6 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
@@ -27,7 +28,8 @@ import org.koin.compose.koinInject
 
 @Composable
 fun WorkoutNavigation(
-    onFullScreen: (Boolean) -> Unit = {}
+    onFullScreen: (Boolean) -> Unit = {},
+    modifier: Modifier
 ) {
     val backStack = rememberNavBackStack(
         SavedStateConfiguration {
@@ -43,6 +45,7 @@ fun WorkoutNavigation(
     )
 
     var lastWorkoutResult by remember { mutableStateOf<WorkoutCompletionResult?>(null) }
+    var workoutCompletedToday by remember { mutableStateOf(false) }
 
     val fullScreenRoutes = remember {
         setOf<NavKey>(NavRoutes.WorkoutFlow.WorkoutSession, NavRoutes.WorkoutFlow.WorkoutCompleted)
@@ -54,6 +57,7 @@ fun WorkoutNavigation(
     DisposableEffect(Unit) { onDispose { onFullScreen(false) } }
 
     NavDisplay(
+        modifier = modifier,
         backStack = backStack,
         entryDecorators = listOf(
             rememberSaveableStateHolderNavEntryDecorator(),
@@ -63,7 +67,8 @@ fun WorkoutNavigation(
             entry<NavRoutes.HomeFlow.Workout> {
                 val viewModel = koinInject<WorkoutViewModel>()
                 WorkoutDestination(
-                    onStartWorkout = { backStack.add(NavRoutes.WorkoutFlow.WorkoutSession) }
+                    onStartWorkout = { backStack.add(NavRoutes.WorkoutFlow.WorkoutSession) },
+                    workoutCompletedToday = workoutCompletedToday
                 )
             }
             entry<NavRoutes.WorkoutFlow.WorkoutSession> {
@@ -81,6 +86,7 @@ fun WorkoutNavigation(
                         result = result,
                         onContinue = {
                             lastWorkoutResult = null
+                            workoutCompletedToday = true
                             backStack.removeAll {
                                 it == NavRoutes.WorkoutFlow.WorkoutCompleted ||
                                 it == NavRoutes.WorkoutFlow.WorkoutSession
