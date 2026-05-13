@@ -8,5 +8,6 @@ class AuthMapper {
         AuthResult(
             uid   = dto.uid,
             email = dto.email ?: "",
+            token = dto.token ?: "",
         )
 }

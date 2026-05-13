@@ -9,11 +9,12 @@ import com.example.presentation.ui.splash.viewmodel.SplashViewModel
 import com.example.presentation.ui.onboarding.viewmodel.OnboardingViewModel
 import com.example.presentation.ui.trial.viewmodel.TrialViewModel
 // ── Home ──────────────────────────────────────────────────────────────────────
+import com.example.presentation.ui.community.viewmodel.CommunityViewModel
 import com.example.presentation.ui.dashboard.viewmodel.DashboardViewModel
 import com.example.presentation.ui.notification.NotificationViewModel
 import com.example.presentation.ui.workout.viewmodel.WorkoutViewModel
 import com.example.presentation.ui.workout.viewmodel.WorkoutSessionViewModel
-import com.example.presentation.ui.meals.viewmodel.NutritionViewModel
+import com.example.presentation.ui.meals.viewmodel.MealsViewModel
 import com.example.presentation.ui.profile.ProfileViewModel
 // ── Modal / Features ──────────────────────────────────────────────────────────
 import com.example.presentation.ui.planWorkout.viewmodel.WorkoutPlanViewModel
@@ -83,11 +84,14 @@ val homeModule = module {
     viewModel<WorkoutSessionViewModel> {
         WorkoutSessionViewModel()
     }
-    viewModel<NutritionViewModel> {
-        NutritionViewModel()
+    viewModel<MealsViewModel> {
+        MealsViewModel()
     }
     viewModel<ProfileViewModel> {
         ProfileViewModel()
+    }
+    viewModel<CommunityViewModel> {
+        CommunityViewModel()
     }
 }
 

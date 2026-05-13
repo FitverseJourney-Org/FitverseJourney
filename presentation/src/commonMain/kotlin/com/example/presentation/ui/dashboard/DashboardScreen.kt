@@ -28,8 +28,11 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,6 +50,9 @@ import com.example.presentation.theme.FitverseColors
 import com.example.presentation.ui.dashboard.DailyMission.Companion.defaultDailyMissions
 import com.example.presentation.ui.dashboard.MissionType
 import com.example.presentation.ui.dashboard.components.AnimatedStreakDialog
+import com.example.presentation.ui.dashboard.viewmodel.DashboardEvent
+import com.example.presentation.ui.dashboard.viewmodel.DashboardIntent
+import com.example.presentation.ui.dashboard.viewmodel.DashboardViewModel
 import com.example.presentation.ui.dashboard.components.CardStreakWeek
 import com.example.presentation.ui.dashboard.components.HomeHeader
 import com.example.presentation.ui.dashboard.components.MetricCard
@@ -64,16 +70,55 @@ import kotlinx.datetime.toLocalDateTime
 import kotlin.time.Clock
 
 
+// ── Root — wires ViewModel to Screen ─────────────────────────────────────────
+
+@Composable
+fun DashboardRoot(
+    viewModel:          DashboardViewModel,
+    exit:               () -> Unit,
+    onNotificationsClick: () -> Unit,
+    onEnergyClick:      () -> Unit,
+    onNavigateToWorkout: () -> Unit = {},
+) {
+    val uiState by viewModel.uiState.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(Unit) {
+        viewModel.events.collect { event ->
+            when (event) {
+                is DashboardEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.message)
+            }
+        }
+    }
+
+    DashboardScreen(
+        username             = uiState.username,
+        avatarInitials       = uiState.avatarInitials,
+        missions             = uiState.missions,
+        streakDays           = uiState.streakDays,
+        exit                 = exit,
+        onNotificationsClick = onNotificationsClick,
+        onEnergyClick        = onEnergyClick,
+        onNavigateToWorkout  = onNavigateToWorkout,
+        onClaimMission       = { viewModel.onIntent(DashboardIntent.ClaimMission(it)) },
+    )
+}
+
+// ── Screen ────────────────────────────────────────────────────────────────────
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun DashboardScreen(
     username: String = "Athlete",
     avatarInitials: String = "A",
+    missions: List<DailyMission> = defaultDailyMissions,
+    streakDays: List<StreakDay> = emptyList(),
     exit: () -> Unit,
     onNotificationsClick: () -> Unit,
     onEnergyClick: () -> Unit,
-    onNavigateToWorkout: () -> Unit = {}
+    onNavigateToWorkout: () -> Unit = {},
+    onClaimMission: (String) -> Unit = {},
 ) {
     var showStreakDialog by remember { mutableStateOf(false) }
     var totalStreakCount by rememberSaveable { mutableStateOf(0) }
@@ -87,15 +132,17 @@ fun DashboardScreen(
         isTodayChecked = isTodayChecked
     )
 
-    val listOfStreakDay = listOf(
-        StreakDay("S", isCompleted = true),
-        StreakDay("T", isCompleted = true),
-        StreakDay("Q", isCompleted = true),
-        StreakDay("Q", isCompleted = true),
-        StreakDay("S", isCompleted = true),
-        StreakDay("S", isCompleted = true),
-        StreakDay("D", isCompleted = true)
-    )
+    val listOfStreakDay = streakDays.ifEmpty {
+        listOf(
+            StreakDay("S", isCompleted = true),
+            StreakDay("T", isCompleted = true),
+            StreakDay("Q", isCompleted = true),
+            StreakDay("Q", isCompleted = true),
+            StreakDay("S", isCompleted = true),
+            StreakDay("S", isCompleted = true),
+            StreakDay("D", isCompleted = true),
+        )
+    }
 
     AnimatedStreakDialog(
         visible = showStreakDialog,
@@ -131,16 +178,18 @@ fun DashboardScreen(
         containerColor = Color.Transparent,
         content = {
             ContentDashboardScreen(
-                modifier = Modifier.padding(it),
-                username = username,
-                avatarInitials = avatarInitials,
-                exit = exit,
+                modifier             = Modifier.padding(it),
+                username             = username,
+                avatarInitials       = avatarInitials,
+                exit                 = exit,
                 onNotificationsClick = onNotificationsClick,
-                onEnergyClick = onEnergyClick,
-                onStreakClick = { showStreakDialog = true },
-                totalStreakCount = totalStreakCount,
-                listOfStreakDay = listOfStreakDay,
-                onNavigateToWorkout = onNavigateToWorkout
+                onEnergyClick        = onEnergyClick,
+                onStreakClick        = { showStreakDialog = true },
+                totalStreakCount     = totalStreakCount,
+                listOfStreakDay      = listOfStreakDay,
+                missions             = missions,
+                onClaimMission       = onClaimMission,
+                onNavigateToWorkout  = onNavigateToWorkout,
             )
         }
     )
@@ -157,7 +206,9 @@ fun ContentDashboardScreen(
     onStreakClick: () -> Unit,
     totalStreakCount: Int,
     listOfStreakDay: List<StreakDay>,
-    onNavigateToWorkout: () -> Unit = {}
+    missions: List<DailyMission> = defaultDailyMissions,
+    onClaimMission: (String) -> Unit = {},
+    onNavigateToWorkout: () -> Unit = {},
 ) {
     LazyColumn(
         modifier = modifier,
@@ -211,16 +262,16 @@ fun ContentDashboardScreen(
 
         item { SectionHeader("Missões Diárias") }
 
-        items(defaultDailyMissions) { mission ->
+        items(missions) { mission ->
             MissionCard(
-                title = mission.title,
-                description = mission.description,
-                xp = mission.xp,
-                icon = mission.type.icon,
-                iconColor = mission.type.color,
-                isCompleted = mission.isCompleted,
+                title           = mission.title,
+                description     = mission.description,
+                xp              = mission.xp,
+                icon            = mission.type.icon,
+                iconColor       = mission.type.color,
+                isCompleted     = mission.isCompleted,
                 isChallengeType = mission.type == MissionType.CHALLENGE,
-                onClaim = { println("XP ganho: ${mission.xp}") }
+                onClaim         = { onClaimMission(mission.title) },
             )
         }
     }

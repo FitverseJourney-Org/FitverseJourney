@@ -7,10 +7,10 @@ import com.example.domain.usecase.db.datastore.onboarding.ObserveOnboardingCompl
 import com.example.domain.usecase.db.datastore.trial.ObserveIsTrialCompletedUseCase
 import com.example.presentation.navigationState.SplashNavigation
 import kotlinx.coroutines.async
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class SplashViewModel(
@@ -19,8 +19,8 @@ class SplashViewModel(
     private val observeTrialCompletedUseCase: ObserveIsTrialCompletedUseCase
 ) : ViewModel() {
 
-    private val _navigationState = MutableSharedFlow<SplashNavigation>()
-    val navigationState = _navigationState.asSharedFlow()
+    private val _events = Channel<SplashNavigation>()
+    val navigationState = _events.receiveAsFlow()
 
     init {
         decideInitialDestination()
@@ -41,10 +41,10 @@ class SplashViewModel(
                     !deferredAuth.await()       -> SplashNavigation.ToAuth
                     else                        -> SplashNavigation.ToHome
                 }
-                _navigationState.emit(destination)
+                _events.send(destination)
 
             } catch (e: Exception) {
-                _navigationState.emit(SplashNavigation.ToAuth)
+                _events.send(SplashNavigation.ToAuth)
             }
         }
     }

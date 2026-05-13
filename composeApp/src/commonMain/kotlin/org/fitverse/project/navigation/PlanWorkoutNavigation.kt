@@ -15,15 +15,12 @@ import com.example.presentation.ui.planWorkout.WorkoutAiPlanGenerationDestinatio
 import com.example.presentation.ui.planWorkout.WorkoutPlanListScreen
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
-import org.fitverse.project.destinations.homepage.workout.WorkoutPlanBuilderDestination
-import org.fitverse.project.destinations.homepage.workout.WorkoutPlanExercisesDestination
-import org.fitverse.project.destinations.homepage.workout.WorkoutPlanDestination
-import org.fitverse.project.destinations.homepage.workout.WorkoutPlanExercisesDetailsDestination
 import org.fitverse.project.routes.NavRoutes
 
 @Composable
 fun PlanWorkoutNavigation(
-    toBack: () -> Unit
+    toBack: () -> Unit,
+    modifier: Modifier
 ) {
     val rootBackStack = rememberNavBackStack(
         SavedStateConfiguration {
@@ -43,7 +40,7 @@ fun PlanWorkoutNavigation(
 
 
     NavDisplay(
-        modifier = Modifier,
+        modifier = modifier,
         backStack = rootBackStack,
         entryDecorators = listOf(
             rememberSaveableStateHolderNavEntryDecorator(),
@@ -93,7 +90,7 @@ fun PlanWorkoutNavigation(
                 )
             }
             entry<NavRoutes.PlanWorkoutFlow.Plan> {
-                WorkoutPlanDestination(
+                org.fitverse.project.destinations.workout.WorkoutPlanDestination(
                     onBack = {
                         rootBackStack.removeLastOrNull()
                     },
@@ -103,7 +100,7 @@ fun PlanWorkoutNavigation(
                 )
             }
             entry<NavRoutes.PlanWorkoutFlow.Builder>{
-                WorkoutPlanBuilderDestination(
+                org.fitverse.project.destinations.workout.WorkoutPlanBuilderDestination(
                     onBack = {
                         rootBackStack.removeLastOrNull()
                     },
@@ -116,7 +113,7 @@ fun PlanWorkoutNavigation(
                 )
             }
             entry<NavRoutes.PlanWorkoutFlow.Exercises>{
-                WorkoutPlanExercisesDestination(
+                org.fitverse.project.destinations.workout.WorkoutPlanExercisesDestination(
                     onBack = {
                         rootBackStack.removeLastOrNull()
                     },
@@ -129,7 +126,7 @@ fun PlanWorkoutNavigation(
                 )
             }
             entry<NavRoutes.PlanWorkoutFlow.ExerciseDetails>{
-                WorkoutPlanExercisesDetailsDestination(
+                org.fitverse.project.destinations.workout.WorkoutPlanExercisesDetailsDestination(
                     onBack = {
                         rootBackStack.removeLastOrNull()
                     },

@@ -1,0 +1,22 @@
+-- ============================================================
+-- FOOD_ITEM — Alimentos individuais dentro de uma refeição
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS FoodItemEntity (
+    id      TEXT    NOT NULL PRIMARY KEY,
+    mealId  TEXT    NOT NULL,
+    name    TEXT    NOT NULL,
+    portion REAL    NOT NULL DEFAULT 100.0,  -- quantidade
+    unit    TEXT    NOT NULL DEFAULT 'g',    -- g, ml, unidade, colher...
+    kcal    INTEGER NOT NULL DEFAULT 0,
+    protein REAL    NOT NULL DEFAULT 0.0,
+    carbs   REAL    NOT NULL DEFAULT 0.0,
+    fat     REAL    NOT NULL DEFAULT 0.0
+);
+
+CREATE INDEX IF NOT EXISTS idx_food_item_meal
+    ON FoodItemEntity(mealId);
+
+-- ── Queries ───────────────────────────────────────────────────────────────────
+
+

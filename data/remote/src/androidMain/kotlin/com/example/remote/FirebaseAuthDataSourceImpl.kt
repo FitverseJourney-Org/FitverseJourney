@@ -3,7 +3,6 @@ package com.example.remote
 import com.example.domain.models.auth.AuthResult
 import com.example.domain.repository.authentication.AuthRepository
 import com.example.domain.repository.authentication.AuthResultDto
-import com.example.domain.repository.dbLocal.datastore.AppAuthenticateRepository
 import com.example.remote.mapper.AuthMapper
 import com.google.firebase.FirebaseApiNotAvailableException
 import com.google.firebase.FirebaseNetworkException
@@ -22,7 +21,6 @@ import kotlin.coroutines.cancellation.CancellationException
 class FirebaseAuthRepositoryImpl(
     private val firebaseAuth: FirebaseAuth,
     private val authMapper: AuthMapper,
-    private val appAuthenticateRepository: AppAuthenticateRepository
 ) : AuthRepository {
 
     override suspend fun login(email: String, password: String): AuthResult {
@@ -32,10 +30,6 @@ class FirebaseAuthRepositoryImpl(
             val token = user.getIdToken(true).await().token  // true = força refresh
                 ?: throw Exception("Token inválido: Firebase retornou token nulo")
 
-            // salvar o token do usuario
-            appAuthenticateRepository.saveToken(token)
-            // salvar o estado de autenticação
-            appAuthenticateRepository.setIsAuthenticated(true)
             return authMapper.mapDtoToDomain(
                 dto = AuthResultDto(
                     uid   = user.uid,

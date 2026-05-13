@@ -20,12 +20,30 @@ import com.example.local.database.datastore.repository.AppTrialRepositoryImpl
 import com.example.local.database.sqldelight.repository.configuration.ConfigLanguageDataSourceDao
 import com.example.local.database.sqldelight.repository.configuration.ConfigOnboardingDataSourceDao
 import com.example.local.database.sqldelight.repository.configuration.ConfigTokenDaoDataSourceImpl
+import com.example.domain.repository.dbLocal.sqldelight.achievements.AchievementDao
+import com.example.domain.repository.dbLocal.sqldelight.missions.DailyMissionDao
+import com.example.domain.repository.dbLocal.sqldelight.notifications.NotificationDao
+import com.example.domain.repository.dbLocal.sqldelight.nutrition.FoodItemDao
+import com.example.domain.repository.dbLocal.sqldelight.nutrition.MealEntryDao
+import com.example.domain.repository.dbLocal.sqldelight.stats.UserStatsDao
+import com.example.domain.repository.dbLocal.sqldelight.streak.StreakDao
+import com.example.domain.repository.dbLocal.sqldelight.workout.WorkoutSessionDao
+import com.example.domain.repository.dbLocal.sqldelight.workout.WorkoutSetDao
+import com.example.local.datasource.achievements.AchievementDaoImpl
 import com.example.local.datasource.exercises.ExerciseLocalDataSource
 import com.example.local.datasource.exercises.ExerciseLocalDataSourceImpl
+import com.example.local.datasource.missions.DailyMissionDaoImpl
+import com.example.local.datasource.notifications.NotificationDaoImpl
+import com.example.local.datasource.nutrition.FoodItemDaoImpl
+import com.example.local.datasource.nutrition.MealEntryDaoImpl
 import com.example.local.datasource.progression.ProgressionLocalDataSource
 import com.example.local.datasource.progression.ProgressionLocalDataSourceImpl
+import com.example.local.datasource.stats.UserStatsDaoImpl
+import com.example.local.datasource.streak.StreakDaoImpl
 import com.example.local.datasource.user.UserLocalDataSource
 import com.example.local.datasource.user.UserLocalDataSourceImpl
+import com.example.local.datasource.workout.WorkoutSessionDaoImpl
+import com.example.local.datasource.workout.WorkoutSetDaoImpl
 import com.example.local.di.databaseModule
 import com.example.local.mapper.EntityMapper
 import com.example.util.networkModule
@@ -69,6 +87,17 @@ val dataSourceModule = module {
 
     single<UserLocalDataSource> { UserLocalDataSourceImpl(database = get()) }
     single { FakeFriendsRepository() } // Removido bind genérico se não for interface
+
+    // ── DAOs das tabelas de negócio ───────────────────────────────────────────|
+    single<DailyMissionDao>   { DailyMissionDaoImpl(database = get()) }
+    single<WorkoutSessionDao> { WorkoutSessionDaoImpl(database = get()) }
+    single<WorkoutSetDao>     { WorkoutSetDaoImpl(database = get()) }
+    single<MealEntryDao>      { MealEntryDaoImpl(database = get()) }
+    single<FoodItemDao>       { FoodItemDaoImpl(database = get()) }
+    single<AchievementDao>    { AchievementDaoImpl(database = get()) }
+    single<NotificationDao>   { NotificationDaoImpl(database = get()) }
+    single<StreakDao>         { StreakDaoImpl(database = get()) }
+    single<UserStatsDao>      { UserStatsDaoImpl(database = get()) }
 
     // Remote
     single<UserRemoteDataSource> { UserRemoteDataSourceImpl(get()) }

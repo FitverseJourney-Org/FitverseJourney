@@ -1,12 +1,19 @@
+package org.fitverse.project.destinations.modal_destinations.historic
 
 import androidx.compose.runtime.Composable
-import com.example.presentation.ui.historic.HistoricScreen
+import androidx.compose.ui.Modifier
+import com.example.presentation.ui.historic.HistoricRoot
+import com.example.presentation.ui.historic.viewmodel.HistoricViewModel
 
 @Composable
 fun HistoricDestination(
-    navigateBack: () -> Unit
+    viewModel:    HistoricViewModel,
+    navigateBack: () -> Unit,
+    modifier:     Modifier,
 ) {
-    HistoricScreen(
-        onBack = navigateBack
+    HistoricRoot(
+        viewModel = viewModel,
+        onBack    = navigateBack,
+        modifier  = modifier,
     )
 }

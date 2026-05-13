@@ -9,10 +9,10 @@ import com.example.domain.usecase.login.LoginUseCase
 import com.example.presentation.navigationState.LoginNavigation
 import com.example.presentation.ui.authentication.login.states.LoginAction
 import com.example.presentation.ui.authentication.login.states.LoginState
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -20,8 +20,8 @@ class LoginViewModel(
     private val loginUseCase: LoginUseCase,
 ) : ViewModel() {
 
-    private val _navigationState = MutableSharedFlow<LoginNavigation>()
-    val navigationState = _navigationState.asSharedFlow()
+    private val _events = Channel<LoginNavigation>()
+    val navigationState = _events.receiveAsFlow()
 
     private val _state = MutableStateFlow(LoginState())
     val state: StateFlow<LoginState> = _state
@@ -39,7 +39,7 @@ class LoginViewModel(
     }
 
     private fun navigateTo(destination: LoginNavigation) {
-        viewModelScope.launch { _navigationState.emit(destination) }
+        viewModelScope.launch { _events.send(destination) }
     }
 
     fun onTogglePasswordVisibility() {

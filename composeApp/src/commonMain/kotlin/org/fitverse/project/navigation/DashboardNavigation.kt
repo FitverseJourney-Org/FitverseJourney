@@ -12,16 +12,20 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
 import com.example.domain.models.levelUp.LevelUpData
+import com.example.presentation.ui.dashboard.viewmodel.DashboardViewModel
+import com.example.presentation.ui.notification.NotificationViewModel
 import com.example.presentation.widgets.LevelUpScreen
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
-import org.fitverse.project.destinations.homepage.dashboad.DashboardDestination
-import org.fitverse.project.destinations.homepage.dashboad.NotificationDestination
+import org.fitverse.project.destinations.dashboad.DashboardDestination
+import org.fitverse.project.destinations.dashboad.NotificationDestination
 import org.fitverse.project.routes.NavRoutes
+import org.koin.compose.koinInject
 
 @Composable
 fun DashboardNavigation(
     modifier: Modifier,
+    subScreenModifier: Modifier = Modifier,
     onSubScreenChange: (Boolean) -> Unit = {},
     onNavigateToWorkout: () -> Unit = {}
 ) {
@@ -45,7 +49,7 @@ fun DashboardNavigation(
     DisposableEffect(Unit) { onDispose { onSubScreenChange(false) } }
 
     NavDisplay(
-        modifier = modifier,
+        modifier = if (isSubScreen) subScreenModifier else modifier,
         backStack = backStack,
         entryDecorators = listOf(
             rememberSaveableStateHolderNavEntryDecorator(),
@@ -53,24 +57,28 @@ fun DashboardNavigation(
         ),
         entryProvider = entryProvider {
             entry<NavRoutes.HomeFlow.Dashboard> {
+                val viewModel = koinInject<DashboardViewModel>()
                 DashboardDestination(
-                    toNotification = { backStack.add(NavRoutes.HomeFlow.SubFlow.Notification) },
-                    toEnergy = { backStack.add(NavRoutes.HomeFlow.SubFlow.UserLevelUp) },
-                    onNavigateToWorkout = onNavigateToWorkout
+                    viewModel            = viewModel,
+                    toNotification       = { backStack.add(NavRoutes.HomeFlow.SubFlow.Notification) },
+                    toEnergy             = { backStack.add(NavRoutes.HomeFlow.SubFlow.UserLevelUp) },
+                    onNavigateToWorkout  = onNavigateToWorkout,
                 )
             }
             entry<NavRoutes.HomeFlow.SubFlow.Notification> {
+                val viewModel = koinInject<NotificationViewModel>()
                 NotificationDestination(
-                    toDashboard = { backStack.removeLastOrNull() }
+                    viewModel   = viewModel,
+                    toDashboard = { backStack.removeLastOrNull() },
                 )
             }
             entry<NavRoutes.HomeFlow.SubFlow.UserLevelUp> {
                 LevelUpScreen(
                     data = LevelUpData(
-                        userName = "Alex",
-                        level = 24,
+                        userName  = "Alex",
+                        level     = 24,
                         className = "Warrior",
-                        xpGained = 200
+                        xpGained  = 200,
                     ),
                     onContinue = { backStack.removeLastOrNull() }
                 )

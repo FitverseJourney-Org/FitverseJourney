@@ -1,16 +1,19 @@
 package org.fitverse.project.destinations.modal_destinations.progress
 
 import androidx.compose.runtime.Composable
-import com.example.presentation.ui.progress.ProgressScreen
+import androidx.compose.ui.Modifier
+import com.example.presentation.ui.progress.ProgressionRoot
 import com.example.presentation.ui.progress.viewmodel.ProgressViewModel
 
 @Composable
 fun ProgressDestination(
     viewmodel: ProgressViewModel,
     toBack: () -> Unit,
+    modifier: Modifier,
 ) {
-    ProgressScreen(
+    ProgressionRoot(
         viewModel = viewmodel,
-        onBack = toBack,
+        onBack    = toBack,
+        modifier  = modifier,
     )
 }

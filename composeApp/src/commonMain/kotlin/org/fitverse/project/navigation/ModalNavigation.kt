@@ -134,6 +134,7 @@ fun ModalDrawerSheetMainScreen(
                     // --- SEÇÕES DE MENU ---
                     MenuSectionTitle("EXPLORE")
                     MenuCardContainer {
+                        ActionRow("Profile", Icons.Rounded.Person, colors) { onNavigate(NavRoutes.HomeFlow.Profile) }
                         ActionRow("Workout Plan", Icons.Rounded.FitnessCenter, colors) { onNavigate(NavRoutes.PlanWorkoutFlow) }
                         ActionRow("Historic", Icons.Rounded.History, colors) { onNavigate(NavRoutes.Historic) }
                         ActionRow("Achievements", Icons.Rounded.Star, colors) { onNavigate(NavRoutes.Achievements) }

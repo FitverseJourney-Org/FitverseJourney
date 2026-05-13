@@ -1,15 +1,19 @@
+package org.fitverse.project.destinations.modal_destinations.leaderboards
 
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import com.example.presentation.widgets.LeaderboardScreen
+import androidx.compose.ui.Modifier
+import com.example.presentation.ui.leaderboards.LeaderboardRoot
+import com.example.presentation.ui.leaderboards.viewmodel.LeaderboardsViewModel
 
 @Composable
 fun LeaderboardsDestination(
-    navigateBack: () -> Unit
+    viewModel:    LeaderboardsViewModel,
+    navigateBack: () -> Unit,
+    modifier:     Modifier,
 ) {
-    val cs = MaterialTheme.colorScheme
-
-    LeaderboardScreen(
-        onBack = navigateBack
+    LeaderboardRoot(
+        viewModel = viewModel,
+        onBack    = navigateBack,
+        modifier  = modifier,
     )
 }

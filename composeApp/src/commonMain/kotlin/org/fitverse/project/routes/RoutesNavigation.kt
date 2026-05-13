@@ -27,6 +27,7 @@ sealed interface NavRoutes : NavKey {
         // Bottom Bar
         @Serializable data object Dashboard  : NavRoutes
         @Serializable data object Workout    : NavRoutes
+        @Serializable data object Activity   : NavRoutes
         @Serializable data object Community  : NavRoutes
         @Serializable data object Nutrition  : NavRoutes
         @Serializable data object Profile    : NavRoutes
@@ -63,6 +64,9 @@ sealed interface NavRoutes : NavKey {
         @Serializable data object TasksLibrary : NavRoutes
     }
 
+    // ── Nutrition sub-screens ─────────────────────────────────
+    @Serializable data class NutritionAddManualFood(val mealName: String) : NavRoutes
+
     // ── Telas avulsas ─────────────────────────────────────────
     @Serializable data object Shopping         : NavRoutes
     @Serializable data object WikiFitness      : NavRoutes
@@ -74,8 +78,4 @@ sealed interface NavRoutes : NavKey {
     @Serializable data object Progress         : NavRoutes
     @Serializable data object Achievements     : NavRoutes
     @Serializable data object HelpSupport      : NavRoutes
-    @Serializable data object ActionsWorkout   : NavRoutes
-    @Serializable data object ActionsNutrition : NavRoutes
-    @Serializable data object ActionsTasks     : NavRoutes
-    @Serializable data object ActionsHistoric  : NavRoutes
 }

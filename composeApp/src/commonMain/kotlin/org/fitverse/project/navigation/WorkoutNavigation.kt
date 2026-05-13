@@ -20,16 +20,14 @@ import com.example.presentation.ui.workout.viewmodel.WorkoutSessionViewModel
 import com.example.presentation.ui.workout.viewmodel.WorkoutViewModel
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
-import org.fitverse.project.destinations.homepage.workout.WorkoutCompletedDestination
-import org.fitverse.project.destinations.homepage.workout.WorkoutDestination
-import org.fitverse.project.destinations.homepage.workout.WorkoutSessionDestination
 import org.fitverse.project.routes.NavRoutes
 import org.koin.compose.koinInject
 
 @Composable
 fun WorkoutNavigation(
     onFullScreen: (Boolean) -> Unit = {},
-    modifier: Modifier
+    modifier: Modifier,
+    subScreenModifier: Modifier = Modifier,
 ) {
     val backStack = rememberNavBackStack(
         SavedStateConfiguration {
@@ -57,7 +55,7 @@ fun WorkoutNavigation(
     DisposableEffect(Unit) { onDispose { onFullScreen(false) } }
 
     NavDisplay(
-        modifier = modifier,
+        modifier = if (isFullScreen) subScreenModifier else modifier,
         backStack = backStack,
         entryDecorators = listOf(
             rememberSaveableStateHolderNavEntryDecorator(),
@@ -66,14 +64,14 @@ fun WorkoutNavigation(
         entryProvider = entryProvider {
             entry<NavRoutes.HomeFlow.Workout> {
                 val viewModel = koinInject<WorkoutViewModel>()
-                WorkoutDestination(
+                org.fitverse.project.destinations.workout.WorkoutDestination(
                     onStartWorkout = { backStack.add(NavRoutes.WorkoutFlow.WorkoutSession) },
                     workoutCompletedToday = workoutCompletedToday
                 )
             }
             entry<NavRoutes.WorkoutFlow.WorkoutSession> {
                 val viewModel = koinInject<WorkoutSessionViewModel>()
-                WorkoutSessionDestination(
+                org.fitverse.project.destinations.workout.WorkoutSessionDestination(
                     toCompletedWorkout = { result ->
                         lastWorkoutResult = result
                         backStack.add(NavRoutes.WorkoutFlow.WorkoutCompleted)
@@ -82,14 +80,14 @@ fun WorkoutNavigation(
             }
             entry<NavRoutes.WorkoutFlow.WorkoutCompleted> {
                 lastWorkoutResult?.let { result ->
-                    WorkoutCompletedDestination(
+                    org.fitverse.project.destinations.workout.WorkoutCompletedDestination(
                         result = result,
                         onContinue = {
                             lastWorkoutResult = null
                             workoutCompletedToday = true
                             backStack.removeAll {
                                 it == NavRoutes.WorkoutFlow.WorkoutCompleted ||
-                                it == NavRoutes.WorkoutFlow.WorkoutSession
+                                        it == NavRoutes.WorkoutFlow.WorkoutSession
                             }
                         }
                     )

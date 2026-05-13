@@ -37,14 +37,16 @@ import org.koin.dsl.module
 val AuthUseCase = module {
     factory {
         LoginUseCase(
-            userRepository = get(),
-            authRepository = get()
+            authRepository          = get(),
+            userRepository          = get(),
+            appAuthenticateRepository = get(),
         )
     }
     factory {
         RegisterUseCase(
-            userRepository = get(),
-            authRepository = get()
+            authRepository          = get(),
+            userRepository          = get(),
+            appAuthenticateRepository = get(),
         )
     }
     factory {

@@ -19,7 +19,8 @@ import org.fitverse.project.routes.NavRoutes
 
 @Composable
 fun TasksNavigation(
-    toBack: () -> Unit
+    toBack: () -> Unit,
+    modifier: Modifier
 ) {
     val rootBackStack = rememberNavBackStack(
         SavedStateConfiguration {
@@ -36,7 +37,7 @@ fun TasksNavigation(
 
 
     NavDisplay(
-        modifier = Modifier,
+        modifier = modifier,
         backStack = rootBackStack,
         entryDecorators = listOf(
             rememberSaveableStateHolderNavEntryDecorator(),

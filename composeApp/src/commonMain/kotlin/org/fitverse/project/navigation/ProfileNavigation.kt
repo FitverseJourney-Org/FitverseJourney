@@ -1,6 +1,7 @@
 package org.fitverse.project.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
@@ -10,11 +11,13 @@ import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
-import org.fitverse.project.destinations.homepage.profile.ProfileDestination
 import org.fitverse.project.routes.NavRoutes
 
 @Composable
-fun ProfileNavigation() {
+fun ProfileNavigation(
+    modifier: Modifier,
+    onBack: () -> Unit
+) {
     val backStack = rememberNavBackStack(
         SavedStateConfiguration {
             serializersModule = SerializersModule {
@@ -27,6 +30,7 @@ fun ProfileNavigation() {
     )
 
     NavDisplay(
+        modifier = modifier,
         backStack = backStack,
         entryDecorators = listOf(
             rememberSaveableStateHolderNavEntryDecorator(),
@@ -34,7 +38,9 @@ fun ProfileNavigation() {
         ),
         entryProvider = entryProvider {
             entry<NavRoutes.HomeFlow.Profile> {
-                ProfileDestination()
+                org.fitverse.project.destinations.profile.ProfileDestination(
+                    onBack = onBack
+                )
             }
         }
     )

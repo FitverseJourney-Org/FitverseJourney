@@ -11,7 +11,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,6 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.domain.models.notification.NotificationStyle
 import com.example.domain.models.notification.NotificationType
+import com.example.presentation.ui.notification.viewmodel.NotificationEvent
+import com.example.presentation.ui.notification.viewmodel.NotificationIntent
 import com.example.presentation.widgets.FitverseTopAppBar
 import com.example.presentation.theme.FitverseColors
 import com.example.presentation.theme.ShapeCard
@@ -160,10 +166,36 @@ val sampleNotifications = listOf(
     ),
 )
 
+// ── Root — wires ViewModel ────────────────────────────────────────────────────
+
+@Composable
+fun NotificationRoot(
+    viewModel: NotificationViewModel,
+    onBack:    () -> Unit,
+) {
+    val uiState by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.events.collect { event ->
+            when (event) {
+                NotificationEvent.NavigateBack -> onBack()
+            }
+        }
+    }
+
+    NotificationScreen(
+        onBack        = { viewModel.onIntent(NotificationIntent.NavigateBack) },
+        notifications = uiState.notifications,
+    )
+}
+
 // ── Screen ────────────────────────────────────────────────────────────────────
 
 @Composable
-fun NotificationScreen(onBack: () -> Unit) {
+fun NotificationScreen(
+    onBack:        () -> Unit,
+    notifications: List<Notification> = sampleNotifications,
+) {
     Scaffold(
         containerColor = FitverseColors.Bg,
         topBar = {
@@ -174,15 +206,12 @@ fun NotificationScreen(onBack: () -> Unit) {
         },
         content = {
             LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(FitverseColors.Bg)
-                    .padding(it),
+                modifier = Modifier.fillMaxSize().padding(it),
                 contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
-                items(sampleNotifications, key = { it.title }) { notif ->
-                    NotificationRow(notif    = notif)
+                items(notifications, key = { it.title }) { notif ->
+                    NotificationRow(notif = notif)
                 }
             }
         }

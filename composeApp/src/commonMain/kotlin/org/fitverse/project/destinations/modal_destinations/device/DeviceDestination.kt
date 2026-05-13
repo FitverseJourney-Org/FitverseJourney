@@ -1,20 +1,14 @@
 package org.fitverse.project.destinations.modal_destinations.device
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.navigation3.runtime.NavKey
 import com.example.presentation.ui.device.DevicesScreen
 
 @Composable
-fun DevicesDestination(toBack: () -> NavKey?) {
-    val cs = MaterialTheme.colorScheme
-
-    Box(modifier = Modifier.fillMaxSize().background(Brush.verticalGradient(listOf(cs.surface, cs.background)))){
-        DevicesScreen(onBack =  { toBack() })
-    }
+fun DevicesDestination(toBack: () -> NavKey?, modifier: Modifier) {
+    DevicesScreen(
+        onBack = { toBack() },
+        modifier = modifier
+    )
 }
