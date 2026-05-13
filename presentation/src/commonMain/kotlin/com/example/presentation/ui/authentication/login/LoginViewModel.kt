@@ -68,7 +68,7 @@ class LoginViewModel(
                 onSuccess = { user ->
                     println("User: $user")
                     _state.update { it.copy(isLoading = false) }
-                    _navigationState.emit(LoginNavigation.ToHome)
+                    _events.send(LoginNavigation.ToHome)
                 },
                 onFailure = { error ->
                     _state.update { s ->
