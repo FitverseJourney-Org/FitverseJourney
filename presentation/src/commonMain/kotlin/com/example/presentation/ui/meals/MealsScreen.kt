@@ -94,7 +94,10 @@ private val meals = listOf(
 // ── Screen ────────────────────────────────────────────────────────────────────
 
 @Composable
-fun MealsScreen(onBottomSheetOpen: (Boolean) -> Unit = {}) {
+fun MealsScreen(
+    onBottomSheetOpen: (Boolean) -> Unit = {},
+    onNavigateToManualFood: (mealName: String) -> Unit = {},
+) {
     var showAddSheet by remember { mutableStateOf(false) }
     var selectedMeal by remember { mutableStateOf<Meal?>(null) }
 
@@ -109,7 +112,7 @@ fun MealsScreen(onBottomSheetOpen: (Boolean) -> Unit = {}) {
                     contentPadding = PaddingValues(16.dp),
                     verticalArrangement = Arrangement.spacedBy(10.dp),
                 ) {
-                    item { NutritionHeader() }
+                    item { MealsHeader() }
                     item { MacrosSummaryCard() }
                     item { SectionHeader(title = "REFEIÇÕES DO DIA", actionText = "+ ADICIONAR") }
                     items(meals) { meal ->
@@ -128,7 +131,12 @@ fun MealsScreen(onBottomSheetOpen: (Boolean) -> Unit = {}) {
                     AddFoodBottomSheet(
                         mealName  = selectedMeal?.name.orEmpty(),
                         onCamera  = { showAddSheet = false; onBottomSheetOpen(false) },
-                        onCustom  = { showAddSheet = false; onBottomSheetOpen(false) },
+                        onCustom  = {
+                            val mealName = selectedMeal?.name.orEmpty()
+                            showAddSheet = false
+                            onBottomSheetOpen(false)
+                            onNavigateToManualFood(mealName)
+                        },
                         onDismiss = { showAddSheet = false; onBottomSheetOpen(false) },
                     )
                 }
@@ -140,7 +148,7 @@ fun MealsScreen(onBottomSheetOpen: (Boolean) -> Unit = {}) {
 // ── Header ────────────────────────────────────────────────────────────────────
 
 @Composable
-private fun NutritionHeader() {
+private fun MealsHeader() {
     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Text(
             "SEGUNDA-FEIRA",

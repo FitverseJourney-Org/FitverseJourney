@@ -4,8 +4,19 @@ import com.example.local.model.ProgressionPointEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
+import kotlin.math.sin
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Epoch anchors (UTC midnight)
+// ─────────────────────────────────────────────────────────────────────────────
 
 private const val EPOCH_2025_JAN_01: Long = 1_735_689_600_000L
+private const val EPOCH_2026_JAN_01: Long = 1_767_225_600_000L
+private const val WEEK_MS:           Long = 604_800_000L          // 7 × 24 × 3600 × 1000
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Calendar math (pure arithmetic, no java.util.Calendar)
+// ─────────────────────────────────────────────────────────────────────────────
 
 private fun Long.toCalendarYear(): Int {
     val z   = this / 86_400_000L + 719_468L
@@ -29,44 +40,91 @@ private fun Long.toCalendarMonth(): Int {
     return mp + if (mp < 10) 3 else -9
 }
 
-private data class ExerciseSeed(val exerciseId: String, val baseWeight: Double)
+// ─────────────────────────────────────────────────────────────────────────────
+// Seed configuration
+// ─────────────────────────────────────────────────────────────────────────────
 
-private val SEED_NOISE_PATTERN = listOf(
-    0.0, 0.5, -0.5, 1.0, 0.0, 0.5, -0.25, 0.75, 0.0, 1.25, -0.5, 0.5,
+private data class ExerciseSeedConfig(
+    val exerciseId     : String,
+    val baseWeight     : Double,
+    val weeklyGain     : Double,
+    val noiseAmplitude : Double,
+    val reps           : Int,
 )
 
-private val EXERCISE_SEEDS = listOf(
-    ExerciseSeed(exerciseId = "ex_001", baseWeight = 80.0),
-    ExerciseSeed(exerciseId = "ex_004", baseWeight = 40.0),
-    ExerciseSeed(exerciseId = "ex_006", baseWeight = 60.0),
-    ExerciseSeed(exerciseId = "ex_011", baseWeight = 100.0),
+private val EXERCISE_CONFIGS = listOf(
+    // ── Ficha A ──────────────────────────────────────────────────────────────
+    ExerciseSeedConfig("ex_001", baseWeight = 80.0,  weeklyGain = 0.40, noiseAmplitude = 1.50, reps = 8),
+    ExerciseSeedConfig("ex_002", baseWeight = 28.0,  weeklyGain = 0.25, noiseAmplitude = 1.00, reps = 10),
+    ExerciseSeedConfig("ex_003", baseWeight = 15.0,  weeklyGain = 0.15, noiseAmplitude = 0.75, reps = 12),
+    ExerciseSeedConfig("ex_004", baseWeight = 40.0,  weeklyGain = 0.25, noiseAmplitude = 1.00, reps = 12),
+    ExerciseSeedConfig("ex_005", baseWeight = 30.0,  weeklyGain = 0.20, noiseAmplitude = 0.80, reps = 10),
+    // ── Ficha B ──────────────────────────────────────────────────────────────
+    ExerciseSeedConfig("ex_006", baseWeight = 65.0,  weeklyGain = 0.35, noiseAmplitude = 1.25, reps = 8),
+    ExerciseSeedConfig("ex_007", baseWeight = 70.0,  weeklyGain = 0.40, noiseAmplitude = 1.50, reps = 8),
+    ExerciseSeedConfig("ex_008", baseWeight = 30.0,  weeklyGain = 0.20, noiseAmplitude = 0.75, reps = 10),
+    ExerciseSeedConfig("ex_009", baseWeight = 35.0,  weeklyGain = 0.20, noiseAmplitude = 0.75, reps = 10),
+    ExerciseSeedConfig("ex_010", baseWeight = 16.0,  weeklyGain = 0.10, noiseAmplitude = 0.50, reps = 15),
+    // ── Ficha C ──────────────────────────────────────────────────────────────
+    ExerciseSeedConfig("ex_011", baseWeight = 100.0, weeklyGain = 0.50, noiseAmplitude = 2.00, reps = 8),
+    ExerciseSeedConfig("ex_012", baseWeight = 150.0, weeklyGain = 0.60, noiseAmplitude = 2.50, reps = 10),
+    ExerciseSeedConfig("ex_013", baseWeight = 50.0,  weeklyGain = 0.30, noiseAmplitude = 1.00, reps = 12),
+    ExerciseSeedConfig("ex_014", baseWeight = 24.0,  weeklyGain = 0.15, noiseAmplitude = 0.50, reps = 15),
+    ExerciseSeedConfig("ex_015", baseWeight = 60.0,  weeklyGain = 0.35, noiseAmplitude = 1.25, reps = 10),
 )
 
-private fun seedProgressionPoints(): List<ProgressionPointEntity> {
-    val baseEpoch  = EPOCH_2025_JAN_01
-    val weekMillis = 7L * 24L * 60L * 60L * 1_000L
-    val reps       = 8
+// ─────────────────────────────────────────────────────────────────────────────
+// Week generator — continuous globalOffset ensures smooth year-over-year trend
+// ─────────────────────────────────────────────────────────────────────────────
+
+private fun generateWeeks(
+    config       : ExerciseSeedConfig,
+    startEpoch   : Long,
+    weekCount    : Int,
+    globalOffset : Int,
+): List<ProgressionPointEntity> {
+    // Deterministic per-exercise noise phase prevents all exercises moving in sync
+    val noisePhase = config.exerciseId.sumOf { it.code.toDouble() } % 20.0
+    val floor      = config.baseWeight * 0.60
 
     return buildList {
-        EXERCISE_SEEDS.forEach { seed ->
-            (0 until 12).forEach { weekIndex ->
-                val noise  = SEED_NOISE_PATTERN[weekIndex % SEED_NOISE_PATTERN.size]
-                val weight = seed.baseWeight + (weekIndex * 0.75) + noise
-                add(
-                    ProgressionPointEntity(
-                        id             = "${seed.exerciseId}_w$weekIndex",
-                        exerciseId     = seed.exerciseId,
-                        epochMillis    = baseEpoch + weekIndex * weekMillis,
-                        weightKg       = (weight * 2).toLong().toDouble() / 2.0,
-                        estimatedOneRm = weight * (1.0 + reps / 30.0),
-                        reps           = reps,
-                        sets           = 3,
-                    )
+        repeat(weekCount) { w ->
+            val absoluteWeek = (globalOffset + w).toDouble()
+            val trend        = absoluteWeek * config.weeklyGain
+            val noise        = config.noiseAmplitude * sin(absoluteWeek * 0.35 + noisePhase)
+            // Every 8th week is a deload (-12 % of base)
+            val deload       = if ((globalOffset + w) % 8 == 7) config.baseWeight * -0.12 else 0.0
+            val rawWeight    = config.baseWeight + trend + noise + deload
+            // Snap to 0.5 kg and enforce floor
+            val weight       = ((rawWeight.coerceAtLeast(floor) * 2).toLong().toDouble()) / 2.0
+
+            add(
+                ProgressionPointEntity(
+                    id             = "${config.exerciseId}_aw${globalOffset + w}",
+                    exerciseId     = config.exerciseId,
+                    epochMillis    = startEpoch + w.toLong() * WEEK_MS,
+                    weightKg       = weight,
+                    estimatedOneRm = weight * (1.0 + config.reps / 30.0),
+                    reps           = config.reps,
+                    sets           = 3,
                 )
-            }
+            )
         }
     }
 }
+
+// 52 weeks for 2025 + 19 weeks for Jan–May 2026 (to match today's date)
+private fun seedProgressionPoints(): List<ProgressionPointEntity> =
+    buildList {
+        EXERCISE_CONFIGS.forEach { config ->
+            addAll(generateWeeks(config, EPOCH_2025_JAN_01, 52, globalOffset = 0))
+            addAll(generateWeeks(config, EPOCH_2026_JAN_01, 19, globalOffset = 52))
+        }
+    }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Data source
+// ─────────────────────────────────────────────────────────────────────────────
 
 class ProgressionLocalDataSourceImpl : ProgressionLocalDataSource {
 
@@ -78,16 +136,16 @@ class ProgressionLocalDataSourceImpl : ProgressionLocalDataSource {
         }
 
     override fun observeByExerciseAndYearPeriod(
-        exerciseId: String,
-        year: Int,
-        startMonth: Int,
-        endMonth: Int,
+        exerciseId : String,
+        year       : Int,
+        startMonth : Int,
+        endMonth   : Int,
     ): Flow<List<ProgressionPointEntity>> =
         _store.map { points ->
             points.filter { point ->
                 point.exerciseId == exerciseId &&
-                        point.epochMillis.toCalendarYear()  == year &&
-                        point.epochMillis.toCalendarMonth() in startMonth..endMonth
+                point.epochMillis.toCalendarYear()  == year &&
+                point.epochMillis.toCalendarMonth() in startMonth..endMonth
             }.sortedBy { it.epochMillis }
         }
 

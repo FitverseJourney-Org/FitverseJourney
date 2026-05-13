@@ -1,48 +1,49 @@
 package com.example.presentation.ui.progress
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.QueryStats
-import androidx.compose.material.icons.rounded.WifiOff
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.pulltorefresh.PullToRefreshBox
-import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
-import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.ui.unit.sp
+import com.example.presentation.theme.FVExtension
 import com.example.presentation.ui.progress.components.ExerciseBottomSheet
 import com.example.presentation.ui.progress.components.ExerciseSelectorButton
 import com.example.presentation.ui.progress.components.InsightsCard
@@ -52,231 +53,230 @@ import com.example.presentation.ui.progress.components.ProgressScreenSkeleton
 import com.example.presentation.ui.progress.components.ProgressionStatsGrid
 import com.example.presentation.ui.progress.components.SplitTabRow
 import com.example.presentation.ui.progress.viewmodel.ProgressViewModel
-import com.example.presentation.widgets.FitverseTopAppBar
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.example.presentation.widgets.FVCard
+import com.example.presentation.widgets.FVScreenHeader
+import com.example.presentation.widgets.FVSectionLabel
 
-/**
- * Tela de Progressão de Carga — refatorada com MVVM puro.
- *
- * ## Responsabilidades desta composable
- * - Observar [ProgressUiState] via [StateFlow] da ViewModel.
- * - Escutar [ProgressUiEvent]s pontuais (snackbar, navegação).
- * - Delegar **todas** as ações ao ViewModel via [ProgressIntent].
- * - Orquestrar a animação de entrada "staggered" dos elementos.
- *
- * ## O que NÃO existe aqui
- * - Nenhuma lógica de filtragem, cálculo ou formatação.
- * - Nenhum `remember` guardando estado de negócio (apenas estados de UI pura,
- *   como `SnackbarHostState`).
- *
- * @param viewModel  ViewModel injetada (Koin/Hilt/manual).
- * @param onBack     Callback de navegação para voltar.
- */
-@OptIn(ExperimentalMaterial3Api::class)
+// ─────────────────────────────────────────────────────────────────────────────
+// Root — recebe o ViewModel, observa eventos pontuais
+// ─────────────────────────────────────────────────────────────────────────────
+
 @Composable
-fun ProgressScreen(
-    viewModel: ProgressViewModel,
-    onBack: () -> Unit,
+fun ProgressionRoot(
+    viewModel : ProgressViewModel,
+    onBack    : () -> Unit,
+    modifier  : Modifier = Modifier,
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val snackbarHostState = remember { SnackbarHostState() }
+    val uiState           by viewModel.uiState.collectAsState()
+    val snackbarHostState  = remember { SnackbarHostState() }
 
-    // Consome eventos pontuais (canal de entrega única)
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
-                is ProgressUiEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.message)
-                ProgressUiEvent.NavigateBack    -> onBack()
+                is ProgressUiEvent.NavigateBack  -> onBack()
+                is ProgressUiEvent.ShowSnackbar  -> snackbarHostState.showSnackbar(event.message)
             }
         }
     }
 
+    ProgressionScreen(
+        uiState           = uiState,
+        onIntent          = viewModel::onIntent,
+        snackbarHostState = snackbarHostState,
+        modifier          = modifier,
+    )
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Screen — puro, previewável, sem referência ao ViewModel
+// ─────────────────────────────────────────────────────────────────────────────
+
+@Composable
+fun ProgressionScreen(
+    uiState           : ProgressUiState,
+    onIntent          : (ProgressIntent) -> Unit,
+    snackbarHostState : SnackbarHostState = remember { SnackbarHostState() },
+    modifier          : Modifier = Modifier,
+) {
     Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) },
+        modifier            = modifier,
+        containerColor      = FVExtension.bg,
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        snackbarHost        = { SnackbarHost(snackbarHostState) },
         topBar = {
-            FitverseTopAppBar(
-                title = "PROGRESSÃO",
-                onBack = { viewModel.onIntent(ProgressIntent.NavigateBack) },
+            FVScreenHeader(
+                title  = "PROGRESSÃO",
+                sub    = "Sua evolução em números",
+                onBack = { onIntent(ProgressIntent.NavigateBack) },
             )
         },
-        containerColor = Color(0xFF0A0A0A), // OLED-friendly deep black
-    ) { innerPadding ->
-        // Transição animada entre os estados macros (Loading ↔ Success ↔ Error)
-        AnimatedContent(
-            targetState = uiState,
-            transitionSpec = {
-                fadeIn(tween(300)) togetherWith fadeOut(tween(200))
-            },
-            label = "progress_state_transition",
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-        ) { state ->
-            when (state) {
-                ProgressUiState.Loading        -> ProgressScreenSkeleton()
-                is ProgressUiState.Success     -> ProgressSuccessContent(state, viewModel)
-                is ProgressUiState.Error       -> ProgressErrorContent(state, viewModel)
+    ) { paddingValues ->
+        when (val state = uiState) {
+            is ProgressUiState.Loading -> {
+                ProgressScreenSkeleton(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                )
+            }
+
+            is ProgressUiState.Error -> {
+                ProgressionErrorContent(
+                    message  = state.message,
+                    canRetry = state.canRetry,
+                    onRetry  = { onIntent(ProgressIntent.Retry) },
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                )
+            }
+
+            is ProgressUiState.Success -> {
+                ProgressionSuccessContent(
+                    state    = state,
+                    onIntent = onIntent,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                )
+                if (state.isExerciseSheetOpen) {
+                    ExerciseBottomSheet(
+                        exercises          = state.exercises,
+                        selectedExercise   = state.selectedExercise,
+                        onExerciseSelected = { onIntent(ProgressIntent.SelectExercise(it)) },
+                        onDismiss          = { onIntent(ProgressIntent.CloseExerciseSheet) },
+                    )
+                }
             }
         }
     }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// ProgressSuccessContent — conteúdo principal com animação staggered
+// Conteúdo de sucesso
 // ─────────────────────────────────────────────────────────────────────────────
 
-/**
- * Conteúdo do estado de sucesso.
- *
- * ## Pull-to-refresh (Material3 1.3.0+)
- * Usa [PullToRefreshBox] que encapsula internamente o `nestedScroll`,
- * o indicador visual e a sincronização de estado — eliminando os
- * `LaunchedEffect` de sincronização e o `Box` com `nestedScrollConnection`
- * que eram necessários na API anterior.
- *
- * ## Animação Staggered
- * Cada seção (filtros → gráfico → stats → insight) tem seu próprio
- * [Animatable] de alpha que dispara com delay crescente via `launch {}`,
- * criando o efeito "cascata" de entrada sem bloquear a coroutine principal.
- */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ProgressSuccessContent(
-    state: ProgressUiState.Success,
-    viewModel: ProgressViewModel,
+private fun ProgressionSuccessContent(
+    state    : ProgressUiState.Success,
+    onIntent : (ProgressIntent) -> Unit,
+    modifier : Modifier = Modifier,
 ) {
-    // ── Animação staggered de entrada ─────────────────────────────────────
-    val alphaFilters = remember { Animatable(0f) }
-    val alphaChart   = remember { Animatable(0f) }
-    val alphaStats   = remember { Animatable(0f) }
-    val alphaInsight = remember { Animatable(0f) }
+    Column(modifier = modifier) {
 
-    LaunchedEffect(Unit) {
-        val spec = tween<Float>(durationMillis = 400, easing = FastOutSlowInEasing)
-        launch { alphaFilters.animateTo(1f, spec) }
-        launch {
-            delay(80)
-            alphaChart.animateTo(1f, spec)
-        }
-        launch {
-            delay(160)
-            alphaStats.animateTo(1f, spec)
-        }
-        launch {
-            delay(240)
-            alphaInsight.animateTo(1f, spec)
-        }
-    }
-
-    // ── BottomSheet de exercício ──────────────────────────────────────────
-    // Renderizado fora do LazyColumn para não herdar o contexto de scroll.
-    if (state.isExerciseSheetOpen) {
-        ExerciseBottomSheet(
-            exercises = state.exercises,
-            selectedExercise = state.selectedExercise,
-            onExerciseSelected = { viewModel.onIntent(ProgressIntent.SelectExercise(it)) },
-            onDismiss = { viewModel.onIntent(ProgressIntent.CloseExerciseSheet) },
-        )
-    }
-
-    // ── PullToRefreshBox (API M3 1.3.0+) ─────────────────────────────────
-    //
-    // Diferenças em relação à API anterior:
-    //   Antes → rememberPullToRefreshState() + Box(nestedScroll) + PullToRefreshContainer
-    //   Agora → PullToRefreshBox recebe isRefreshing + onRefresh e gerencia tudo internamente.
-    //
-    // O indicador customizado mantém as cores do tema OLED (fundo #1A1A1A, ícone branco).
-    val pullState = rememberPullToRefreshState()
-
-    PullToRefreshBox(
-        isRefreshing = state.isRefreshing,
-        onRefresh = { viewModel.onIntent(ProgressIntent.Refresh) },
-        state = pullState,
-        modifier = Modifier.fillMaxSize(),
-        indicator = {
-            PullToRefreshDefaults.Indicator(
-                state = pullState,
-                isRefreshing = state.isRefreshing,
-                modifier = Modifier.align(Alignment.TopCenter),
-                color = Color.White,
-                containerColor = Color(0xFF1A1A1A),
+        // Indicador de atualização não-bloqueante
+        if (state.isRefreshing) {
+            LinearProgressIndicator(
+                modifier   = Modifier.fillMaxWidth(),
+                color      = FVExtension.primary,
+                trackColor = Color.Transparent,
             )
-        },
-    ) {
+        }
+
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(bottom = 32.dp),
+            modifier       = Modifier
+                .weight(1f)
+                .background(FVExtension.bg),
+            contentPadding = PaddingValues(bottom = 48.dp),
         ) {
-            // ── Seção 1: Split Tabs ────────────────────────────────────────
+
+            // 1 ── Fichas de treino (tab row)
             item(key = "split_tabs") {
                 SplitTabRow(
-                    splits = state.splits,
-                    selectedSplit = state.selectedSplit,
-                    onSplitSelected = { viewModel.onIntent(ProgressIntent.SelectSplit(it)) },
-                    modifier = Modifier.alpha(alphaFilters.value),
+                    splits          = state.splits,
+                    selectedSplit   = state.selectedSplit,
+                    onSplitSelected = { onIntent(ProgressIntent.SelectSplit(it)) },
                 )
-                Spacer(Modifier.height(16.dp))
             }
 
-            // ── Seção 2: Seletor de Exercício ──────────────────────────────
+            // 2 ── Seletor de exercício
             item(key = "exercise_selector") {
-                ExerciseSelectorButton(
-                    selectedExercise = state.selectedExercise,
-                    onClick = { viewModel.onIntent(ProgressIntent.OpenExerciseSheet) },
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .alpha(alphaFilters.value),
-                )
-                Spacer(Modifier.height(16.dp))
+                Column(
+                    Modifier
+                        .padding(horizontal = FVExtension.margin)
+                        .padding(top = 16.dp),
+                ) {
+                    ExerciseSelectorButton(
+                        selectedExercise = state.selectedExercise,
+                        onClick          = { onIntent(ProgressIntent.OpenExerciseSheet) },
+                    )
+                }
             }
 
-            // ── Seção 3: Filtro de Período ─────────────────────────────────
+            // 3 ── Filtro de período (chips de mês)
             item(key = "period_filter") {
-                PeriodFilterChips(
-                    period = state.periodFilter,
-                    onPeriodChanged = { viewModel.onIntent(ProgressIntent.UpdatePeriod(it)) },
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .alpha(alphaFilters.value),
-                )
-                Spacer(Modifier.height(20.dp))
+                Column(
+                    Modifier
+                        .padding(horizontal = FVExtension.margin)
+                        .padding(top = 12.dp),
+                ) {
+                    PeriodFilterChips(
+                        period          = state.periodFilter,
+                        onPeriodChanged = { onIntent(ProgressIntent.UpdatePeriod(it)) },
+                    )
+                }
             }
 
-            // ── Conteúdo dinâmico: vazio ou dados ─────────────────────────
-            if (state.chartLines.all { it.values.isEmpty() }) {
-                item(key = "empty_state") { ProgressEmptyState() }
-            } else {
-                // ── Seção 4: Gráfico ───────────────────────────────────────
-                item(key = "chart") {
-                    ProgressChartCard(
-                        chartLines = state.chartLines,
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .alpha(alphaChart.value),
-                    )
-                    Spacer(Modifier.height(16.dp))
+            // 4 ── Gráfico de evolução de carga (compose-charts: linha + colunas)
+            item(key = "load_chart") {
+                Spacer(Modifier.height(20.dp))
+                FVSectionLabel("Evolução de Carga")
+                Spacer(Modifier.height(8.dp))
+                Column(Modifier.padding(horizontal = FVExtension.margin)) {
+                    ProgressChartCard(chartLines = state.chartLines)
                 }
+            }
 
-                // ── Seção 5: Grid de Estatísticas ──────────────────────────
-                item(key = "stats_grid") {
+            // 5 ── Grade de estatísticas (PR, carga atual, evolução, sessões)
+            item(key = "stats_grid") {
+                Spacer(Modifier.height(16.dp))
+                FVSectionLabel("Estatísticas do Período")
+                Spacer(Modifier.height(8.dp))
+                Column(Modifier.padding(horizontal = FVExtension.margin)) {
                     ProgressionStatsGrid(
-                        stats = state.stats,
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .alpha(alphaStats.value),
+                        stats       = state.stats,
+                        accentColor = FVExtension.primary,
                     )
-                    Spacer(Modifier.height(16.dp))
                 }
+            }
 
-                // ── Seção 6: Insight ───────────────────────────────────────
-                item(key = "insight") {
-                    InsightsCard(
-                        insight = state.insight,
-                        modifier = Modifier
-                            .padding(horizontal = 16.dp)
-                            .alpha(alphaInsight.value),
-                    )
+            // 6 ── Insight de evolução
+            item(key = "insight") {
+                Spacer(Modifier.height(16.dp))
+                Column(Modifier.padding(horizontal = FVExtension.margin)) {
+                    InsightsCard(insight = state.insight)
+                }
+            }
+
+            // 7 ── Volume semanal (barras animadas)
+            item(key = "volume_chart") {
+                Spacer(Modifier.height(20.dp))
+                FVSectionLabel("Volume Semanal", action = "+12% vs semana ant.")
+                Spacer(Modifier.height(8.dp))
+                Column(Modifier.padding(horizontal = FVExtension.margin)) {
+                    FVCard {
+                        VolumeBarChart(
+                            values   = listOf(2800f, 3500f, 4100f, 4800f, 5200f, 6100f),
+                            labels   = listOf("S1", "S2", "S3", "S4", "S5", "S6"),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(110.dp),
+                        )
+                    }
+                }
+            }
+
+            // 8 ── Frequência de treino (heatmap 8 semanas)
+            item(key = "heatmap") {
+                Spacer(Modifier.height(16.dp))
+                FVSectionLabel("Frequência de Treino")
+                Spacer(Modifier.height(8.dp))
+                Column(Modifier.padding(horizontal = FVExtension.margin)) {
+                    FVCard {
+                        TrainingHeatmap(Modifier.fillMaxWidth())
+                        Spacer(Modifier.height(8.dp))
+                        HeatmapLegend()
+                    }
                 }
             }
         }
@@ -284,78 +284,186 @@ private fun ProgressSuccessContent(
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Estados auxiliares
+// Estado de erro com retry
 // ─────────────────────────────────────────────────────────────────────────────
 
 @Composable
-private fun ProgressEmptyState() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 48.dp, horizontal = 32.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-    ) {
-        Icon(
-            imageVector = Icons.Rounded.QueryStats,
-            contentDescription = null,
-            modifier = Modifier.size(64.dp),
-            tint = Color.White.copy(alpha = 0.15f),
-        )
-        Spacer(Modifier.height(16.dp))
-        Text(
-            text = "Nenhum dado no período",
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.SemiBold,
-            color = Color.White.copy(alpha = 0.6f),
-        )
-        Spacer(Modifier.height(8.dp))
-        Text(
-            text = "Você não registrou treinos para este exercício nos meses selecionados. Expanda o período ou selecione outro exercício.",
-            style = MaterialTheme.typography.bodySmall,
-            color = Color.White.copy(alpha = 0.35f),
-            textAlign = TextAlign.Center,
-        )
-    }
-}
-
-@Composable
-private fun ProgressErrorContent(
-    state: ProgressUiState.Error,
-    viewModel: ProgressViewModel,
+private fun ProgressionErrorContent(
+    message  : String,
+    canRetry : Boolean,
+    onRetry  : () -> Unit,
+    modifier : Modifier = Modifier,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(32.dp),
+        modifier            = modifier.padding(32.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
         Icon(
-            imageVector = Icons.Rounded.WifiOff,
+            imageVector        = Icons.Default.Warning,
             contentDescription = null,
-            modifier = Modifier.size(64.dp),
-            tint = Color.White.copy(alpha = 0.25f),
+            tint               = FVExtension.textMuted,
+            modifier           = Modifier.size(48.dp),
         )
         Spacer(Modifier.height(16.dp))
         Text(
-            text = "Algo deu errado",
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-            color = Color.White,
+            text       = message,
+            fontSize   = 15.sp,
+            color      = FVExtension.textMuted,
+            textAlign  = TextAlign.Center,
+            lineHeight = 22.sp,
         )
-        Spacer(Modifier.height(8.dp))
-        Text(
-            text = state.message,
-            style = MaterialTheme.typography.bodyMedium,
-            color = Color.White.copy(alpha = 0.5f),
-            textAlign = TextAlign.Center,
-        )
-        if (state.canRetry) {
+        if (canRetry) {
             Spacer(Modifier.height(24.dp))
-            Button(onClick = { viewModel.onIntent(ProgressIntent.Retry) }) {
-                Text("Tentar novamente")
+            Button(
+                onClick = onRetry,
+                colors  = ButtonDefaults.buttonColors(containerColor = FVExtension.primary),
+                shape   = RoundedCornerShape(FVExtension.radiusBtn),
+            ) {
+                Text(
+                    text       = "Tentar novamente",
+                    color      = Color.Black,
+                    fontWeight = FontWeight.Bold,
+                )
             }
         }
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Gráfico de volume semanal (barras animadas com Canvas-free rendering)
+// ─────────────────────────────────────────────────────────────────────────────
+
+@Composable
+private fun VolumeBarChart(
+    values   : List<Float>,
+    labels   : List<String>,
+    modifier : Modifier = Modifier,
+) {
+    val maxVal = remember(values) { values.max() }
+
+    Column(modifier = modifier) {
+        Row(
+            modifier              = Modifier
+                .weight(1f)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment     = Alignment.Bottom,
+        ) {
+            values.forEachIndexed { i, v ->
+                VolumeBar(
+                    fraction = v / maxVal,
+                    isLast   = i == values.lastIndex,
+                    index    = i,
+                )
+            }
+        }
+        Spacer(Modifier.height(6.dp))
+        Row(
+            modifier              = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+        ) {
+            labels.forEachIndexed { i, label ->
+                Text(
+                    text       = label,
+                    fontSize   = 9.sp,
+                    color      = if (i == labels.lastIndex) FVExtension.primary else FVExtension.textMuted,
+                    fontWeight = if (i == labels.lastIndex) FontWeight.Bold else FontWeight.Normal,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun VolumeBar(fraction: Float, isLast: Boolean, index: Int) {
+    val animH by animateFloatAsState(
+        targetValue   = fraction,
+        animationSpec = tween(600 + index * 80, easing = FastOutSlowInEasing),
+        label         = "bar$index",
+    )
+    Box(
+        modifier = Modifier
+            .width(28.dp)
+            .fillMaxHeight(animH)
+            .clip(RoundedCornerShape(topStart = 4.dp, topEnd = 4.dp))
+            .background(
+                if (isLast) FVExtension.primary
+                else FVExtension.primary.copy(alpha = 0.15f + fraction * 0.45f)
+            )
+    )
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Heatmap de frequência de treino (8 semanas × 7 dias)
+// ─────────────────────────────────────────────────────────────────────────────
+
+@Composable
+private fun TrainingHeatmap(modifier: Modifier = Modifier) {
+    val intensities = remember {
+        List(7 * 8) { i ->
+            when {
+                i % 7 == 6 -> 0f
+                i % 3 == 0 -> (0.3f + (i % 5) * 0.15f).coerceAtMost(1f)
+                i % 5 == 0 -> 0f
+                else       -> (0.1f + (i % 7) * 0.12f).coerceAtMost(1f)
+            }
+        }
+    }
+
+    Column(modifier = modifier) {
+        Row(
+            modifier              = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            listOf("Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom").forEach { d ->
+                Text(
+                    text     = d,
+                    fontSize = 8.sp,
+                    color    = FVExtension.textMuted,
+                    modifier = Modifier.width(32.dp),
+                )
+            }
+        }
+        Spacer(Modifier.height(4.dp))
+        repeat(8) { week ->
+            Row(
+                modifier              = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 3.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                repeat(7) { day ->
+                    val intensity = intensities[week * 7 + day]
+                    Box(
+                        modifier = Modifier
+                            .size(width = 30.dp, height = 10.dp)
+                            .clip(RoundedCornerShape(2.dp))
+                            .background(
+                                if (intensity == 0f) Color(0xFF1A1A22)
+                                else FVExtension.primary.copy(alpha = intensity)
+                            )
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun HeatmapLegend() {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        verticalAlignment     = Alignment.CenterVertically,
+    ) {
+        Text(text = "Menos", fontSize = 9.sp, color = FVExtension.textMuted)
+        listOf(0.08f, 0.2f, 0.5f, 1.0f).forEach { alpha ->
+            Box(
+                modifier = Modifier
+                    .size(10.dp)
+                    .background(FVExtension.primary.copy(alpha = alpha), RoundedCornerShape(2.dp))
+            )
+        }
+        Text(text = "Mais", fontSize = 9.sp, color = FVExtension.textMuted)
     }
 }

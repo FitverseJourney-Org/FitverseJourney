@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -65,9 +66,8 @@ private val liveMetrics = listOf(
 )
 
 // ── Screen ────────────────────────────────────────────────────────────────────
-
 @Composable
-fun DevicesScreen(onBack: () -> Unit) {
+fun DevicesScreen(onBack: () -> Unit, modifier: Modifier = Modifier) {
     var devices by remember {
         mutableStateOf(
             listOf(
@@ -80,7 +80,9 @@ fun DevicesScreen(onBack: () -> Unit) {
     }
 
     Scaffold(
+        modifier = modifier,
         containerColor = FitverseColors.Bg,
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = {
             FitverseTopAppBar(
                 title = "Dispositivos",

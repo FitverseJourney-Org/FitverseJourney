@@ -71,6 +71,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.expect.PlatformDateFormatter
 import com.example.expect.TimerManager
+import com.example.expect.format
 import com.example.expect.formatWorkoutTime
 import fitversejourneyapp.presentation.generated.resources.Res
 import fitversejourneyapp.presentation.generated.resources.bg_girl_pose

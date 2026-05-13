@@ -84,26 +84,31 @@ fun WorkoutPlanListScreen(
         containerColor = cs.background
     ) { padding ->
         LazyColumn(
-            modifier = Modifier.fillMaxSize().padding(padding),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding),
             contentPadding = PaddingValues(20.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp)
         ){
             item {
                 SectionHeader(title = "PLANO ATIVO")
-                FitVerseSpacer(vertical = true, value = 12.dp)
-
+            }
+            item {
                 if (state.activePlan != null) {
                     WorkoutOverviewCard(state = state)
                 } else {
                     NoActivePlanCard(onCreateClick = { showCreateDialog = true })
                 }
             }
-
             item {
-                SectionHeader(title = "Planos Disponiveis")
                 FitVerseSpacer(vertical = true, value = 12.dp)
             }
-
+            item {
+                SectionHeader(title = "Planos Disponiveis")
+            }
+            item {
+                FitVerseSpacer(vertical = true, value = 12.dp)
+            }
             items(state.availablePlans) { plan ->
                 AdaptiveWorkoutPlanCard(plan = plan, onClick = onSelectedPlan)
             }

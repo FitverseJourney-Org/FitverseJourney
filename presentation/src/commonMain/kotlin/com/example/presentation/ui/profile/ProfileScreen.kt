@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -26,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import com.example.presentation.ui.workout.FitChip
 import com.example.presentation.theme.FitverseColors
 import com.example.presentation.ui.dashboard.components.SectionHeader
+import com.example.presentation.widgets.FitverseTopAppBar
 
 private data class Achievement(val emoji: String, val title: String, val subtitle: String)
 
@@ -38,76 +40,72 @@ private val achievements = listOf(
     Achievement("👑", "Elite",         "Plano Premium"),
 )
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen(
-    onSettingsClick: () -> Unit = {}
-) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        Scaffold(
-            modifier = Modifier.fillMaxSize(),
-            contentWindowInsets = WindowInsets(0,0,0,0),
-            containerColor = Color.Transparent,
-            content = {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(16.dp)
-                ) {
-                    item { ProfileTopBar(onSettingsClick) }
-                    item { ProfileAvatar() }
-                    item { StatsCard() }
-                    item { XpProgressCard() }
-                    item {
-                        SectionHeader(title = "CONQUISTAS", actionText = "TODAS")
-                    }
+fun ProfileScreen(onBack: () -> Unit) {
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        contentWindowInsets = WindowInsets(0,0,0,0),
+        containerColor = Color.Transparent,
+        topBar = {
+            FitverseTopAppBar(
+                title = "PERFIL",
+                onBack = onBack,
+                actions = {
+                    Box(
+                        modifier = Modifier
+                            .size(40.dp)
+                            .clip(RoundedCornerShape(10.dp))
+                            .background(FitverseColors.Surface2),
+                        contentAlignment = Alignment.Center
+                    ) { Text("⚙️", fontSize = 18.sp) }
+                }
+            )
+        },
+        content = {
+            ContentProfileScreen(
+                modifier = Modifier.fillMaxSize().padding(it)
+            )
+        }
+    )
+}
 
-                    items(achievements.chunked(3)) { row ->
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(10.dp)
-                        ) {
-                            row.forEach { achievement ->
-                                AchievementCard(
-                                    emoji    = achievement.emoji,
-                                    title    = achievement.title,
-                                    subtitle = achievement.subtitle,
-                                    modifier = Modifier.weight(1f)
-                                )
-                            }
-                        }
-                        Spacer(Modifier.height(10.dp))
-                    }
+
+@Composable
+fun ContentProfileScreen(
+    modifier: Modifier
+) {
+    LazyColumn(
+        modifier = modifier,
+        contentPadding = PaddingValues(start = 16.dp, top = 16.dp, end = 16.dp)
+    ) {
+        item { ProfileAvatar() }
+        item { StatsCard() }
+        item { XpProgressCard() }
+        item {
+            SectionHeader(title = "CONQUISTAS")
+        }
+
+        items(achievements.chunked(3)) { row ->
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                row.forEach { achievement ->
+                    AchievementCard(
+                        emoji = achievement.emoji,
+                        title = achievement.title,
+                        subtitle = achievement.subtitle,
+                        modifier = Modifier.weight(1f)
+                    )
                 }
             }
-        )
+            Spacer(Modifier.height(10.dp))
+        }
     }
 }
 
 // ── Sub-composables privados ──────────────────
-
-@Composable
-private fun ProfileTopBar(onSettingsClick: () -> Unit) {
-    Row(
-        modifier = Modifier.fillMaxWidth().padding(vertical = 24.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            "PERFIL",
-            color = FitverseColors.TextPrimary,
-            fontSize = 28.sp,
-            fontWeight = FontWeight.Black,
-            letterSpacing = (-0.5).sp
-        )
-        Box(
-            modifier = Modifier
-                .size(40.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .background(FitverseColors.Surface2),
-            contentAlignment = Alignment.Center
-        ) { Text("⚙️", fontSize = 18.sp) }
-    }
-}
-
 @Composable
 private fun ProfileAvatar() {
     Column(
@@ -222,6 +220,7 @@ fun AchievementCard(
         }
     }
 }
+
 @Composable
 private fun XpProgressCard() {
     val cs = MaterialTheme.colorScheme

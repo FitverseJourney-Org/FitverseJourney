@@ -27,8 +27,8 @@ data class UserRequestDto(
     @SerialName("target_protein")   val targetProtein   : Double? = null,
     @SerialName("target_carbs")     val targetCarbs     : Double? = null,
     @SerialName("target_fat")       val targetFat       : Double? = null,
-    @SerialName("created_at")       val createdAt       : String  = "",
-    @SerialName("updated_at")       val updatedAt       : String  = "",
+    @SerialName("created_at")       val createdAt       : Long    = 0L,
+    @SerialName("updated_at")       val updatedAt       : Long    = 0L,
 )
 
 

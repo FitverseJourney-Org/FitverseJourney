@@ -27,7 +27,7 @@ class ProgressionRemoteDataSourceImpl(
         exerciseId: String,
     ): Result<List<ProgressionPointDto>> = runCatching {
         delay(networkDelayMs)
-        generateFakePoints(exerciseId, count = 12)
+        emptyList()
     }
 
     override suspend fun fetchProgressionPointsByPeriod(
@@ -36,7 +36,7 @@ class ProgressionRemoteDataSourceImpl(
         endEpoch: Long,
     ): Result<List<ProgressionPointDto>> = runCatching {
         delay(networkDelayMs / 2)
-        generateFakePoints(exerciseId, count = 6)
+        emptyList()
     }
 
     override suspend fun postProgressionPoint(

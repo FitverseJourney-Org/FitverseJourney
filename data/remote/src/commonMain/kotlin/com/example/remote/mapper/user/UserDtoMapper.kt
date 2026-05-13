@@ -27,8 +27,8 @@ class UserDtoMapper : DtoMapper<UserRequestDto, User> {
         targetProtein   = dto.targetProtein,
         targetCarbs     = dto.targetCarbs,
         targetFat       = dto.targetFat,
-        createdAt       = dto.createdAt.toLong(),
-        updatedAt       = dto.updatedAt.toLong()
+        createdAt       = dto.createdAt,
+        updatedAt       = dto.updatedAt
 
     )
 
@@ -52,7 +52,7 @@ class UserDtoMapper : DtoMapper<UserRequestDto, User> {
         targetProtein = domain.targetProtein,
         targetCarbs = domain.targetCarbs,
         targetFat = domain.targetFat,
-        createdAt = "",
-        updatedAt = ""
+        createdAt = domain.createdAt,
+        updatedAt = domain.updatedAt
     )
 }

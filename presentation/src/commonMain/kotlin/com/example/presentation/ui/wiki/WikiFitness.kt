@@ -59,6 +59,7 @@ private val sampleArticles = listOf(
 fun WikiFitnessScreen(
     onBack: () -> Unit,
     onArticleClick: (WikiArticle) -> Unit = {},
+    modifier: Modifier = Modifier,
 ) {
     var query by remember { mutableStateOf("") }
 
@@ -71,7 +72,9 @@ fun WikiFitnessScreen(
     }
 
     Scaffold(
-        containerColor = FitverseColors.Bg,
+        modifier = modifier,
+        containerColor = Color.Transparent,
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = {
             FitverseTopAppBar(
                 title = "Wiki Fitness",
@@ -82,8 +85,7 @@ fun WikiFitnessScreen(
         LazyColumn(
             modifier = Modifier
                 .padding(it)
-                .fillMaxSize()
-                .background(FitverseColors.Bg),
+                .fillMaxSize(),
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
         ) {
             item {

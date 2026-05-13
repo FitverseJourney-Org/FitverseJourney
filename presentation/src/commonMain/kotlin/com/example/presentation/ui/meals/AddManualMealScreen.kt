@@ -239,17 +239,6 @@ import androidx.compose.ui.unit.sp
 //    }
 //}
 
-/* --- Componentes Auxiliares da Tela --- */
-
-@Composable
-fun SectionTitle(title: String) {
-    Text(
-        text = title,
-        style = MaterialTheme.typography.titleMedium,
-        fontWeight = FontWeight.ExtraBold,
-        color = MaterialTheme.colorScheme.onSurface
-    )
-}
 
 @Composable
 fun MacroInputCard(

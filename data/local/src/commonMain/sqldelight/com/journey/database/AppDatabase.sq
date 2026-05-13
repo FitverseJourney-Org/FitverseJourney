@@ -1,9 +1,375 @@
 
+-- ============================================================
+-- QUERIES
+-- ============================================================
+selectSetsBySession:
+SELECT * FROM WorkoutSetEntity
+WHERE sessionId = ?
+ORDER BY exerciseName, setNumber;
+
+selectSetsByExercise:
+SELECT * FROM WorkoutSetEntity
+WHERE exerciseName = ?
+ORDER BY rowid DESC;
+
+selectPRsByExercise:
+SELECT * FROM WorkoutSetEntity
+WHERE exerciseName = ? AND isPR = 1
+ORDER BY weight DESC
+LIMIT 1;
+
+selectMaxWeightByExercise:
+SELECT MAX(weight) FROM WorkoutSetEntity WHERE exerciseName = ?;
+
+insertSet:
+INSERT OR REPLACE INTO WorkoutSetEntity(
+    id, sessionId, exerciseName, muscleGroup,
+    setNumber, reps, weight, isPR, rpe, notes
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+deleteSetsBySession:
+DELETE FROM WorkoutSetEntity WHERE sessionId = ?;
+
+deleteSet:
+DELETE FROM WorkoutSetEntity WHERE id = ?;
+
+countPRsInSession:
+SELECT COUNT(*) FROM WorkoutSetEntity
+WHERE sessionId = ? AND isPR = 1;
 
 -- ============================================================
 -- QUERIES
 -- ============================================================
 
+selectSessionsByUser:
+SELECT * FROM WorkoutSessionEntity
+WHERE userId = ?
+ORDER BY startedAt DESC;
+
+selectSessionsByUserAndPeriod:
+SELECT * FROM WorkoutSessionEntity
+WHERE userId = ? AND startedAt >= ? AND startedAt <= ?
+ORDER BY startedAt DESC;
+
+selectSessionById:
+SELECT * FROM WorkoutSessionEntity WHERE id = ?;
+
+selectRecentSessionsByUser:
+SELECT * FROM WorkoutSessionEntity
+WHERE userId = ?
+ORDER BY startedAt DESC
+LIMIT ?;
+
+insertSession:
+INSERT OR REPLACE INTO WorkoutSessionEntity(
+    id, userId, workoutPlanId, workoutTitle, startedAt, completedAt,
+    durationSeconds, totalVolume, totalSets, totalReps,
+    xpEarned, hasPR, intensityLevel, muscleGroups, notes
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+completeSession:
+UPDATE WorkoutSessionEntity
+SET completedAt = ?, durationSeconds = ?, totalVolume = ?,
+    totalSets = ?, totalReps = ?, xpEarned = ?,
+    hasPR = ?, intensityLevel = ?, muscleGroups = ?, notes = ?
+WHERE id = ? AND userId = ?;
+
+deleteSession:
+DELETE FROM WorkoutSessionEntity WHERE id = ? AND userId = ?;
+
+countSessionsByUser:
+SELECT COUNT(*) FROM WorkoutSessionEntity
+WHERE userId = ? AND completedAt IS NOT NULL;
+
+sumVolumeByUser:
+SELECT COALESCE(SUM(totalVolume), 0.0) FROM WorkoutSessionEntity
+WHERE userId = ? AND completedAt IS NOT NULL;
+
+
+-- ============================================================
+-- QUERIES
+-- ============================================================
+
+selectStatsByUser:
+SELECT * FROM UserStatsEntity WHERE userId = ?;
+
+upsertStats:
+INSERT OR REPLACE INTO UserStatsEntity(
+    userId, currentXp, currentLevel, totalXp,
+    stepsToday, stepsGoal, waterGlasses, waterGoal,
+    currentStreak, longestStreak, totalWorkouts, totalPRs, updatedAt
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+addXp:
+UPDATE UserStatsEntity
+SET currentXp = currentXp + ?, totalXp = totalXp + ?, updatedAt = ?
+WHERE userId = ?;
+
+incrementWater:
+UPDATE UserStatsEntity
+SET waterGlasses = waterGlasses + 1, updatedAt = ?
+WHERE userId = ?;
+
+resetDailyStats:
+UPDATE UserStatsEntity
+SET stepsToday = 0, waterGlasses = 0, updatedAt = ?
+WHERE userId = ?;
+
+updateSteps:
+UPDATE UserStatsEntity
+SET stepsToday = ?, updatedAt = ?
+WHERE userId = ?;
+
+incrementWorkouts:
+UPDATE UserStatsEntity
+SET totalWorkouts = totalWorkouts + 1, updatedAt = ?
+WHERE userId = ?;
+
+incrementPRs:
+UPDATE UserStatsEntity
+SET totalPRs = totalPRs + ?, updatedAt = ?
+WHERE userId = ?;
+
+updateStreak:
+UPDATE UserStatsEntity
+SET currentStreak = ?,
+    longestStreak = MAX(longestStreak, ?),
+    updatedAt = ?
+WHERE userId = ?;
+
+-- ============================================================
+-- QUERIES
+-- ============================================================
+
+selectStreakByUserAndDate:
+SELECT * FROM StreakEntity WHERE userId = ? AND date = ?;
+
+selectStreakLastDays:
+SELECT * FROM StreakEntity
+WHERE userId = ? AND date >= ?
+ORDER BY date DESC;
+
+selectCurrentStreak:
+SELECT streakCount FROM StreakEntity
+WHERE userId = ?
+ORDER BY date DESC
+LIMIT 1;
+
+selectStreakWeek:
+SELECT date, isCheckedIn FROM StreakEntity
+WHERE userId = ?
+ORDER BY date DESC
+LIMIT 7;
+
+upsertStreak:
+INSERT OR REPLACE INTO StreakEntity(id, userId, date, isCheckedIn, streakCount)
+VALUES (?, ?, ?, ?, ?);
+
+deleteStreaksOlderThan:
+DELETE FROM StreakEntity WHERE userId = ? AND date < ?;
+
+-- ============================================================
+-- QUERIES
+-- ============================================================
+
+selectNotificationsByUser:
+SELECT * FROM NotificationEntity
+WHERE userId = ?
+ORDER BY createdAt DESC;
+
+selectUnreadByUser:
+SELECT * FROM NotificationEntity
+WHERE userId = ? AND isRead = 0
+ORDER BY createdAt DESC;
+
+selectNotificationById:
+SELECT * FROM NotificationEntity WHERE id = ?;
+
+insertNotification:
+INSERT OR REPLACE INTO NotificationEntity(
+    id, userId, type, title, description, isRead, createdAt
+) VALUES (?, ?, ?, ?, ?, ?, ?);
+
+markAsRead:
+UPDATE NotificationEntity
+SET isRead = 1
+WHERE id = ? AND userId = ?;
+
+markAllAsRead:
+UPDATE NotificationEntity
+SET isRead = 1
+WHERE userId = ?;
+
+deleteNotification:
+DELETE FROM NotificationEntity WHERE id = ? AND userId = ?;
+
+deleteOldNotifications:
+DELETE FROM NotificationEntity
+WHERE userId = ? AND createdAt < ? AND isRead = 1;
+
+countUnreadByUser:
+SELECT COUNT(*) FROM NotificationEntity
+WHERE userId = ? AND isRead = 0;
+
+-- ============================================================
+-- QUERIES
+-- ============================================================
+
+selectMealsByUserAndDate:
+SELECT * FROM MealEntryEntity
+WHERE userId = ? AND date = ?
+ORDER BY
+    CASE mealType
+        WHEN 'BREAKFAST' THEN 0
+        WHEN 'LUNCH'     THEN 1
+        WHEN 'DINNER'    THEN 2
+        WHEN 'SNACK'     THEN 3
+        ELSE 4
+    END;
+
+selectMealById:
+SELECT * FROM MealEntryEntity WHERE id = ?;
+
+selectMealsByUserAndPeriod:
+SELECT * FROM MealEntryEntity
+WHERE userId = ? AND date >= ? AND date <= ?
+ORDER BY date DESC, loggedAt DESC;
+
+insertMeal:
+INSERT OR REPLACE INTO MealEntryEntity(
+    id, userId, date, mealType, name,
+    totalKcal, totalProtein, totalCarbs, totalFat, loggedAt
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+updateMealTotals:
+UPDATE MealEntryEntity
+SET totalKcal = ?, totalProtein = ?, totalCarbs = ?, totalFat = ?
+WHERE id = ? AND userId = ?;
+
+deleteMeal:
+DELETE FROM MealEntryEntity WHERE id = ? AND userId = ?;
+
+sumMacrosByUserAndDate:
+SELECT
+    COALESCE(SUM(totalKcal),    0)   AS kcal,
+    COALESCE(SUM(totalProtein), 0.0) AS protein,
+    COALESCE(SUM(totalCarbs),   0.0) AS carbs,
+    COALESCE(SUM(totalFat),     0.0) AS fat
+FROM MealEntryEntity
+WHERE userId = ? AND date = ?;
+
+
+-- ============================================================
+-- QUERIES
+-- ============================================================
+selectFoodsByMeal:
+SELECT * FROM FoodItemEntity WHERE mealId = ? ORDER BY rowid;
+
+selectFoodById:
+SELECT * FROM FoodItemEntity WHERE id = ?;
+
+insertFood:
+INSERT OR REPLACE INTO FoodItemEntity(
+    id, mealId, name, portion, unit, kcal, protein, carbs, fat
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+updateFood:
+UPDATE FoodItemEntity
+SET name = ?, portion = ?, unit = ?, kcal = ?, protein = ?, carbs = ?, fat = ?
+WHERE id = ?;
+
+deleteFood:
+DELETE FROM FoodItemEntity WHERE id = ?;
+
+deleteFoodsByMeal:
+DELETE FROM FoodItemEntity WHERE mealId = ?;
+
+sumMacrosByMeal:
+SELECT
+    COALESCE(SUM(kcal),    0)   AS totalKcal,
+    COALESCE(SUM(protein), 0.0) AS totalProtein,
+    COALESCE(SUM(carbs),   0.0) AS totalCarbs,
+    COALESCE(SUM(fat),     0.0) AS totalFat
+FROM FoodItemEntity WHERE mealId = ?;
+-- ============================================================
+-- QUERIES
+-- ============================================================
+selectMissionsByUserAndDate:
+SELECT * FROM DailyMissionEntity
+WHERE userId = ? AND date = ?
+ORDER BY
+    CASE type WHEN 'CHALLENGE' THEN 0 ELSE 1 END,
+    id;
+
+selectMissionById:
+SELECT * FROM DailyMissionEntity WHERE id = ?;
+
+insertMission:
+INSERT OR REPLACE INTO DailyMissionEntity(
+    id, userId, date, title, description, xpReward, type, isCompleted, completedAt
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+completeMission:
+UPDATE DailyMissionEntity
+SET isCompleted = 1, completedAt = ?
+WHERE id = ? AND userId = ?;
+
+resetMissionsForDate:
+UPDATE DailyMissionEntity
+SET isCompleted = 0, completedAt = NULL
+WHERE userId = ? AND date = ?;
+
+deleteMission:
+DELETE FROM DailyMissionEntity WHERE id = ? AND userId = ?;
+
+deleteMissionsOlderThan:
+DELETE FROM DailyMissionEntity WHERE userId = ? AND date < ?;
+
+countCompletedByUserAndDate:
+SELECT COUNT(*) FROM DailyMissionEntity
+WHERE userId = ? AND date = ? AND isCompleted = 1;
+-- ============================================================
+-- QUERIES
+-- ============================================================
+selectAllAchievementsByUser:
+SELECT * FROM AchievementEntity
+WHERE userId = ?
+ORDER BY
+    CASE status WHEN 'UNLOCKED' THEN 0 WHEN 'IN_PROGRESS' THEN 1 ELSE 2 END,
+    CASE rarity WHEN 'LEGENDARY' THEN 0 WHEN 'EPIC' THEN 1 WHEN 'RARE' THEN 2 ELSE 3 END;
+
+selectAchievementsByCategory:
+SELECT * FROM AchievementEntity
+WHERE userId = ? AND category = ?
+ORDER BY status, rarity;
+
+selectAchievementById:
+SELECT * FROM AchievementEntity WHERE id = ? AND userId = ?;
+
+selectUnlockedAchievements:
+SELECT * FROM AchievementEntity
+WHERE userId = ? AND status = 'UNLOCKED'
+ORDER BY unlockedAt DESC;
+
+insertAchievement:
+INSERT OR REPLACE INTO AchievementEntity(
+    id, userId, icon, title, description, xpReward,
+    rarity, status, category, progress, maxProgress, condition, unlockedAt
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+updateAchievementProgress:
+UPDATE AchievementEntity
+SET progress = ?, status = ?
+WHERE id = ? AND userId = ?;
+
+unlockAchievement:
+UPDATE AchievementEntity
+SET status = 'UNLOCKED', progress = 1.0, unlockedAt = ?
+WHERE id = ? AND userId = ?;
+
+countUnlockedByUser:
+SELECT COUNT(*) FROM AchievementEntity
+WHERE userId = ? AND status = 'UNLOCKED';
 -- ============================================================
 -- QUERIES
 -- ============================================================

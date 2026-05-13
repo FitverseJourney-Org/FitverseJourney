@@ -28,9 +28,11 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -92,36 +94,45 @@ private val faqItems = listOf(
 // ── Screen ────────────────────────────────────────────────────────────────────
 
 @Composable
-fun SupportScreen(onBack: () -> Unit) {
+fun SupportScreen(onBack: () -> Unit, modifier: Modifier = Modifier) {
     var expandedFaq by remember { mutableStateOf<Int?>(null) }
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(FitverseColors.Bg),
-        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
-    ) {
-        item {
+    Scaffold(
+        modifier = modifier,
+        containerColor = FitverseColors.Bg,
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        topBar = {
             FitverseTopAppBar(
                 title = "Central de Ajuda",
                 onBack = onBack
             )
-            FitverseScreenTitle(title = "Central de Ajuda")
-            Spacer(Modifier.height(18.dp))
-            QuickGuideCard(steps = quickSteps)
-            SectionLabel("Perguntas Frequentes")
         }
+    ) { paddingValues ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(FitverseColors.Bg)
+                .padding(paddingValues),
+            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
+        ) {
+            item {
+                FitverseScreenTitle(title = "Central de Ajuda")
+                Spacer(Modifier.height(18.dp))
+                QuickGuideCard(steps = quickSteps)
+                SectionLabel("Perguntas Frequentes")
+            }
 
-        itemsIndexed(faqItems) { index, item ->
-            FaqRow(
-                item       = item,
-                isExpanded = expandedFaq == index,
-                onClick    = { expandedFaq = if (expandedFaq == index) null else index },
-                modifier   = Modifier.padding(bottom = 8.dp),
-            )
+            itemsIndexed(faqItems) { index, item ->
+                FaqRow(
+                    item       = item,
+                    isExpanded = expandedFaq == index,
+                    onClick    = { expandedFaq = if (expandedFaq == index) null else index },
+                    modifier   = Modifier.padding(bottom = 8.dp),
+                )
+            }
+
+            item { Spacer(Modifier.height(24.dp)) }
         }
-
-        item { Spacer(Modifier.height(24.dp)) }
     }
 }
 
