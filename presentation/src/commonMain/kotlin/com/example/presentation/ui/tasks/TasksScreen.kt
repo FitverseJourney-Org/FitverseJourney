@@ -59,7 +59,6 @@ fun TasksScreen(
     currentTasks: List<TaskItem>,
     swapsRemaining: Int,
     onBack: () -> Unit,
-    onToggleTask: (TaskItem) -> Unit,
     onNavigateToLibrary: (TaskItem) -> Unit
 ) {
     val cs = MaterialTheme.colorScheme
@@ -111,22 +110,15 @@ fun TasksScreen(
             }
 
             items(currentTasks, key = { it.id }) { task ->
-                // Chamada do componente sem o Box externo para evitar conflitos de clique
                 FitverseTaskItem(
                     task = task,
                     isSelected = selectedTaskForSwap?.id == task.id,
                     onSelect = {
-                        // Só permite selecionar para troca se não estiver completada
                         if (!task.completed) {
                             selectedTaskForSwap =
                                 if (selectedTaskForSwap?.id == task.id) null else task
                         }
                     },
-                    onToggle = {
-                        onToggleTask(task)
-                        // Se completar a tarefa, desmarca ela da seleção de troca
-                        if (selectedTaskForSwap?.id == task.id) selectedTaskForSwap = null
-                    }
                 )
             }
         }

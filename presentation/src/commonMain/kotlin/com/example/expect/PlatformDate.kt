@@ -9,4 +9,8 @@ expect object PlatformDateFormatter {
     // actual fun formatFullDate(1745580000000L) "Sábado, abr 25, 2026 at 14:00"
     fun getFormattedDate(daysOffset: Int = 0): String
     fun formatFullDate(timestamp: Long): String
+    // Returns today as "yyyy-MM-dd" (ISO 8601) — used for DB queries
+    fun getTodayIsoDate(): String
+    // Returns current epoch time in milliseconds — used for timestamps
+    fun getCurrentTimeMillis(): Long
 }

@@ -11,7 +11,7 @@ actual class DatabaseFactory {
         val schema = AppDatabase.Schema.synchronous()
         return NativeSqliteDriver(
             schema  = schema, // ← sem .synchronous()
-            name    = "fitverse.db",
+            name    = "fitverse_v3.db",
             onConfiguration = { config ->
                 config.copy(
                     extendedConfig = DatabaseConfiguration.Extended(

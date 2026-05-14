@@ -22,8 +22,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.domain.models.dashboard.tasks.TaskItem
@@ -34,14 +36,15 @@ import com.example.presentation.theme.DarkGamifiedColors
 fun FitverseTaskItem(
     task: TaskItem,
     isSelected: Boolean,
-    onToggle: () -> Unit,
     onSelect: () -> Unit
 ) {
     val cs = MaterialTheme.colorScheme
 
+    val isChecked = task.completed || isSelected
+
     Surface(
-        modifier = Modifier.fillMaxWidth(),
-        onClick = onToggle,
+        modifier = Modifier.fillMaxWidth().alpha(if (task.completed) 0.5f else 1f),
+        onClick = onSelect,
         shape = RoundedCornerShape(20.dp),
         color = if (isSelected) DarkGamifiedColors.PrimarySoft.copy(alpha = 0.15f) else cs.surface.copy(alpha = 0.75f),
         border = BorderStroke(
@@ -53,20 +56,19 @@ fun FitverseTaskItem(
             modifier = Modifier.padding(14.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Container do Ícone: Neon quando inativo, Sólido quando concluído
             Box(
                 modifier = Modifier
                     .size(48.dp)
                     .background(
-                        color = if (isSelected) cs.primary else cs.primary.copy(alpha = 0.1f),
+                        color = if (isChecked) cs.primary else cs.primary.copy(alpha = 0.1f),
                         shape = RoundedCornerShape(12.dp)
                     ),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    imageVector = if (isSelected) Icons.Rounded.Check else Icons.Rounded.Assignment,
+                    imageVector = if (isChecked) Icons.Rounded.Check else Icons.Rounded.Assignment,
                     contentDescription = null,
-                    tint = if (isSelected) Color.Black else cs.primary,
+                    tint = if (isChecked) Color.Black else cs.primary,
                     modifier = Modifier.size(24.dp)
                 )
             }
@@ -78,7 +80,8 @@ fun FitverseTaskItem(
                     text = task.title,
                     color = cs.onBackground,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp
+                    fontSize = 16.sp,
+                    textDecoration = if (task.completed) TextDecoration.LineThrough else TextDecoration.None
                 )
                 Text(
                     text = task.description,
@@ -89,7 +92,7 @@ fun FitverseTaskItem(
 
             Text(
                 text = "+${task.xp} XP",
-                color = DarkGamifiedColors.Tertiary,
+                color = if (task.completed) cs.onSurfaceVariant else DarkGamifiedColors.Tertiary,
                 fontWeight = FontWeight.Black,
                 fontSize = 13.sp
             )

@@ -13,7 +13,7 @@ actual class DatabaseFactory(private val context: Context) {
         return AndroidSqliteDriver(
             schema   = schema,
             context  = context,
-            name     = "fitverse.db",
+            name     = "fitverse_v3.db",
             callback = object : AndroidSqliteDriver.Callback(schema) {
                 override fun onOpen(db: SupportSQLiteDatabase) {
                     super.onOpen(db)

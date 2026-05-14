@@ -7,15 +7,12 @@ import org.fitverse.project.features.user.db.UserRepository
 import org.fitverse.project.features.user.services.UserService
 import org.koin.dsl.module
 
-
 val firebaseModule = module {
     single { FirebaseApp.getInstance() }
     single { FirestoreClient.getFirestore() }
 }
 
-val authModule = module {
-
-}
+val authModule = module {}
 
 val userModule = module {
     single { UserRepository() }

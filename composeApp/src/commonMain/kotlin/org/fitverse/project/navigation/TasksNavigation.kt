@@ -11,11 +11,13 @@ import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
 import com.example.domain.models.dashboard.tasks.TaskIcon
 import com.example.domain.models.dashboard.tasks.TaskItem
+import com.example.presentation.ui.tasks.viewmodel.TasksViewModel
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import org.fitverse.project.destinations.modal_destinations.tasks.TasksDestination
 import org.fitverse.project.destinations.modal_destinations.tasks.TasksLibraryDestination
 import org.fitverse.project.routes.NavRoutes
+import org.koin.compose.koinInject
 
 @Composable
 fun TasksNavigation(
@@ -45,13 +47,11 @@ fun TasksNavigation(
         ),
         entryProvider = entryProvider {
             entry<NavRoutes.TasksFlow.TasksList>{
+                val viewModel = koinInject<TasksViewModel>()
                 TasksDestination(
-                    toBack = {
-                        toBack()
-                    },
-                    toLibrary = {
-                        rootBackStack.add(NavRoutes.TasksFlow.TasksLibrary)
-                    }
+                    viewModel = viewModel,
+                    toBack    = { toBack() },
+                    toLibrary = { rootBackStack.add(NavRoutes.TasksFlow.TasksLibrary) },
                 )
             }
             entry<NavRoutes.TasksFlow.TasksLibrary>{

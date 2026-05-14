@@ -20,6 +20,9 @@ object ApiConstants {
         const val MEALS = "/meals"
         const val MEAL_BY_ID = "/meals/{id}"
 
+        // Missions
+        const val MISSIONS = "/missions"
+
         // Auth
         const val LOGIN = "/auth/login"
         const val REGISTER = "/auth/register"

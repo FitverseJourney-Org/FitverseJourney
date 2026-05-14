@@ -100,7 +100,7 @@ fun DashboardRoot(
         onNotificationsClick = onNotificationsClick,
         onEnergyClick        = onEnergyClick,
         onNavigateToWorkout  = onNavigateToWorkout,
-        onClaimMission       = { viewModel.onIntent(DashboardIntent.ClaimMission(it)) },
+        onClaimMission       = { id, title -> viewModel.onIntent(DashboardIntent.ClaimMission(id, title)) },
     )
 }
 
@@ -118,7 +118,7 @@ fun DashboardScreen(
     onNotificationsClick: () -> Unit,
     onEnergyClick: () -> Unit,
     onNavigateToWorkout: () -> Unit = {},
-    onClaimMission: (String) -> Unit = {},
+    onClaimMission: (String, String) -> Unit = { _, _ -> },
 ) {
     var showStreakDialog by remember { mutableStateOf(false) }
     var totalStreakCount by rememberSaveable { mutableStateOf(0) }
@@ -207,7 +207,7 @@ fun ContentDashboardScreen(
     totalStreakCount: Int,
     listOfStreakDay: List<StreakDay>,
     missions: List<DailyMission> = defaultDailyMissions,
-    onClaimMission: (String) -> Unit = {},
+    onClaimMission: (String, String) -> Unit = { _, _ -> },
     onNavigateToWorkout: () -> Unit = {},
 ) {
     LazyColumn(
@@ -271,7 +271,7 @@ fun ContentDashboardScreen(
                 iconColor       = mission.type.color,
                 isCompleted     = mission.isCompleted,
                 isChallengeType = mission.type == MissionType.CHALLENGE,
-                onClaim         = { onClaimMission(mission.title) },
+                onClaim         = { onClaimMission(mission.id, mission.title) },
             )
         }
     }

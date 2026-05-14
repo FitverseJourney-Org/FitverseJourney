@@ -15,18 +15,16 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.presentation.theme.FitverseColors
 
 enum class MissionType(val icon: ImageVector, val color: Color) {
-    STRETCH(Icons.Rounded.SelfImprovement,  FitverseColors.Purple),
     HYDRATION(Icons.Rounded.WaterDrop,      FitverseColors.Teal),
     CARDIO(Icons.Rounded.DirectionsRun,     FitverseColors.Orange),
     STRENGTH(Icons.Rounded.FitnessCenter,   FitverseColors.Accent),
     NUTRITION(Icons.Rounded.Restaurant,     FitverseColors.Green),
-    SLEEP(Icons.Rounded.Bedtime,            FitverseColors.Blue),
     STEPS(Icons.Rounded.DirectionsWalk,     FitverseColors.Amber),
-    MEDITATION(Icons.Rounded.Spa,           FitverseColors.Purple),
     CHALLENGE(Icons.Rounded.EmojiEvents,    FitverseColors.Amber),
 }
 
 data class DailyMission(
+    val id: String = "",
     val title: String,
     val description: String,
     val xp: Int?,
@@ -42,12 +40,6 @@ data class DailyMission(
                 type = MissionType.CHALLENGE
             ),
             DailyMission(
-                title = "Morning Stretch",
-                description = "5–10 min • Aqueça seu corpo",
-                xp = 10,
-                type = MissionType.STRETCH
-            ),
-            DailyMission(
                 title = "Registrar Hidratação",
                 description = "8 copos • Meta diária de água",
                 xp = 15,
@@ -61,17 +53,11 @@ data class DailyMission(
                 type = MissionType.CARDIO
             ),
             DailyMission(
-                title = "Treino de Força",
-                description = "3 séries • Membros superiores",
-                xp = 50,
-                type = MissionType.STRENGTH
-            ),
-            DailyMission(
                 title = "Refeição Saudável",
                 description = "Registre suas 3 refeições do dia",
                 xp = 20,
                 type = MissionType.NUTRITION
             ),
-        ).sortedByDescending { it.type == MissionType.CHALLENGE }
+        )
     }
 }

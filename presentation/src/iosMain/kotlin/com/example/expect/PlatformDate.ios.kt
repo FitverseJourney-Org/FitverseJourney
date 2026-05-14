@@ -28,4 +28,14 @@ actual object PlatformDateFormatter {
         formatter.locale = NSLocale.currentLocale
         return formatter.stringFromDate(date)
     }
+
+    actual fun getTodayIsoDate(): String {
+        val formatter = NSDateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        formatter.locale = NSLocale.currentLocale
+        return formatter.stringFromDate(NSDate())
+    }
+
+    actual fun getCurrentTimeMillis(): Long =
+        (NSDate().timeIntervalSince1970 * 1000).toLong()
 }

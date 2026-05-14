@@ -414,3 +414,16 @@ DELETE FROM UserEntity WHERE uid = ?;
 
 deleteAllUsers:
 DELETE FROM UserEntity;
+
+-- ============================================================
+-- QUERIES
+-- ============================================================
+selectAllCatalogMissions:
+SELECT * FROM CatalogMissionEntity ORDER BY id;
+
+countCatalogMissions:
+SELECT COUNT(*) FROM CatalogMissionEntity;
+
+insertCatalogMission:
+INSERT OR IGNORE INTO CatalogMissionEntity(id, title, description, xpReward, type, isSpecial)
+VALUES (?, ?, ?, ?, ?, ?);

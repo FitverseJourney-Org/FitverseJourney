@@ -42,9 +42,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -65,6 +63,7 @@ import com.example.expect.format
 import com.example.presentation.theme.FVExtension
 import com.example.presentation.ui.achievements.viewmodel.AchievementsEvent
 import com.example.presentation.ui.achievements.viewmodel.AchievementsIntent
+import com.example.presentation.ui.achievements.viewmodel.AchievementsUiState
 import com.example.presentation.ui.achievements.viewmodel.AchievementsViewModel
 import com.example.presentation.widgets.FVCard
 import com.example.presentation.widgets.FVFilterPill
@@ -146,8 +145,10 @@ fun AchievementsRoot(
     }
 
     AchievementsScreen(
-        modifier = modifier,
-        onBack   = { viewModel.onIntent(AchievementsIntent.NavigateBack) },
+        modifier  = modifier,
+        state     = uiState,
+        onIntent  = viewModel::onIntent,
+        onBack    = { viewModel.onIntent(AchievementsIntent.NavigateBack) },
     )
 }
 
@@ -156,17 +157,18 @@ fun AchievementsRoot(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AchievementsScreen(
+    state:    AchievementsUiState,
+    onIntent: (AchievementsIntent) -> Unit,
     modifier: Modifier = Modifier,
-    onBack:   () -> Unit
+    onBack:   () -> Unit,
 ) {
-    var cat      by remember { mutableStateOf<AchievementCategory?>(null) }
-    var statusF  by remember { mutableStateOf<AchievementStatus?>(null) }
-    var selected by remember { mutableStateOf<Achievement?>(null) }
+    val cat     = state.selectedCategory
+    val statusF = state.selectedStatus
 
-    // Filtragem memoizada — só recalcula quando os filtros mudam
-    val filtered by remember(cat, statusF) {
+    // Filtragem memoizada — só recalcula quando os filtros ou a lista mudam
+    val filtered by remember(state.achievements, cat, statusF) {
         derivedStateOf {
-            AchievementsData.all.filter { a ->
+            state.achievements.filter { a ->
                 (cat == null || a.cat == cat) &&
                         (statusF == null || a.status == statusF)
             }
@@ -179,9 +181,14 @@ fun AchievementsScreen(
     }
 
     // Métricas globais (independem dos filtros)
-    val unlocked = remember { AchievementsData.all.count { it.status == AchievementStatus.UNLOCKED } }
-    val totalXp  = remember { AchievementsData.all.filter { it.status == AchievementStatus.UNLOCKED }.sumOf { it.xp } }
-    val pct      = unlocked.toFloat() / AchievementsData.all.size
+    val unlocked by remember(state.achievements) {
+        derivedStateOf { state.achievements.count { it.status == AchievementStatus.UNLOCKED } }
+    }
+    val totalXp by remember(state.achievements) {
+        derivedStateOf { state.achievements.filter { it.status == AchievementStatus.UNLOCKED }.sumOf { it.xp } }
+    }
+    val total = state.achievements.size.coerceAtLeast(1)
+    val pct   = unlocked.toFloat() / total
 
     Scaffold(
         modifier            = modifier,
@@ -193,7 +200,7 @@ fun AchievementsScreen(
                 onBack   = onBack,
                 subtitle = {
                     Text(
-                        text     = "Você desbloqueou $unlocked / ${AchievementsData.all.size} conquistas",
+                        text     = "Você desbloqueou $unlocked / $total conquistas",
                         fontSize = 12.sp,
                         color    = FVExtension.textMuted
                     )
@@ -287,7 +294,9 @@ fun AchievementsScreen(
                         modifier              = Modifier.horizontalScroll(rememberScrollState()),
                         horizontalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
-                        FVFilterPill(label = "Todos", selected = cat == null) { cat = null }
+                        FVFilterPill(label = "Todos", selected = cat == null) {
+                            onIntent(AchievementsIntent.FilterByCategory(null))
+                        }
                         AchievementCategory.entries.forEach { c ->
                             FVFilterPill(
                                 label    = when (c) {
@@ -298,7 +307,7 @@ fun AchievementsScreen(
                                     AchievementCategory.ESPECIAIS -> "⭐ Especiais"
                                 },
                                 selected = cat == c
-                            ) { cat = c }
+                            ) { onIntent(AchievementsIntent.FilterByCategory(c)) }
                         }
                     }
 
@@ -310,17 +319,17 @@ fun AchievementsScreen(
                     // Filtro por status
                     Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                         FVFilterPill(label = "Todas", selected = statusF == null) {
-                            statusF = null
+                            onIntent(AchievementsIntent.FilterByStatus(null))
                         }
                         FVFilterPill(
                             label    = "Desbloqueadas",
                             selected = statusF == AchievementStatus.UNLOCKED
-                        ) { statusF = AchievementStatus.UNLOCKED }
+                        ) { onIntent(AchievementsIntent.FilterByStatus(AchievementStatus.UNLOCKED)) }
 
                         FVFilterPill(
                             label    = "Em progresso",
                             selected = statusF == AchievementStatus.IN_PROGRESS
-                        ) { statusF = AchievementStatus.IN_PROGRESS }
+                        ) { onIntent(AchievementsIntent.FilterByStatus(AchievementStatus.IN_PROGRESS)) }
                     }
                 }
             }
@@ -356,7 +365,7 @@ fun AchievementsScreen(
                         AchievementCard(
                             achievement = achievement,
                             modifier    = Modifier.weight(1f),
-                            onClick     = { selected = achievement }
+                            onClick     = { onIntent(AchievementsIntent.SelectAchievement(achievement)) }
                         )
                     }
                     // Célula fantasma: mantém alinhamento quando a linha tem 1 só item
@@ -368,10 +377,10 @@ fun AchievementsScreen(
         // ── Bottom sheet ─────────────────────────────────────────────
         // Declarado fora do LazyColumn para que o ModalBottomSheet
         // gerencie seu próprio overlay e animação corretamente
-        selected?.let { achievement ->
+        state.selectedAchievement?.let { achievement ->
             AchievementDetailSheet(
                 achievement = achievement,
-                onDismiss   = { selected = null }
+                onDismiss   = { onIntent(AchievementsIntent.SelectAchievement(null)) }
             )
         }
     }

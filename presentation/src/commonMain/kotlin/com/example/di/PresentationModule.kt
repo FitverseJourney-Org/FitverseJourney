@@ -73,10 +73,21 @@ val onboardingModule = module {
 // =============================================================================
 val homeModule = module {
     viewModel<DashboardViewModel> {
-        DashboardViewModel()
+        DashboardViewModel(
+            observeDailyMissions = get(),
+            completeMission      = get(),
+            getDailyMissions     = get(),
+            observeUserStats     = get(),
+            observeStreakWeek    = get(),
+        )
     }
     viewModel<NotificationViewModel> {
-        NotificationViewModel()
+        NotificationViewModel(
+            observeNotifications = get(),
+            markRead             = get(),
+            markAllRead          = get(),
+            deleteNotification   = get(),
+        )
     }
     viewModel<WorkoutViewModel> {
         WorkoutViewModel()
@@ -85,7 +96,12 @@ val homeModule = module {
         WorkoutSessionViewModel()
     }
     viewModel<MealsViewModel> {
-        MealsViewModel()
+        MealsViewModel(
+            observeMealsByDate = get(),
+            insertMeal         = get(),
+            deleteMeal         = get(),
+            getDailyMacros     = get(),
+        )
     }
     viewModel<ProfileViewModel> {
         ProfileViewModel()
@@ -121,13 +137,17 @@ val featuresModule = module {
         )
     }
     viewModel<HistoricViewModel>{
-        HistoricViewModel()
+        HistoricViewModel(
+            observeWorkoutSessions = get(),
+            getSessionsByPeriod    = get(),
+            deleteWorkoutSession   = get(),
+        )
     }
     viewModel<AchievementsViewModel>{
-        AchievementsViewModel()
+        AchievementsViewModel(achievementDao = get(), authRepository = get())
     }
     viewModel<TasksViewModel>{
-        TasksViewModel()
+        TasksViewModel(observeDailyMissions = get())
     }
     viewModel<ShoppingViewModel>{
         ShoppingViewModel()

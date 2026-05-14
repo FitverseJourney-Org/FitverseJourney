@@ -46,6 +46,20 @@ object FirestoreService {
             .await()
         Unit
     }
+
+    suspend fun <T> getAll(
+        collection: String,
+        type: Class<T>,
+    ): Result<List<Pair<String, T>>> = runCatching {
+        db.collection(collection)
+            .get()
+            .await()
+            .documents
+            .mapNotNull { doc ->
+                val obj = doc.toObject(type) ?: return@mapNotNull null
+                Pair(doc.id, obj)
+            }
+    }
 }
 
 suspend fun <T> ApiFuture<T>.await(): T = suspendCancellableCoroutine { cont ->

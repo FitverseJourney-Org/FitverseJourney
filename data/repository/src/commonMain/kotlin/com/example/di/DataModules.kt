@@ -21,6 +21,7 @@ import com.example.local.database.sqldelight.repository.configuration.ConfigLang
 import com.example.local.database.sqldelight.repository.configuration.ConfigOnboardingDataSourceDao
 import com.example.local.database.sqldelight.repository.configuration.ConfigTokenDaoDataSourceImpl
 import com.example.domain.repository.dbLocal.sqldelight.achievements.AchievementDao
+import com.example.domain.repository.dbLocal.sqldelight.catalog.CatalogMissionDao
 import com.example.domain.repository.dbLocal.sqldelight.missions.DailyMissionDao
 import com.example.domain.repository.dbLocal.sqldelight.notifications.NotificationDao
 import com.example.domain.repository.dbLocal.sqldelight.nutrition.FoodItemDao
@@ -30,6 +31,7 @@ import com.example.domain.repository.dbLocal.sqldelight.streak.StreakDao
 import com.example.domain.repository.dbLocal.sqldelight.workout.WorkoutSessionDao
 import com.example.domain.repository.dbLocal.sqldelight.workout.WorkoutSetDao
 import com.example.local.datasource.achievements.AchievementDaoImpl
+import com.example.local.datasource.catalog.CatalogMissionDaoImpl
 import com.example.local.datasource.exercises.ExerciseLocalDataSource
 import com.example.local.datasource.exercises.ExerciseLocalDataSourceImpl
 import com.example.local.datasource.missions.DailyMissionDaoImpl
@@ -84,11 +86,11 @@ val dataSourceModule = module {
     // Local
     singleOf(::ExerciseLocalDataSourceImpl) { bind<ExerciseLocalDataSource>() }
     singleOf(::ProgressionLocalDataSourceImpl) { bind<ProgressionLocalDataSource>() }
-
     single<UserLocalDataSource> { UserLocalDataSourceImpl(database = get()) }
     single { FakeFriendsRepository() } // Removido bind genérico se não for interface
 
     // ── DAOs das tabelas de negócio ───────────────────────────────────────────|
+    single<CatalogMissionDao>  { CatalogMissionDaoImpl(database = get()) }
     single<DailyMissionDao>   { DailyMissionDaoImpl(database = get()) }
     single<WorkoutSessionDao> { WorkoutSessionDaoImpl(database = get()) }
     single<WorkoutSetDao>     { WorkoutSetDaoImpl(database = get()) }

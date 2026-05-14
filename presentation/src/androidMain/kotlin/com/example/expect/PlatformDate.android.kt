@@ -25,4 +25,11 @@ actual object PlatformDateFormatter {
         val sdf = SimpleDateFormat("EEEE, MMM dd, yyyy 'at' HH:mm", Locale.getDefault())
         return sdf.format(Date(timestamp))
     }
+
+    actual fun getTodayIsoDate(): String {
+        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        return sdf.format(Calendar.getInstance().time)
+    }
+
+    actual fun getCurrentTimeMillis(): Long = System.currentTimeMillis()
 }
