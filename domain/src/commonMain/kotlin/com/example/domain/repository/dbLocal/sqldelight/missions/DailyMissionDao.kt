@@ -9,6 +9,7 @@ interface DailyMissionDao {
     suspend fun insertMissions(missions: List<DailyMissionRecord>)
     suspend fun completeMission(id: String, userId: String, completedAt: Long)
     suspend fun resetMissionsForDate(userId: String, date: String)
+    suspend fun deleteMission(id: String, userId: String)
     suspend fun deleteMissionsOlderThan(userId: String, beforeDate: String)
     suspend fun countCompleted(userId: String, date: String): Long
 }

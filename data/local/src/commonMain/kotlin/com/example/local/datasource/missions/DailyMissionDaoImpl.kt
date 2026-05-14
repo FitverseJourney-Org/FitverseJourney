@@ -48,6 +48,9 @@ class DailyMissionDaoImpl(database: AppDatabase) : DailyMissionDao {
             queries.completeMission(completedAt = completedAt, id = id, userId = userId)
         }
 
+    override suspend fun deleteMission(id: String, userId: String): Unit =
+        withContext(Dispatchers.IO) { queries.deleteMission(id = id, userId = userId) }
+
     override suspend fun resetMissionsForDate(userId: String, date: String): Unit =
         withContext(Dispatchers.IO) { queries.resetMissionsForDate(userId = userId, date = date) }
 

@@ -60,8 +60,8 @@ sealed interface NavRoutes : NavKey {
 
     // ── Tasks ─────────────────────────────────────────────────
     @Serializable data object TasksFlow : NavRoutes {
-        @Serializable data object TasksList    : NavRoutes
-        @Serializable data object TasksLibrary : NavRoutes
+        @Serializable data object TasksList                              : NavRoutes
+        @Serializable data class  TasksLibrary(val taskToReplaceId: String) : NavRoutes
     }
 
     // ── Nutrition sub-screens ─────────────────────────────────

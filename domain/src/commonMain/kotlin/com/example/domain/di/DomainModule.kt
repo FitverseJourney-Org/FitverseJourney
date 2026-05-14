@@ -34,6 +34,7 @@ import com.example.domain.usecase.missions.CompleteMissionUseCase
 import com.example.domain.usecase.missions.GetDailyMissionsUseCase
 import com.example.domain.usecase.missions.InsertDailyMissionsUseCase
 import com.example.domain.usecase.missions.ObserveDailyMissionsUseCase
+import com.example.domain.usecase.missions.SwapMissionUseCase
 // ── Stats ─────────────────────────────────────────────────────────────────────
 import com.example.domain.usecase.stats.AddXpUseCase
 import com.example.domain.usecase.stats.IncrementWaterUseCase
@@ -118,6 +119,7 @@ val missionsUseCase = module {
     factory { CompleteMissionUseCase(dao = get(), authRepository = get()) }
     factory { InsertDailyMissionsUseCase(dao = get()) }
     factory { GetDailyMissionsUseCase(catalogDao = get(), missionDao = get(), authRepository = get()) }
+    factory { SwapMissionUseCase(missionDao = get(), catalogDao = get(), authRepository = get()) }
 }
 
 val statsUseCase = module {

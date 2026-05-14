@@ -9,8 +9,6 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
-import com.example.domain.models.dashboard.tasks.TaskIcon
-import com.example.domain.models.dashboard.tasks.TaskItem
 import com.example.presentation.ui.tasks.viewmodel.TasksViewModel
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
@@ -24,19 +22,19 @@ fun TasksNavigation(
     toBack: () -> Unit,
     modifier: Modifier
 ) {
+    val viewModel = koinInject<TasksViewModel>()
+
     val rootBackStack = rememberNavBackStack(
         SavedStateConfiguration {
             serializersModule = SerializersModule {
                 polymorphic(NavKey::class) {
                     subclass(NavRoutes.TasksFlow.TasksList::class, NavRoutes.TasksFlow.TasksList.serializer())
                     subclass(NavRoutes.TasksFlow.TasksLibrary::class, NavRoutes.TasksFlow.TasksLibrary.serializer())
-
                 }
             }
         },
         NavRoutes.TasksFlow.TasksList
     )
-
 
     NavDisplay(
         modifier = modifier,
@@ -46,29 +44,23 @@ fun TasksNavigation(
             rememberViewModelStoreNavEntryDecorator()
         ),
         entryProvider = entryProvider {
-            entry<NavRoutes.TasksFlow.TasksList>{
-                val viewModel = koinInject<TasksViewModel>()
+            entry<NavRoutes.TasksFlow.TasksList> {
                 TasksDestination(
                     viewModel = viewModel,
-                    toBack    = { toBack() },
-                    toLibrary = { rootBackStack.add(NavRoutes.TasksFlow.TasksLibrary) },
+                    toBack    = toBack,
+                    toLibrary = { task ->
+                        rootBackStack.add(NavRoutes.TasksFlow.TasksLibrary(task.id))
+                    },
                 )
             }
-            entry<NavRoutes.TasksFlow.TasksLibrary>{
+            entry<NavRoutes.TasksFlow.TasksLibrary> { route ->
                 TasksLibraryDestination(
-                    toBack = {
-                        toBack()
+                    viewModel       = viewModel,
+                    taskToReplaceId = route.taskToReplaceId,
+                    toBack          = {
+                        if (rootBackStack.size > 1) rootBackStack.removeLastOrNull()
+                        else toBack()
                     },
-                    libraryTasks = listOf(),
-                    onTaskSelected = {},
-                    taskToReplace = TaskItem(
-                        id = "1",
-                        title = "Exercícios de Agilidade",
-                        description = "Treine sua agilidade e precisão",
-                        iconType = TaskIcon.RUN,
-                        xp = 100,
-                        completed = false,
-                    )
                 )
             }
         }

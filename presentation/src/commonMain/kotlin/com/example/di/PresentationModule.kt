@@ -147,7 +147,11 @@ val featuresModule = module {
         AchievementsViewModel(achievementDao = get(), authRepository = get())
     }
     viewModel<TasksViewModel>{
-        TasksViewModel(observeDailyMissions = get())
+        TasksViewModel(
+            observeDailyMissions = get(),
+            swapMission          = get(),
+            catalogDao           = get(),
+        )
     }
     viewModel<ShoppingViewModel>{
         ShoppingViewModel()
