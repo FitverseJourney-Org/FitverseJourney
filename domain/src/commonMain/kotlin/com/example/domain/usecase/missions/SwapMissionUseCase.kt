@@ -1,9 +1,9 @@
-package com.example.domain.usecase.missions
+﻿package org.fitverse.domain.usecase.missions
 
-import com.example.domain.repository.authentication.AuthRepository
-import com.example.domain.repository.dbLocal.sqldelight.catalog.CatalogMissionDao
-import com.example.domain.repository.dbLocal.sqldelight.missions.DailyMissionDao
-import com.example.domain.repository.dbLocal.sqldelight.missions.DailyMissionRecord
+import org.fitverse.domain.repository.authentication.AuthRepository
+import org.fitverse.domain.repository.dbLocal.sqldelight.catalog.CatalogMissionDao
+import org.fitverse.domain.repository.dbLocal.sqldelight.missions.DailyMissionDao
+import org.fitverse.domain.repository.dbLocal.sqldelight.missions.DailyMissionRecord
 
 class SwapMissionUseCase(
     private val missionDao: DailyMissionDao,

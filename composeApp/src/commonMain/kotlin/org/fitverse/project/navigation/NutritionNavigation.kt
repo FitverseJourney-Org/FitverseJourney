@@ -1,4 +1,4 @@
-package org.fitverse.project.navigation
+﻿package org.fitverse.project.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -11,7 +11,8 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
-import com.example.presentation.ui.meals.viewmodel.MealsViewModel
+import org.fitverse.presentation.ui.meals.viewmodel.AddManualFoodViewModel
+import org.fitverse.presentation.ui.meals.viewmodel.MealsViewModel
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import org.fitverse.project.destinations.meals.AddManualFoodDestination
@@ -44,7 +45,8 @@ fun NutritionNavigation(
 
     DisposableEffect(Unit) { onDispose { onSubScreenChange(false) } }
 
-    val viewModel = koinInject<MealsViewModel>()
+    val mealsViewModel     = koinInject<MealsViewModel>()
+    val addFoodViewModel   = koinInject<AddManualFoodViewModel>()
 
     NavDisplay(
         modifier = if (isSubScreen) subScreenModifier else modifier,
@@ -56,16 +58,19 @@ fun NutritionNavigation(
         entryProvider = entryProvider {
             entry<NavRoutes.HomeFlow.Nutrition> {
                 MealsDestination(
-                    onBottomSheetOpen = { isOpen -> onSheetStateChange(isOpen) },
-                    onNavigateToAddManualFood = { mealName ->
-                        backStack.add(NavRoutes.NutritionAddManualFood(mealName))
-                    }
+                    viewModel                 = mealsViewModel,
+                    onBottomSheetOpen         = { isOpen -> onSheetStateChange(isOpen) },
+                    onNavigateToAddManualFood = { mealId, mealName ->
+                        backStack.add(NavRoutes.NutritionAddManualFood(mealId = mealId, mealName = mealName))
+                    },
                 )
             }
             entry<NavRoutes.NutritionAddManualFood> { key ->
                 AddManualFoodDestination(
-                    mealName = key.mealName,
-                    onBack = { backStack.removeLastOrNull() }
+                    mealId    = key.mealId,
+                    mealName  = key.mealName,
+                    viewModel = addFoodViewModel,
+                    onBack    = { backStack.removeLastOrNull() },
                 )
             }
         }

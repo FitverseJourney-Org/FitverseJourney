@@ -1,8 +1,8 @@
-package com.example.repository.activePlan
+﻿package org.fitverse.data.repository.activePlan
 
-import com.example.domain.models.plan.PlanId
-import com.example.domain.repository.ActivatePlanRepository
-import com.example.remote.datasource.activePlan.ActivatePlanRemoteDataSource
+import org.fitverse.domain.models.PlanId
+import org.fitverse.domain.repository.ActivatePlanRepository
+import org.fitverse.data.remote.datasource.activePlan.ActivatePlanRemoteDataSource
 
 class ActivatePlanRepositoryImpl(
     private val remoteDataSource: ActivatePlanRemoteDataSource,

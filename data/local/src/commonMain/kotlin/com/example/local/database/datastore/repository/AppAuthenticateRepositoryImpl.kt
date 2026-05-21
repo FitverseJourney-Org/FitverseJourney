@@ -1,13 +1,13 @@
-package com.example.local.database.datastore.repository
+﻿package org.fitverse.data.local.database.datastore.repository
 
 import androidx.datastore.core.IOException
-import com.example.local.database.datastore.PreferencesKeys
-import com.example.local.datasource.token.TokenStorageImpl
+import org.fitverse.data.local.database.datastore.PreferencesKeys
+import org.fitverse.data.local.datasource.token.TokenStorageImpl
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
-import com.example.domain.repository.dbLocal.datastore.AppAuthenticateRepository
+import org.fitverse.domain.repository.dbLocal.datastore.AppAuthenticateRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map

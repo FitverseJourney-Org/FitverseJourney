@@ -1,4 +1,4 @@
-package com.example.domain.repository.dbLocal.sqldelight.nutrition
+﻿package org.fitverse.domain.repository.dbLocal.sqldelight.nutrition
 
 interface FoodItemDao {
     suspend fun getFoodsByMeal(mealId: String): List<FoodItemRecord>
@@ -7,6 +7,7 @@ interface FoodItemDao {
     suspend fun updateFood(food: FoodItemRecord)
     suspend fun deleteFood(id: String)
     suspend fun deleteFoodsByMeal(mealId: String)
+    suspend fun deleteFoodsByUserBeforeDate(userId: String, beforeDate: String)
     suspend fun getMealMacros(mealId: String): MealMacros
 }
 

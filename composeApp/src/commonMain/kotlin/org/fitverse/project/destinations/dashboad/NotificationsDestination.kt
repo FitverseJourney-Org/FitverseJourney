@@ -1,8 +1,8 @@
-package org.fitverse.project.destinations.dashboad
+﻿package org.fitverse.project.destinations.dashboad
 
 import androidx.compose.runtime.Composable
-import com.example.presentation.ui.notification.NotificationRoot
-import com.example.presentation.ui.notification.NotificationViewModel
+import org.fitverse.presentation.ui.notification.NotificationRoot
+import org.fitverse.presentation.ui.notification.NotificationViewModel
 
 @Composable
 fun NotificationDestination(

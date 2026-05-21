@@ -1,4 +1,4 @@
-package com.example.domain.expect
+﻿package org.fitverse.domain.expect
 
 import java.time.LocalDate
 import java.time.Period

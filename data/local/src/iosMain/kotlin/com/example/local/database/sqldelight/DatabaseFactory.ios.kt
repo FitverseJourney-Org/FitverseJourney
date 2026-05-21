@@ -1,10 +1,10 @@
-package com.example.local.database.sqldelight
+﻿package org.fitverse.data.local.database.sqldelight
 
 import app.cash.sqldelight.async.coroutines.synchronous
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.native.NativeSqliteDriver
 import co.touchlab.sqliter.DatabaseConfiguration
-import com.journey.database.AppDatabase.AppDatabase
+import com.journey.AppDatabase
 
 actual class DatabaseFactory {
     actual fun createDriver(): SqlDriver {

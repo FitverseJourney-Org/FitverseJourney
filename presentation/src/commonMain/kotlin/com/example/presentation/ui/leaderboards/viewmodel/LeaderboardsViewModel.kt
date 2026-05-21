@@ -1,4 +1,4 @@
-package com.example.presentation.ui.leaderboards.viewmodel
+﻿package org.fitverse.presentation.ui.leaderboards.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

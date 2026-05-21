@@ -1,9 +1,9 @@
-package com.example.remote.datasource.missions
+﻿package org.fitverse.data.remote.datasource.missions
 
-import com.example.domain.repository.remote.MissionTemplate
-import com.example.remote.dto.missions.MissionDto
-import com.example.remote.util.ApiConstants
-import com.example.remote.util.ApiResponse
+import org.fitverse.domain.repository.remote.MissionTemplate
+import org.fitverse.data.remote.dto.missions.MissionDto
+import org.fitverse.data.remote.util.ApiConstants
+import org.fitverse.data.remote.util.ApiResponse
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get

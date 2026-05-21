@@ -1,10 +1,10 @@
-package org.fitverse.project.destinations.splash
+﻿package org.fitverse.project.destinations.splash
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import com.example.presentation.navigationState.SplashNavigation
-import com.example.presentation.ui.splash.AppSplashScreen
-import com.example.presentation.ui.splash.viewmodel.SplashViewModel
+import org.fitverse.presentation.navigationState.SplashNavigation
+import org.fitverse.presentation.ui.splash.AppSplashScreen
+import org.fitverse.presentation.ui.splash.viewmodel.SplashViewModel
 
 @Composable
 fun SplashDestination(

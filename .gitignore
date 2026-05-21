@@ -21,4 +21,4 @@ server/src/main/resources/firebase-admin.json
 **/google-services.json
 androidApp/src/debug/google-services.json
 androidApp/src/release/google-services.json
-.claude/settings.local.json
+.claude/

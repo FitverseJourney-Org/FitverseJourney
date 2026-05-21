@@ -1,7 +1,7 @@
-package com.example.local.mapper.exercise
+﻿package org.fitverse.data.local.mapper.exercise
 
-import com.example.domain.models.progression.Exercise
-import com.example.local.model.ExerciseEntity
+import org.fitverse.domain.models.progression.Exercise
+import org.fitverse.data.local.model.ExerciseEntity
 
 fun ExerciseEntity.toDomain(): Exercise = Exercise(
     id            = id,

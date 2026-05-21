@@ -1,6 +1,6 @@
-package com.example.domain.repository
+﻿package org.fitverse.domain.repository
 
-import com.example.domain.models.progression.LoadProgressionPoint
+import org.fitverse.domain.models.progression.LoadProgressionPoint
 import kotlinx.coroutines.flow.Flow
 
 /**

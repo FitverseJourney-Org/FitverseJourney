@@ -1,4 +1,4 @@
-package org.fitverse.project.navigation
+﻿package org.fitverse.project.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -9,7 +9,7 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
-import com.example.presentation.ui.tasks.viewmodel.TasksViewModel
+import org.fitverse.presentation.ui.tasks.viewmodel.TasksViewModel
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import org.fitverse.project.destinations.modal_destinations.tasks.TasksDestination

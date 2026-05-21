@@ -1,4 +1,4 @@
-package com.example.domain.repository.dbLocal.datastore
+﻿package org.fitverse.domain.repository.dbLocal.datastore
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow

@@ -1,8 +1,8 @@
-package com.example.remote.repository
+﻿package org.fitverse.data.remote.repository
 
-import com.example.domain.repository.remote.MissionCatalogRepository
-import com.example.domain.repository.remote.MissionTemplate
-import com.example.remote.datasource.missions.MissionCatalogRemoteDataSource
+import org.fitverse.domain.repository.remote.MissionCatalogRepository
+import org.fitverse.domain.repository.remote.MissionTemplate
+import org.fitverse.data.remote.datasource.missions.MissionCatalogRemoteDataSource
 
 class MissionCatalogRepositoryImpl(
     private val dataSource: MissionCatalogRemoteDataSource,

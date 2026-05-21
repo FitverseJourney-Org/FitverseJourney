@@ -1,18 +1,18 @@
-package com.example.presentation.ui.dashboard.viewmodel
+﻿package org.fitverse.presentation.ui.dashboard.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.usecase.missions.CompleteMissionUseCase
-import com.example.domain.usecase.missions.GetDailyMissionsUseCase
-import com.example.domain.usecase.missions.ObserveDailyMissionsUseCase
-import com.example.domain.usecase.stats.ObserveUserStatsUseCase
-import com.example.domain.usecase.streak.ObserveStreakWeekUseCase
-import com.example.domain.repository.dbLocal.sqldelight.missions.DailyMissionRecord
-import com.example.domain.repository.dbLocal.sqldelight.streak.StreakRecord
-import com.example.presentation.ui.dashboard.DailyMission
-import com.example.presentation.ui.dashboard.MissionType
-import com.example.expect.PlatformDateFormatter
-import com.example.presentation.widgets.StreakDay
+import org.fitverse.domain.usecase.missions.CompleteMissionUseCase
+import org.fitverse.domain.usecase.missions.GetDailyMissionsUseCase
+import org.fitverse.domain.usecase.missions.ObserveDailyMissionsUseCase
+import org.fitverse.domain.usecase.stats.ObserveUserStatsUseCase
+import org.fitverse.domain.usecase.streak.ObserveStreakWeekUseCase
+import org.fitverse.domain.repository.dbLocal.sqldelight.missions.DailyMissionRecord
+import org.fitverse.domain.repository.dbLocal.sqldelight.streak.StreakRecord
+import org.fitverse.presentation.ui.dashboard.DailyMission
+import org.fitverse.presentation.ui.dashboard.MissionType
+import org.fitverse.presentation.expect.DateFormatter
+import org.fitverse.presentation.widgets.StreakDay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
@@ -37,7 +37,7 @@ class DashboardViewModel(
     val events = _events.receiveAsFlow()
 
     private val today: String
-        get() = PlatformDateFormatter.getTodayIsoDate()
+        get() = DateFormatter.getTodayIsoDate()
 
     init {
         loadDashboard()
@@ -82,7 +82,7 @@ class DashboardViewModel(
 
     private fun claimMission(missionId: String, title: String) {
         viewModelScope.launch {
-            val now = PlatformDateFormatter.getCurrentTimeMillis()
+            val now = DateFormatter.getCurrentTimeMillis()
             completeMission(missionId, now)
                 .onSuccess {
                     _events.send(DashboardEvent.ShowSnackbar("Missão concluída! XP ganho."))

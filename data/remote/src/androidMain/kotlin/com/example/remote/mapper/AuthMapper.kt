@@ -1,13 +1,13 @@
-package com.example.remote.mapper
+﻿package org.fitverse.data.remote.mapper
 
-import com.example.domain.models.auth.AuthResult
-import com.example.domain.repository.authentication.AuthResultDto
+import org.fitverse.domain.models.auth.AuthResult
+import org.fitverse.data.remote.dto.auth.AuthResultDto
 
 class AuthMapper {
-    fun mapDtoToDomain(dto: AuthResultDto): AuthResult =
-        AuthResult(
-            uid   = dto.uid,
-            email = dto.email ?: "",
-            token = dto.token ?: "",
-        )
+    fun mapDtoToDomain(dto: AuthResultDto): AuthResult = AuthResult(
+        uid   = dto.uid,
+        email = dto.email ?: "",
+        token = dto.token ?: "",
+    )
+
 }

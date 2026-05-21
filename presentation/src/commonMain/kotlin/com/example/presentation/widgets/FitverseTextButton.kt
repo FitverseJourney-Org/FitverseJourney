@@ -1,4 +1,4 @@
-package com.example.presentation.widgets
+﻿package org.fitverse.presentation.widgets
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding

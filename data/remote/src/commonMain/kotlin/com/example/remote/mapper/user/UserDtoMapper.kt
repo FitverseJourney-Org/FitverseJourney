@@ -1,10 +1,10 @@
-package com.example.remote.mapper.user
+﻿package org.fitverse.data.remote.mapper.user
 
-import com.example.domain.models.user.ClassType
-import com.example.domain.models.user.Genero
-import com.example.domain.models.user.User
-import com.example.remote.dto.user.UserRequestDto
-import com.example.remote.mapper.DtoMapper
+import org.fitverse.domain.models.user.ClassType
+import org.fitverse.domain.models.user.Genero
+import org.fitverse.domain.models.user.User
+import org.fitverse.data.remote.dto.user.UserRequestDto
+import org.fitverse.data.remote.mapper.DtoMapper
 
 class UserDtoMapper : DtoMapper<UserRequestDto, User> {
 

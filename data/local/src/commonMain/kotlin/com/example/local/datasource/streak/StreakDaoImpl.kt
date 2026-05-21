@@ -1,11 +1,11 @@
-package com.example.local.datasource.streak
+﻿package org.fitverse.data.local.datasource.streak
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
-import com.example.domain.repository.dbLocal.sqldelight.streak.StreakDao
-import com.example.domain.repository.dbLocal.sqldelight.streak.StreakDayRecord
-import com.example.domain.repository.dbLocal.sqldelight.streak.StreakRecord
-import com.journey.database.AppDatabase.AppDatabase
+import org.fitverse.domain.repository.dbLocal.sqldelight.streak.StreakDao
+import org.fitverse.domain.repository.dbLocal.sqldelight.streak.StreakDayRecord
+import org.fitverse.domain.repository.dbLocal.sqldelight.streak.StreakRecord
+import com.journey.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
@@ -14,7 +14,7 @@ import kotlinx.coroutines.withContext
 
 class StreakDaoImpl(database: AppDatabase) : StreakDao {
 
-    private val queries = database.appDatabaseQueries
+    private val queries = database.streakEntityQueries
 
     override fun observeStreakWeek(userId: String): Flow<List<StreakRecord>> =
         queries.selectStreakLastDays(userId = userId, date = "")
@@ -59,7 +59,7 @@ class StreakDaoImpl(database: AppDatabase) : StreakDao {
 
     // ── Mapper ────────────────────────────────────────────────────────────────
 
-    private fun com.journey.database.migrations.StreakEntity.toRecord() = StreakRecord(
+    private fun com.journey.streak.StreakEntity.toRecord() = StreakRecord(
         id          = id,
         userId      = userId,
         date        = date,

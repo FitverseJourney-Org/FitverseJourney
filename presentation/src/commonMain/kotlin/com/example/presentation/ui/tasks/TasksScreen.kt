@@ -1,4 +1,4 @@
-import androidx.compose.animation.AnimatedVisibility
+﻿import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
@@ -47,10 +47,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.domain.models.dashboard.tasks.TaskIcon
-import com.example.domain.models.dashboard.tasks.TaskItem
-import com.example.presentation.widgets.FitverseTaskItem
-import com.example.presentation.widgets.FitverseTopAppBar
+import org.fitverse.domain.models.dashboard.tasks.TaskIcon
+import org.fitverse.domain.models.dashboard.tasks.TaskItem
+import org.fitverse.presentation.widgets.FitverseTaskItem
+import org.fitverse.presentation.widgets.FitverseTopAppBar
 
 
 @OptIn(ExperimentalMaterial3Api::class)

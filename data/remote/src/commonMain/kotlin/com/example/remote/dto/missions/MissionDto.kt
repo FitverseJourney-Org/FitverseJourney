@@ -1,4 +1,4 @@
-package com.example.remote.dto.missions
+﻿package org.fitverse.data.remote.dto.missions
 
 import kotlinx.serialization.Serializable
 

@@ -1,4 +1,4 @@
-package com.example.domain.models.user
+﻿package org.fitverse.domain.models.user
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

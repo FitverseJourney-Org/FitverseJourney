@@ -1,11 +1,11 @@
-package com.example.presentation.ui.splash.viewmodel
+﻿package org.fitverse.presentation.ui.splash.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.usecase.db.datastore.authentication.ObserveIsAuthenticatedUseCase
-import com.example.domain.usecase.db.datastore.onboarding.ObserveOnboardingCompletedUseCase
-import com.example.domain.usecase.db.datastore.trial.ObserveIsTrialCompletedUseCase
-import com.example.presentation.navigationState.SplashNavigation
+import org.fitverse.domain.usecase.db.datastore.authentication.ObserveIsAuthenticatedUseCase
+import org.fitverse.domain.usecase.db.datastore.onboarding.ObserveOnboardingCompletedUseCase
+import org.fitverse.domain.usecase.db.datastore.trial.ObserveIsTrialCompletedUseCase
+import org.fitverse.presentation.navigationState.SplashNavigation
 import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay

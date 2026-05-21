@@ -1,10 +1,10 @@
-package com.example.local.datasource.notifications
+﻿package org.fitverse.data.local.datasource.notifications
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
-import com.example.domain.repository.dbLocal.sqldelight.notifications.NotificationDao
-import com.example.domain.repository.dbLocal.sqldelight.notifications.NotificationRecord
-import com.journey.database.AppDatabase.AppDatabase
+import org.fitverse.domain.repository.dbLocal.sqldelight.notifications.NotificationDao
+import org.fitverse.domain.repository.dbLocal.sqldelight.notifications.NotificationRecord
+import com.journey.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
@@ -13,7 +13,7 @@ import kotlinx.coroutines.withContext
 
 class NotificationDaoImpl(database: AppDatabase) : NotificationDao {
 
-    private val queries = database.appDatabaseQueries
+    private val queries = database.notificationEntityQueries
 
     override fun observeNotificationsByUser(userId: String): Flow<List<NotificationRecord>> =
         queries.selectNotificationsByUser(userId)
@@ -63,7 +63,7 @@ class NotificationDaoImpl(database: AppDatabase) : NotificationDao {
 
     // ── Mapper ────────────────────────────────────────────────────────────────
 
-    private fun com.journey.database.migrations.NotificationEntity.toRecord() = NotificationRecord(
+    private fun com.journey.notification.NotificationEntity.toRecord() = NotificationRecord(
         id          = id,
         userId      = userId,
         type        = type,

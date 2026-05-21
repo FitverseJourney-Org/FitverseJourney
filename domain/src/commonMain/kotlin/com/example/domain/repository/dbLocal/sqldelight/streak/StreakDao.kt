@@ -1,4 +1,4 @@
-package com.example.domain.repository.dbLocal.sqldelight.streak
+﻿package org.fitverse.domain.repository.dbLocal.sqldelight.streak
 
 import kotlinx.coroutines.flow.Flow
 

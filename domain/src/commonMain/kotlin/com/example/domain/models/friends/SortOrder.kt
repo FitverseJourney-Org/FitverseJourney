@@ -1,4 +1,4 @@
-package com.example.domain.models.friends
+﻿package org.fitverse.domain.models.friends
 
 /**
  * Sealed class para ordenação type-safe

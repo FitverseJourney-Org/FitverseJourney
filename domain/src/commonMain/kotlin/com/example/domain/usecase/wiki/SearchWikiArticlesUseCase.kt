@@ -1,7 +1,7 @@
-package com.example.domain.usecase.wiki
+﻿package org.fitverse.domain.usecase.wiki
 
-import com.example.domain.models.wiki.WikiArticle
-import com.example.domain.repository.wiki.WikiRepository
+import org.fitverse.domain.models.wiki.WikiArticle
+import org.fitverse.domain.repository.wiki.WikiRepository
 
 /**
  * UseCase de busca por texto livre.

@@ -1,24 +1,12 @@
-package com.example.local.database.datastore
+﻿package org.fitverse.data.local.database.datastore
 
-import android.annotation.SuppressLint
-import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 
-@SuppressLint("StaticFieldLeak")
 actual object DataStoreFactory {
+    actual val dataStore: DataStore<Preferences>
+        get() = error("Inject DataStore<Preferences> via Koin — do not call DataStoreFactory.dataStore directly on Android")
 
-    lateinit var context: Context
-
-    actual val dataStore: DataStore<Preferences> by lazy {
-        createDataStore()
-    }
-
-    actual fun createDataStore(): DataStore<Preferences> {
-        return com.example.local.expect.createDataStore(
-            producePath = {
-                context.filesDir.resolve(dataStoreFileName).absolutePath
-            }
-        )
-    }
+    actual fun createDataStore(): DataStore<Preferences> =
+        error("Inject DataStore<Preferences> via Koin — do not call DataStoreFactory.createDataStore() directly on Android")
 }

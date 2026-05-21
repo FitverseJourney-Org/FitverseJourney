@@ -1,7 +1,7 @@
-package com.example.domain.usecase.reset
+﻿package org.fitverse.domain.usecase.reset
 
-import com.example.domain.repository.authentication.AuthRepository
-import com.example.domain.repository.dbLocal.sqldelight.user.UserRepository
+import org.fitverse.domain.repository.authentication.AuthRepository
+import org.fitverse.domain.repository.dbLocal.sqldelight.user.UserRepository
 
 class ResetPasswordUseCase(
     private val authRepository: AuthRepository

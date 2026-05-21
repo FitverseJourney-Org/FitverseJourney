@@ -1,6 +1,6 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+﻿@file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.example.presentation.ui.wiki
+package org.fitverse.presentation.ui.wiki
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -22,34 +22,34 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.presentation.widgets.FitverseScreenTitle
-import com.example.presentation.widgets.FitverseTopAppBar
-import com.example.presentation.theme.FitverseColors
-import com.example.presentation.theme.ShapeCard
-import com.example.presentation.theme.ShapeTag
+import org.fitverse.presentation.widgets.FitverseScreenTitle
+import org.fitverse.presentation.widgets.FitverseTopAppBar
+import org.fitverse.presentation.theme.FitColors
+import org.fitverse.presentation.theme.ShapeCard
+import org.fitverse.presentation.theme.ShapeTag
 
 // ── Models ────────────────────────────────────────────────────────────────────
 
 data class WikiArticle(
     val tag: String,
     val tagColor: Color,
-    val tagTextColor: Color = FitverseColors.Bg,
+    val tagTextColor: Color = FitColors.Bg,
     val title: String,
     val views: String,
     val readTime: String,
 )
 
 private val sampleArticles = listOf(
-    WikiArticle("Força",    FitverseColors.TagForca,    title = "Hipertrofia: O Guia Definitivo",     views = "12.4k", readTime = "8 min"),
-    WikiArticle("Treino",   FitverseColors.TagTreino,   title = "Periodização para Iniciantes",        views = "8.2k",  readTime = "5 min"),
-    WikiArticle("Nutrição", FitverseColors.TagNutricao, tagTextColor = FitverseColors.TextPrimary,
+    WikiArticle("Força",    FitColors.TagForca,    title = "Hipertrofia: O Guia Definitivo",     views = "12.4k", readTime = "8 min"),
+    WikiArticle("Treino",   FitColors.TagTreino,   title = "Periodização para Iniciantes",        views = "8.2k",  readTime = "5 min"),
+    WikiArticle("Nutrição", FitColors.TagNutricao, tagTextColor = FitColors.TextPrimary,
         title = "Proteínas: Timing e Quantidade",      views = "15.1k", readTime = "6 min"),
-    WikiArticle("Recovery", FitverseColors.TagRecovery, tagTextColor = FitverseColors.TextPrimary,
+    WikiArticle("Recovery", FitColors.TagRecovery, tagTextColor = FitColors.TextPrimary,
         title = "Descanso e Recuperação Muscular",     views = "9.7k",  readTime = "4 min"),
-    WikiArticle("Cardio",   FitverseColors.TagCardio,   tagTextColor = FitverseColors.TextPrimary,
+    WikiArticle("Cardio",   FitColors.TagCardio,   tagTextColor = FitColors.TextPrimary,
         title = "HIIT vs Cardio Tradicional",          views = "11.3k", readTime = "7 min"),
-    WikiArticle("Força",    FitverseColors.TagForca,    title = "Overload Progressivo na Prática",     views = "7.9k",  readTime = "6 min"),
-    WikiArticle("Nutrição", FitverseColors.TagNutricao, tagTextColor = FitverseColors.TextPrimary,
+    WikiArticle("Força",    FitColors.TagForca,    title = "Overload Progressivo na Prática",     views = "7.9k",  readTime = "6 min"),
+    WikiArticle("Nutrição", FitColors.TagNutricao, tagTextColor = FitColors.TextPrimary,
         title = "Déficit Calórico sem Perder Massa",   views = "18.3k", readTime = "9 min"),
 )
 
@@ -122,16 +122,16 @@ private fun WikiSearchBar(query: String, onChange: (String) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .border(1.dp, FitverseColors.Border, RoundedCornerShape(10.dp))
+            .border(1.dp, FitColors.Border, RoundedCornerShape(10.dp))
             .clip(RoundedCornerShape(10.dp))
-            .background(FitverseColors.Surface)
+            .background(FitColors.Surface)
             .padding(horizontal = 14.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             imageVector        = Icons.Default.Search,
             contentDescription = null,
-            tint               = FitverseColors.TextMuted2,
+            tint               = FitColors.TextDisabled,
             modifier           = Modifier.size(18.dp),
         )
         Spacer(Modifier.width(8.dp))
@@ -139,15 +139,15 @@ private fun WikiSearchBar(query: String, onChange: (String) -> Unit) {
             value         = query,
             onValueChange = onChange,
             singleLine    = true,
-            cursorBrush   = SolidColor(FitverseColors.Accent),
+            cursorBrush   = SolidColor(FitColors.Accent),
             textStyle     = LocalTextStyle.current.copy(
-                color    = FitverseColors.TextPrimary,
+                color    = FitColors.TextPrimary,
                 fontSize = 13.sp,
             ),
             decorationBox = { inner ->
                 Box {
                     if (query.isEmpty()) {
-                        Text("Buscar artigos...", color = FitverseColors.TextMuted2, fontSize = 13.sp)
+                        Text("Buscar artigos...", color = FitColors.TextDisabled, fontSize = 13.sp)
                     }
                     inner()
                 }
@@ -168,9 +168,9 @@ private fun WikiArticleRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .border(1.dp, FitverseColors.Border, ShapeCard)
+            .border(1.dp, FitColors.Border, ShapeCard)
             .clip(ShapeCard)
-            .background(FitverseColors.Surface)
+            .background(FitColors.Surface)
             .clickable(onClick = onClick)
             .padding(14.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -199,12 +199,12 @@ private fun WikiArticleRow(
                 text       = article.title,
                 fontSize   = 14.sp,
                 fontWeight = FontWeight.SemiBold,
-                color      = FitverseColors.TextPrimary,
+                color      = FitColors.TextPrimary,
             )
             Spacer(Modifier.height(5.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                Text("👁 ${article.views}", fontSize = 11.sp, color = FitverseColors.TextMuted)
-                Text("⏱ ${article.readTime}", fontSize = 11.sp, color = FitverseColors.TextMuted)
+                Text("👁 ${article.views}", fontSize = 11.sp, color = FitColors.TextMuted)
+                Text("⏱ ${article.readTime}", fontSize = 11.sp, color = FitColors.TextMuted)
             }
         }
     }

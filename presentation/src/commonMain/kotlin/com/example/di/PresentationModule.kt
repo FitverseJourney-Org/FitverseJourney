@@ -1,33 +1,37 @@
-package com.example.di
+﻿package org.fitverse.presentation.di
 
 // ── Auth ──────────────────────────────────────────────────────────────────────
-import com.example.presentation.ui.authentication.login.LoginViewModel
-import com.example.presentation.ui.authentication.register.RegisterViewModel
-import com.example.presentation.ui.authentication.resetPassword.ResetPasswordViewModel
+import org.fitverse.presentation.ui.authentication.login.LoginViewModel
+import org.fitverse.presentation.ui.authentication.register.RegisterViewModel
+import org.fitverse.presentation.ui.authentication.resetPassword.ResetPasswordViewModel
 // ── Splash & Onboarding ───────────────────────────────────────────────────────
-import com.example.presentation.ui.splash.viewmodel.SplashViewModel
-import com.example.presentation.ui.onboarding.viewmodel.OnboardingViewModel
-import com.example.presentation.ui.trial.viewmodel.TrialViewModel
+import org.fitverse.presentation.ui.splash.viewmodel.SplashViewModel
+import org.fitverse.presentation.ui.onboarding.viewmodel.OnboardingViewModel
+import org.fitverse.presentation.ui.trial.viewmodel.TrialViewModel
 // ── Home ──────────────────────────────────────────────────────────────────────
-import com.example.presentation.ui.community.viewmodel.CommunityViewModel
-import com.example.presentation.ui.dashboard.viewmodel.DashboardViewModel
-import com.example.presentation.ui.notification.NotificationViewModel
-import com.example.presentation.ui.workout.viewmodel.WorkoutViewModel
-import com.example.presentation.ui.workout.viewmodel.WorkoutSessionViewModel
-import com.example.presentation.ui.meals.viewmodel.MealsViewModel
-import com.example.presentation.ui.profile.ProfileViewModel
+import org.fitverse.presentation.ui.community.viewmodel.CommunityViewModel
+import org.fitverse.presentation.ui.community.viewmodel.GroupHomeViewModel
+import org.fitverse.presentation.ui.dashboard.viewmodel.DashboardViewModel
+import org.fitverse.presentation.ui.notification.NotificationViewModel
+import org.fitverse.presentation.ui.workout.viewmodel.WorkoutViewModel
+import org.fitverse.presentation.ui.workout.viewmodel.WorkoutSessionViewModel
+import org.fitverse.presentation.ui.meals.viewmodel.AddManualFoodViewModel
+import org.fitverse.presentation.ui.meals.viewmodel.MealsViewModel
+import org.fitverse.presentation.ui.profile.ProfileViewModel
 // ── Modal / Features ──────────────────────────────────────────────────────────
-import com.example.presentation.ui.planWorkout.viewmodel.WorkoutPlanViewModel
-import com.example.presentation.ui.friends.viewmodel.FriendsViewModel
-import com.example.presentation.ui.wiki.viewmodel.WikiViewModel
-import com.example.presentation.ui.progress.viewmodel.ProgressViewModel
+import org.fitverse.presentation.ui.workoutPlan.viewmodel.WorkoutPlanBuilderViewModel
+import org.fitverse.presentation.ui.workoutPlan.viewmodel.WorkoutPlanViewModel
+import org.fitverse.presentation.ui.workoutPlan.viewmodel.WorkoutPlansViewModel
+import org.fitverse.presentation.ui.friends.viewmodel.FriendsViewModel
+import org.fitverse.presentation.ui.wiki.viewmodel.WikiViewModel
+import org.fitverse.presentation.ui.progress.viewmodel.ProgressViewModel
 // ── Global ────────────────────────────────────────────────────────────────────
-import com.example.presentation.ui.LanguageViewModel
-import com.example.presentation.ui.achievements.viewmodel.AchievementsViewModel
-import com.example.presentation.ui.historic.viewmodel.HistoricViewModel
-import com.example.presentation.ui.leaderboards.viewmodel.LeaderboardsViewModel
-import com.example.presentation.ui.shopping.ShoppingViewModel
-import com.example.presentation.ui.tasks.viewmodel.TasksViewModel
+import org.fitverse.presentation.ui.LanguageViewModel
+import org.fitverse.presentation.ui.achievements.viewmodel.AchievementsViewModel
+import org.fitverse.presentation.ui.historic.viewmodel.HistoricViewModel
+import org.fitverse.presentation.ui.leaderboards.viewmodel.LeaderboardsViewModel
+import org.fitverse.presentation.ui.shopping.ShoppingViewModel
+import org.fitverse.presentation.ui.tasks.viewmodel.TasksViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
@@ -98,16 +102,25 @@ val homeModule = module {
     viewModel<MealsViewModel> {
         MealsViewModel(
             observeMealsByDate = get(),
+            createMeal         = get(),
             insertMeal         = get(),
             deleteMeal         = get(),
             getDailyMacros     = get(),
+            getFoodsByMeal     = get(),
+            cleanupOldMeals    = get(),
         )
+    }
+    viewModel<AddManualFoodViewModel> {
+        AddManualFoodViewModel(addFoodToMeal = get())
     }
     viewModel<ProfileViewModel> {
         ProfileViewModel()
     }
     viewModel<CommunityViewModel> {
         CommunityViewModel()
+    }
+    viewModel<GroupHomeViewModel> {
+        GroupHomeViewModel()
     }
 }
 
@@ -117,6 +130,12 @@ val homeModule = module {
 val featuresModule = module {
     viewModel<WorkoutPlanViewModel> {
         WorkoutPlanViewModel()
+    }
+    viewModel<WorkoutPlanBuilderViewModel> {
+        WorkoutPlanBuilderViewModel()
+    }
+    viewModel<WorkoutPlansViewModel> {
+        WorkoutPlansViewModel(useCases = get())
     }
     viewModel<FriendsViewModel> {
         FriendsViewModel(friendsRepository = get())

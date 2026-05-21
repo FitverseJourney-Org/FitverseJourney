@@ -1,7 +1,7 @@
-package com.example.domain.usecase.activatePlan
+﻿package org.fitverse.domain.usecase.activatePlan
 
-import com.example.domain.models.plan.PlanId
-import com.example.domain.repository.ActivatePlanRepository
+import org.fitverse.domain.models.PlanId
+import org.fitverse.domain.repository.ActivatePlanRepository
 
 class ActivatePlanUseCase(
     private val activatePlanRepository: ActivatePlanRepository

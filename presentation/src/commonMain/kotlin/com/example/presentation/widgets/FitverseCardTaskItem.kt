@@ -1,4 +1,4 @@
-package com.example.presentation.widgets
+﻿package org.fitverse.presentation.widgets
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.BorderStroke
@@ -28,8 +28,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.domain.models.dashboard.tasks.TaskItem
-import com.example.presentation.theme.DarkGamifiedColors
+import org.fitverse.domain.models.dashboard.tasks.TaskItem
+import org.fitverse.presentation.theme.FitColors
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -46,10 +46,10 @@ fun FitverseTaskItem(
         modifier = Modifier.fillMaxWidth().alpha(if (task.completed) 0.5f else 1f),
         onClick = onSelect,
         shape = RoundedCornerShape(20.dp),
-        color = if (isSelected) DarkGamifiedColors.PrimarySoft.copy(alpha = 0.15f) else cs.surface.copy(alpha = 0.75f),
+        color = if (isSelected) FitColors.AccentContainer.copy(alpha = 0.15f) else cs.surface.copy(alpha = 0.75f),
         border = BorderStroke(
             width = 1.dp,
-            color = if (isSelected) cs.surface.copy(alpha = 0.5f) else DarkGamifiedColors.PrimarySoft.copy(alpha = 0.1f)
+            color = if (isSelected) cs.surface.copy(alpha = 0.5f) else FitColors.AccentContainer.copy(alpha = 0.1f)
         )
     ) {
         Row(
@@ -92,7 +92,7 @@ fun FitverseTaskItem(
 
             Text(
                 text = "+${task.xp} XP",
-                color = if (task.completed) cs.onSurfaceVariant else DarkGamifiedColors.Tertiary,
+                color = if (task.completed) cs.onSurfaceVariant else FitColors.Green,
                 fontWeight = FontWeight.Black,
                 fontSize = 13.sp
             )

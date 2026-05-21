@@ -1,7 +1,7 @@
-package com.example.domain.usecase.notifications
+﻿package org.fitverse.domain.usecase.notifications
 
-import com.example.domain.repository.authentication.AuthRepository
-import com.example.domain.repository.dbLocal.sqldelight.notifications.NotificationDao
+import org.fitverse.domain.repository.authentication.AuthRepository
+import org.fitverse.domain.repository.dbLocal.sqldelight.notifications.NotificationDao
 
 class DeleteNotificationUseCase(
     private val dao: NotificationDao,

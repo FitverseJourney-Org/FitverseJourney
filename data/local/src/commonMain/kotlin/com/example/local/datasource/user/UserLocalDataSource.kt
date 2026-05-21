@@ -1,6 +1,6 @@
-package com.example.local.datasource.user
+﻿package org.fitverse.data.local.datasource.user
 
-import com.journey.database.migrations.UserEntity
+import com.journey.user.UserEntity
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -13,5 +13,4 @@ interface UserLocalDataSource {
     suspend fun insertUser(entity: UserEntity)
     suspend fun updateUser(entity: UserEntity)
     suspend fun deleteUser(userId: String)                  // ✅ String
-    suspend fun deleteAllUsers()                            // ✅ útil para logout
 }

@@ -1,8 +1,8 @@
-package com.example.mapper
+﻿package org.fitverse.data.repository.mapper
 
-import com.example.domain.models.progression.Exercise
-import com.example.mapper.exercise.toDomain
-import com.example.remote.dto.exercise.ExerciseDto
+import org.fitverse.domain.models.progression.Exercise
+import org.fitverse.data.repository.mapper.exercise.toDomain
+import org.fitverse.data.remote.dto.exercise.ExerciseDto
 
 /**
  * Funções de extensão puras para conversão [ExerciseDto] ↔ [Exercise].

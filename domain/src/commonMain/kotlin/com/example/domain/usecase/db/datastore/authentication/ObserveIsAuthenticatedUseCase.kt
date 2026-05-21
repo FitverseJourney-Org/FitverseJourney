@@ -1,6 +1,6 @@
-package com.example.domain.usecase.db.datastore.authentication
+﻿package org.fitverse.domain.usecase.db.datastore.authentication
 
-import com.example.domain.repository.dbLocal.datastore.AppAuthenticateRepository
+import org.fitverse.domain.repository.dbLocal.datastore.AppAuthenticateRepository
 import kotlinx.coroutines.flow.Flow
 
 class ObserveIsAuthenticatedUseCase(

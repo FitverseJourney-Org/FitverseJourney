@@ -1,4 +1,4 @@
-package com.example.domain.models.workout.workout_plan
+﻿package org.fitverse.domain.models.workout.workout_plan
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.FitnessCenter

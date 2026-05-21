@@ -1,8 +1,8 @@
-package com.example.domain.usecase.wiki
+﻿package org.fitverse.domain.usecase.wiki
 
-import com.example.domain.models.wiki.WikiArticle
-import com.example.domain.models.wiki.WikiCategory
-import com.example.domain.repository.wiki.WikiRepository
+import org.fitverse.domain.models.wiki.WikiArticle
+import org.fitverse.domain.models.wiki.WikiCategory
+import org.fitverse.domain.repository.wiki.WikiRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map

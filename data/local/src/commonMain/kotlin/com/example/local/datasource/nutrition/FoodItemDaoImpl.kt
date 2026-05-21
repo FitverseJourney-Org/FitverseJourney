@@ -1,16 +1,16 @@
-package com.example.local.datasource.nutrition
+﻿package org.fitverse.data.local.datasource.nutrition
 
-import com.example.domain.repository.dbLocal.sqldelight.nutrition.FoodItemDao
-import com.example.domain.repository.dbLocal.sqldelight.nutrition.FoodItemRecord
-import com.example.domain.repository.dbLocal.sqldelight.nutrition.MealMacros
-import com.journey.database.AppDatabase.AppDatabase
+import org.fitverse.domain.repository.dbLocal.sqldelight.nutrition.FoodItemDao
+import org.fitverse.domain.repository.dbLocal.sqldelight.nutrition.FoodItemRecord
+import org.fitverse.domain.repository.dbLocal.sqldelight.nutrition.MealMacros
+import com.journey.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 
 class FoodItemDaoImpl(database: AppDatabase) : FoodItemDao {
 
-    private val queries = database.appDatabaseQueries
+    private val queries = database.foodItemEntityQueries
 
     override suspend fun getFoodsByMeal(mealId: String): List<FoodItemRecord> =
         withContext(Dispatchers.IO) {
@@ -55,6 +55,9 @@ class FoodItemDaoImpl(database: AppDatabase) : FoodItemDao {
     override suspend fun deleteFoodsByMeal(mealId: String): Unit =
         withContext(Dispatchers.IO) { queries.deleteFoodsByMeal(mealId) }
 
+    override suspend fun deleteFoodsByUserBeforeDate(userId: String, beforeDate: String): Unit =
+        withContext(Dispatchers.IO) { queries.deleteFoodsByUserBeforeDate(userId = userId, date = beforeDate) }
+
     override suspend fun getMealMacros(mealId: String): MealMacros =
         withContext(Dispatchers.IO) {
             val row = queries.sumMacrosByMeal(mealId).executeAsOne()
@@ -68,7 +71,7 @@ class FoodItemDaoImpl(database: AppDatabase) : FoodItemDao {
 
     // ── Mapper ────────────────────────────────────────────────────────────────
 
-    private fun com.journey.database.migrations.FoodItemEntity.toRecord() = FoodItemRecord(
+    private fun com.journey.nutrition.FoodItemEntity.toRecord() = FoodItemRecord(
         id      = id,
         mealId  = mealId,
         name    = name,

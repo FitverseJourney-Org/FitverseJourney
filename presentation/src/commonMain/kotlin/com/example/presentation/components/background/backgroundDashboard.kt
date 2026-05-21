@@ -1,4 +1,4 @@
-package com.example.presentation.components.background
+﻿package org.fitverse.presentation.components.background
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize

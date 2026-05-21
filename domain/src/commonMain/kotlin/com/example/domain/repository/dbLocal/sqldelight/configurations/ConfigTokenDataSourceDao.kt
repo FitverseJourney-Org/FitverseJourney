@@ -1,4 +1,4 @@
-package com.example.domain.repository.dbLocal.sqldelight.configurations
+﻿package org.fitverse.domain.repository.dbLocal.sqldelight.configurations
 
 interface ConfigTokenDataSourceDao {
     suspend fun getAuthToken(): String?

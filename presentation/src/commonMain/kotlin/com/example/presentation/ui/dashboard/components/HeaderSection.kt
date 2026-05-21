@@ -1,4 +1,4 @@
-package com.example.presentation.ui.dashboard.components
+﻿package org.fitverse.presentation.ui.dashboard.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -10,10 +10,9 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.presentation.widgets.FitverseTextButton
+import org.fitverse.presentation.theme.FVTypography
+import org.fitverse.presentation.widgets.FitverseTextButton
 
 @Composable
 fun SectionHeader(
@@ -28,20 +27,15 @@ fun SectionHeader(
         verticalAlignment = Alignment.CenterVertically
     ){
         Text(
-            text = title.uppercase(),
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Black,
-            color = cs.onSurfaceVariant
+            text  = title.uppercase(),
+            style = FVTypography.overline,
+            color = cs.onSurfaceVariant,
         )
         if(actionText != null) {
             FitverseTextButton(
-                text = actionText,
-                onClick = {
-                    onActionClick?.invoke()
-                },
-                style = MaterialTheme.typography.labelSmall.copy(
-                    color = cs.primary,
-                )
+                text  = actionText,
+                onClick = { onActionClick?.invoke() },
+                style = FVTypography.labelMedium.copy(color = cs.primary),
             )
         }
     }

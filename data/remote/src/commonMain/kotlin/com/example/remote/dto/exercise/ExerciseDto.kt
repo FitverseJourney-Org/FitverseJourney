@@ -1,4 +1,4 @@
-package com.example.remote.dto.exercise
+﻿package org.fitverse.data.remote.dto.exercise
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

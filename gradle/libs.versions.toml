@@ -110,6 +110,7 @@ datastore                      = "1.2.0"       # DataStore — armazenamento cha
 # ----------------------------------------------------
 firebase-bom                   = "34.11.0"     # Firebase BOM — gerencia versões de todos os SDKs Firebase
 firebase-admin                 = "9.4.2"       # Firebase Admin SDK (JVM/servidor)
+
 # ----------------------------------------------------
 # TESTING
 # ----------------------------------------------------
@@ -118,6 +119,8 @@ androidx-espresso              = "3.7.0"       # Espresso — testes de UI Andro
 androidx-testExt               = "1.3.0"       # AndroidX Test Extensions (junit ktx)
 runner                         = "1.5.2"
 materialVersion = "1.13.0"       # AndroidX Test Runner
+turbine                        = "1.2.0"       # Turbine — teste de Flows KMP
+coroutines-test                = "1.10.2"      # kotlinx-coroutines-test — runTest, TestDispatcher
 
 
 [libraries]
@@ -341,7 +344,6 @@ firebase-analytics             = { module = "com.google.firebase:firebase-analyt
 firebase-firestore             = { module = "com.google.firebase:firebase-firestore" }
 
 
-
 # Firebase Firestore KTX — cliente Firestore para servidor/JVM (Google Cloud)
 # firebase-firestore-ktx         = { module = "com.google.cloud:google-cloud-firestore" }
 # Firebase Admin SDK — acesso privilegiado ao Firebase via servidor
@@ -403,6 +405,10 @@ androidx-runner                = { module = "androidx.test:runner", version.ref 
 androidx-core-test             = { module = "androidx.test:core", version.ref = "androidx-core" }
 # Espresso — testes de UI instrumentados Android
 androidx-espresso-core         = { module = "androidx.test.espresso:espresso-core", version.ref = "androidx-espresso" }
+# Turbine — teste de Flow KMP (collect, awaitItem, cancelAndIgnoreRemainingEvents)
+turbine                        = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
+# kotlinx-coroutines-test — runTest, UnconfinedTestDispatcher, Dispatchers.setMain
+kotlinx-coroutines-test        = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines-test" }
 material = { group = "com.google.android.material", name = "material", version.ref = "materialVersion" }
 
 

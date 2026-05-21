@@ -1,6 +1,6 @@
-package com.example.domain.models.workout.workout_plan.mocks
+﻿package org.fitverse.domain.models.workout.workout_plan.mocks
 
-import com.example.domain.models.workout.workout_plan.ExerciseLibraryItem
+import org.fitverse.domain.models.workout.workout_plan.ExerciseLibraryItem
 
 val muscleGroups = listOf("Todos", "Peito", "Costas", "Pernas", "Braços", "Ombros")
 

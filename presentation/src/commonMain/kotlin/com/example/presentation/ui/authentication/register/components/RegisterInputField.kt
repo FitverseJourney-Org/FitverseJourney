@@ -1,4 +1,4 @@
-package com.example.presentation.ui.authentication.register.components
+﻿package org.fitverse.presentation.ui.authentication.register.components
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
@@ -24,8 +24,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import com.example.domain.models.validations.ValidationType
-import com.example.presentation.theme.RegisterDimens
+import org.fitverse.domain.models.validations.ValidationType
+import org.fitverse.presentation.theme.RegisterDimens
 
 @Composable
 fun RegisterInputField(

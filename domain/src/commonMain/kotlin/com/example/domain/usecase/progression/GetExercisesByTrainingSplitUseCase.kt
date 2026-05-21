@@ -1,7 +1,7 @@
-package com.example.domain.usecase.progression
+﻿package org.fitverse.domain.usecase.progression
 
-import com.example.domain.models.progression.Exercise
-import com.example.domain.repository.ExerciseRepository
+import org.fitverse.domain.models.progression.Exercise
+import org.fitverse.domain.repository.ExerciseRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map

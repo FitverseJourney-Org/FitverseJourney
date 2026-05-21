@@ -1,4 +1,4 @@
-package com.example.domain.models.auth
+﻿package org.fitverse.domain.models.auth
 
 data class AuthResult(
     val uid: String,

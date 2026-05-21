@@ -1,6 +1,6 @@
-package com.example.presentation.ui.authentication.login.states
+﻿package org.fitverse.presentation.ui.authentication.login.states
 
-import com.example.domain.models.snackbar.SnackBarData
+import org.fitverse.domain.models.snackbar.SnackBarData
 
 data class LoginState(
     val email: String = "",

@@ -1,13 +1,13 @@
-package com.example.presentation.ui.friends.viewmodel
+﻿package org.fitverse.presentation.ui.friends.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.models.friends.FriendsError
-import com.example.domain.models.friends.FriendsEvent
-import com.example.domain.models.friends.FriendsUiState
-import com.example.domain.models.friends.SortOrder
-import com.example.domain.models.dashboard.UserProfile
-import com.example.domain.repository.FriendsRepository
+import org.fitverse.domain.models.friends.FriendsError
+import org.fitverse.domain.models.friends.FriendsEvent
+import org.fitverse.domain.models.friends.FriendsUiState
+import org.fitverse.domain.models.friends.SortOrder
+import org.fitverse.domain.models.dashboard.UserProfile
+import org.fitverse.domain.repository.FriendsRepository
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 

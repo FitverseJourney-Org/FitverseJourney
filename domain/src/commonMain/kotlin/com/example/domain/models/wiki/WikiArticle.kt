@@ -1,4 +1,4 @@
-package com.example.domain.models.wiki
+﻿package org.fitverse.domain.models.wiki
 
 /**
  * Modelo de domínio que representa um artigo/pílula de conhecimento na Wiki Global.

@@ -1,4 +1,4 @@
-package com.example.presentation.ui.shopping
+﻿package org.fitverse.presentation.ui.shopping
 
 import androidx.lifecycle.ViewModel
 

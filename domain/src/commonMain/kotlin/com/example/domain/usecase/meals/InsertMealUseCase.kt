@@ -1,7 +1,7 @@
-package com.example.domain.usecase.meals
+﻿package org.fitverse.domain.usecase.meals
 
-import com.example.domain.repository.dbLocal.sqldelight.nutrition.MealEntryDao
-import com.example.domain.repository.dbLocal.sqldelight.nutrition.MealEntryRecord
+import org.fitverse.domain.repository.dbLocal.sqldelight.nutrition.MealEntryDao
+import org.fitverse.domain.repository.dbLocal.sqldelight.nutrition.MealEntryRecord
 
 class InsertMealUseCase(
     private val dao: MealEntryDao,

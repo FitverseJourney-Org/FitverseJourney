@@ -1,4 +1,4 @@
-package com.example.remote.mapper
+﻿package org.fitverse.data.remote.mapper
 
 interface DtoMapper<Dto, Domain> {
     fun mapDtoToDomain(dto: Dto): Domain

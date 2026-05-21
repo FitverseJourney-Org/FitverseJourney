@@ -1,11 +1,11 @@
-package com.example.local.datasource.nutrition
+﻿package org.fitverse.data.local.datasource.nutrition
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
-import com.example.domain.repository.dbLocal.sqldelight.nutrition.DailyMacros
-import com.example.domain.repository.dbLocal.sqldelight.nutrition.MealEntryDao
-import com.example.domain.repository.dbLocal.sqldelight.nutrition.MealEntryRecord
-import com.journey.database.AppDatabase.AppDatabase
+import org.fitverse.domain.repository.dbLocal.sqldelight.nutrition.DailyMacros
+import org.fitverse.domain.repository.dbLocal.sqldelight.nutrition.MealEntryDao
+import org.fitverse.domain.repository.dbLocal.sqldelight.nutrition.MealEntryRecord
+import com.journey.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
@@ -14,7 +14,7 @@ import kotlinx.coroutines.withContext
 
 class MealEntryDaoImpl(database: AppDatabase) : MealEntryDao {
 
-    private val queries = database.appDatabaseQueries
+    private val queries = database.mealEntryEntityQueries
 
     override fun observeMealsByDate(userId: String, date: String): Flow<List<MealEntryRecord>> =
         queries.selectMealsByUserAndDate(userId, date)
@@ -68,6 +68,9 @@ class MealEntryDaoImpl(database: AppDatabase) : MealEntryDao {
     override suspend fun deleteMeal(id: String, userId: String): Unit =
         withContext(Dispatchers.IO) { queries.deleteMeal(id = id, userId = userId) }
 
+    override suspend fun deleteMealsByUserBeforeDate(userId: String, beforeDate: String): Unit =
+        withContext(Dispatchers.IO) { queries.deleteMealsByUserBeforeDate(userId = userId, date = beforeDate) }
+
     override suspend fun getDailyMacros(userId: String, date: String): DailyMacros =
         withContext(Dispatchers.IO) {
             val row = queries.sumMacrosByUserAndDate(userId, date).executeAsOne()
@@ -81,7 +84,7 @@ class MealEntryDaoImpl(database: AppDatabase) : MealEntryDao {
 
     // ── Mapper ────────────────────────────────────────────────────────────────
 
-    private fun com.journey.database.migrations.MealEntryEntity.toRecord() = MealEntryRecord(
+    private fun com.journey.nutrition.MealEntryEntity.toRecord() = MealEntryRecord(
         id           = id,
         userId       = userId,
         date         = date,

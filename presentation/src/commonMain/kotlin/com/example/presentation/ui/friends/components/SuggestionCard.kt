@@ -1,4 +1,4 @@
-package com.example.presentation.ui.friends.components
+﻿package org.fitverse.presentation.ui.friends.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,7 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.example.domain.models.dashboard.UserProfile
+import org.fitverse.domain.models.dashboard.UserProfile
 import fitversejourneyapp.presentation.generated.resources.Res
 import fitversejourneyapp.presentation.generated.resources.action_add
 import fitversejourneyapp.presentation.generated.resources.mutual_connections

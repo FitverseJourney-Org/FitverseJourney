@@ -1,4 +1,4 @@
-package com.example.presentation.ui.authentication.register.pages
+﻿package org.fitverse.presentation.ui.authentication.register.pages
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,11 +22,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import com.example.presentation.ui.authentication.register.components.RegisterInputField
-import com.example.presentation.ui.authentication.register.components.RegisterPrimaryButton
-import com.example.presentation.ui.authentication.register.states.RegisterIntent
-import com.example.presentation.ui.authentication.register.states.RegisterUiState
-import com.example.presentation.theme.RegisterDimens
+import org.fitverse.presentation.ui.authentication.register.components.RegisterInputField
+import org.fitverse.presentation.ui.authentication.register.components.RegisterPrimaryButton
+import org.fitverse.presentation.ui.authentication.register.states.RegisterIntent
+import org.fitverse.presentation.ui.authentication.register.states.RegisterUiState
+import org.fitverse.presentation.theme.RegisterDimens
 import fitversejourneyapp.presentation.generated.resources.Res
 import fitversejourneyapp.presentation.generated.resources.register_button_next
 import fitversejourneyapp.presentation.generated.resources.register_conta_email_label

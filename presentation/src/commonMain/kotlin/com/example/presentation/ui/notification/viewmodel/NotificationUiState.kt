@@ -1,9 +1,9 @@
-package com.example.presentation.ui.notification.viewmodel
+﻿package org.fitverse.presentation.ui.notification.viewmodel
 
-import com.example.presentation.ui.notification.Notification
+import org.fitverse.presentation.ui.notification.NotificationUiModel
 
 data class NotificationUiState(
-    val notifications: List<Notification> = emptyList(),
+    val notifications: List<NotificationUiModel> = emptyList(),
     val unreadCount: Int = 0,
     val isLoading: Boolean = true,
 )

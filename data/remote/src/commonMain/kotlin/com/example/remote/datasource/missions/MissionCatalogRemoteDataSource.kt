@@ -1,6 +1,6 @@
-package com.example.remote.datasource.missions
+﻿package org.fitverse.data.remote.datasource.missions
 
-import com.example.domain.repository.remote.MissionTemplate
+import org.fitverse.domain.repository.remote.MissionTemplate
 
 interface MissionCatalogRemoteDataSource {
     suspend fun fetchMissions(): List<MissionTemplate>

@@ -1,4 +1,4 @@
-package com.example.remote.datasource
+﻿package org.fitverse.data.remote.datasource
 
 import io.ktor.client.*
 import io.ktor.client.engine.HttpClientEngineFactory

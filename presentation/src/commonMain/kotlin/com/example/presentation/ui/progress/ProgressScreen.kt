@@ -1,4 +1,4 @@
-package com.example.presentation.ui.progress
+﻿package org.fitverse.presentation.ui.progress
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -43,19 +43,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.presentation.theme.FVExtension
-import com.example.presentation.ui.progress.components.ExerciseBottomSheet
-import com.example.presentation.ui.progress.components.ExerciseSelectorButton
-import com.example.presentation.ui.progress.components.InsightsCard
-import com.example.presentation.ui.progress.components.PeriodFilterChips
-import com.example.presentation.ui.progress.components.ProgressChartCard
-import com.example.presentation.ui.progress.components.ProgressScreenSkeleton
-import com.example.presentation.ui.progress.components.ProgressionStatsGrid
-import com.example.presentation.ui.progress.components.SplitTabRow
-import com.example.presentation.ui.progress.viewmodel.ProgressViewModel
-import com.example.presentation.widgets.FVCard
-import com.example.presentation.widgets.FVScreenHeader
-import com.example.presentation.widgets.FVSectionLabel
+import org.fitverse.presentation.theme.FitColors
+import org.fitverse.presentation.ui.progress.components.ExerciseBottomSheet
+import org.fitverse.presentation.ui.progress.components.ExerciseSelectorButton
+import org.fitverse.presentation.ui.progress.components.InsightsCard
+import org.fitverse.presentation.ui.progress.components.PeriodFilterChips
+import org.fitverse.presentation.ui.progress.components.ProgressChartCard
+import org.fitverse.presentation.ui.progress.components.ProgressScreenSkeleton
+import org.fitverse.presentation.ui.progress.components.ProgressionStatsGrid
+import org.fitverse.presentation.ui.progress.components.SplitTabRow
+import org.fitverse.presentation.ui.progress.viewmodel.ProgressViewModel
+import org.fitverse.presentation.widgets.FVCard
+import org.fitverse.presentation.widgets.FVScreenHeader
+import org.fitverse.presentation.widgets.FVSectionLabel
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Root — recebe o ViewModel, observa eventos pontuais
@@ -100,7 +100,7 @@ fun ProgressionScreen(
 ) {
     Scaffold(
         modifier            = modifier,
-        containerColor      = FVExtension.bg,
+        containerColor      = FitColors.Bg,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         snackbarHost        = { SnackbarHost(snackbarHostState) },
         topBar = {
@@ -168,7 +168,7 @@ private fun ProgressionSuccessContent(
         if (state.isRefreshing) {
             LinearProgressIndicator(
                 modifier   = Modifier.fillMaxWidth(),
-                color      = FVExtension.primary,
+                color      = FitColors.Accent,
                 trackColor = Color.Transparent,
             )
         }
@@ -176,7 +176,7 @@ private fun ProgressionSuccessContent(
         LazyColumn(
             modifier       = Modifier
                 .weight(1f)
-                .background(FVExtension.bg),
+                .background(FitColors.Bg),
             contentPadding = PaddingValues(bottom = 48.dp),
         ) {
 
@@ -193,7 +193,7 @@ private fun ProgressionSuccessContent(
             item(key = "exercise_selector") {
                 Column(
                     Modifier
-                        .padding(horizontal = FVExtension.margin)
+                        .padding(horizontal = 20.dp)
                         .padding(top = 16.dp),
                 ) {
                     ExerciseSelectorButton(
@@ -207,7 +207,7 @@ private fun ProgressionSuccessContent(
             item(key = "period_filter") {
                 Column(
                     Modifier
-                        .padding(horizontal = FVExtension.margin)
+                        .padding(horizontal = 20.dp)
                         .padding(top = 12.dp),
                 ) {
                     PeriodFilterChips(
@@ -222,7 +222,7 @@ private fun ProgressionSuccessContent(
                 Spacer(Modifier.height(20.dp))
                 FVSectionLabel("Evolução de Carga")
                 Spacer(Modifier.height(8.dp))
-                Column(Modifier.padding(horizontal = FVExtension.margin)) {
+                Column(Modifier.padding(horizontal = 20.dp)) {
                     ProgressChartCard(chartLines = state.chartLines)
                 }
             }
@@ -232,10 +232,10 @@ private fun ProgressionSuccessContent(
                 Spacer(Modifier.height(16.dp))
                 FVSectionLabel("Estatísticas do Período")
                 Spacer(Modifier.height(8.dp))
-                Column(Modifier.padding(horizontal = FVExtension.margin)) {
+                Column(Modifier.padding(horizontal = 20.dp)) {
                     ProgressionStatsGrid(
                         stats       = state.stats,
-                        accentColor = FVExtension.primary,
+                        accentColor = FitColors.Accent,
                     )
                 }
             }
@@ -243,7 +243,7 @@ private fun ProgressionSuccessContent(
             // 6 ── Insight de evolução
             item(key = "insight") {
                 Spacer(Modifier.height(16.dp))
-                Column(Modifier.padding(horizontal = FVExtension.margin)) {
+                Column(Modifier.padding(horizontal = 20.dp)) {
                     InsightsCard(insight = state.insight)
                 }
             }
@@ -253,7 +253,7 @@ private fun ProgressionSuccessContent(
                 Spacer(Modifier.height(20.dp))
                 FVSectionLabel("Volume Semanal", action = "+12% vs semana ant.")
                 Spacer(Modifier.height(8.dp))
-                Column(Modifier.padding(horizontal = FVExtension.margin)) {
+                Column(Modifier.padding(horizontal = 20.dp)) {
                     FVCard {
                         VolumeBarChart(
                             values   = listOf(2800f, 3500f, 4100f, 4800f, 5200f, 6100f),
@@ -271,7 +271,7 @@ private fun ProgressionSuccessContent(
                 Spacer(Modifier.height(16.dp))
                 FVSectionLabel("Frequência de Treino")
                 Spacer(Modifier.height(8.dp))
-                Column(Modifier.padding(horizontal = FVExtension.margin)) {
+                Column(Modifier.padding(horizontal = 20.dp)) {
                     FVCard {
                         TrainingHeatmap(Modifier.fillMaxWidth())
                         Spacer(Modifier.height(8.dp))
@@ -302,14 +302,14 @@ private fun ProgressionErrorContent(
         Icon(
             imageVector        = Icons.Default.Warning,
             contentDescription = null,
-            tint               = FVExtension.textMuted,
+            tint               = FitColors.TextMuted,
             modifier           = Modifier.size(48.dp),
         )
         Spacer(Modifier.height(16.dp))
         Text(
             text       = message,
             fontSize   = 15.sp,
-            color      = FVExtension.textMuted,
+            color      = FitColors.TextMuted,
             textAlign  = TextAlign.Center,
             lineHeight = 22.sp,
         )
@@ -317,8 +317,8 @@ private fun ProgressionErrorContent(
             Spacer(Modifier.height(24.dp))
             Button(
                 onClick = onRetry,
-                colors  = ButtonDefaults.buttonColors(containerColor = FVExtension.primary),
-                shape   = RoundedCornerShape(FVExtension.radiusBtn),
+                colors  = ButtonDefaults.buttonColors(containerColor = FitColors.Accent),
+                shape   = RoundedCornerShape(12.dp),
             ) {
                 Text(
                     text       = "Tentar novamente",
@@ -367,7 +367,7 @@ private fun VolumeBarChart(
                 Text(
                     text       = label,
                     fontSize   = 9.sp,
-                    color      = if (i == labels.lastIndex) FVExtension.primary else FVExtension.textMuted,
+                    color      = if (i == labels.lastIndex) FitColors.Accent else FitColors.TextMuted,
                     fontWeight = if (i == labels.lastIndex) FontWeight.Bold else FontWeight.Normal,
                 )
             }
@@ -388,8 +388,8 @@ private fun VolumeBar(fraction: Float, isLast: Boolean, index: Int) {
             .fillMaxHeight(animH)
             .clip(RoundedCornerShape(topStart = 4.dp, topEnd = 4.dp))
             .background(
-                if (isLast) FVExtension.primary
-                else FVExtension.primary.copy(alpha = 0.15f + fraction * 0.45f)
+                if (isLast) FitColors.Accent
+                else FitColors.Accent.copy(alpha = 0.15f + fraction * 0.45f)
             )
     )
 }
@@ -420,7 +420,7 @@ private fun TrainingHeatmap(modifier: Modifier = Modifier) {
                 Text(
                     text     = d,
                     fontSize = 8.sp,
-                    color    = FVExtension.textMuted,
+                    color    = FitColors.TextMuted,
                     modifier = Modifier.width(32.dp),
                 )
             }
@@ -441,7 +441,7 @@ private fun TrainingHeatmap(modifier: Modifier = Modifier) {
                             .clip(RoundedCornerShape(2.dp))
                             .background(
                                 if (intensity == 0f) Color(0xFF1A1A22)
-                                else FVExtension.primary.copy(alpha = intensity)
+                                else FitColors.Accent.copy(alpha = intensity)
                             )
                     )
                 }
@@ -456,14 +456,14 @@ private fun HeatmapLegend() {
         horizontalArrangement = Arrangement.spacedBy(6.dp),
         verticalAlignment     = Alignment.CenterVertically,
     ) {
-        Text(text = "Menos", fontSize = 9.sp, color = FVExtension.textMuted)
+        Text(text = "Menos", fontSize = 9.sp, color = FitColors.TextMuted)
         listOf(0.08f, 0.2f, 0.5f, 1.0f).forEach { alpha ->
             Box(
                 modifier = Modifier
                     .size(10.dp)
-                    .background(FVExtension.primary.copy(alpha = alpha), RoundedCornerShape(2.dp))
+                    .background(FitColors.Accent.copy(alpha = alpha), RoundedCornerShape(2.dp))
             )
         }
-        Text(text = "Mais", fontSize = 9.sp, color = FVExtension.textMuted)
+        Text(text = "Mais", fontSize = 9.sp, color = FitColors.TextMuted)
     }
 }

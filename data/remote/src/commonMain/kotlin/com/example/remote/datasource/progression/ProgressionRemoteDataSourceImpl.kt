@@ -1,7 +1,7 @@
-package com.example.remote.datasource.progression
+﻿package org.fitverse.data.remote.datasource.progression
 
-import com.example.remote.dto.progression.ProgressionPointDto
-import com.example.remote.expect.DateTimeManager
+import org.fitverse.data.remote.dto.progression.ProgressionPointDto
+import org.fitverse.data.remote.expect.DateTimeManager
 import kotlinx.coroutines.delay
 import kotlin.random.Random
 

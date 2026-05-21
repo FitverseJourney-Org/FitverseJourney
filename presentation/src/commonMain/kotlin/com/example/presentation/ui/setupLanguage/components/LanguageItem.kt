@@ -1,4 +1,4 @@
-package com.example.presentation.ui.setupLanguage.components
+﻿package org.fitverse.presentation.ui.setupLanguage.components
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
@@ -23,7 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.example.domain.models.language.AppLanguageItem
+import org.fitverse.domain.models.language.AppLanguageItem
 import org.jetbrains.compose.resources.painterResource
 
 @Composable

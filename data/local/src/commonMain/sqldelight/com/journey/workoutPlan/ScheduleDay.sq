@@ -1,0 +1,51 @@
+-- ScheduleDay.sq
+-- Cronograma semanal: cada entrada representa um dia agendado dentro de um plano.
+-- O `position` garante a ordem de exibição (S, T, Q, S, ... da UI).
+
+CREATE TABLE ScheduleDay (
+    id              TEXT    NOT NULL PRIMARY KEY,
+    workout_plan_id TEXT    NOT NULL,
+    day_of_week     TEXT    NOT NULL,   -- Enum: DayOfWeek ("SUNDAY", "MONDAY" ...)
+    is_rest_day     INTEGER NOT NULL DEFAULT 0, -- 0 = treino, 1 = descanso (🔥 na UI)
+    position        INTEGER NOT NULL DEFAULT 0, -- Ordem de exibição no cronograma
+
+    FOREIGN KEY (workout_plan_id) REFERENCES WorkoutPlan(id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_schedule_day_plan ON ScheduleDay(workout_plan_id);
+
+-- ─────────────────────────────────────────────
+-- Queries de escrita
+-- ─────────────────────────────────────────────
+
+insertScheduleDay:
+INSERT OR REPLACE INTO ScheduleDay (
+    id,
+    workout_plan_id,
+    day_of_week,
+    is_rest_day,
+    position
+) VALUES (?, ?, ?, ?, ?);
+
+deleteScheduleDaysByPlan:
+DELETE FROM ScheduleDay WHERE workout_plan_id = ?;
+
+deleteScheduleDayById:
+DELETE FROM ScheduleDay WHERE id = ?;
+
+-- ─────────────────────────────────────────────
+-- Queries de leitura
+-- ─────────────────────────────────────────────
+
+selectScheduleDaysByPlan:
+SELECT * FROM ScheduleDay
+WHERE workout_plan_id = ?
+ORDER BY position ASC;
+
+selectScheduleDayById:
+SELECT * FROM ScheduleDay WHERE id = ?;
+
+selectTrainingScheduleDays:
+SELECT * FROM ScheduleDay
+WHERE workout_plan_id = ? AND is_rest_day = 0
+ORDER BY position ASC;

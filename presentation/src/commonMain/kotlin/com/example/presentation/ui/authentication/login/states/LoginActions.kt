@@ -1,4 +1,4 @@
-package com.example.presentation.ui.authentication.login.states
+﻿package org.fitverse.presentation.ui.authentication.login.states
 
 sealed interface LoginAction {
     data class EmailChanged(val value: String) : LoginAction

@@ -1,6 +1,6 @@
-package com.example.domain.usecase.missions
+﻿package org.fitverse.domain.usecase.missions
 
-import com.example.domain.repository.dbLocal.sqldelight.catalog.CatalogMissionRecord
+import org.fitverse.domain.repository.dbLocal.sqldelight.catalog.CatalogMissionRecord
 
 internal object CatalogMissionSeeds {
 

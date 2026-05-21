@@ -1,4 +1,4 @@
-package com.example.presentation.ui.setupLanguage
+﻿package org.fitverse.presentation.ui.setupLanguage
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -47,8 +47,8 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.domain.models.language.AppLanguageItem
-import com.example.presentation.utils.LanguageAvailableApp.Companion.availableAppLanguageItems
+import org.fitverse.domain.models.language.AppLanguageItem
+import org.fitverse.presentation.utils.LanguageAvailableApp.Companion.availableAppLanguageItems
 import org.jetbrains.compose.resources.painterResource
 
 @Composable

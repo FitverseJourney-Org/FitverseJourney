@@ -1,4 +1,4 @@
-package com.example.presentation.ui.setupLanguage.components
+﻿package org.fitverse.presentation.ui.setupLanguage.components
 
 
 import androidx.compose.animation.AnimatedContent

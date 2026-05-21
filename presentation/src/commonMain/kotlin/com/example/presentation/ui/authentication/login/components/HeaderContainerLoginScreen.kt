@@ -1,4 +1,4 @@
-package com.example.presentation.ui.authentication.login.components
+﻿package org.fitverse.presentation.ui.authentication.login.components
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -13,7 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.domain.models.language.AppLanguageItem
+import org.fitverse.domain.models.language.AppLanguageItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

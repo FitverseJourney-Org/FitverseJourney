@@ -1,6 +1,6 @@
-package com.example.remote.datasource.exercises
+﻿package org.fitverse.data.remote.datasource.exercises
 
-import com.example.remote.dto.exercise.ExerciseDto
+import org.fitverse.data.remote.dto.exercise.ExerciseDto
 import kotlinx.coroutines.flow.Flow
 
 interface ExerciseLocalDataSource {

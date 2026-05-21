@@ -1,7 +1,7 @@
-package com.example.presentation.ui.wiki.state
+﻿package org.fitverse.presentation.ui.wiki.state
 
-import com.example.domain.models.wiki.WikiArticle
-import com.example.domain.models.wiki.WikiCategory
+import org.fitverse.domain.models.wiki.WikiArticle
+import org.fitverse.domain.models.wiki.WikiCategory
 
 /**
  * Estado imutável que descreve completamente a UI da WikiScreen em qualquer momento.

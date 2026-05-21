@@ -1,4 +1,4 @@
-package com.example.presentation.widgets
+﻿package org.fitverse.presentation.widgets
 
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat

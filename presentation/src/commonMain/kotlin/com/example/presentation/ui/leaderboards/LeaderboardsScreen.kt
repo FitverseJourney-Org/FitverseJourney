@@ -1,4 +1,4 @@
-package com.example.presentation.ui.leaderboards
+﻿package org.fitverse.presentation.ui.leaderboards
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode
@@ -48,17 +48,17 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.collectAsState
-import com.example.expect.format
-import com.example.presentation.theme.FVExtension
-import com.example.presentation.ui.leaderboards.viewmodel.LeaderboardEntry
-import com.example.presentation.ui.leaderboards.viewmodel.LeaderboardsEvent
-import com.example.presentation.ui.leaderboards.viewmodel.LeaderboardsIntent
-import com.example.presentation.ui.leaderboards.viewmodel.LeaderboardsViewModel
-import com.example.presentation.ui.leaderboards.viewmodel.defaultLeaderboardEntries
-import com.example.presentation.widgets.FVCard
-import com.example.presentation.widgets.FVFilterPill
-import com.example.presentation.widgets.FVSectionLabel
-import com.example.presentation.widgets.FitverseTopAppBar
+import org.fitverse.presentation.expect.format
+import org.fitverse.presentation.theme.FitColors
+import org.fitverse.presentation.ui.leaderboards.viewmodel.LeaderboardEntry
+import org.fitverse.presentation.ui.leaderboards.viewmodel.LeaderboardsEvent
+import org.fitverse.presentation.ui.leaderboards.viewmodel.LeaderboardsIntent
+import org.fitverse.presentation.ui.leaderboards.viewmodel.LeaderboardsViewModel
+import org.fitverse.presentation.ui.leaderboards.viewmodel.defaultLeaderboardEntries
+import org.fitverse.presentation.widgets.FVCard
+import org.fitverse.presentation.widgets.FVFilterPill
+import org.fitverse.presentation.widgets.FVSectionLabel
+import org.fitverse.presentation.widgets.FitverseTopAppBar
 import kotlin.math.abs
 
 // ── Dados estáticos centralizados ─────────────────────────────────────────────
@@ -118,7 +118,7 @@ fun LeaderboardScreen(
 ) {
     Scaffold(
         modifier            = modifier,
-        containerColor      = FVExtension.bg,
+        containerColor      = FitColors.Bg,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = {
             FitverseTopAppBar(
@@ -128,7 +128,7 @@ fun LeaderboardScreen(
                     Text(
                         text     = "Semana de 29 Abr – 5 Mai · atualizado há 2 min",
                         fontSize = 12.sp,
-                        color    = FVExtension.textMuted
+                        color    = FitColors.TextMuted
                     )
                 }
             )
@@ -138,7 +138,7 @@ fun LeaderboardScreen(
         LazyColumn(
             modifier       = Modifier
                 .fillMaxSize()
-                .background(FVExtension.bg)
+                .background(FitColors.Bg)
                 .padding(paddingValues),
             contentPadding = PaddingValues(bottom = 32.dp)
         ) {
@@ -172,9 +172,9 @@ fun LeaderboardScreen(
                 )
                 Spacer(Modifier.height(16.dp))
                 HorizontalDivider(
-                    color     = FVExtension.outline,
+                    color     = FitColors.Outline,
                     thickness = 0.5.dp,
-                    modifier  = Modifier.padding(horizontal = FVExtension.margin)
+                    modifier  = Modifier.padding(horizontal = 20.dp)
                 )
                 Spacer(Modifier.height(8.dp))
                 FVSectionLabel("Classificação Geral")
@@ -205,11 +205,11 @@ fun LeaderboardScreen(
 private fun SeasonBanner() {
     Box(
         modifier = Modifier
-            .padding(horizontal = FVExtension.margin)
+            .padding(horizontal = 20.dp)
             .fillMaxWidth()
-            .clip(RoundedCornerShape(FVExtension.radius))
-            .background(FVExtension.danger.copy(alpha = 0.07f))
-            .border(1.dp, FVExtension.danger.copy(alpha = 0.2f), RoundedCornerShape(FVExtension.radius))
+            .clip(RoundedCornerShape(16.dp))
+            .background(FitColors.Red.copy(alpha = 0.07f))
+            .border(1.dp, FitColors.Red.copy(alpha = 0.2f), RoundedCornerShape(16.dp))
             .padding(12.dp)
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -220,25 +220,25 @@ private fun SeasonBanner() {
                     text       = "Temporada encerra em ${LeaderboardData.seasonDaysLeft} dias",
                     fontSize   = 13.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color      = FVExtension.text
+                    color      = FitColors.TextPrimary
                 )
                 Text(
                     text     = "Mantenha sua posição para ganhar recompensas",
                     fontSize = 11.sp,
-                    color    = FVExtension.textMuted
+                    color    = FitColors.TextMuted
                 )
             }
             Spacer(Modifier.width(8.dp))
             Box(
                 modifier = Modifier
-                    .clip(RoundedCornerShape(FVExtension.radiusPill))
-                    .background(FVExtension.danger.copy(alpha = 0.15f))
+                    .clip(RoundedCornerShape(100.dp))
+                    .background(FitColors.Red.copy(alpha = 0.15f))
                     .padding(horizontal = 10.dp, vertical = 5.dp)
             ) {
                 Text(
                     text       = "Ver prêmios",
                     fontSize   = 10.sp,
-                    color      = FVExtension.danger,
+                    color      = FitColors.Red,
                     fontWeight = FontWeight.Bold
                 )
             }
@@ -260,7 +260,7 @@ private fun FilterSection(
 ) {
     // horizontalScroll em cada Row evita overflow em telas pequenas
     Column(
-        modifier      = Modifier.padding(horizontal = FVExtension.margin),
+        modifier      = Modifier.padding(horizontal = 20.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Row(
@@ -301,13 +301,13 @@ private fun Podium(
     Row(
         modifier              = Modifier
             .fillMaxWidth()
-            .padding(horizontal = FVExtension.margin),
+            .padding(horizontal = 20.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment     = Alignment.Bottom
     ) {
-        PodiumEntry(entry = second, placeColor = FVExtension.silver, platformH = 48.dp)
-        PodiumEntry(entry = first,  placeColor = FVExtension.gold,   platformH = 64.dp, isCrown = true)
-        PodiumEntry(entry = third,  placeColor = FVExtension.bronze, platformH = 32.dp)
+        PodiumEntry(entry = second, placeColor = FitColors.Silver, platformH = 48.dp)
+        PodiumEntry(entry = first,  placeColor = FitColors.Gold,   platformH = 64.dp, isCrown = true)
+        PodiumEntry(entry = third,  placeColor = FitColors.Bronze, platformH = 32.dp)
     }
 }
 
@@ -355,7 +355,7 @@ private fun PodiumEntry(
             Text(
                 text     = entry.name.first().toString(),
                 fontSize = if (isCrown) 22.sp else 17.sp,
-                color    = FVExtension.text
+                color    = FitColors.TextPrimary
             )
         }
 
@@ -364,7 +364,7 @@ private fun PodiumEntry(
         Text(
             text       = entry.name,
             fontSize   = if (isCrown) 12.sp else 10.sp,
-            color      = FVExtension.text,
+            color      = FitColors.TextPrimary,
             fontWeight = FontWeight.SemiBold,
             maxLines   = 1
         )
@@ -389,7 +389,7 @@ private fun PodiumEntry(
                 text       = entry.rank.toString(),
                 fontSize   = 18.sp,
                 fontWeight = FontWeight.ExtraBold,
-                color      = FVExtension.bg
+                color      = FitColors.Bg
             )
         }
     }
@@ -400,17 +400,17 @@ private fun PodiumEntry(
 @Composable
 private fun RankRow(entry: LeaderboardEntry) {
     // Cores calculadas uma vez por composição da linha
-    val borderColor     = if (entry.isMe) FVExtension.primary.copy(alpha = 0.25f) else FVExtension.outline
-    val bgColor         = if (entry.isMe) FVExtension.primary.copy(alpha = 0.05f) else FVExtension.surface
-    val rankColor       = if (entry.rank <= 5) FVExtension.text else FVExtension.textMuted
-    val nameColor       = if (entry.isMe) FVExtension.primary else FVExtension.text
-    val scoreColor      = if (entry.isMe) FVExtension.primary else FVExtension.text
+    val borderColor     = if (entry.isMe) FitColors.Accent.copy(alpha = 0.25f) else FitColors.Outline
+    val bgColor         = if (entry.isMe) FitColors.Accent.copy(alpha = 0.05f) else FitColors.Surface
+    val rankColor       = if (entry.rank <= 5) FitColors.TextPrimary else FitColors.TextMuted
+    val nameColor       = if (entry.isMe) FitColors.Accent else FitColors.TextPrimary
+    val scoreColor      = if (entry.isMe) FitColors.Accent else FitColors.TextPrimary
     val avatarBorder    = if (entry.isMe) 2.dp else 1.dp
-    val avatarBdrColor  = if (entry.isMe) FVExtension.primary.copy(alpha = 0.5f) else entry.classColor.copy(alpha = 0.3f)
+    val avatarBdrColor  = if (entry.isMe) FitColors.Accent.copy(alpha = 0.5f) else entry.classColor.copy(alpha = 0.3f)
     val deltaColor = when {
-        entry.delta > 0 -> FVExtension.secondary
-        entry.delta < 0 -> FVExtension.danger
-        else            -> FVExtension.textMuted
+        entry.delta > 0 -> FitColors.Secondary
+        entry.delta < 0 -> FitColors.Red
+        else            -> FitColors.TextMuted
     }
     val deltaText = when {
         entry.delta > 0 -> "▲${entry.delta}"
@@ -421,7 +421,7 @@ private fun RankRow(entry: LeaderboardEntry) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = FVExtension.margin, vertical = 4.dp)
+            .padding(horizontal = 20.dp, vertical = 4.dp)
             .clip(RoundedCornerShape(10.dp))
             .background(bgColor)
             .border(1.dp, borderColor, RoundedCornerShape(10.dp))
@@ -447,7 +447,7 @@ private fun RankRow(entry: LeaderboardEntry) {
                 .border(avatarBorder, avatarBdrColor, CircleShape),
             contentAlignment = Alignment.Center
         ) {
-            Text(text = entry.name.first().toString(), fontSize = 14.sp, color = FVExtension.text)
+            Text(text = entry.name.first().toString(), fontSize = 14.sp, color = FitColors.TextPrimary)
         }
 
         Spacer(Modifier.width(10.dp))
@@ -464,14 +464,14 @@ private fun RankRow(entry: LeaderboardEntry) {
                     Spacer(Modifier.width(6.dp))
                     Box(
                         modifier = Modifier
-                            .clip(RoundedCornerShape(FVExtension.radiusPill))
-                            .background(FVExtension.primary.copy(alpha = 0.15f))
+                            .clip(RoundedCornerShape(100.dp))
+                            .background(FitColors.Accent.copy(alpha = 0.15f))
                             .padding(horizontal = 6.dp, vertical = 2.dp)
                     ) {
                         Text(
                             text       = "VOCÊ",
                             fontSize   = 8.sp,
-                            color      = FVExtension.primary,
+                            color      = FitColors.Accent,
                             fontWeight = FontWeight.Bold
                         )
                     }
@@ -480,7 +480,7 @@ private fun RankRow(entry: LeaderboardEntry) {
             Text(
                 text     = "Nível ${entry.level} · ${entry.className}",
                 fontSize = 10.sp,
-                color    = FVExtension.textMuted
+                color    = FitColors.TextMuted
             )
         }
 
@@ -507,8 +507,8 @@ private fun RankRow(entry: LeaderboardEntry) {
 
 @Composable
 private fun MeCard(entry: LeaderboardEntry) {
-    Column(modifier = Modifier.padding(horizontal = FVExtension.margin)) {
-        FVCard(glowColor = FVExtension.primary) {
+    Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+        FVCard(glowColor = FitColors.Accent) {
             Row(
                 modifier              = Modifier.fillMaxWidth(),
                 verticalAlignment     = Alignment.CenterVertically,
@@ -518,21 +518,21 @@ private fun MeCard(entry: LeaderboardEntry) {
                     Text(
                         text          = "Sua posição atual",
                         fontSize      = 10.sp,
-                        color         = FVExtension.textMuted,
+                        color         = FitColors.TextMuted,
                         letterSpacing = 0.5.sp
                     )
                     Text(
                         text       = "#${entry.rank} no ranking global",
                         fontSize   = 15.sp,
                         fontWeight = FontWeight.Bold,
-                        color      = FVExtension.primary
+                        color      = FitColors.Accent
                     )
                 }
                 Text(
                     text       = "%,d XP".format(entry.score),
                     fontSize   = 16.sp,
                     fontWeight = FontWeight.ExtraBold,
-                    color      = FVExtension.text,
+                    color      = FitColors.TextPrimary,
                     fontFamily = FontFamily.Monospace
                 )
             }
@@ -548,7 +548,7 @@ private fun MeCard(entry: LeaderboardEntry) {
                 Text(
                     text     = "Faltam ${"%,d".format(gap)} XP para a posição #${nextEntry.rank}",
                     fontSize = 11.sp,
-                    color    = FVExtension.textMuted
+                    color    = FitColors.TextMuted
                 )
                 Spacer(Modifier.height(6.dp))
                 LinearProgressIndicator(
@@ -556,9 +556,9 @@ private fun MeCard(entry: LeaderboardEntry) {
                     modifier   = Modifier
                         .fillMaxWidth()
                         .height(4.dp)
-                        .clip(RoundedCornerShape(FVExtension.radiusPill)),
-                    color      = FVExtension.primary,
-                    trackColor = FVExtension.surface2
+                        .clip(RoundedCornerShape(100.dp)),
+                    color      = FitColors.Accent,
+                    trackColor = FitColors.Surface2
                 )
             }
         }

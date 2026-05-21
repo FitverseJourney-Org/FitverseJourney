@@ -1,4 +1,4 @@
-package com.example.presentation.ui.achievements
+﻿package org.fitverse.presentation.ui.achievements
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
@@ -54,22 +54,22 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.expect.format
-import com.example.presentation.theme.FVExtension
-import com.example.presentation.ui.achievements.viewmodel.AchievementsEvent
-import com.example.presentation.ui.achievements.viewmodel.AchievementsIntent
-import com.example.presentation.ui.achievements.viewmodel.AchievementsUiState
-import com.example.presentation.ui.achievements.viewmodel.AchievementsViewModel
-import com.example.presentation.widgets.FVCard
-import com.example.presentation.widgets.FVFilterPill
-import com.example.presentation.widgets.FVSectionLabel
-import com.example.presentation.widgets.FitVerseSpacer
-import com.example.presentation.widgets.FitverseTopAppBar
+import org.fitverse.presentation.expect.format
+import org.fitverse.presentation.theme.FitColors
+import org.fitverse.presentation.theme.FVTypography
+import org.fitverse.presentation.ui.achievements.viewmodel.AchievementsEvent
+import org.fitverse.presentation.ui.achievements.viewmodel.AchievementsIntent
+import org.fitverse.presentation.ui.achievements.viewmodel.AchievementsUiState
+import org.fitverse.presentation.ui.achievements.viewmodel.AchievementsViewModel
+import org.fitverse.presentation.widgets.FVCard
+import org.fitverse.presentation.widgets.FVFilterPill
+import org.fitverse.presentation.widgets.FVSectionLabel
+import org.fitverse.presentation.widgets.FitVerseSpacer
+import org.fitverse.presentation.widgets.FitverseTopAppBar
 
 // ── Modelos ───────────────────────────────────────────────────────────────────
 
@@ -113,10 +113,10 @@ object AchievementsData {
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 fun rarityColor(r: AchievementRarity): Color = when (r) {
-    AchievementRarity.COMMON    -> FVExtension.primary
-    AchievementRarity.RARE      -> FVExtension.xp
+    AchievementRarity.COMMON    -> FitColors.Accent
+    AchievementRarity.RARE      -> FitColors.Xp
     AchievementRarity.EPIC      -> Color(0xFFF5C518)
-    AchievementRarity.LEGENDARY -> FVExtension.danger
+    AchievementRarity.LEGENDARY -> FitColors.Red
 }
 
 fun rarityLabel(r: AchievementRarity): String = when (r) {
@@ -192,7 +192,7 @@ fun AchievementsScreen(
 
     Scaffold(
         modifier            = modifier,
-        containerColor      = FVExtension.bg,
+        containerColor      = FitColors.Bg,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = {
             FitverseTopAppBar(
@@ -200,9 +200,9 @@ fun AchievementsScreen(
                 onBack   = onBack,
                 subtitle = {
                     Text(
-                        text     = "Você desbloqueou $unlocked / $total conquistas",
-                        fontSize = 12.sp,
-                        color    = FVExtension.textMuted
+                        text  = "Você desbloqueou $unlocked / $total conquistas",
+                        style = FVTypography.bodySmall,
+                        color = FitColors.TextMuted,
                     )
                 }
             )
@@ -212,7 +212,7 @@ fun AchievementsScreen(
         LazyColumn(
             modifier       = Modifier
                 .fillMaxSize()
-                .background(FVExtension.bg)
+                .background(FitColors.Bg)
                 .padding(paddingValues),
             contentPadding = PaddingValues(bottom = 32.dp, top = 16.dp)
         ) {
@@ -223,8 +223,8 @@ fun AchievementsScreen(
                     vertical = true,
                     value = 12.dp
                 )
-                Column(Modifier.padding(horizontal = FVExtension.margin)) {
-                    FVCard(glowColor = FVExtension.xp) {
+                Column(Modifier.padding(horizontal = 20.dp)) {
+                    FVCard(glowColor = FitColors.Xp) {
                         Row(
                             modifier              = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
@@ -232,23 +232,20 @@ fun AchievementsScreen(
                         ) {
                             Column {
                                 Text(
-                                    text          = "XP DE CONQUISTAS",
-                                    fontSize      = 10.sp,
-                                    color         = FVExtension.textMuted,
-                                    letterSpacing = 1.sp
+                                    text  = "XP DE CONQUISTAS",
+                                    style = FVTypography.overline,
+                                    color = FitColors.TextMuted,
                                 )
                                 Text(
-                                    text       = "%,d XP".format(totalXp),
-                                    fontSize   = 22.sp,
-                                    fontWeight = FontWeight.ExtraBold,
-                                    color      = FVExtension.primary
+                                    text  = "%,d XP".format(totalXp),
+                                    style = FVTypography.monoLarge,
+                                    color = FitColors.Accent,
                                 )
                             }
                             Text(
-                                text       = "%.0f%%".format(pct * 100),
-                                fontSize   = 28.sp,
-                                fontWeight = FontWeight.ExtraBold,
-                                color      = FVExtension.xp
+                                text  = "%.0f%%".format(pct * 100),
+                                style = FVTypography.displayMedium,
+                                color = FitColors.Xp,
                             )
                         }
                         FitVerseSpacer(
@@ -264,16 +261,16 @@ fun AchievementsScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(5.dp)
-                                .clip(RoundedCornerShape(FVExtension.radiusPill))
-                                .background(FVExtension.surface2)
+                                .clip(RoundedCornerShape(100.dp))
+                                .background(FitColors.Surface2)
                         ) {
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth(animPct)
                                     .fillMaxHeight()
-                                    .clip(RoundedCornerShape(FVExtension.radiusPill))
+                                    .clip(RoundedCornerShape(100.dp))
                                     .background(
-                                        Brush.horizontalGradient(listOf(FVExtension.xp, FVExtension.primary))
+                                        Brush.horizontalGradient(listOf(FitColors.Xp, FitColors.Accent))
                                     )
                             )
                         }
@@ -287,7 +284,7 @@ fun AchievementsScreen(
                     vertical = true,
                     value = 14.dp
                 )
-                Column(Modifier.padding(horizontal = FVExtension.margin)) {
+                Column(Modifier.padding(horizontal = 20.dp)) {
 
                     // Filtro por categoria
                     Row(
@@ -357,7 +354,7 @@ fun AchievementsScreen(
                 Row(
                     modifier              = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = FVExtension.margin)
+                        .padding(horizontal = 20.dp)
                         .padding(bottom = 10.dp),
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
@@ -403,16 +400,17 @@ private fun AchievementCard(
 
     Box(
         modifier = modifier
-            .clip(RoundedCornerShape(FVExtension.radius))
-            .background(if (locked) Color(0xFF0D0D12) else FVExtension.surface)
+            .height(160.dp)
+            .clip(RoundedCornerShape(16.dp))
+            .background(if (locked) Color(0xFF0D0D12) else FitColors.Surface)
             .border(
                 width = 1.dp,
                 color = when (achievement.status) {
                     AchievementStatus.UNLOCKED    -> rColor.copy(alpha = 0.3f)
                     AchievementStatus.IN_PROGRESS -> rColor.copy(alpha = 0.2f)
-                    AchievementStatus.LOCKED      -> FVExtension.outline.copy(alpha = 0.5f)
+                    AchievementStatus.LOCKED      -> FitColors.Outline.copy(alpha = 0.5f)
                 },
-                shape = RoundedCornerShape(FVExtension.radius)
+                shape = RoundedCornerShape(16.dp)
             )
             .clickable(onClick = onClick)
             .alpha(if (locked) 0.55f else 1f),
@@ -443,30 +441,26 @@ private fun AchievementCard(
             Spacer(Modifier.height(8.dp))
 
             Text(
-                text       = achievement.name,
-                fontSize   = 11.sp,
-                fontWeight = FontWeight.Bold,
-                color      = if (locked) FVExtension.textMuted else rColor,
-                textAlign  = TextAlign.Center,
-                lineHeight = 14.sp
+                text      = achievement.name,
+                style     = FVTypography.titleSmall,
+                color     = if (locked) FitColors.TextMuted else rColor,
+                textAlign = TextAlign.Center,
             )
 
             Spacer(Modifier.height(4.dp))
 
             if (!locked) {
                 Text(
-                    text       = "+${achievement.xp} XP",
-                    fontSize   = 9.sp,
-                    color      = FVExtension.primary,
-                    fontFamily = FontFamily.Monospace
+                    text  = "+${achievement.xp} XP",
+                    style = FVTypography.monoSmall,
+                    color = FitColors.Accent,
                 )
             } else {
                 Text(
-                    text       = achievement.condition.take(26),
-                    fontSize   = 9.sp,
-                    color      = FVExtension.textMuted,
-                    textAlign  = TextAlign.Center,
-                    lineHeight = 12.sp
+                    text      = achievement.condition.take(26),
+                    style     = FVTypography.caption,
+                    color     = FitColors.TextMuted,
+                    textAlign = TextAlign.Center,
                 )
             }
 
@@ -477,15 +471,15 @@ private fun AchievementCard(
                     modifier   = Modifier
                         .fillMaxWidth()
                         .height(3.dp)
-                        .clip(RoundedCornerShape(FVExtension.radiusPill)),
+                        .clip(RoundedCornerShape(100.dp)),
                     color      = rColor,
-                    trackColor = FVExtension.surface2
+                    trackColor = FitColors.Surface2
                 )
                 Spacer(Modifier.height(3.dp))
                 Text(
-                    text     = achievement.condition,
-                    fontSize = 8.sp,
-                    color    = rColor
+                    text  = achievement.condition,
+                    style = FVTypography.caption,
+                    color = rColor,
                 )
             }
         }
@@ -501,10 +495,9 @@ private fun AchievementCard(
                 .padding(horizontal = 5.dp, vertical = 2.dp)
         ) {
             Text(
-                text       = rarityLabel(achievement.rarity),
-                fontSize   = 7.sp,
-                color      = rColor,
-                fontWeight = FontWeight.Bold
+                text  = rarityLabel(achievement.rarity),
+                style = FVTypography.captionBold,
+                color = rColor,
             )
         }
 
@@ -512,7 +505,7 @@ private fun AchievementCard(
         if (locked) {
             Text(
                 text     = "🔒",
-                fontSize = 10.sp,
+                style    = FVTypography.labelSmall,
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(6.dp)
@@ -535,7 +528,7 @@ fun AchievementDetailSheet(
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState       = sheetState,
-        containerColor   = FVExtension.surface,
+        containerColor   = FitColors.Surface,
         tonalElevation   = 0.dp,
         shape            = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp),
         dragHandle       = {
@@ -545,7 +538,7 @@ fun AchievementDetailSheet(
                     .width(36.dp)
                     .height(4.dp)
                     .clip(RoundedCornerShape(2.dp))
-                    .background(FVExtension.outline)
+                    .background(FitColors.Outline)
             )
         }
     ) {
@@ -563,20 +556,18 @@ fun AchievementDetailSheet(
             Spacer(Modifier.height(10.dp))
 
             Text(
-                text       = achievement.name,
-                fontSize   = 22.sp,
-                fontWeight = FontWeight.ExtraBold,
-                color      = FVExtension.text,
-                textAlign  = TextAlign.Center
+                text      = achievement.name,
+                style     = FVTypography.headlineLarge,
+                color     = FitColors.TextPrimary,
+                textAlign = TextAlign.Center,
             )
             Spacer(Modifier.height(6.dp))
 
             Text(
-                text       = achievement.desc,
-                fontSize   = 14.sp,
-                color      = FVExtension.textMuted,
-                textAlign  = TextAlign.Center,
-                lineHeight = 20.sp
+                text      = achievement.desc,
+                style     = FVTypography.bodyLarge,
+                color     = FitColors.TextMuted,
+                textAlign = TextAlign.Center,
             )
             Spacer(Modifier.height(16.dp))
 
@@ -595,9 +586,9 @@ fun AchievementDetailSheet(
             if (achievement.date.isNotEmpty()) {
                 Spacer(Modifier.height(8.dp))
                 Text(
-                    text     = "Desbloqueada em ${achievement.date}",
-                    fontSize = 11.sp,
-                    color    = FVExtension.textMuted
+                    text  = "Desbloqueada em ${achievement.date}",
+                    style = FVTypography.labelMedium,
+                    color = FitColors.TextMuted,
                 )
             }
 
@@ -615,7 +606,7 @@ fun AchievementDetailSheet(
 
             SheetButton(
                 label   = "Fechar",
-                color   = FVExtension.textMuted,
+                color   = FitColors.TextMuted,
                 filled  = false,
                 onClick = onDismiss
             )
@@ -678,17 +669,15 @@ private fun AchievementIcon(achievement: Achievement, rColor: Color) {
 private fun RarityBadge(rarity: AchievementRarity, rColor: Color) {
     Box(
         modifier = Modifier
-            .clip(RoundedCornerShape(FVExtension.radiusPill))
+            .clip(RoundedCornerShape(100.dp))
             .background(rColor.copy(alpha = 0.12f))
-            .border(1.dp, rColor.copy(alpha = 0.3f), RoundedCornerShape(FVExtension.radiusPill))
+            .border(1.dp, rColor.copy(alpha = 0.3f), RoundedCornerShape(100.dp))
             .padding(horizontal = 12.dp, vertical = 4.dp)
     ) {
         Text(
-            text          = rarityLabel(rarity),
-            fontSize      = 10.sp,
-            color         = rColor,
-            fontWeight    = FontWeight.Bold,
-            letterSpacing = 0.8.sp
+            text  = rarityLabel(rarity),
+            style = FVTypography.captionBold,
+            color = rColor,
         )
     }
 }
@@ -698,19 +687,17 @@ private fun XpBadge(xp: Int) {
     Row(
         modifier          = Modifier
             .clip(RoundedCornerShape(10.dp))
-            .background(FVExtension.primary.copy(alpha = 0.08f))
-            .border(1.dp, FVExtension.primary.copy(alpha = 0.2f), RoundedCornerShape(10.dp))
+            .background(FitColors.Accent.copy(alpha = 0.08f))
+            .border(1.dp, FitColors.Accent.copy(alpha = 0.2f), RoundedCornerShape(10.dp))
             .padding(horizontal = 16.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(text = "⭐", fontSize = 18.sp)
         Spacer(Modifier.width(8.dp))
         Text(
-            text       = "+$xp XP",
-            fontSize   = 20.sp,
-            fontWeight = FontWeight.ExtraBold,
-            color      = FVExtension.primary,
-            fontFamily = FontFamily.Monospace
+            text  = "+$xp XP",
+            style = FVTypography.monoLarge,
+            color = FitColors.Accent,
         )
     }
 }
@@ -719,17 +706,16 @@ private fun XpBadge(xp: Int) {
 private fun AchievementCondition(condition: String) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
-            text          = "COMO DESBLOQUEAR",
-            fontSize      = 10.sp,
-            color         = FVExtension.textMuted,
-            letterSpacing = 1.sp
+            text  = "COMO DESBLOQUEAR",
+            style = FVTypography.overline,
+            color = FitColors.TextMuted,
         )
         Spacer(Modifier.height(4.dp))
         Text(
             text      = condition,
-            fontSize  = 13.sp,
-            color     = FVExtension.textDim,
-            textAlign = TextAlign.Center
+            style     = FVTypography.bodyMedium,
+            color     = FitColors.TextDisabled,
+            textAlign = TextAlign.Center,
         )
     }
 }
@@ -745,15 +731,15 @@ private fun AchievementProgress(progress: Float, rColor: Color) {
             modifier   = Modifier
                 .fillMaxWidth()
                 .height(5.dp)
-                .clip(RoundedCornerShape(FVExtension.radiusPill)),
+                .clip(RoundedCornerShape(100.dp)),
             color      = rColor,
-            trackColor = FVExtension.surface2
+            trackColor = FitColors.Surface2
         )
         Spacer(Modifier.height(4.dp))
         Text(
-            text     = "${(progress * 100).toInt()}% concluído",
-            fontSize = 11.sp,
-            color    = rColor
+            text  = "${(progress * 100).toInt()}% concluído",
+            style = FVTypography.labelMedium,
+            color = rColor,
         )
     }
 }
@@ -768,18 +754,17 @@ private fun SheetButton(
     Box(
         modifier         = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(FVExtension.radiusBtn))
+            .clip(RoundedCornerShape(12.dp))
             .background(if (filled) color else color.copy(alpha = 0.08f))
-            .border(1.dp, color.copy(alpha = 0.3f), RoundedCornerShape(FVExtension.radiusBtn))
+            .border(1.dp, color.copy(alpha = 0.3f), RoundedCornerShape(12.dp))
             .clickable(onClick = onClick)
             .padding(14.dp),
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text       = label,
-            fontSize   = 14.sp,
-            fontWeight = FontWeight.Bold,
-            color      = if (filled) FVExtension.surface else color
+            text  = label,
+            style = FVTypography.bodyLarge.copy(fontWeight = FontWeight.Bold),
+            color = if (filled) FitColors.Surface else color,
         )
     }
 }

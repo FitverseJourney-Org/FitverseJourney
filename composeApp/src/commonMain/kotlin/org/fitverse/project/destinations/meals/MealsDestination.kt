@@ -1,20 +1,23 @@
-package org.fitverse.project.destinations.meals
+﻿package org.fitverse.project.destinations.meals
 
-
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import com.example.presentation.ui.meals.MealsScreen
-import com.example.presentation.widgets.DarkGamifiedDashboardBackground
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.fitverse.presentation.ui.meals.MealsScreen
+import org.fitverse.presentation.ui.meals.viewmodel.MealsViewModel
 
 @Composable
 fun MealsDestination(
+    viewModel: MealsViewModel,
     onBottomSheetOpen: (Boolean) -> Unit = {},
-    onNavigateToAddManualFood: (mealName: String) -> Unit = {},
+    onNavigateToAddManualFood: (mealId: String, mealName: String) -> Unit = { _, _ -> },
 ) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     MealsScreen(
-        onBottomSheetOpen = onBottomSheetOpen,
-        onNavigateToManualFood = onNavigateToAddManualFood,
+        uiState                = uiState,
+        onIntent               = viewModel::onIntent,
+        onBottomSheetOpen      = onBottomSheetOpen,
+        onNavigateToManualFood = { mealId, mealName -> onNavigateToAddManualFood(mealId, mealName) },
     )
 }

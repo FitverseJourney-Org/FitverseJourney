@@ -9,7 +9,7 @@ plugins {
 kotlin {
 
     androidLibrary {
-        namespace = "com.example.presentation"
+        namespace = "org.fitverse.presentation"
         compileSdk = 36
         minSdk = 26
 
@@ -78,6 +78,12 @@ kotlin {
 
             // Coil
             implementation(libs.coil.compose)
+        }
+
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+            implementation(libs.turbine)
+            implementation(libs.kotlinx.coroutines.test)
         }
 
         iosMain.dependencies {

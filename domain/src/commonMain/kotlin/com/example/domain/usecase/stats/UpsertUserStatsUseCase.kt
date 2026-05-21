@@ -1,7 +1,7 @@
-package com.example.domain.usecase.stats
+﻿package org.fitverse.domain.usecase.stats
 
-import com.example.domain.repository.dbLocal.sqldelight.stats.UserStatsDao
-import com.example.domain.repository.dbLocal.sqldelight.stats.UserStatsRecord
+import org.fitverse.domain.repository.dbLocal.sqldelight.stats.UserStatsDao
+import org.fitverse.domain.repository.dbLocal.sqldelight.stats.UserStatsRecord
 
 class UpsertUserStatsUseCase(
     private val dao: UserStatsDao,

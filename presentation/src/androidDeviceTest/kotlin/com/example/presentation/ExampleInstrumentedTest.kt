@@ -1,4 +1,4 @@
-package com.example.presentation
+﻿package org.fitverse.presentation
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

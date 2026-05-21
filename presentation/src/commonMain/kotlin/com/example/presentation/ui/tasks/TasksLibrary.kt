@@ -1,4 +1,4 @@
-package com.example.presentation.ui.tasks
+﻿package org.fitverse.presentation.ui.tasks
 
 
 import androidx.compose.foundation.BorderStroke
@@ -32,8 +32,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.example.domain.models.dashboard.tasks.TaskIcon
-import com.example.domain.models.dashboard.tasks.TaskItem
+import org.fitverse.domain.models.dashboard.tasks.TaskIcon
+import org.fitverse.domain.models.dashboard.tasks.TaskItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -1,4 +1,4 @@
-package com.example.presentation.ui.friends
+﻿package org.fitverse.presentation.ui.friends
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -23,11 +23,11 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.presentation.theme.FVExtension
-import com.example.presentation.widgets.FVCard
-import com.example.presentation.widgets.FVFilterPill
-import com.example.presentation.widgets.FVSectionLabel
-import com.example.presentation.widgets.FitverseTopAppBar
+import org.fitverse.presentation.theme.FitColors
+import org.fitverse.presentation.widgets.FVCard
+import org.fitverse.presentation.widgets.FVFilterPill
+import org.fitverse.presentation.widgets.FVSectionLabel
+import org.fitverse.presentation.widgets.FitverseTopAppBar
 
 
 private enum class FriendStatus { ONLINE, OFFLINE }
@@ -78,7 +78,7 @@ fun FriendsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
 
     Scaffold(
         modifier = modifier,
-        containerColor = FVExtension.bg,
+        containerColor = FitColors.Bg,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = {
             FitverseTopAppBar(
@@ -88,19 +88,19 @@ fun FriendsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
                     Text(
                         text = "${FRIENDS.size} amigos",
                         fontSize = 12.sp,
-                        color = FVExtension.textMuted
+                        color = FitColors.TextMuted
                     )
                 },
                 actions = {
                     Box(
                         modifier = Modifier
-                            .clip(RoundedCornerShape(FVExtension.radiusBtn))
-                            .background(FVExtension.primary.copy(0.1f))
-                            .border(1.dp, FVExtension.primary.copy(0.3f), RoundedCornerShape(FVExtension.radiusBtn))
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(FitColors.Accent.copy(0.1f))
+                            .border(1.dp, FitColors.Accent.copy(0.3f), RoundedCornerShape(12.dp))
                             .clickable { }
                             .padding(horizontal = 12.dp, vertical = 7.dp)
                     ) {
-                        Text("+ Adicionar", fontSize = 12.sp, color = FVExtension.primary, fontWeight = FontWeight.Bold)
+                        Text("+ Adicionar", fontSize = 12.sp, color = FitColors.Accent, fontWeight = FontWeight.Bold)
                     }
                 }
             )
@@ -111,23 +111,23 @@ fun FriendsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
         ) {
             // ── Search bar
             Row(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = FVExtension.margin, vertical = 10.dp)
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)
                     .clip(RoundedCornerShape(10.dp))
-                    .background(FVExtension.surface2)
-                    .border(1.dp, FVExtension.outline, RoundedCornerShape(10.dp))
+                    .background(FitColors.Surface2)
+                    .border(1.dp, FitColors.Outline, RoundedCornerShape(10.dp))
                     .padding(horizontal = 12.dp, vertical = 10.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("🔍", fontSize = 14.sp, color = FVExtension.textMuted)
+                Text("🔍", fontSize = 14.sp, color = FitColors.TextMuted)
                 Spacer(Modifier.width(8.dp))
                 BasicTextField(
                     value = search,
                     onValueChange = { search = it },
                     modifier = Modifier.weight(1f),
                     singleLine = true,
-                    textStyle = TextStyle(fontSize = 13.sp, color = FVExtension.text),
+                    textStyle = TextStyle(fontSize = 13.sp, color = FitColors.TextPrimary),
                     decorationBox = { inner ->
-                        if (search.isEmpty()) Text("Buscar por nome ou @id...", fontSize = 13.sp, color = FVExtension.textMuted)
+                        if (search.isEmpty()) Text("Buscar por nome ou @id...", fontSize = 13.sp, color = FitColors.TextMuted)
                         inner()
                     }
                 )
@@ -137,7 +137,7 @@ fun FriendsScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = FVExtension.margin),
+                    .padding(horizontal = 20.dp),
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 FriendsTab.values().forEach { tab ->
@@ -195,10 +195,10 @@ private fun FriendRow(friend: Friend) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = FVExtension.margin, vertical = 4.dp)
+            .padding(horizontal = 20.dp, vertical = 4.dp)
             .clip(RoundedCornerShape(10.dp))
-            .background(FVExtension.surface)
-            .border(1.dp, FVExtension.outline, RoundedCornerShape(10.dp))
+            .background(FitColors.Surface)
+            .border(1.dp, FitColors.Outline, RoundedCornerShape(10.dp))
             .padding(10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -218,7 +218,7 @@ private fun FriendRow(friend: Friend) {
                     ),
                 contentAlignment = Alignment.Center
             ) {
-                Text(friend.name.first().toString(), fontSize = 16.sp, color = FVExtension.text)
+                Text(friend.name.first().toString(), fontSize = 16.sp, color = FitColors.TextPrimary)
             }
             // Presence dot
             Box(
@@ -226,11 +226,11 @@ private fun FriendRow(friend: Friend) {
                     .size(10.dp)
                     .align(Alignment.BottomEnd)
                     .clip(CircleShape)
-                    .background(FVExtension.bg)
+                    .background(FitColors.Bg)
                     .padding(1.5.dp)
                     .clip(CircleShape)
                     .background(
-                        if (friend.status == FriendStatus.ONLINE) FVExtension.secondary
+                        if (friend.status == FriendStatus.ONLINE) FitColors.Secondary
                         else Color(0xFF4A4A52)
                     )
             )
@@ -241,13 +241,13 @@ private fun FriendRow(friend: Friend) {
                 friend.name,
                 fontSize = 13.sp,
                 fontWeight = FontWeight.SemiBold,
-                color = FVExtension.text
+                color = FitColors.TextPrimary
             )
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(friend.id, fontSize = 10.sp, color = FVExtension.textMuted)
+                Text(friend.id, fontSize = 10.sp, color = FitColors.TextMuted)
                 if (friend.streak > 0) {
                     Spacer(Modifier.width(6.dp))
-                    Text("🔥${friend.streak}", fontSize = 10.sp, color = FVExtension.danger)
+                    Text("🔥${friend.streak}", fontSize = 10.sp, color = FitColors.Red)
                 }
             }
             if (friend.status == FriendStatus.ONLINE) {
@@ -258,22 +258,22 @@ private fun FriendRow(friend: Friend) {
                     else                     -> "Online"
                 }
                 val actColor = when (friend.activity) {
-                    FriendActivity.TRAINING  -> FVExtension.secondary
+                    FriendActivity.TRAINING  -> FitColors.Secondary
                     FriendActivity.NUTRITION -> Color(0xFFF5C518)
-                    FriendActivity.MISSION   -> FVExtension.primary
-                    else                     -> FVExtension.textMuted
+                    FriendActivity.MISSION   -> FitColors.Accent
+                    else                     -> FitColors.TextMuted
                 }
                 Text(actLabel, fontSize = 10.sp, color = actColor)
             } else {
-                Text("Visto ${friend.lastSeen}", fontSize = 10.sp, color = FVExtension.textMuted)
+                Text("Visto ${friend.lastSeen}", fontSize = 10.sp, color = FitColors.TextMuted)
             }
         }
         // Level badge
         Box(
             modifier = Modifier
-                .clip(RoundedCornerShape(FVExtension.radiusPill))
+                .clip(RoundedCornerShape(100.dp))
                 .background(friend.classColor.copy(0.1f))
-                .border(1.dp, friend.classColor.copy(0.25f), RoundedCornerShape(FVExtension.radiusPill))
+                .border(1.dp, friend.classColor.copy(0.25f), RoundedCornerShape(100.dp))
                 .padding(horizontal = 8.dp, vertical = 4.dp)
         ) {
             Text(
@@ -285,7 +285,7 @@ private fun FriendRow(friend: Friend) {
         }
         Spacer(Modifier.width(6.dp))
         // Actions button
-        Text("⋯", color = FVExtension.textMuted, fontSize = 18.sp)
+        Text("⋯", color = FitColors.TextMuted, fontSize = 18.sp)
     }
 }
 
@@ -303,7 +303,7 @@ private fun RequestsTab(
                 .padding(40.dp),
             contentAlignment = Alignment.Center
         ) {
-            Text("Nenhuma solicitação pendente", color = FVExtension.textMuted, fontSize = 13.sp)
+            Text("Nenhuma solicitação pendente", color = FitColors.TextMuted, fontSize = 13.sp)
         }
         return
     }
@@ -311,10 +311,10 @@ private fun RequestsTab(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = FVExtension.margin, vertical = 4.dp)
+                .padding(horizontal = 20.dp, vertical = 4.dp)
                 .clip(RoundedCornerShape(10.dp))
-                .background(FVExtension.surface)
-                .border(1.dp, FVExtension.danger.copy(0.15f), RoundedCornerShape(10.dp))
+                .background(FitColors.Surface)
+                .border(1.dp, FitColors.Red.copy(0.15f), RoundedCornerShape(10.dp))
                 .padding(10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -326,20 +326,20 @@ private fun RequestsTab(
                     .border(1.dp, req.classColor.copy(0.3f), CircleShape),
                 contentAlignment = Alignment.Center
             ) {
-                Text(req.name.first().toString(), fontSize = 15.sp, color = FVExtension.text)
+                Text(req.name.first().toString(), fontSize = 15.sp, color = FitColors.TextPrimary)
             }
             Spacer(Modifier.width(10.dp))
             Column(modifier = Modifier.weight(1f)) {
-                Text(req.name, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = FVExtension.text)
+                Text(req.name, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, color = FitColors.TextPrimary)
                 Text(
                     text = "Nível ${req.level} · ${req.className}",
                     fontSize = 10.sp,
-                    color = FVExtension.textMuted
+                    color = FitColors.TextMuted
                 )
                 Text(
                     "Quer ser seu amigo no FitVerse",
                     fontSize = 10.sp,
-                    color = FVExtension.textMuted,
+                    color = FitColors.TextMuted,
                     fontStyle = FontStyle.Italic
                 )
             }
@@ -348,12 +348,12 @@ private fun RequestsTab(
                 modifier = Modifier
                     .size(30.dp)
                     .clip(RoundedCornerShape(8.dp))
-                    .background(FVExtension.primary.copy(0.1f))
-                    .border(1.dp, FVExtension.primary.copy(0.3f), RoundedCornerShape(8.dp))
+                    .background(FitColors.Accent.copy(0.1f))
+                    .border(1.dp, FitColors.Accent.copy(0.3f), RoundedCornerShape(8.dp))
                     .clickable { onAccept(req.id) },
                 contentAlignment = Alignment.Center
             ) {
-                Text("✓", fontSize = 14.sp, color = FVExtension.primary, fontWeight = FontWeight.Bold)
+                Text("✓", fontSize = 14.sp, color = FitColors.Accent, fontWeight = FontWeight.Bold)
             }
             Spacer(Modifier.width(6.dp))
             // Decline
@@ -361,12 +361,12 @@ private fun RequestsTab(
                 modifier = Modifier
                     .size(30.dp)
                     .clip(RoundedCornerShape(8.dp))
-                    .background(FVExtension.danger.copy(0.1f))
-                    .border(1.dp, FVExtension.danger.copy(0.25f), RoundedCornerShape(8.dp))
+                    .background(FitColors.Red.copy(0.1f))
+                    .border(1.dp, FitColors.Red.copy(0.25f), RoundedCornerShape(8.dp))
                     .clickable { onDecline(req.id) },
                 contentAlignment = Alignment.Center
             ) {
-                Text("✕", fontSize = 14.sp, color = FVExtension.danger, fontWeight = FontWeight.Bold)
+                Text("✕", fontSize = 14.sp, color = FitColors.Red, fontWeight = FontWeight.Bold)
             }
         }
     }
@@ -386,16 +386,16 @@ private fun SuggestedTab() {
         modifier  = Modifier
             .fillMaxWidth()
             .height(340.dp)
-            .padding(horizontal = FVExtension.margin),
+            .padding(horizontal = 20.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         verticalArrangement   = Arrangement.spacedBy(10.dp)
     ) {
         items(suggested) { (name, cls, color) ->
             Column(
                 modifier = Modifier
-                    .clip(RoundedCornerShape(FVExtension.radius))
-                    .background(FVExtension.surface)
-                    .border(1.dp, FVExtension.outline, RoundedCornerShape(FVExtension.radius))
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(FitColors.Surface)
+                    .border(1.dp, FitColors.Outline, RoundedCornerShape(16.dp))
                     .padding(12.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -407,23 +407,23 @@ private fun SuggestedTab() {
                         .border(1.dp, color.copy(0.3f), CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(name.first().toString(), fontSize = 20.sp, color = FVExtension.text)
+                    Text(name.first().toString(), fontSize = 20.sp, color = FitColors.TextPrimary)
                 }
                 Spacer(Modifier.height(8.dp))
-                Text(name, fontSize = 12.sp, fontWeight = FontWeight.SemiBold, color = FVExtension.text)
-                Text("2 amigos em comum", fontSize = 10.sp, color = FVExtension.textMuted)
+                Text(name, fontSize = 12.sp, fontWeight = FontWeight.SemiBold, color = FitColors.TextPrimary)
+                Text("2 amigos em comum", fontSize = 10.sp, color = FitColors.TextMuted)
                 Spacer(Modifier.height(8.dp))
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clip(RoundedCornerShape(FVExtension.radiusBtn))
-                        .background(FVExtension.primary.copy(0.1f))
-                        .border(1.dp, FVExtension.primary.copy(0.3f), RoundedCornerShape(FVExtension.radiusBtn))
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(FitColors.Accent.copy(0.1f))
+                        .border(1.dp, FitColors.Accent.copy(0.3f), RoundedCornerShape(12.dp))
                         .clickable { }
                         .padding(vertical = 6.dp),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("+ Adicionar", fontSize = 11.sp, color = FVExtension.primary, fontWeight = FontWeight.Bold)
+                    Text("+ Adicionar", fontSize = 11.sp, color = FitColors.Accent, fontWeight = FontWeight.Bold)
                 }
             }
         }
@@ -433,12 +433,12 @@ private fun SuggestedTab() {
 @Composable
 private fun AddFriendTab(query: String) {
     FVSectionLabel("Buscar por @ID")
-    Column(modifier = Modifier.padding(horizontal = FVExtension.margin)) {
+    Column(modifier = Modifier.padding(horizontal = 20.dp)) {
         FVCard {
             Text(
                 "Digite o @id único do usuário para enviar uma solicitação de amizade",
                 fontSize = 12.sp,
-                color = FVExtension.textMuted,
+                color = FitColors.TextMuted,
                 lineHeight = 18.sp
             )
             Spacer(Modifier.height(12.dp))
@@ -447,7 +447,7 @@ private fun AddFriendTab(query: String) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(10.dp))
-                        .background(FVExtension.surface2)
+                        .background(FitColors.Surface2)
                         .padding(10.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -455,15 +455,15 @@ private fun AddFriendTab(query: String) {
                         modifier = Modifier
                             .size(36.dp)
                             .clip(CircleShape)
-                            .background(FVExtension.primary.copy(0.1f)),
+                            .background(FitColors.Accent.copy(0.1f)),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("?", fontSize = 16.sp, color = FVExtension.primary)
+                        Text("?", fontSize = 16.sp, color = FitColors.Accent)
                     }
                     Spacer(Modifier.width(10.dp))
                     Column(modifier = Modifier.weight(1f)) {
-                        Text(query, fontSize = 13.sp, color = FVExtension.text)
-                        Text("Procurando usuário...", fontSize = 10.sp, color = FVExtension.textMuted)
+                        Text(query, fontSize = 13.sp, color = FitColors.TextPrimary)
+                        Text("Procurando usuário...", fontSize = 10.sp, color = FitColors.TextMuted)
                     }
                 }
             }
@@ -473,8 +473,8 @@ private fun AddFriendTab(query: String) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(10.dp))
-                    .background(FVExtension.surface2)
-                    .border(1.dp, FVExtension.outline, RoundedCornerShape(10.dp))
+                    .background(FitColors.Surface2)
+                    .border(1.dp, FitColors.Outline, RoundedCornerShape(10.dp))
                     .clickable { }
                     .padding(12.dp),
                 verticalAlignment = Alignment.CenterVertically
@@ -482,8 +482,8 @@ private fun AddFriendTab(query: String) {
                 Text("⬛", fontSize = 20.sp)
                 Spacer(Modifier.width(12.dp))
                 Column {
-                    Text("Escanear QR Code", fontSize = 13.sp, color = FVExtension.text, fontWeight = FontWeight.Medium)
-                    Text("Aponte para o QR de um amigo", fontSize = 11.sp, color = FVExtension.textMuted)
+                    Text("Escanear QR Code", fontSize = 13.sp, color = FitColors.TextPrimary, fontWeight = FontWeight.Medium)
+                    Text("Aponte para o QR de um amigo", fontSize = 11.sp, color = FitColors.TextMuted)
                 }
             }
             Spacer(Modifier.height(8.dp))
@@ -491,8 +491,8 @@ private fun AddFriendTab(query: String) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(10.dp))
-                    .background(FVExtension.surface2)
-                    .border(1.dp, FVExtension.outline, RoundedCornerShape(10.dp))
+                    .background(FitColors.Surface2)
+                    .border(1.dp, FitColors.Outline, RoundedCornerShape(10.dp))
                     .clickable { }
                     .padding(12.dp),
                 verticalAlignment = Alignment.CenterVertically
@@ -500,8 +500,8 @@ private fun AddFriendTab(query: String) {
                 Text("🔗", fontSize = 20.sp)
                 Spacer(Modifier.width(12.dp))
                 Column {
-                    Text("Compartilhar meu link", fontSize = 13.sp, color = FVExtension.text, fontWeight = FontWeight.Medium)
-                    Text("fitverse.app/@seuid · toque para copiar", fontSize = 11.sp, color = FVExtension.textMuted)
+                    Text("Compartilhar meu link", fontSize = 13.sp, color = FitColors.TextPrimary, fontWeight = FontWeight.Medium)
+                    Text("fitverse.app/@seuid · toque para copiar", fontSize = 11.sp, color = FitColors.TextMuted)
                 }
             }
         }

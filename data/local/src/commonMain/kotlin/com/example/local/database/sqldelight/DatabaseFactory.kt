@@ -1,7 +1,7 @@
-package com.example.local.database.sqldelight
+﻿package org.fitverse.data.local.database.sqldelight
 
 import app.cash.sqldelight.db.SqlDriver
-import com.journey.database.AppDatabase.AppDatabase
+import com.journey.AppDatabase
 
 expect class DatabaseFactory {
     fun createDriver(): SqlDriver

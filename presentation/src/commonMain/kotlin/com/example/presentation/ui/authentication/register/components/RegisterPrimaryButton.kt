@@ -1,4 +1,4 @@
-package com.example.presentation.ui.authentication.register.components
+﻿package org.fitverse.presentation.ui.authentication.register.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -12,7 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.presentation.theme.RegisterDimens
+import org.fitverse.presentation.theme.RegisterDimens
 
 @Composable
 fun RegisterPrimaryButton(

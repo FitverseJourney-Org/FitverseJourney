@@ -1,4 +1,4 @@
-package com.example.presentation.ui.onboarding
+﻿package org.fitverse.presentation.ui.onboarding
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
@@ -22,13 +22,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.domain.models.onboarding.OnboardingAnimationTopics
-import com.example.domain.models.onboarding.OnboardingPage
-import com.example.expect.FitnessLottieAnimation
-import com.example.presentation.navigationState.OnboardingNavigation
-import com.example.presentation.ui.onboarding.viewmodel.OnboardingViewModel
-import com.example.presentation.ui.onboarding.state.OnboardingState
-import com.example.presentation.widgets.FitverseButton
+import org.fitverse.domain.models.onboarding.LottieAnimation
+import org.fitverse.presentation.expect.PlatformLottieAnimation
+import org.fitverse.domain.models.onboarding.OnboardingPage
+import org.fitverse.presentation.navigationState.OnboardingNavigation
+import org.fitverse.presentation.ui.onboarding.viewmodel.OnboardingViewModel
+import org.fitverse.presentation.ui.onboarding.state.OnboardingState
+import org.fitverse.presentation.widgets.FitverseButton
 import fitversejourneyapp.presentation.generated.resources.Res
 import fitversejourneyapp.presentation.generated.resources.*
 import kotlinx.coroutines.delay
@@ -59,22 +59,22 @@ fun OnboardingScreen(
         OnboardingPage(
             title       = stringResource(Res.string.onboarding_title_1),
             description = stringResource(Res.string.onboarding_description_1),
-            animation   = OnboardingAnimationTopics.WORKOUT
+            animation   = LottieAnimation.WORKOUT
         ),
         OnboardingPage(
             title       = stringResource(Res.string.onboarding_title_2),
             description = stringResource(Res.string.onboarding_description_2),
-            animation   = OnboardingAnimationTopics.NUTRITION
+            animation   = LottieAnimation.NUTRITION
         ),
         OnboardingPage(
             title       = stringResource(Res.string.onboarding_title_3),
             description = stringResource(Res.string.onboarding_description_3),
-            animation   = OnboardingAnimationTopics.AI
+            animation   = LottieAnimation.AI
         ),
         OnboardingPage(
             title       = stringResource(Res.string.onboarding_title_4),
             description = stringResource(Res.string.onboarding_description_4),
-            animation   = OnboardingAnimationTopics.COMMUNITY
+            animation   = LottieAnimation.COMMUNITY
         )
     )
     val lastIndex = onboardingPages.lastIndex
@@ -274,7 +274,7 @@ fun OnboardingPageContent(page: OnboardingPage) {
                 .clip(RoundedCornerShape(28.dp)),
             contentAlignment = Alignment.Center
         ) {
-            FitnessLottieAnimation(
+            PlatformLottieAnimation(
                 modifier  = Modifier.fillMaxSize(0.85f),
                 animation = page.animation
             )

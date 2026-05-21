@@ -1,4 +1,4 @@
-package com.example.presentation.ui.trial.event
+﻿package org.fitverse.presentation.ui.trial.event
 
 sealed interface TrialEvent {
     data object NavigateToDashboard : TrialEvent

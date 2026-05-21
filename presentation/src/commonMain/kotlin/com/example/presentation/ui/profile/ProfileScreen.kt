@@ -1,4 +1,4 @@
-package com.example.presentation.ui.profile
+﻿package org.fitverse.presentation.ui.profile
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -24,10 +24,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.presentation.ui.workout.FitChip
-import com.example.presentation.theme.FitverseColors
-import com.example.presentation.ui.dashboard.components.SectionHeader
-import com.example.presentation.widgets.FitverseTopAppBar
+import org.fitverse.presentation.ui.workout.FitChip
+import org.fitverse.presentation.theme.FitColors
+import org.fitverse.presentation.theme.FVTypography
+import org.fitverse.presentation.ui.dashboard.components.SectionHeader
+import org.fitverse.presentation.widgets.FitverseTopAppBar
 
 private data class Achievement(val emoji: String, val title: String, val subtitle: String)
 
@@ -51,15 +52,6 @@ fun ProfileScreen(onBack: () -> Unit) {
             FitverseTopAppBar(
                 title = "PERFIL",
                 onBack = onBack,
-                actions = {
-                    Box(
-                        modifier = Modifier
-                            .size(40.dp)
-                            .clip(RoundedCornerShape(10.dp))
-                            .background(FitverseColors.Surface2),
-                        contentAlignment = Alignment.Center
-                    ) { Text("⚙️", fontSize = 18.sp) }
-                }
             )
         },
         content = {
@@ -116,11 +108,11 @@ private fun ProfileAvatar() {
             modifier = Modifier
                 .size(96.dp)
                 .clip(CircleShape)
-                .border(3.dp, FitverseColors.Purple, CircleShape),
+                .border(3.dp, FitColors.Purple, CircleShape),
             contentAlignment = Alignment.Center
         ) {
             Box(
-                modifier = Modifier.size(84.dp).clip(CircleShape).background(FitverseColors.Surface2),
+                modifier = Modifier.size(84.dp).clip(CircleShape).background(FitColors.Surface2),
                 contentAlignment = Alignment.Center
             ) { Text("⚔️", fontSize = 36.sp) }
         }
@@ -130,21 +122,21 @@ private fun ProfileAvatar() {
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(6.dp))
-                .background(FitverseColors.AccentDim.copy(alpha = 0.25f))
+                .background(FitColors.AccentDim.copy(alpha = 0.25f))
                 .padding(horizontal = 10.dp, vertical = 3.dp)
-        ) { Text("LVL 23", color = FitverseColors.Accent, fontSize = 12.sp, fontWeight = FontWeight.Bold) }
+        ) { Text(text = "LVL 23", style = FVTypography.labelLarge, color = FitColors.Accent) }
 
         Spacer(Modifier.height(6.dp))
-        Text("ALEX RIVERS", color = FitverseColors.TextPrimary, fontSize = 22.sp, fontWeight = FontWeight.Black)
-        Text("WARRIOR CLASS · LEVEL 23", color = FitverseColors.TextMuted, fontSize = 12.sp)
+        Text(text = "ALEX RIVERS",            style = FVTypography.headlineLarge, color = FitColors.TextPrimary)
+        Text(text = "WARRIOR CLASS · LEVEL 23", style = FVTypography.bodySmall,     color = FitColors.TextMuted)
 
         Spacer(Modifier.height(12.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            FitChip("🔥 7 Streak", Color(0xFF7C1F0F), textColor = FitverseColors.Orange)
+            FitChip("🔥 7 Streak", Color(0xFF7C1F0F), textColor = FitColors.Orange)
             FitChip(
                 "⚡ 340 XP",
-                FitverseColors.Purple.copy(alpha = 0.3f),
-                textColor = FitverseColors.Purple
+                FitColors.Purple.copy(alpha = 0.3f),
+                textColor = FitColors.Purple
             )
             FitChip("🏆 Top 5%", Color(0xFF5C4000), textColor = Color(0xFFFFCC00))
         }
@@ -175,8 +167,8 @@ private fun StatsCard() {
 @Composable
 fun ProfileStat(value: String, label: String) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(value, color = FitverseColors.TextPrimary, fontSize = 22.sp, fontWeight = FontWeight.Black)
-        Text(label, color = FitverseColors.TextMuted,   fontSize = 10.sp, letterSpacing = 0.5.sp)
+        Text(text = value, style = FVTypography.monoLarge, color = FitColors.TextPrimary)
+        Text(text = label, style = FVTypography.overline,  color = FitColors.TextMuted)
     }
 }
 
@@ -186,7 +178,7 @@ fun ProfileStatDivider() {
         modifier = Modifier
             .width(1.dp)
             .height(40.dp)
-            .background(FitverseColors.TextMuted)
+            .background(FitColors.TextMuted)
     )
 }
 
@@ -215,8 +207,8 @@ fun AchievementCard(
         ){
             Text(emoji, fontSize = 28.sp)
             Spacer(Modifier.height(4.dp))
-            Text(title,    color = FitverseColors.TextPrimary, fontSize = 12.sp, fontWeight = FontWeight.SemiBold, textAlign = TextAlign.Center)
-            Text(subtitle, color = FitverseColors.TextMuted,   fontSize = 10.sp, textAlign = TextAlign.Center)
+            Text(text = title,    style = FVTypography.titleSmall, color = FitColors.TextPrimary, textAlign = TextAlign.Center)
+            Text(text = subtitle, style = FVTypography.labelSmall, color = FitColors.TextMuted,   textAlign = TextAlign.Center)
         }
     }
 }
@@ -243,27 +235,26 @@ private fun XpProgressCard() {
                 Alignment.CenterVertically
             ) {
                 Text(
-                    "Progresso Level 23 → 24",
-                    color = FitverseColors.TextPrimary,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.SemiBold
+                    text  = "Progresso Level 23 → 24",
+                    style = FVTypography.bodyLarge.copy(fontWeight = FontWeight.SemiBold),
+                    color = FitColors.TextPrimary,
                 )
-                Text("340 / 500 XP", color = FitverseColors.Accent, fontSize = 13.sp, fontWeight = FontWeight.Bold)
+                Text(text = "340 / 500 XP", style = FVTypography.monoMedium, color = FitColors.Accent)
             }
             Spacer(Modifier.height(12.dp))
             Box(
                 modifier = Modifier.fillMaxWidth().height(8.dp)
                     .clip(RoundedCornerShape(4.dp))
-                    .background(FitverseColors.Surface2)
+                    .background(FitColors.Surface2)
             ) {
                 Box(
                     modifier = Modifier.fillMaxWidth(0.68f)
                         .fillMaxHeight().clip(RoundedCornerShape(4.dp))
-                        .background(Brush.horizontalGradient(listOf(FitverseColors.Accent, FitverseColors.AccentDim)))
+                        .background(Brush.horizontalGradient(listOf(FitColors.Accent, FitColors.AccentDim)))
                 )
             }
             Spacer(Modifier.height(8.dp))
-            Text("160 XP para o próximo nível", color = FitverseColors.TextMuted, fontSize = 12.sp)
+            Text(text = "160 XP para o próximo nível", style = FVTypography.bodySmall, color = FitColors.TextMuted)
         }
     }
     Spacer(Modifier.height(20.dp))

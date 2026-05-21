@@ -1,4 +1,4 @@
-package org.fitverse.fitverseJourney
+﻿package org.fitverse.fitverseJourney
 
 import android.graphics.Color
 import android.os.Bundle
@@ -9,9 +9,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import com.example.expect.AppEnvironment
-import com.example.presentation.ui.LanguageViewModel
-import com.example.presentation.theme.FitVerseJourneyTheme
+import org.fitverse.presentation.expect.AppEnvironment
+import org.fitverse.presentation.ui.LanguageViewModel
+import org.fitverse.presentation.theme.FitVerseJourneyTheme
 import org.fitverse.project.navigation.FitverseRootNavigation
 import org.koin.compose.koinInject
 

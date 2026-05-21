@@ -1,7 +1,10 @@
-package com.example.presentation.navigationState
+﻿package org.fitverse.presentation.navigationState
 
-sealed class LoginNavigation {
-    object ToRegister : LoginNavigation()
-    object ToResetPassword : LoginNavigation()
-    object ToHome : LoginNavigation()
-}
+@Deprecated(
+    message = "Moved to org.fitverse.presentation.ui.authentication.login.states.LoginNavigation",
+    replaceWith = ReplaceWith(
+        "LoginNavigation",
+        "org.fitverse.presentation.ui.authentication.login.states.LoginNavigation"
+    )
+)
+typealias LoginNavigation = org.fitverse.presentation.ui.authentication.login.states.LoginNavigation

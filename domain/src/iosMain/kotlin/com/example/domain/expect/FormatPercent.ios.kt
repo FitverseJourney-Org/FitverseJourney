@@ -1,4 +1,4 @@
-package com.example.domain.expect
+﻿package org.fitverse.domain.expect
 
 import platform.Foundation.NSNumber
 import platform.Foundation.NSNumberFormatter

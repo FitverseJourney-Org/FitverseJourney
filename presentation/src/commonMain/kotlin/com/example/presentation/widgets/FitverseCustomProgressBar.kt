@@ -1,4 +1,4 @@
-package com.example.presentation.widgets
+﻿package org.fitverse.presentation.widgets
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxWidth

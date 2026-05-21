@@ -1,4 +1,4 @@
-package com.example.presentation.ui.dashboard
+﻿package org.fitverse.presentation.ui.dashboard
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -46,23 +46,24 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.presentation.theme.FitverseColors
-import com.example.presentation.ui.dashboard.DailyMission.Companion.defaultDailyMissions
-import com.example.presentation.ui.dashboard.MissionType
-import com.example.presentation.ui.dashboard.components.AnimatedStreakDialog
-import com.example.presentation.ui.dashboard.viewmodel.DashboardEvent
-import com.example.presentation.ui.dashboard.viewmodel.DashboardIntent
-import com.example.presentation.ui.dashboard.viewmodel.DashboardViewModel
-import com.example.presentation.ui.dashboard.components.CardStreakWeek
-import com.example.presentation.ui.dashboard.components.HomeHeader
-import com.example.presentation.ui.dashboard.components.MetricCard
-import com.example.presentation.ui.dashboard.components.MissionCard
-import com.example.presentation.ui.dashboard.components.PlayerProfileCard
-import com.example.presentation.ui.dashboard.components.SectionHeader
-import com.example.presentation.ui.dashboard.util.StreakState
-import com.example.presentation.ui.dashboard.util.getGreeting
-import com.example.presentation.widgets.DailyStreakCard
-import com.example.presentation.widgets.StreakDay
+import org.fitverse.presentation.theme.FitColors
+import org.fitverse.presentation.theme.FVTypography
+import org.fitverse.presentation.ui.dashboard.DailyMission.Companion.defaultDailyMissions
+import org.fitverse.presentation.ui.dashboard.MissionType
+import org.fitverse.presentation.ui.dashboard.components.AnimatedStreakDialog
+import org.fitverse.presentation.ui.dashboard.viewmodel.DashboardEvent
+import org.fitverse.presentation.ui.dashboard.viewmodel.DashboardIntent
+import org.fitverse.presentation.ui.dashboard.viewmodel.DashboardViewModel
+import org.fitverse.presentation.ui.dashboard.components.CardStreakWeek
+import org.fitverse.presentation.ui.dashboard.components.HomeHeader
+import org.fitverse.presentation.ui.dashboard.components.MetricCard
+import org.fitverse.presentation.ui.dashboard.components.MissionCard
+import org.fitverse.presentation.ui.dashboard.components.PlayerProfileCard
+import org.fitverse.presentation.ui.dashboard.components.SectionHeader
+import org.fitverse.presentation.ui.dashboard.util.StreakState
+import org.fitverse.presentation.ui.dashboard.util.getGreeting
+import org.fitverse.presentation.widgets.DailyStreakCard
+import org.fitverse.presentation.widgets.StreakDay
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.daysUntil
@@ -298,9 +299,9 @@ private fun TodayWorkoutBanner(onStart: () -> Unit) {
                         Brush.horizontalGradient(
                             listOf(
                                 Color.Transparent,
-                                FitverseColors.Accent.copy(alpha = 0.6f),
-                                FitverseColors.Accent,
-                                FitverseColors.Accent.copy(alpha = 0.6f),
+                                FitColors.Accent.copy(alpha = 0.6f),
+                                FitColors.Accent,
+                                FitColors.Accent.copy(alpha = 0.6f),
                                 Color.Transparent,
                             )
                         )
@@ -312,45 +313,40 @@ private fun TodayWorkoutBanner(onStart: () -> Unit) {
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = "TREINO DE HOJE",
-                        color = FitverseColors.TextMuted,
-                        fontSize = 10.sp,
-                        fontWeight = FontWeight.Medium,
-                        letterSpacing = 1.2.sp
+                        text  = "TREINO DE HOJE",
+                        style = FVTypography.overline,
+                        color = FitColors.TextMuted,
                     )
                     Spacer(Modifier.height(2.dp))
                     Text(
-                        text = "HYPERTROPHY A",
-                        color = FitverseColors.TextPrimary,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Black
+                        text  = "HYPERTROPHY A",
+                        style = FVTypography.headlineSmall,
+                        color = FitColors.TextPrimary,
                     )
                     Spacer(Modifier.height(4.dp))
                     Text(
-                        text = "Fase 2 · 18 séries · 45 min",
-                        color = FitverseColors.TextMuted,
-                        fontSize = 12.sp
+                        text  = "Fase 2 · 18 séries · 45 min",
+                        style = FVTypography.bodySmall,
+                        color = FitColors.TextMuted,
                     )
                 }
                 Spacer(Modifier.width(12.dp))
                 Button(
                     onClick = onStart,
                     shape = RoundedCornerShape(12.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = FitverseColors.Accent),
+                    colors = ButtonDefaults.buttonColors(containerColor = FitColors.Accent),
                     contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp)
                 ) {
                     Text(
-                        "TREINO",
-                        color = FitverseColors.Bg,
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Black,
-                        letterSpacing = 0.5.sp
+                        text  = "TREINO",
+                        style = FVTypography.labelLarge.copy(fontWeight = FontWeight.Black),
+                        color = FitColors.Bg,
                     )
                     Spacer(Modifier.width(4.dp))
                     Icon(
                         Icons.Rounded.ChevronRight,
                         contentDescription = null,
-                        tint = FitverseColors.Bg,
+                        tint = FitColors.Bg,
                         modifier = Modifier.size(16.dp)
                     )
                 }

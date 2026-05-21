@@ -1,4 +1,4 @@
-package com.example.presentation.ui.friends.components
+﻿package org.fitverse.presentation.ui.friends.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

@@ -1,4 +1,4 @@
-package com.example.presentation.ui.progress.components
+﻿package org.fitverse.presentation.ui.progress.components
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Spring

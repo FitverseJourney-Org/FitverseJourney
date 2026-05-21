@@ -1,4 +1,4 @@
-package org.fitverse.project.navigation
+﻿package org.fitverse.project.navigation
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -16,10 +16,10 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
-import com.example.presentation.ui.LoadingLanguageScreen
-import com.example.presentation.ui.onboarding.viewmodel.OnboardingViewModel
-import com.example.presentation.ui.splash.viewmodel.SplashViewModel
-import com.example.presentation.ui.trial.viewmodel.TrialViewModel
+import org.fitverse.presentation.ui.LoadingLanguageScreen
+import org.fitverse.presentation.ui.onboarding.viewmodel.OnboardingViewModel
+import org.fitverse.presentation.ui.splash.viewmodel.SplashViewModel
+import org.fitverse.presentation.ui.trial.viewmodel.TrialViewModel
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import org.fitverse.project.destinations.onboading.OnboardingDestination

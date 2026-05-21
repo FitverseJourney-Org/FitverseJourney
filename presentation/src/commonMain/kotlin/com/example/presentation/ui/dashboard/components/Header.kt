@@ -1,4 +1,4 @@
-package com.example.presentation.ui.dashboard.components
+﻿package org.fitverse.presentation.ui.dashboard.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
@@ -12,14 +12,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import org.fitverse.presentation.theme.FVTypography
+import org.fitverse.presentation.theme.FitColors
 
-// --- Cores extraídas do Design (Ajuste no seu MaterialTheme/ColorPalette) ---
-private val TextSecondaryHeader = Color(0xFF5A728A) // Tom azul/cinza do "BOM DIA"
-private val TextPrimaryHeader = Color.White
-private val SurfaceDark = Color(0xFF1C1C24)
 private val IconDefaultColor = Color(0xFFA0A0B5)
 private val SurfaceEnergy = Color(0xFF2A3018) // Fundo do botão de energia
 private val EnergyAccentColor = Color(0xFFFFD700) // Raio amarelo
@@ -39,22 +35,16 @@ fun HomeHeader(
         verticalAlignment = Alignment.CenterVertically
     ) {
         // Bloco de Saudação
-        Column(
-            verticalArrangement = Arrangement.Center
-        ) {
+        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Text(
-                text = greeting.uppercase(),
-                color = TextSecondaryHeader,
-                fontSize = 12.sp,
-                fontWeight = FontWeight.SemiBold,
-                letterSpacing = 1.sp
+                text  = greeting.uppercase(),
+                style = FVTypography.overlineLarge,
+                color = FitColors.TextMuted,
             )
             Text(
-                text = userName.uppercase(),
-                color = TextPrimaryHeader,
-                fontSize = 26.sp, // Fonte robusta como no design
-                fontWeight = FontWeight.Black,
-                letterSpacing = 0.5.sp
+                text  = userName.uppercase(),
+                style = FVTypography.displayLarge,
+                color = FitColors.TextPrimary,
             )
         }
 
@@ -121,7 +111,3 @@ private fun HeaderIconButton(
         }
     }
 }
-
-// ==========================================
-// PREVIEW
-// ==========================================

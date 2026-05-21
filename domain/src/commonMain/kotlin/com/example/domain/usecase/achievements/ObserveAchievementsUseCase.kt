@@ -1,8 +1,8 @@
-package com.example.domain.usecase.achievements
+﻿package org.fitverse.domain.usecase.achievements
 
-import com.example.domain.repository.authentication.AuthRepository
-import com.example.domain.repository.dbLocal.sqldelight.achievements.AchievementDao
-import com.example.domain.repository.dbLocal.sqldelight.achievements.AchievementRecord
+import org.fitverse.domain.repository.authentication.AuthRepository
+import org.fitverse.domain.repository.dbLocal.sqldelight.achievements.AchievementDao
+import org.fitverse.domain.repository.dbLocal.sqldelight.achievements.AchievementRecord
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emptyFlow
 

@@ -1,4 +1,4 @@
-package com.example.domain.repository.dbLocal.sqldelight.nutrition
+﻿package org.fitverse.domain.repository.dbLocal.sqldelight.nutrition
 
 import kotlinx.coroutines.flow.Flow
 
@@ -10,6 +10,7 @@ interface MealEntryDao {
     suspend fun insertMeal(meal: MealEntryRecord)
     suspend fun updateMealTotals(id: String, userId: String, kcal: Int, protein: Double, carbs: Double, fat: Double)
     suspend fun deleteMeal(id: String, userId: String)
+    suspend fun deleteMealsByUserBeforeDate(userId: String, beforeDate: String)
     suspend fun getDailyMacros(userId: String, date: String): DailyMacros
 }
 

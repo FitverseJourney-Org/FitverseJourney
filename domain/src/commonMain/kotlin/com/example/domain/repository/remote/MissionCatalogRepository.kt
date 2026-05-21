@@ -1,4 +1,4 @@
-package com.example.domain.repository.remote
+﻿package org.fitverse.domain.repository.remote
 
 interface MissionCatalogRepository {
     suspend fun getMissionCatalog(): Result<List<MissionTemplate>>

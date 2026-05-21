@@ -1,4 +1,4 @@
-package com.example.local.model
+﻿package org.fitverse.data.local.model
 
 data class UserStatsEntity(
     val userId: String,

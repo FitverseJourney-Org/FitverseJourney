@@ -1,4 +1,4 @@
-package com.example.domain.repository.dbLocal.sqldelight.catalog
+﻿package org.fitverse.domain.repository.dbLocal.sqldelight.catalog
 
 interface CatalogMissionDao {
     suspend fun getAll(): List<CatalogMissionRecord>

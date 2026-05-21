@@ -7,7 +7,7 @@ plugins {
 
 kotlin {
     androidLibrary {
-        namespace = "com.example.data.remote"
+        namespace = "org.fitverse.data.remote"
         compileSdk = 36
         minSdk = 26
         withHostTestBuilder {}

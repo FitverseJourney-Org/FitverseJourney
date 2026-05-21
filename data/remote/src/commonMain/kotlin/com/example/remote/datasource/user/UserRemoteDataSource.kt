@@ -1,6 +1,6 @@
-package com.example.remote.datasource.user
+﻿package org.fitverse.data.remote.datasource.user
 
-import com.example.remote.dto.user.UserRequestDto
+import org.fitverse.data.remote.dto.user.UserRequestDto
 
 /**
  * Interface para operações remotas de User

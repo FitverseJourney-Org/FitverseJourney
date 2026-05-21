@@ -1,4 +1,4 @@
-package com.example.presentation.navigationState
+﻿package org.fitverse.presentation.navigationState
 
 sealed class SplashNavigation {
     object ToTrial : SplashNavigation()

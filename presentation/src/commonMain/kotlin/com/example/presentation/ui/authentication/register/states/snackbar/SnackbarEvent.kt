@@ -1,4 +1,4 @@
-package com.example.presentation.ui.authentication.register.states.snackbar
+﻿package org.fitverse.presentation.ui.authentication.register.states.snackbar
 
 data class SnackbarEvent(
     val message: String,

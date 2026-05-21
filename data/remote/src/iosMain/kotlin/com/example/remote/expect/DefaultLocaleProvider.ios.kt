@@ -1,4 +1,4 @@
-package com.example.remote.expect
+﻿package org.fitverse.data.remote.expect
 
 import platform.Foundation.NSLocale
 import platform.Foundation.preferredLanguages

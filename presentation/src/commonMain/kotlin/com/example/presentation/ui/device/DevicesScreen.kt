@@ -1,6 +1,6 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+﻿@file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.example.presentation.ui.device
+package org.fitverse.presentation.ui.device
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
@@ -40,11 +40,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.presentation.widgets.FitverseScreenTitle
-import com.example.presentation.widgets.FitverseTopAppBar
-import com.example.presentation.widgets.SectionLabel
-import com.example.presentation.theme.FitverseColors
-import com.example.presentation.theme.ShapeCard
+import org.fitverse.presentation.widgets.FitverseScreenTitle
+import org.fitverse.presentation.widgets.FitverseTopAppBar
+import org.fitverse.presentation.widgets.SectionLabel
+import org.fitverse.presentation.theme.FitColors
+import org.fitverse.presentation.theme.ShapeCard
 
 
 // ── Models ────────────────────────────────────────────────────────────────────
@@ -81,7 +81,7 @@ fun DevicesScreen(onBack: () -> Unit, modifier: Modifier = Modifier) {
 
     Scaffold(
         modifier = modifier,
-        containerColor = FitverseColors.Bg,
+        containerColor = FitColors.Bg,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = {
             FitverseTopAppBar(
@@ -129,9 +129,9 @@ private fun LiveMetricsCard(metrics: List<LiveMetric>) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .border(1.dp, FitverseColors.Accent, RoundedCornerShape(14.dp))
+            .border(1.dp, FitColors.Accent, RoundedCornerShape(14.dp))
             .clip(RoundedCornerShape(14.dp))
-            .background(FitverseColors.Surface2)
+            .background(FitColors.Surface2)
             .padding(16.dp),
     ) {
         Text(
@@ -139,7 +139,7 @@ private fun LiveMetricsCard(metrics: List<LiveMetric>) {
             fontSize      = 10.sp,
             fontWeight    = FontWeight.ExtraBold,
             letterSpacing = 1.sp,
-            color         = FitverseColors.Accent,
+            color         = FitColors.Accent,
         )
         Spacer(Modifier.height(12.dp))
         Row(
@@ -160,14 +160,14 @@ private fun MetricItem(metric: LiveMetric) {
             text       = metric.value,
             fontSize   = 24.sp,
             fontWeight = FontWeight.ExtraBold,
-            color      = if (metric.isHighlighted) FitverseColors.Accent else FitverseColors.TextPrimary,
+            color      = if (metric.isHighlighted) FitColors.Accent else FitColors.TextPrimary,
             lineHeight = 24.sp,
         )
         Spacer(Modifier.height(2.dp))
         Text(
             text      = metric.unit,
             fontSize  = 10.sp,
-            color     = FitverseColors.TextMuted,
+            color     = FitColors.TextMuted,
             lineHeight = 14.sp,
         )
     }
@@ -184,9 +184,9 @@ private fun DeviceRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .border(1.dp, FitverseColors.Border, ShapeCard)
+            .border(1.dp, FitColors.Border, ShapeCard)
             .clip(ShapeCard)
-            .background(FitverseColors.Surface)
+            .background(FitColors.Surface)
             .padding(14.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -195,7 +195,7 @@ private fun DeviceRow(
             modifier = Modifier
                 .size(44.dp)
                 .clip(RoundedCornerShape(10.dp))
-                .background(FitverseColors.Surface2),
+                .background(FitColors.Surface2),
             contentAlignment = Alignment.Center,
         ) {
             Text(device.icon, fontSize = 20.sp)
@@ -208,13 +208,13 @@ private fun DeviceRow(
                 text       = device.name,
                 fontSize   = 14.sp,
                 fontWeight = FontWeight.SemiBold,
-                color      = FitverseColors.TextPrimary,
+                color      = FitColors.TextPrimary,
             )
             Spacer(Modifier.height(2.dp))
             Text(
                 text  = device.statusDetail ?: "Disponível",
                 fontSize = 12.sp,
-                color = if (device.statusDetail != null) FitverseColors.Green else FitverseColors.TextMuted,
+                color = if (device.statusDetail != null) FitColors.Green else FitColors.TextMuted,
             )
         }
 
@@ -228,10 +228,10 @@ private fun DeviceRow(
 fun FitverseToggle(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
-    activeColor: Color = FitverseColors.Green,
+    activeColor: Color = FitColors.Green,
 ) {
     val trackColor by animateColorAsState(
-        targetValue    = if (checked) activeColor else FitverseColors.Surface2,
+        targetValue    = if (checked) activeColor else FitColors.Surface2,
         animationSpec  = tween(200),
         label          = "toggle_track",
     )
@@ -246,11 +246,11 @@ fun FitverseToggle(
         onCheckedChange = onCheckedChange,
         colors = SwitchDefaults.colors(
             checkedTrackColor   = trackColor,
-            uncheckedTrackColor = FitverseColors.Surface2,
+            uncheckedTrackColor = FitColors.Surface2,
             checkedThumbColor   = Color.White,
             uncheckedThumbColor = Color.White,
             checkedBorderColor  = Color.Transparent,
-            uncheckedBorderColor = FitverseColors.Border,
+            uncheckedBorderColor = FitColors.Border,
         ),
     )
 }

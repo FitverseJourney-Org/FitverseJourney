@@ -1,4 +1,4 @@
-package com.example.domain.models.validations
+﻿package org.fitverse.domain.models.validations
 
 sealed class ValidationResult {
     data object Valid : ValidationResult()

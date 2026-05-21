@@ -1,6 +1,6 @@
-package com.example.remote.expect
+﻿package org.fitverse.data.remote.expect
 
-import com.example.domain.expect.PlatformDate
+import org.fitverse.domain.expect.PlatformDate
 
 expect object DateTimeManager {
     fun dateTimeGetDefaultLocale() : String

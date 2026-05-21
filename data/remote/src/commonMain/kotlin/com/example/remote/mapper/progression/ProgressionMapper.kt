@@ -1,9 +1,9 @@
-package com.example.remote.mapper.progression
+﻿package org.fitverse.data.remote.mapper.progression
 // data/remote/src/commonMain/kotlin/com/example/remote/mapper/progression/ProgressionMapper.kt
 
-import com.example.domain.expect.toPlatformDate
-import com.example.domain.models.progression.LoadProgressionPoint
-import com.example.remote.dto.progression.ProgressionPointDto
+import org.fitverse.domain.expect.toPlatformDate
+import org.fitverse.domain.models.progression.LoadProgressionPoint
+import org.fitverse.data.remote.dto.progression.ProgressionPointDto
 
 // ── Dto → Entity (remote → local) ────────────────────────────────────────────
 

@@ -1,4 +1,4 @@
-package com.example.presentation.ui.wiki.components
+﻿package org.fitverse.presentation.ui.wiki.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
@@ -53,8 +53,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
-import com.example.domain.models.wiki.WikiArticle
-import com.example.domain.models.wiki.WikiCategory
+import org.fitverse.domain.models.wiki.WikiArticle
+import org.fitverse.domain.models.wiki.WikiCategory
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.TextField

@@ -1,27 +1,19 @@
-package com.example.local.di
+﻿package org.fitverse.data.local.di
 
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import com.example.local.database.datastore.DataStoreFactory
-import com.example.local.database.sqldelight.DatabaseFactory
-import com.example.local.database.sqldelight.DatabaseSqlDeLightHelper
-import com.example.local.database.sqldelight.createDatabase
-import com.journey.database.AppDatabase.AppDatabase
+import org.fitverse.data.local.database.sqldelight.DatabaseFactory
+import org.fitverse.data.local.database.sqldelight.DatabaseSqlDeLightHelper
+import org.fitverse.data.local.database.sqldelight.createDatabase
+import com.journey.AppDatabase
 import org.koin.dsl.module
 
 val databaseModule = module {
-    // DatabaseFactory (platform-specific)
-    // Será fornecido por cada plataforma (Android/iOS)
+    // DatabaseFactory fornecido por cada plataforma (Android/iOS)
 
     // AppDatabase (singleton)
     single<AppDatabase> { get<DatabaseFactory>().createDatabase() }
 
-    // SQLDELIGHT
+    // SQLDelight
     single { DatabaseSqlDeLightHelper(driverFactory = get()) }
 
-    // DATASTORE
-    single<DataStore<Preferences>> { DataStoreFactory.dataStore }
-
-
-
+    // DataStore<Preferences> fornecido por androidLocalPlatformModule / iosLocalPlatformModule
 }

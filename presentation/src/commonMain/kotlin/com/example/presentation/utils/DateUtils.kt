@@ -1,4 +1,8 @@
-package com.example.presentation.utils
+﻿package org.fitverse.presentation.utils
+
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
+
 /**
  * Utilitários de data/período prontos para `commonMain` no KMP.
  *

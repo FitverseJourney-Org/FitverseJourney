@@ -1,4 +1,4 @@
-package com.example.domain.models.token
+﻿package org.fitverse.domain.models.token
 
 interface TokenProvider {
     fun getToken(): String?

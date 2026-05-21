@@ -1,4 +1,4 @@
-package com.example.presentation.ui.workout
+﻿package org.fitverse.presentation.ui.workout
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
@@ -24,9 +24,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.expect.TimerManager
-import com.example.expect.PlatformDateFormatter
-import com.example.expect.formatWorkoutTime
+import org.fitverse.presentation.expect.TimerManager
+import org.fitverse.presentation.expect.DateFormatter
+import org.fitverse.presentation.expect.formatWorkoutTime
 import kotlinx.coroutines.delay
 import kotlin.math.roundToInt
 
@@ -634,7 +634,7 @@ fun CelebrationHeader(
             Spacer(Modifier.height(4.dp))
 
             Text(
-                text = PlatformDateFormatter.formatFullDate(result.completedAt),
+                text = DateFormatter.formatFullDate(result.completedAt),
                 style = MaterialTheme.typography.bodySmall,
                 color = cs.onPrimaryContainer.copy(alpha = 0.6f),
                 textAlign = TextAlign.Center

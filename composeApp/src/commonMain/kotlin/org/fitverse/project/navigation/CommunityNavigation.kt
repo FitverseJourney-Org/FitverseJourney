@@ -1,4 +1,4 @@
-package org.fitverse.project.navigation
+﻿package org.fitverse.project.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -11,11 +11,13 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
-import com.example.presentation.ui.community.viewmodel.CommunityViewModel
+import org.fitverse.presentation.ui.community.viewmodel.CommunityViewModel
+import org.fitverse.presentation.ui.community.viewmodel.GroupHomeViewModel
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import org.fitverse.project.destinations.community.AddPostDestination
 import org.fitverse.project.destinations.community.CommunityDestination
+import org.fitverse.project.destinations.community.GroupHomeDestination
 import org.fitverse.project.routes.NavRoutes
 import org.koin.compose.koinInject
 
@@ -30,8 +32,9 @@ fun CommunityNavigation(
         SavedStateConfiguration {
             serializersModule = SerializersModule {
                 polymorphic(NavKey::class) {
-                    subclass(NavRoutes.HomeFlow.Community::class,          NavRoutes.HomeFlow.Community.serializer())
-                    subclass(NavRoutes.HomeFlow.SubFlow.AddPost::class,    NavRoutes.HomeFlow.SubFlow.AddPost.serializer())
+                    subclass(NavRoutes.HomeFlow.Community::class,               NavRoutes.HomeFlow.Community.serializer())
+                    subclass(NavRoutes.HomeFlow.SubFlow.AddPost::class,         NavRoutes.HomeFlow.SubFlow.AddPost.serializer())
+                    subclass(NavRoutes.HomeFlow.SubFlow.GroupHome::class,       NavRoutes.HomeFlow.SubFlow.GroupHome.serializer())
                 }
             }
         },
@@ -57,12 +60,21 @@ fun CommunityNavigation(
                 CommunityDestination(
                     viewModel          = viewModel,
                     toAddPost          = { backStack.add(NavRoutes.HomeFlow.SubFlow.AddPost) },
+                    toGroupHome        = { groupName -> backStack.add(NavRoutes.HomeFlow.SubFlow.GroupHome(groupName)) },
                     onSheetStateChange = onSheetStateChange,
                 )
             }
             entry<NavRoutes.HomeFlow.SubFlow.AddPost> {
                 AddPostDestination(
                     toBack = { backStack.removeLastOrNull() }
+                )
+            }
+            entry<NavRoutes.HomeFlow.SubFlow.GroupHome> { route ->
+                val viewModel = koinInject<GroupHomeViewModel>()
+                GroupHomeDestination(
+                    groupName = route.groupName,
+                    viewModel = viewModel,
+                    toBack    = { backStack.removeLastOrNull() },
                 )
             }
         }

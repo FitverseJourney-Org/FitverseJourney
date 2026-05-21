@@ -1,15 +1,15 @@
-package com.example.local.datasource.catalog
+﻿package org.fitverse.data.local.datasource.catalog
 
-import com.example.domain.repository.dbLocal.sqldelight.catalog.CatalogMissionDao
-import com.example.domain.repository.dbLocal.sqldelight.catalog.CatalogMissionRecord
-import com.journey.database.AppDatabase.AppDatabase
+import org.fitverse.domain.repository.dbLocal.sqldelight.catalog.CatalogMissionDao
+import org.fitverse.domain.repository.dbLocal.sqldelight.catalog.CatalogMissionRecord
+import com.journey.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 
 class CatalogMissionDaoImpl(database: AppDatabase) : CatalogMissionDao {
 
-    private val queries = database.appDatabaseQueries
+    private val queries = database.catalogMissionEntityQueries
 
     override suspend fun getAll(): List<CatalogMissionRecord> =
         withContext(Dispatchers.IO) {
@@ -37,7 +37,7 @@ class CatalogMissionDaoImpl(database: AppDatabase) : CatalogMissionDao {
 
     // ── Mapper ────────────────────────────────────────────────────────────────
 
-    private fun com.journey.database.migrations.CatalogMissionEntity.toRecord() =
+    private fun com.journey.mission.CatalogMissionEntity.toRecord() =
         CatalogMissionRecord(
             id          = id,
             title       = title,

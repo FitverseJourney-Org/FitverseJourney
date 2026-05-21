@@ -1,4 +1,4 @@
-package com.example.presentation.ui.meals
+﻿package org.fitverse.presentation.ui.meals
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateIntAsState
@@ -54,11 +54,12 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.presentation.theme.FitverseColors
+import org.fitverse.presentation.theme.FitColors
 
 @Composable
 fun AddManualFoodScreen(
     mealName: String,
+    onSave: (name: String, portion: Double, unit: String, kcal: Int, protein: Double, carbs: Double, fat: Double) -> Unit,
     onBack: () -> Unit,
 ) {
     // ── Form state ────────────────────────────────────────────────────────────
@@ -87,11 +88,11 @@ fun AddManualFoodScreen(
     )
 
     val kcalColor = when {
-        calculatedKcal == 0   -> FitverseColors.TextMuted2
-        calculatedKcal < 300  -> FitverseColors.Green
-        calculatedKcal < 600  -> FitverseColors.Accent
-        calculatedKcal < 900  -> FitverseColors.Orange
-        else                  -> FitverseColors.Red
+        calculatedKcal == 0   -> FitColors.TextDisabled
+        calculatedKcal < 300  -> FitColors.Green
+        calculatedKcal < 600  -> FitColors.Accent
+        calculatedKcal < 900  -> FitColors.Orange
+        else                  -> FitColors.Red
     }
 
     // ── Layout ────────────────────────────────────────────────────────────────
@@ -160,7 +161,7 @@ fun AddManualFoodScreen(
                             ) {
                                 Text(
                                     "Unidade",
-                                    color     = FitverseColors.TextMuted,
+                                    color     = FitColors.TextMuted,
                                     fontSize  = 12.sp,
                                     fontWeight= FontWeight.Medium,
                                 )
@@ -171,8 +172,8 @@ fun AddManualFoodScreen(
                                             modifier = Modifier
                                                 .clip(RoundedCornerShape(8.dp))
                                                 .background(
-                                                    if (isSelected) FitverseColors.Accent
-                                                    else FitverseColors.Surface2
+                                                    if (isSelected) FitColors.Accent
+                                                    else FitColors.Surface2
                                                 )
                                                 .border(
                                                     width  = if (isSelected) 0.dp else 1.dp,
@@ -184,7 +185,7 @@ fun AddManualFoodScreen(
                                         ) {
                                             Text(
                                                 unit,
-                                                color      = if (isSelected) FitverseColors.Bg else FitverseColors.TextMuted,
+                                                color      = if (isSelected) FitColors.Bg else FitColors.TextMuted,
                                                 fontSize   = 12.sp,
                                                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                                             )
@@ -203,21 +204,21 @@ fun AddManualFoodScreen(
                             MacroInputCard(
                                 label         = "Proteína (g)",
                                 value         = protein,
-                                color         = FitverseColors.Accent,
+                                color         = FitColors.Accent,
                                 onValueChange = { protein = it },
                                 modifier      = Modifier.weight(1f),
                             )
                             MacroInputCard(
                                 label         = "Carbo (g)",
                                 value         = carbs,
-                                color         = FitverseColors.Blue,
+                                color         = FitColors.Blue,
                                 onValueChange = { carbs = it },
                                 modifier      = Modifier.weight(1f),
                             )
                             MacroInputCard(
                                 label         = "Gordura (g)",
                                 value         = fat,
-                                color         = FitverseColors.Purple,
+                                color         = FitColors.Purple,
                                 onValueChange = { fat = it },
                                 modifier      = Modifier.weight(1f),
                             )
@@ -230,14 +231,14 @@ fun AddManualFoodScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clip(RoundedCornerShape(10.dp))
-                                .background(FitverseColors.Surface2)
+                                .background(FitColors.Surface2)
                                 .padding(horizontal = 14.dp, vertical = 10.dp),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
                                 "Prot×4 + Carbo×4 + Gord×9",
-                                color   = FitverseColors.TextMuted2,
+                                color   = FitColors.TextDisabled,
                                 fontSize = 11.sp,
                             )
                             Text(
@@ -270,8 +271,8 @@ fun AddManualFoodScreen(
                                     .size(52.dp)
                                     .clip(RoundedCornerShape(12.dp))
                                     .background(
-                                        if (currentIngredient.isNotBlank()) FitverseColors.Accent
-                                        else FitverseColors.Surface2
+                                        if (currentIngredient.isNotBlank()) FitColors.Accent
+                                        else FitColors.Surface2
                                     )
                                     .clickable {
                                         if (currentIngredient.isNotBlank()) {
@@ -284,8 +285,8 @@ fun AddManualFoodScreen(
                                 Icon(
                                     Icons.Default.Add,
                                     contentDescription = "Adicionar",
-                                    tint = if (currentIngredient.isNotBlank()) FitverseColors.Bg
-                                           else FitverseColors.TextMuted2,
+                                    tint = if (currentIngredient.isNotBlank()) FitColors.Bg
+                                           else FitColors.TextDisabled,
                                     modifier = Modifier.size(22.dp),
                                 )
                             }
@@ -315,8 +316,8 @@ fun AddManualFoodScreen(
                 .background(
                     Brush.verticalGradient(
                         0.0f to Color.Transparent,
-                        0.35f to FitverseColors.Bg.copy(alpha = 0.95f),
-                        1.0f to FitverseColors.Bg,
+                        0.35f to FitColors.Bg.copy(alpha = 0.95f),
+                        1.0f to FitColors.Bg,
                     )
                 )
                 .navigationBarsPadding()
@@ -324,16 +325,24 @@ fun AddManualFoodScreen(
         ) {
             Button(
                 onClick = {
-                    onBack()
+                    onSave(
+                        foodName,
+                        portion.toDoubleOrNull() ?: 0.0,
+                        units[selectedUnitIndex],
+                        calculatedKcal,
+                        pInt.toDouble(),
+                        cInt.toDouble(),
+                        fInt.toDouble(),
+                    )
                 },
                 enabled  = isFormValid,
                 modifier = Modifier.fillMaxWidth().height(56.dp),
                 shape    = RoundedCornerShape(16.dp),
                 colors   = ButtonDefaults.buttonColors(
-                    containerColor         = FitverseColors.Accent,
-                    contentColor           = FitverseColors.Bg,
-                    disabledContainerColor = FitverseColors.Surface2,
-                    disabledContentColor   = FitverseColors.TextMuted2,
+                    containerColor         = FitColors.Accent,
+                    contentColor           = FitColors.Bg,
+                    disabledContainerColor = FitColors.Surface2,
+                    disabledContentColor   = FitColors.TextDisabled,
                 ),
             ) {
                 Icon(
@@ -362,7 +371,7 @@ private fun ScreenHeader(mealName: String, onBack: () -> Unit) {
             modifier = Modifier
                 .size(40.dp)
                 .clip(RoundedCornerShape(12.dp))
-                .background(FitverseColors.Surface2)
+                .background(FitColors.Surface2)
                 .border(1.dp, Color(0xFF2a2a35), RoundedCornerShape(12.dp))
                 .clickable(onClick = onBack),
             contentAlignment = Alignment.Center,
@@ -370,7 +379,7 @@ private fun ScreenHeader(mealName: String, onBack: () -> Unit) {
             Icon(
                 Icons.Rounded.KeyboardArrowLeft,
                 contentDescription = "Voltar",
-                tint     = FitverseColors.TextPrimary,
+                tint     = FitColors.TextPrimary,
                 modifier = Modifier.size(22.dp),
             )
         }
@@ -380,14 +389,14 @@ private fun ScreenHeader(mealName: String, onBack: () -> Unit) {
         Column {
             Text(
                 "ADICIONAR ALIMENTO",
-                color         = FitverseColors.TextPrimary,
+                color         = FitColors.TextPrimary,
                 fontSize      = 16.sp,
                 fontWeight    = FontWeight.Black,
                 letterSpacing = 0.5.sp,
             )
             Text(
                 "Em: $mealName",
-                color    = FitverseColors.TextMuted,
+                color    = FitColors.TextMuted,
                 fontSize = 12.sp,
             )
         }
@@ -407,7 +416,7 @@ private fun LiveCalorieCard(
             .border(1.dp, kcalColor.copy(alpha = if (kcal > 0) 0.30f else 0.10f), RoundedCornerShape(20.dp))
             .fillMaxWidth()
             .clip(RoundedCornerShape(20.dp))
-            .background(FitverseColors.SurfaceCard),
+            .background(FitColors.SurfaceModal),
     ) {
         Column {
             // Gradient top strip — cor varia com o nível calórico
@@ -436,7 +445,7 @@ private fun LiveCalorieCard(
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         "CALORIAS ESTIMADAS",
-                        color         = FitverseColors.TextMuted,
+                        color         = FitColors.TextMuted,
                         fontSize      = 10.sp,
                         fontWeight    = FontWeight.SemiBold,
                         letterSpacing = 1.sp,
@@ -453,7 +462,7 @@ private fun LiveCalorieCard(
                         if (kcal > 0) {
                             Text(
                                 " kcal",
-                                color    = FitverseColors.TextMuted,
+                                color    = FitColors.TextMuted,
                                 fontSize = 14.sp,
                                 modifier = Modifier.padding(bottom = 5.dp),
                             )
@@ -461,7 +470,7 @@ private fun LiveCalorieCard(
                     }
                     Text(
                         "Prot×4  +  Carbo×4  +  Gord×9",
-                        color    = FitverseColors.TextMuted2,
+                        color    = FitColors.TextDisabled,
                         fontSize = 10.sp,
                     )
                 }
@@ -471,9 +480,9 @@ private fun LiveCalorieCard(
                     horizontalAlignment = Alignment.End,
                     verticalArrangement = Arrangement.spacedBy(4.dp),
                 ) {
-                    MacroPill("P", protein, FitverseColors.Accent)
-                    MacroPill("C", carbs,   FitverseColors.Blue)
-                    MacroPill("G", fat,     FitverseColors.Purple)
+                    MacroPill("P", protein, FitColors.Accent)
+                    MacroPill("C", carbs,   FitColors.Blue)
+                    MacroPill("G", fat,     FitColors.Purple)
                 }
             }
         }
@@ -513,7 +522,7 @@ private fun FormSection(
     Column {
         Text(
             title,
-            color         = FitverseColors.TextMuted,
+            color         = FitColors.TextMuted,
             fontSize      = 10.sp,
             fontWeight    = FontWeight.Bold,
             letterSpacing = 1.2.sp,
@@ -536,19 +545,19 @@ private fun FitTextField(
         value       = value,
         onValueChange = onValueChange,
         label       = { Text(label, fontSize = 12.sp) },
-        placeholder = { Text(placeholder, color = FitverseColors.TextMuted2, fontSize = 14.sp) },
+        placeholder = { Text(placeholder, color = FitColors.TextDisabled, fontSize = 14.sp) },
         modifier    = modifier.fillMaxWidth(),
         singleLine  = true,
         shape       = RoundedCornerShape(12.dp),
         keyboardOptions = keyboardOptions,
         colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor   = FitverseColors.Accent,
+            focusedBorderColor   = FitColors.Accent,
             unfocusedBorderColor = Color(0xFF2a2a35),
-            focusedLabelColor    = FitverseColors.Accent,
-            unfocusedLabelColor  = FitverseColors.TextMuted,
-            cursorColor          = FitverseColors.Accent,
-            focusedTextColor     = FitverseColors.TextPrimary,
-            unfocusedTextColor   = FitverseColors.TextPrimary,
+            focusedLabelColor    = FitColors.Accent,
+            unfocusedLabelColor  = FitColors.TextMuted,
+            cursorColor          = FitColors.Accent,
+            focusedTextColor     = FitColors.TextPrimary,
+            unfocusedTextColor   = FitColors.TextPrimary,
         ),
     )
 }
@@ -559,7 +568,7 @@ private fun IngredientItem(ingredient: String, onRemove: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(10.dp))
-            .background(FitverseColors.Surface2)
+            .background(FitColors.Surface2)
             .border(1.dp, Color(0xFF2a2a35), RoundedCornerShape(10.dp))
             .padding(horizontal = 14.dp, vertical = 11.dp),
         verticalAlignment     = Alignment.CenterVertically,
@@ -569,11 +578,11 @@ private fun IngredientItem(ingredient: String, onRemove: () -> Unit) {
             modifier = Modifier
                 .size(6.dp)
                 .clip(CircleShape)
-                .background(FitverseColors.Accent),
+                .background(FitColors.Accent),
         )
         Text(
             ingredient,
-            color    = FitverseColors.TextPrimary,
+            color    = FitColors.TextPrimary,
             fontSize = 13.sp,
             modifier = Modifier.weight(1f),
         )
@@ -581,14 +590,14 @@ private fun IngredientItem(ingredient: String, onRemove: () -> Unit) {
             modifier = Modifier
                 .size(24.dp)
                 .clip(CircleShape)
-                .background(FitverseColors.Red.copy(alpha = 0.12f))
+                .background(FitColors.Red.copy(alpha = 0.12f))
                 .clickable(onClick = onRemove),
             contentAlignment = Alignment.Center,
         ) {
             Icon(
                 Icons.Rounded.Close,
                 contentDescription = "Remover",
-                tint     = FitverseColors.Red.copy(alpha = 0.8f),
+                tint     = FitColors.Red.copy(alpha = 0.8f),
                 modifier = Modifier.size(14.dp),
             )
         }

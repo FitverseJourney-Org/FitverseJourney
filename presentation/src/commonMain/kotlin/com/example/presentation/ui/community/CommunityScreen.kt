@@ -1,4 +1,4 @@
-package com.example.presentation.ui.community
+﻿package org.fitverse.presentation.ui.community
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,15 +18,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.EmojiEvents
+import androidx.compose.material.icons.rounded.KeyboardArrowRight
 import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material.icons.rounded.Forum
 import androidx.compose.material.icons.rounded.Groups
@@ -59,11 +58,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.collectAsState
-import com.example.presentation.theme.FitverseColors
-import com.example.presentation.ui.community.viewmodel.CommunityIntent
-import com.example.presentation.ui.community.viewmodel.CommunityViewModel
-import com.example.presentation.ui.dashboard.components.SectionHeader
-import com.example.presentation.ui.workout.FitChip
+import org.fitverse.presentation.theme.FitColors
+import org.fitverse.presentation.ui.community.viewmodel.CommunityEvent
+import org.fitverse.presentation.ui.community.viewmodel.CommunityIntent
+import org.fitverse.presentation.ui.community.viewmodel.CommunityViewModel
+import org.fitverse.presentation.ui.dashboard.components.SectionHeader
+import org.fitverse.presentation.ui.workout.FitChip
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 
@@ -89,19 +89,17 @@ data class Post(
 )
 
 internal val myCommunities = listOf(
-    Community("Warriors GYM", FitverseColors.Accent,  128, isAdmin = true),
-    Community("Dieta Flex",   FitverseColors.Blue,     44),
-    Community("Cardio Club",  FitverseColors.Orange,   17),
+    Community("Warriors GYM", FitColors.Accent, 128, isAdmin = true),
 )
 
 internal val samplePosts = listOf(
-    Post("LF", FitverseColors.Accent,  "Luna Fitness",  "Warriors GYM", "12min atrás", "TREINO",    FitverseColors.Accent,
+    Post("LF", FitColors.Accent,  "Luna Fitness",  "Warriors GYM", "12min atrás", "TREINO",    FitColors.Accent,
         "Treino de pernas destruído! +180 XP ganhos hoje. Quem mais tá na missão de legs?", 34, 8,  "+180XP"),
-    Post("MP", FitverseColors.Purple, "Marcos Power",  "Dieta Flex",   "1h atrás",    "CONQUISTA", FitverseColors.Purple,
+    Post("MP", FitColors.Purple, "Marcos Power",  "Dieta Flex",   "1h atrás",    "CONQUISTA", FitColors.Purple,
         "Novo recorde pessoal no supino: 120kg! Level UP alcançado!", 72, 21, "+250XP"),
-    Post("SH", FitverseColors.Blue,   "Sofia Healthy", "Cardio Club",  "3h atrás",    "NUTRIÇÃO",  FitverseColors.Blue,
+    Post("SH", FitColors.Blue,   "Sofia Healthy", "Cardio Club",  "3h atrás",    "NUTRIÇÃO",  FitColors.Blue,
         "Café da manhã pré-treino. Proteínas, carbos complexos e muita água. Prontos pro dia!", 28, 5, "+48XP"),
-    Post("PS", FitverseColors.Orange, "Pedro Strong",  "Warriors GYM", "5h atrás",    "TREINO",    FitverseColors.Accent,
+    Post("PS", FitColors.Orange, "Pedro Strong",  "Warriors GYM", "5h atrás",    "TREINO",    FitColors.Accent,
         "Semana 4 do programa concluída! Sensação incrível de evolução.", 55, 14, "+120XP"),
 )
 
@@ -109,8 +107,9 @@ internal val samplePosts = listOf(
 
 @Composable
 fun CommunityRoot(
-    viewModel:         CommunityViewModel,
-    toAddPost:         () -> Unit,
+    viewModel:          CommunityViewModel,
+    toAddPost:          () -> Unit,
+    toGroupHome:        (String) -> Unit,
     onSheetStateChange: (Boolean) -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -118,7 +117,8 @@ fun CommunityRoot(
     LaunchedEffect(Unit) {
         viewModel.events.collect { event ->
             when (event) {
-                com.example.presentation.ui.community.viewmodel.CommunityEvent.NavigateToAddPost -> toAddPost()
+                CommunityEvent.NavigateToAddPost              -> toAddPost()
+                is CommunityEvent.NavigateToGroupHome         -> toGroupHome(event.groupName)
             }
         }
     }
@@ -133,6 +133,7 @@ fun CommunityRoot(
         onShowJoinSheet    = { viewModel.onIntent(CommunityIntent.ShowJoinSheet) },
         onDismissSheets    = { viewModel.onIntent(CommunityIntent.DismissSheets) },
         onSheetStateChange = onSheetStateChange,
+        onOpenGroup        = { name -> viewModel.onIntent(CommunityIntent.OpenGroupHome(name)) },
     )
 }
 
@@ -140,7 +141,7 @@ fun CommunityRoot(
 
 @Composable
 fun CommunityScreen(
-    communities:        List<Community>    = myCommunities,
+    communities:        List<Community>    = emptyList(),
     posts:              List<Post>         = samplePosts,
     showCreateSheet:    Boolean            = false,
     showJoinSheet:      Boolean            = false,
@@ -149,6 +150,7 @@ fun CommunityScreen(
     onShowJoinSheet:    () -> Unit         = {},
     onDismissSheets:    () -> Unit         = {},
     onSheetStateChange: (Boolean) -> Unit  = {},
+    onOpenGroup:        (String) -> Unit   = {},
 ) {
     LaunchedEffect(showCreateSheet, showJoinSheet) {
         onSheetStateChange(showCreateSheet || showJoinSheet)
@@ -167,7 +169,7 @@ fun CommunityScreen(
                 // ── Header ────────────────────────────────────────────────
                 item {
                     CommunityHeader(
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
+                        modifier = Modifier.padding(16.dp)
                     )
                 }
 
@@ -183,7 +185,7 @@ fun CommunityScreen(
                             title       = "Criar",
                             description = "Monte seu grupo de atletas",
                             badgeLabel  = "NOVO GRUPO",
-                            accentColor = FitverseColors.Purple,
+                            accentColor = FitColors.Purple,
                             onClick     = onShowCreateSheet,
                         )
                         CommunityActionCard(
@@ -192,7 +194,7 @@ fun CommunityScreen(
                             title       = "Entrar",
                             description = "Use um código ou senha",
                             badgeLabel  = "COM CÓDIGO",
-                            accentColor = FitverseColors.Green,
+                            accentColor = FitColors.Green,
                             onClick     = onShowJoinSheet,
                         )
                     }
@@ -201,22 +203,21 @@ fun CommunityScreen(
                 // ── My communities ────────────────────────────────────────
                 item { Spacer(Modifier.height(28.dp)) }
                 item {
-                    Column {
-                        Box(Modifier.padding(horizontal = 16.dp)) {
-                            SectionHeader(
-                                title      = "MINHAS COMUNIDADES",
-                                actionText = "VER TODAS",
+                    Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+                        SectionHeader(title = "MINHAS COMUNIDADES")
+                        Spacer(Modifier.height(12.dp))
+                        if (communities.isEmpty()) {
+                            EmptyCommunitiesCard(
+                                onShowCreateSheet = onShowCreateSheet,
+                                onShowJoinSheet   = onShowJoinSheet,
                             )
-                        }
-                        Spacer(Modifier.height(4.dp))
-                        LazyRow(
-                            contentPadding        = PaddingValues(horizontal = 16.dp),
-                            horizontalArrangement = Arrangement.spacedBy(14.dp),
-                        ) {
-                            items(communities) { community ->
-                                CommunityAvatar(community = community)
+                        } else {
+                            communities.forEach { community ->
+                                MyCommunityCard(
+                                    community = community,
+                                    onClick   = { onOpenGroup(community.name) },
+                                )
                             }
-                            item { AddCommunityAvatar(onClick = onShowCreateSheet) }
                         }
                     }
                 }
@@ -246,7 +247,13 @@ fun CommunityScreen(
             CreateCommunitySheet(onDismiss = onDismissSheets)
         }
         if (showJoinSheet) {
-            JoinCommunitySheet(onDismiss = onDismissSheets)
+            JoinCommunitySheet(
+                onDismiss = onDismissSheets,
+                onJoin    = { groupName ->
+                    onDismissSheets()
+                    onOpenGroup(groupName)
+                },
+            )
         }
     }
 }
@@ -257,22 +264,24 @@ fun CommunityScreen(
 private fun CommunityHeader(modifier: Modifier = Modifier) {
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Text(
-            "SOCIAL",
-            color         = FitverseColors.TextMuted,
-            fontSize      = 11.sp,
-            fontWeight    = FontWeight.Medium,
-            letterSpacing = 1.5.sp,
+            text          = "SOCIAL",
+            color         = FitColors.TextMuted,
+            style         = MaterialTheme.typography.titleSmall.copy(
+                fontWeight    = FontWeight.Medium,
+                letterSpacing = 1.5.sp,
+            ),
         )
         Text(
-            "COMUNIDADE",
-            color         = FitverseColors.TextPrimary,
-            fontSize      = 28.sp,
-            fontWeight    = FontWeight.Black,
-            letterSpacing = (-0.5).sp,
+            text          = "COMUNIDADE",
+            color         = FitColors.TextPrimary,
+            style      = MaterialTheme.typography.displayLarge.copy(
+                fontWeight    = FontWeight.Black,
+                letterSpacing = (-0.5).sp,
+            ),
         )
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            FitChip("3 GRUPOS",    FitverseColors.AccentDim,  textColor = FitverseColors.Accent)
-            FitChip("317 MEMBROS", FitverseColors.PurpleDim,  textColor = FitverseColors.Purple)
+            FitChip("1 GRUPO",     FitColors.AccentDim,  textColor = FitColors.Accent)
+            FitChip("128 MEMBROS", FitColors.PurpleDim,  textColor = FitColors.Purple)
         }
     }
 }
@@ -293,7 +302,7 @@ private fun CommunityActionCard(
         modifier = modifier
             .clip(RoundedCornerShape(20.dp))
             .border(1.dp, accentColor.copy(alpha = 0.25f), RoundedCornerShape(20.dp))
-            .background(FitverseColors.SurfaceCard)
+            .background(FitColors.SurfaceModal)
             .clickable(onClick = onClick),
     ) {
         // Accent gradient top strip
@@ -343,7 +352,7 @@ private fun CommunityActionCard(
             Spacer(Modifier.height(4.dp))
             Text(
                 description,
-                color      = FitverseColors.TextMuted,
+                color      = FitColors.TextMuted,
                 fontSize   = 11.sp,
                 lineHeight = 16.sp,
             )
@@ -369,85 +378,219 @@ private fun CommunityActionCard(
 // ── My Communities ────────────────────────────────────────────────────────────
 
 @Composable
-private fun CommunityAvatar(community: Community) {
+private fun MyCommunityCard(community: Community, onClick: () -> Unit = {}) {
     val initials = community.name.split(" ").take(2).joinToString("") { it.first().toString() }
 
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(6.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(24.dp))
+            .border(1.dp, community.accentColor.copy(alpha = 0.20f), RoundedCornerShape(24.dp))
+            .background(FitColors.SurfaceModal)
+            .clickable(onClick = onClick),
     ) {
         Box(
             modifier = Modifier
-                .size(64.dp)
-                .clip(RoundedCornerShape(20.dp))
-                .border(1.5.dp, community.accentColor.copy(alpha = 0.45f), RoundedCornerShape(20.dp))
-                .background(community.accentColor.copy(alpha = 0.10f)),
-            contentAlignment = Alignment.Center,
+                .fillMaxWidth()
+                .height(2.dp)
+                .background(
+                    Brush.horizontalGradient(
+                        listOf(
+                            Color.Transparent,
+                            community.accentColor.copy(alpha = 0.40f),
+                            community.accentColor,
+                            community.accentColor.copy(alpha = 0.40f),
+                            Color.Transparent,
+                        )
+                    )
+                )
+        )
+
+        Row(
+            modifier              = Modifier.padding(16.dp),
+            verticalAlignment     = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            Text(
-                initials,
-                color      = community.accentColor,
-                fontSize   = 20.sp,
-                fontWeight = FontWeight.Black,
-            )
-            if (community.isAdmin) {
+            Box(modifier = Modifier.size(68.dp)) {
                 Box(
                     modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(4.dp)
-                        .size(16.dp)
-                        .clip(CircleShape)
-                        .background(community.accentColor),
+                        .size(60.dp)
+                        .clip(RoundedCornerShape(18.dp))
+                        .background(community.accentColor.copy(alpha = 0.10f))
+                        .border(1.5.dp, community.accentColor.copy(alpha = 0.30f), RoundedCornerShape(18.dp)),
                     contentAlignment = Alignment.Center,
                 ) {
-                    Icon(
-                        Icons.Rounded.Check,
-                        contentDescription = null,
-                        tint     = FitverseColors.Bg,
-                        modifier = Modifier.size(10.dp),
-                    )
+                    Text(initials, color = community.accentColor, fontSize = 20.sp, fontWeight = FontWeight.Black)
+                }
+                if (community.isAdmin) {
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .size(20.dp)
+                            .clip(CircleShape)
+                            .background(FitColors.Bg)
+                            .border(1.5.dp, community.accentColor, CircleShape),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Icon(
+                            Icons.Rounded.Check,
+                            contentDescription = null,
+                            tint     = community.accentColor,
+                            modifier = Modifier.size(11.dp),
+                        )
+                    }
                 }
             }
+
+            Column(
+                modifier            = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(5.dp),
+            ) {
+                Row(
+                    verticalAlignment     = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                ) {
+                    Text(
+                        community.name,
+                        color      = FitColors.TextPrimary,
+                        fontSize   = 15.sp,
+                        fontWeight = FontWeight.Black,
+                    )
+                    if (community.isAdmin) {
+                        Box(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(6.dp))
+                                .background(community.accentColor.copy(alpha = 0.12f))
+                                .padding(horizontal = 6.dp, vertical = 2.dp),
+                        ) {
+                            Text(
+                                "ADMIN",
+                                color         = community.accentColor,
+                                fontSize      = 9.sp,
+                                fontWeight    = FontWeight.Bold,
+                                letterSpacing = 0.5.sp,
+                            )
+                        }
+                    }
+                }
+                Row(
+                    verticalAlignment     = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                ) {
+                    Icon(Icons.Rounded.Groups, contentDescription = null, tint = FitColors.TextDisabled, modifier = Modifier.size(12.dp))
+                    Text("${community.memberCount} membros", color = FitColors.TextDisabled, fontSize = 11.sp)
+                }
+                Row(
+                    verticalAlignment     = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                ) {
+                    Icon(Icons.Rounded.EmojiEvents, contentDescription = null, tint = FitColors.Orange, modifier = Modifier.size(12.dp))
+                    Text("Season 3 — Iron Warriors", color = FitColors.TextMuted, fontSize = 11.sp)
+                }
+            }
+
+            Icon(
+                Icons.Rounded.KeyboardArrowRight,
+                contentDescription = null,
+                tint               = community.accentColor.copy(alpha = 0.55f),
+                modifier           = Modifier.size(22.dp),
+            )
         }
-        Text(
-            community.name.split(" ").first(),
-            color     = FitverseColors.TextMuted,
-            fontSize  = 11.sp,
-            textAlign = TextAlign.Center,
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(1.dp)
+                .background(community.accentColor.copy(alpha = 0.08f))
         )
-        Text(
-            "${community.memberCount} membros",
-            color      = community.accentColor,
-            fontSize   = 10.sp,
-            fontWeight = FontWeight.SemiBold,
-        )
+
+        Row(
+            modifier              = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 12.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+        ) {
+            CommunityStatItem(value = "18",     label = "dias restantes", color = community.accentColor)
+            CommunityStatDivider()
+            CommunityStatItem(value = "73%",    label = "participação",   color = FitColors.Purple)
+            CommunityStatDivider()
+            CommunityStatItem(value = "42.3K XP", label = "coletado",    color = FitColors.Orange)
+        }
     }
 }
 
 @Composable
-private fun AddCommunityAvatar(onClick: () -> Unit) {
+private fun CommunityStatItem(value: String, label: String, color: Color) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(6.dp),
+        verticalArrangement = Arrangement.spacedBy(2.dp),
+    ) {
+        Text(value, color = color,               fontSize = 14.sp, fontWeight = FontWeight.Black)
+        Text(label, color = FitColors.TextDisabled, fontSize = 9.sp,  letterSpacing = 0.3.sp)
+    }
+}
+
+@Composable
+private fun CommunityStatDivider() {
+    Box(
+        modifier = Modifier
+            .height(28.dp)
+            .width(1.dp)
+            .background(Color(0xFF2a2a35))
+    )
+}
+
+// ── Empty communities state ───────────────────────────────────────────────────
+
+@Composable
+private fun EmptyCommunitiesCard(
+    onShowCreateSheet: () -> Unit,
+    onShowJoinSheet: () -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(24.dp))
+            .border(1.dp, FitColors.Outline, RoundedCornerShape(24.dp))
+            .background(FitColors.SurfaceModal)
+            .padding(horizontal = 24.dp, vertical = 32.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Box(
             modifier = Modifier
-                .size(64.dp)
-                .clip(RoundedCornerShape(20.dp))
-                .border(1.dp, Color(0xFF2a2a35), RoundedCornerShape(20.dp))
-                .background(FitverseColors.Surface2)
-                .clickable(onClick = onClick),
+                .size(72.dp)
+                .clip(CircleShape)
+                .background(FitColors.AccentDim)
+                .border(1.dp, FitColors.Accent.copy(alpha = 0.20f), CircleShape),
             contentAlignment = Alignment.Center,
         ) {
             Icon(
-                Icons.Default.Add,
-                contentDescription = "Nova comunidade",
-                tint     = FitverseColors.TextMuted,
-                modifier = Modifier.size(24.dp),
+                imageVector        = Icons.Rounded.Groups,
+                contentDescription = null,
+                tint               = FitColors.Accent.copy(alpha = 0.45f),
+                modifier           = Modifier.size(36.dp),
             )
         }
-        Text("Nova",   color = FitverseColors.TextMuted,  fontSize = 11.sp)
-        Text("Criar",  color = FitverseColors.TextMuted2, fontSize = 10.sp)
+
+        Spacer(Modifier.height(4.dp))
+
+        Text(
+            text          = "SEM COMUNIDADE ATIVA",
+            color         = FitColors.TextPrimary,
+            fontSize      = 15.sp,
+            fontWeight    = FontWeight.Black,
+            letterSpacing = 0.5.sp,
+        )
+        Text(
+            text      = "Crie seu grupo ou entre em uma comunidade\npara treinar junto e ganhar XP",
+            color     = FitColors.TextMuted,
+            fontSize  = 14.sp,
+            lineHeight = 18.sp,
+            textAlign = TextAlign.Center,
+        )
+
+        Spacer(Modifier.height(8.dp))
     }
 }
 
@@ -506,7 +649,7 @@ fun PostCard(post: Post, modifier: Modifier = Modifier) {
                 Column(Modifier.weight(1f)) {
                     Text(
                         post.user,
-                        color      = FitverseColors.TextPrimary,
+                        color      = FitColors.TextPrimary,
                         fontSize   = 14.sp,
                         fontWeight = FontWeight.SemiBold,
                     )
@@ -517,12 +660,12 @@ fun PostCard(post: Post, modifier: Modifier = Modifier) {
                         Icon(
                             Icons.Rounded.Groups,
                             contentDescription = null,
-                            tint     = FitverseColors.TextMuted2,
+                            tint     = FitColors.TextDisabled,
                             modifier = Modifier.size(11.dp),
                         )
-                        Text(post.communityName, color = FitverseColors.TextMuted2, fontSize = 11.sp)
-                        Text("·",                color = FitverseColors.TextMuted2, fontSize = 11.sp)
-                        Text(post.time,           color = FitverseColors.TextMuted2, fontSize = 11.sp)
+                        Text(post.communityName, color = FitColors.TextDisabled, fontSize = 11.sp)
+                        Text("·",                color = FitColors.TextDisabled, fontSize = 11.sp)
+                        Text(post.time,           color = FitColors.TextDisabled, fontSize = 11.sp)
                     }
                 }
 
@@ -546,7 +689,7 @@ fun PostCard(post: Post, modifier: Modifier = Modifier) {
             Spacer(Modifier.height(12.dp))
             Text(
                 post.content,
-                color      = FitverseColors.TextPrimary.copy(alpha = 0.9f),
+                color      = FitColors.TextPrimary.copy(alpha = 0.9f),
                 fontSize   = 14.sp,
                 lineHeight = 21.sp,
             )
@@ -558,14 +701,14 @@ fun PostCard(post: Post, modifier: Modifier = Modifier) {
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     verticalAlignment     = Alignment.CenterVertically,
                 ) {
-                    PostStat(icon = Icons.Rounded.FavoriteBorder, count = post.likes,    tint = FitverseColors.Red.copy(alpha = 0.75f))
-                    PostStat(icon = Icons.Rounded.Forum,          count = post.comments, tint = FitverseColors.TextMuted)
+                    PostStat(icon = Icons.Rounded.FavoriteBorder, count = post.likes,    tint = FitColors.Red.copy(alpha = 0.75f))
+                    PostStat(icon = Icons.Rounded.Forum,          count = post.comments, tint = FitColors.TextMuted)
                 }
                 Spacer(Modifier.weight(1f))
                 Row(
                     modifier = Modifier
                         .clip(RoundedCornerShape(8.dp))
-                        .background(FitverseColors.AccentDim.copy(alpha = 0.20f))
+                        .background(FitColors.AccentDim.copy(alpha = 0.20f))
                         .padding(horizontal = 10.dp, vertical = 5.dp),
                     verticalAlignment     = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -573,10 +716,10 @@ fun PostCard(post: Post, modifier: Modifier = Modifier) {
                     Icon(
                         Icons.Rounded.EmojiEvents,
                         contentDescription = null,
-                        tint     = FitverseColors.Accent,
+                        tint     = FitColors.Accent,
                         modifier = Modifier.size(13.dp),
                     )
-                    Text(post.xp, color = FitverseColors.Accent, fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                    Text(post.xp, color = FitColors.Accent, fontSize = 12.sp, fontWeight = FontWeight.Bold)
                 }
             }
         }
@@ -590,7 +733,7 @@ private fun PostStat(icon: ImageVector, count: Int, tint: Color) {
         horizontalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         Icon(icon, contentDescription = null, tint = tint, modifier = Modifier.size(15.dp))
-        Text("$count", color = FitverseColors.TextMuted, fontSize = 13.sp)
+        Text("$count", color = FitColors.TextMuted, fontSize = 13.sp)
     }
 }
 
@@ -605,7 +748,7 @@ private fun CreateCommunitySheet(onDismiss: () -> Unit) {
     CommunityBottomSheet(onDismiss = onDismiss) {
         Text(
             "CRIAR COMUNIDADE",
-            color         = FitverseColors.TextPrimary,
+            color         = FitColors.TextPrimary,
             fontSize      = 17.sp,
             fontWeight    = FontWeight.Black,
             letterSpacing = 0.5.sp,
@@ -613,7 +756,7 @@ private fun CreateCommunitySheet(onDismiss: () -> Unit) {
         Spacer(Modifier.height(4.dp))
         Text(
             "Monte seu grupo de atletas e evolua junto",
-            color    = FitverseColors.TextMuted,
+            color    = FitColors.TextMuted,
             fontSize = 13.sp,
         )
 
@@ -630,7 +773,7 @@ private fun CreateCommunitySheet(onDismiss: () -> Unit) {
 
         Text(
             "VISIBILIDADE",
-            color         = FitverseColors.TextMuted,
+            color         = FitColors.TextMuted,
             fontSize      = 10.sp,
             fontWeight    = FontWeight.Bold,
             letterSpacing = 1.2.sp,
@@ -643,7 +786,7 @@ private fun CreateCommunitySheet(onDismiss: () -> Unit) {
                 label       = "Pública",
                 description = "Qualquer atleta pode entrar",
                 isSelected  = !isPrivate,
-                color       = FitverseColors.Green,
+                color       = FitColors.Green,
                 onClick     = { isPrivate = false },
             )
             PrivacyOption(
@@ -652,7 +795,7 @@ private fun CreateCommunitySheet(onDismiss: () -> Unit) {
                 label       = "Privada",
                 description = "Apenas por convite ou código",
                 isSelected  = isPrivate,
-                color       = FitverseColors.Purple,
+                color       = FitColors.Purple,
                 onClick     = { isPrivate = true },
             )
         }
@@ -665,10 +808,10 @@ private fun CreateCommunitySheet(onDismiss: () -> Unit) {
             modifier = Modifier.fillMaxWidth().height(56.dp),
             shape    = RoundedCornerShape(16.dp),
             colors   = ButtonDefaults.buttonColors(
-                containerColor         = FitverseColors.Purple,
-                contentColor           = FitverseColors.TextPrimary,
-                disabledContainerColor = FitverseColors.Surface2,
-                disabledContentColor   = FitverseColors.TextMuted2,
+                containerColor         = FitColors.Purple,
+                contentColor           = FitColors.TextPrimary,
+                disabledContainerColor = FitColors.Surface2,
+                disabledContentColor   = FitColors.TextDisabled,
             ),
         ) {
             Icon(Icons.Rounded.Groups, contentDescription = null, modifier = Modifier.size(20.dp))
@@ -698,7 +841,7 @@ private fun PrivacyOption(
                 color = if (isSelected) color.copy(alpha = 0.50f) else Color(0xFF2a2a35),
                 shape = RoundedCornerShape(14.dp),
             )
-            .background(if (isSelected) color.copy(alpha = 0.10f) else FitverseColors.SurfaceCard)
+            .background(if (isSelected) color.copy(alpha = 0.10f) else FitColors.SurfaceModal)
             .clickable(onClick = onClick)
             .padding(14.dp),
     ) {
@@ -706,13 +849,13 @@ private fun PrivacyOption(
             Icon(
                 icon,
                 contentDescription = null,
-                tint     = if (isSelected) color else FitverseColors.TextMuted,
+                tint     = if (isSelected) color else FitColors.TextMuted,
                 modifier = Modifier.size(16.dp),
             )
             Spacer(Modifier.width(6.dp))
             Text(
                 label,
-                color      = if (isSelected) color else FitverseColors.TextMuted,
+                color      = if (isSelected) color else FitColors.TextMuted,
                 fontSize   = 13.sp,
                 fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
             )
@@ -720,7 +863,7 @@ private fun PrivacyOption(
         Spacer(Modifier.height(5.dp))
         Text(
             description,
-            color      = FitverseColors.TextMuted2,
+            color      = FitColors.TextDisabled,
             fontSize   = 11.sp,
             lineHeight = 15.sp,
         )
@@ -730,14 +873,17 @@ private fun PrivacyOption(
 // ── Join community sheet ──────────────────────────────────────────────────────
 
 @Composable
-private fun JoinCommunitySheet(onDismiss: () -> Unit) {
+private fun JoinCommunitySheet(
+    onDismiss: () -> Unit,
+    onJoin: (String) -> Unit = {},
+) {
     var code by remember { mutableStateOf("") }
     val isValid = code.isNotBlank()
 
     CommunityBottomSheet(onDismiss = onDismiss) {
         Text(
             "ENTRAR NA COMUNIDADE",
-            color         = FitverseColors.TextPrimary,
+            color         = FitColors.TextPrimary,
             fontSize      = 17.sp,
             fontWeight    = FontWeight.Black,
             letterSpacing = 0.5.sp,
@@ -745,7 +891,7 @@ private fun JoinCommunitySheet(onDismiss: () -> Unit) {
         Spacer(Modifier.height(4.dp))
         Text(
             "Insira o código ou senha fornecido pelo administrador",
-            color      = FitverseColors.TextMuted,
+            color      = FitColors.TextMuted,
             fontSize   = 13.sp,
             lineHeight = 18.sp,
         )
@@ -758,28 +904,28 @@ private fun JoinCommunitySheet(onDismiss: () -> Unit) {
             label           = "Código ou senha",
             placeholder     = "Ex: FIT-2024",
             keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Characters),
-            accentColor     = FitverseColors.Green,
+            accentColor     = FitColors.Green,
         )
 
         Spacer(Modifier.height(8.dp))
         Text(
             "Solicite o código ao administrador da comunidade",
-            color    = FitverseColors.TextMuted2,
+            color    = FitColors.TextDisabled,
             fontSize = 11.sp,
         )
 
         Spacer(Modifier.height(28.dp))
 
         Button(
-            onClick  = onDismiss,
+            onClick  = { onJoin("Warriors GYM") },
             enabled  = isValid,
             modifier = Modifier.fillMaxWidth().height(56.dp),
             shape    = RoundedCornerShape(16.dp),
             colors   = ButtonDefaults.buttonColors(
-                containerColor         = FitverseColors.Green,
-                contentColor           = FitverseColors.Bg,
-                disabledContainerColor = FitverseColors.Surface2,
-                disabledContentColor   = FitverseColors.TextMuted2,
+                containerColor         = FitColors.Green,
+                contentColor           = FitColors.Bg,
+                disabledContainerColor = FitColors.Surface2,
+                disabledContentColor   = FitColors.TextDisabled,
             ),
         ) {
             Icon(Icons.Rounded.VpnKey, contentDescription = null, modifier = Modifier.size(20.dp))
@@ -818,7 +964,7 @@ private fun CommunityBottomSheet(
                     onClick           = {},
                 )
                 .clip(RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp))
-                .background(FitverseColors.Surface)
+                .background(FitColors.Surface)
                 .padding(horizontal = 20.dp, vertical = 24.dp),
         ) {
             Box(
@@ -826,7 +972,7 @@ private fun CommunityBottomSheet(
                     .width(36.dp)
                     .height(4.dp)
                     .clip(RoundedCornerShape(2.dp))
-                    .background(FitverseColors.Border2)
+                    .background(FitColors.Border2)
                     .align(Alignment.CenterHorizontally),
             )
             Spacer(Modifier.height(20.dp))
@@ -842,14 +988,14 @@ private fun CommunityTextField(
     label: String,
     placeholder: String,
     modifier: Modifier = Modifier,
-    accentColor: Color = FitverseColors.Accent,
+    accentColor: Color = FitColors.Accent,
     keyboardOptions: KeyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences),
 ) {
     OutlinedTextField(
         value           = value,
         onValueChange   = onValueChange,
         label           = { Text(label, fontSize = 12.sp) },
-        placeholder     = { Text(placeholder, color = FitverseColors.TextMuted2, fontSize = 14.sp) },
+        placeholder     = { Text(placeholder, color = FitColors.TextDisabled, fontSize = 14.sp) },
         modifier        = modifier.fillMaxWidth(),
         singleLine      = true,
         shape           = RoundedCornerShape(14.dp),
@@ -858,10 +1004,10 @@ private fun CommunityTextField(
             focusedBorderColor   = accentColor,
             unfocusedBorderColor = Color(0xFF2a2a35),
             focusedLabelColor    = accentColor,
-            unfocusedLabelColor  = FitverseColors.TextMuted,
+            unfocusedLabelColor  = FitColors.TextMuted,
             cursorColor          = accentColor,
-            focusedTextColor     = FitverseColors.TextPrimary,
-            unfocusedTextColor   = FitverseColors.TextPrimary,
+            focusedTextColor     = FitColors.TextPrimary,
+            unfocusedTextColor   = FitColors.TextPrimary,
         ),
     )
 }

@@ -1,4 +1,4 @@
-package org.fitverse.project.navigation
+﻿package org.fitverse.project.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -15,9 +15,9 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
-import com.example.presentation.ui.workout.WorkoutCompletionResult
-import com.example.presentation.ui.workout.viewmodel.WorkoutSessionViewModel
-import com.example.presentation.ui.workout.viewmodel.WorkoutViewModel
+import org.fitverse.presentation.ui.workout.WorkoutCompletionResult
+import org.fitverse.presentation.ui.workout.viewmodel.WorkoutSessionViewModel
+import org.fitverse.presentation.ui.workout.viewmodel.WorkoutViewModel
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import org.fitverse.project.routes.NavRoutes

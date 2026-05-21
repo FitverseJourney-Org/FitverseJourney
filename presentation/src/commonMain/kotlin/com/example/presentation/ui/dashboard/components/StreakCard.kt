@@ -1,4 +1,4 @@
-package com.example.presentation.ui.dashboard.components
+﻿package org.fitverse.presentation.ui.dashboard.components
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween

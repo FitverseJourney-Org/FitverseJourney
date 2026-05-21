@@ -1,4 +1,4 @@
-package com.example.presentation.ui.authentication.login.components
+﻿package org.fitverse.presentation.ui.authentication.login.components
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import com.example.presentation.widgets.FitVerseSpacer
+import org.fitverse.presentation.widgets.FitVerseSpacer
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -1,4 +1,4 @@
-package com.example.presentation.ui.progress.components
+﻿package org.fitverse.presentation.ui.progress.components
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -34,10 +34,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.domain.models.progression.InsightLevel
-import com.example.domain.models.progression.ProgressionInsight
-import com.example.domain.models.progression.ProgressionStats
-import com.example.presentation.utils.formatDecimalKmp
+import org.fitverse.domain.models.progression.InsightLevel
+import org.fitverse.domain.models.progression.ProgressionInsight
+import org.fitverse.domain.models.progression.ProgressionStats
+import org.fitverse.presentation.utils.formatDecimalKmp
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ProgressionStatsGrid — grade 2×2 de cards de estatística

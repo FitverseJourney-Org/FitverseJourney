@@ -1,4 +1,4 @@
-package com.example.presentation.widgets
+﻿package org.fitverse.presentation.widgets
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
@@ -45,7 +45,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.presentation.ui.dashboard.state.AvatarState
+import org.fitverse.presentation.ui.dashboard.state.AvatarState
 
 @Composable
 fun FitverseAvatarCard(

@@ -1,4 +1,4 @@
-package com.example.domain.models.navigationBarHomePage
+﻿package org.fitverse.domain.models.navigationBarHomePage
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FitnessCenter

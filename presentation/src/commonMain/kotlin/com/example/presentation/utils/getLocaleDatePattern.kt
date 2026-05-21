@@ -1,7 +1,7 @@
-package com.example.presentation.utils
+﻿package org.fitverse.presentation.utils
 
 import androidx.compose.runtime.Composable
-import com.example.expect.LocalAppLocale
+import org.fitverse.presentation.expect.LocalAppLocale
 
 @Composable
 fun getLocaleDate(): String {

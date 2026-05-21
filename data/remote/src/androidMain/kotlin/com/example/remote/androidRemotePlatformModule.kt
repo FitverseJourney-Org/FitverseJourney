@@ -1,10 +1,10 @@
-package com.example.remote
+﻿package org.fitverse.data.remote
 
-import com.example.domain.repository.authentication.AuthRepository
-import com.example.remote.FirebaseAuthRepositoryImpl
-import com.example.remote.expect.AndroidNetworkMonitor
-import com.example.remote.expect.NetworkMonitor
-import com.example.remote.mapper.AuthMapper
+import org.fitverse.domain.repository.authentication.AuthRepository
+import org.fitverse.data.remote.FirebaseAuthRepositoryImpl
+import org.fitverse.data.remote.expect.AndroidNetworkMonitor
+import org.fitverse.data.remote.expect.NetworkMonitor
+import org.fitverse.data.remote.mapper.AuthMapper
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import org.koin.android.ext.koin.androidContext

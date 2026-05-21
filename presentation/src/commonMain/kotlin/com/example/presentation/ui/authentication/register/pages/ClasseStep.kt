@@ -1,4 +1,4 @@
-package com.example.presentation.ui.authentication.register.pages
+﻿package org.fitverse.presentation.ui.authentication.register.pages
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,12 +15,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.domain.models.user.ClassType
-import com.example.presentation.ui.authentication.register.components.ClassCard
-import com.example.presentation.ui.authentication.register.components.RegisterPrimaryButton
-import com.example.presentation.ui.authentication.register.states.RegisterIntent
-import com.example.presentation.ui.authentication.register.states.RegisterUiState
-import com.example.presentation.theme.RegisterDimens
+import org.fitverse.domain.models.user.ClassType
+import org.fitverse.presentation.ui.authentication.register.components.ClassCard
+import org.fitverse.presentation.ui.authentication.register.components.RegisterPrimaryButton
+import org.fitverse.presentation.ui.authentication.register.states.RegisterIntent
+import org.fitverse.presentation.ui.authentication.register.states.RegisterUiState
+import org.fitverse.presentation.theme.RegisterDimens
 import fitversejourneyapp.presentation.generated.resources.Res
 import fitversejourneyapp.presentation.generated.resources.register_button_confirm_class
 import fitversejourneyapp.presentation.generated.resources.register_classe_level_change_hint

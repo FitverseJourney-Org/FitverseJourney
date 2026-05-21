@@ -1,9 +1,9 @@
-package com.example.local.datasource.user
+﻿package org.fitverse.data.local.datasource.user
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToOneOrNull
-import com.journey.database.AppDatabase.AppDatabase
-import com.journey.database.migrations.UserEntity
+import com.journey.AppDatabase
+import com.journey.user.UserEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
@@ -17,7 +17,7 @@ class UserLocalDataSourceImpl(
     database: AppDatabase,
 ) : UserLocalDataSource {
 
-    private val queries = database.appDatabaseQueries
+    private val queries = database.userEntityQueries
 
     override suspend fun insertUser(entity: UserEntity): Unit = withContext(Dispatchers.IO) {
         queries.insertUser(
@@ -70,10 +70,6 @@ class UserLocalDataSourceImpl(
 
     override suspend fun deleteUser(userId: String): Unit = withContext(Dispatchers.IO) {
         queries.deleteUser(userId)                 // ✅ String
-    }
-
-    override suspend fun deleteAllUsers(): Unit = withContext(Dispatchers.IO) {
-        queries.deleteAllUsers()
     }
 
     // ✅ retorna UserEntity — sem mapper aqui

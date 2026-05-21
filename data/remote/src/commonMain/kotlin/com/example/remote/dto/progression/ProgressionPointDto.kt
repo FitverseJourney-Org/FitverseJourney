@@ -1,4 +1,4 @@
-package com.example.remote.dto.progression
+﻿package org.fitverse.data.remote.dto.progression
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

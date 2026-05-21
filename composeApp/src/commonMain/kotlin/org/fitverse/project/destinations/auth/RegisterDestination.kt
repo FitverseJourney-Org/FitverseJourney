@@ -1,18 +1,20 @@
-package org.fitverse.project.destinations.auth
+﻿package org.fitverse.project.destinations.auth
 
 import androidx.compose.runtime.Composable
-import com.example.presentation.ui.authentication.register.RegisterScreen
-import com.example.presentation.ui.authentication.register.RegisterViewModel
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import org.fitverse.presentation.ui.authentication.register.RegisterScreen
+import org.fitverse.presentation.ui.authentication.register.RegisterViewModel
 import org.koin.compose.koinInject
 
 @Composable
 fun RegisterDestination(onBack: () -> Unit) {
-    val viewmodel = koinInject<RegisterViewModel>()
+    val viewModel = koinInject<RegisterViewModel>()
+    val state by viewModel.uiState.collectAsState()
 
     RegisterScreen(
-        onBack = {
-            onBack()
-        },
-        viewModel = viewmodel
+        state = state,
+        onAction = viewModel::onIntent,
+        onBack = onBack,
     )
 }

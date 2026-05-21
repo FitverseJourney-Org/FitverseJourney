@@ -1,4 +1,4 @@
-package com.example.repository
+﻿package org.fitverse.data.repository
 
 import kotlin.test.Test
 import kotlin.test.assertEquals

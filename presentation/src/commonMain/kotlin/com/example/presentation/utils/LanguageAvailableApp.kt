@@ -1,7 +1,7 @@
-package com.example.presentation.utils
+﻿package org.fitverse.presentation.utils
 
-import com.example.domain.models.language.AppLanguageItem
-import com.example.domain.models.language.TagLanguage
+import org.fitverse.domain.models.language.AppLanguageItem
+import org.fitverse.domain.models.language.TagLanguage
 import fitversejourneyapp.presentation.generated.resources.Res
 import fitversejourneyapp.presentation.generated.resources.locale_de
 import fitversejourneyapp.presentation.generated.resources.locale_en

@@ -1,0 +1,25 @@
+-- ============================================================
+-- CATALOG_MISSION — Catálogo fixo de missões disponíveis
+-- Populado uma única vez a partir dos seeds locais.
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS CatalogMissionEntity (
+    id          TEXT    NOT NULL PRIMARY KEY,
+    title       TEXT    NOT NULL,
+    description TEXT    NOT NULL DEFAULT '',
+    xpReward    INTEGER NOT NULL DEFAULT 10,
+    type        TEXT    NOT NULL DEFAULT 'CARDIO',
+    isSpecial   INTEGER NOT NULL DEFAULT 0   -- 0 = regular, 1 = special/challenge
+);
+
+-- ── Queries ───────────────────────────────────────────────────────────────────
+
+selectAllCatalogMissions:
+SELECT * FROM CatalogMissionEntity ORDER BY id;
+
+countCatalogMissions:
+SELECT COUNT(*) FROM CatalogMissionEntity;
+
+insertCatalogMission:
+INSERT OR IGNORE INTO CatalogMissionEntity(id, title, description, xpReward, type, isSpecial)
+VALUES (?, ?, ?, ?, ?, ?);

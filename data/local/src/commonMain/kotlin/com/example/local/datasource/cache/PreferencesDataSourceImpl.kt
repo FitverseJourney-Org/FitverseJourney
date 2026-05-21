@@ -1,6 +1,6 @@
-package com.example.local.datasource.cache
+﻿package org.fitverse.data.local.datasource.cache
 
-import com.example.local.database.datastore.DataStoreFactory
+import org.fitverse.data.local.database.datastore.DataStoreFactory
 import kotlinx.coroutines.flow.Flow
 
 class PreferencesDataSourceImpl(

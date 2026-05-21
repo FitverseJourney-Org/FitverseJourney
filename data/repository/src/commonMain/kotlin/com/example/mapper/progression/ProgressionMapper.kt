@@ -1,9 +1,9 @@
-package com.example.mapper.progression
+﻿package org.fitverse.data.repository.mapper.progression
 
-import com.example.domain.expect.toPlatformDate
-import com.example.domain.models.progression.LoadProgressionPoint
-import com.example.local.model.ProgressionPointEntity
-import com.example.remote.dto.progression.ProgressionPointDto
+import org.fitverse.domain.expect.toPlatformDate
+import org.fitverse.domain.models.progression.LoadProgressionPoint
+import org.fitverse.data.local.model.ProgressionPointEntity
+import org.fitverse.data.remote.dto.progression.ProgressionPointDto
 import kotlin.jvm.JvmName
 
 fun ProgressionPointDto.toDomain(): LoadProgressionPoint = LoadProgressionPoint(

@@ -1,6 +1,6 @@
-package com.example.local.database.sqldelight
+﻿package org.fitverse.data.local.database.sqldelight
 
-import com.journey.database.AppDatabase.AppDatabase
+import com.journey.AppDatabase
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 

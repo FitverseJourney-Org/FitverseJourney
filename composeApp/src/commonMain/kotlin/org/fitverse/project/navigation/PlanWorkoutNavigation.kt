@@ -1,4 +1,4 @@
-package org.fitverse.project.navigation
+﻿package org.fitverse.project.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -9,13 +9,15 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
-import com.example.domain.models.workout.workout_plan.WorkoutPlanItem
-import com.example.domain.models.workout.workout_plan.WorkoutScreenState
-import com.example.presentation.ui.planWorkout.WorkoutAiPlanGenerationDestination
-import com.example.presentation.ui.planWorkout.WorkoutPlanListScreen
+import org.fitverse.presentation.ui.workoutPlan.WorkoutPlanBuilderRoute
+import org.fitverse.presentation.ui.workoutPlan.WorkoutPlansRoot
+import org.fitverse.presentation.ui.workoutPlan.viewmodel.WorkoutPlanBuilderViewModel
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
+import org.fitverse.project.destinations.workout.WorkoutPlanExercisesDestination
+import org.fitverse.project.destinations.workout.WorkoutPlanExercisesDetailsDestination
 import org.fitverse.project.routes.NavRoutes
+import org.koin.compose.koinInject
 
 @Composable
 fun PlanWorkoutNavigation(
@@ -31,7 +33,6 @@ fun PlanWorkoutNavigation(
                     subclass(NavRoutes.PlanWorkoutFlow.PlanList::class, NavRoutes.PlanWorkoutFlow.PlanList.serializer())
                     subclass(NavRoutes.PlanWorkoutFlow.Exercises::class, NavRoutes.PlanWorkoutFlow.Exercises.serializer())
                     subclass(NavRoutes.PlanWorkoutFlow.ExerciseDetails::class, NavRoutes.PlanWorkoutFlow.ExerciseDetails.serializer())
-
                 }
             }
         },
@@ -48,72 +49,34 @@ fun PlanWorkoutNavigation(
         ),
         entryProvider = entryProvider {
             entry<NavRoutes.PlanWorkoutFlow.PlanList> {
-                WorkoutPlanListScreen(
-                    state = WorkoutScreenState(
-                        objective = "Hipertrofia Muscular",
-                        experienceLevel = "Intermediário",
-                        workoutsPerWeek = 5,
-                        completedThisWeek = 3,
-                        availablePlans = listOf(
-                            WorkoutPlanItem(
-                                id = "1",
-                                title = "Treino de Bateria",
-                                frequency = "A cada 2 semanas",
-                                intensity = "Alta",
-                                isActive = false,
-                                progress = 54f
-                            ),
-                            WorkoutPlanItem(
-                                id = "2",
-                                title = "Treino de Força",
-                                frequency = "A cada semana",
-                                intensity = "Moderada",
-                                isActive = false,
-                                progress = 0f
-                            )
-                        ),
-                        activePlan = null
-                    ),
-                    onBack = { toBack() },
-                    onSelectedPlan = { rootBackStack.add(NavRoutes.PlanWorkoutFlow.Plan) },
-                    onNavigateToManualCreation = {
-                        // Rota para criação manual
+                WorkoutPlansRoot(
+                    onBack = toBack,
+                    onEditPlan = {
+                        val planId = it
                         rootBackStack.add(NavRoutes.PlanWorkoutFlow.Builder)
                     },
-                    onNavigateToAiCreation = {
-                        // Nova rota para a IA
-                        rootBackStack.add(NavRoutes.PlanWorkoutFlow.PlanIA)
+                    onNewPlan = {
+                        rootBackStack.add(NavRoutes.PlanWorkoutFlow.Builder)
                     },
-                    onActivatePlan = {
-                        // Lógica para ativar um plano
-                    }
                 )
             }
             entry<NavRoutes.PlanWorkoutFlow.Plan> {
-                org.fitverse.project.destinations.workout.WorkoutPlanDestination(
-                    onBack = {
-                        rootBackStack.removeLastOrNull()
-                    },
-                    toNewWorkout = {
-                        rootBackStack.add(NavRoutes.PlanWorkoutFlow.Builder)
-                    }
-                )
+
             }
             entry<NavRoutes.PlanWorkoutFlow.Builder>{
-                org.fitverse.project.destinations.workout.WorkoutPlanBuilderDestination(
+                val viewmodel = koinInject<WorkoutPlanBuilderViewModel>()
+                WorkoutPlanBuilderRoute(
+                    viewmodel = viewmodel,
                     onBack = {
                         rootBackStack.removeLastOrNull()
                     },
-                    toAddExercises = {
+                    onNavigateToAddExercise = {
                         rootBackStack.add(NavRoutes.PlanWorkoutFlow.Exercises)
-                    },
-                    savePlan = {
-                        rootBackStack.removeLastOrNull()
                     }
                 )
             }
             entry<NavRoutes.PlanWorkoutFlow.Exercises>{
-                org.fitverse.project.destinations.workout.WorkoutPlanExercisesDestination(
+                WorkoutPlanExercisesDestination(
                     onBack = {
                         rootBackStack.removeLastOrNull()
                     },
@@ -126,22 +89,12 @@ fun PlanWorkoutNavigation(
                 )
             }
             entry<NavRoutes.PlanWorkoutFlow.ExerciseDetails>{
-                org.fitverse.project.destinations.workout.WorkoutPlanExercisesDetailsDestination(
+                WorkoutPlanExercisesDetailsDestination(
                     onBack = {
                         rootBackStack.removeLastOrNull()
                     },
                     onAddExercise = {
 
-                    }
-                )
-            }
-            entry<NavRoutes.PlanWorkoutFlow.PlanIA> {
-                WorkoutAiPlanGenerationDestination(
-                    onBack = { rootBackStack.removeLastOrNull() },
-                    onPlanAccepted = {
-                        // Quando o usuário aceita o plano, você pode levá-lo para a lista
-                        // ou direto para os detalhes do plano gerado.
-                        rootBackStack.removeLastOrNull()
                     }
                 )
             }

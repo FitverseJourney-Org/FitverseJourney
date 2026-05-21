@@ -1,7 +1,7 @@
-package com.example.domain.usecase.missions
+﻿package org.fitverse.domain.usecase.missions
 
-import com.example.domain.repository.dbLocal.sqldelight.missions.DailyMissionDao
-import com.example.domain.repository.dbLocal.sqldelight.missions.DailyMissionRecord
+import org.fitverse.domain.repository.dbLocal.sqldelight.missions.DailyMissionDao
+import org.fitverse.domain.repository.dbLocal.sqldelight.missions.DailyMissionRecord
 
 class InsertDailyMissionsUseCase(
     private val dao: DailyMissionDao,

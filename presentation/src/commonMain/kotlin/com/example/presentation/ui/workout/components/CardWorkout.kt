@@ -1,4 +1,4 @@
-package com.example.presentation.ui.workout.components
+﻿package org.fitverse.presentation.ui.workout.components
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.*
@@ -18,7 +18,7 @@ import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.*
-import com.example.presentation.theme.FitverseColors
+import org.fitverse.presentation.theme.FitColors
 
 // ─────────────────────────────────────────────────────────────────────────────
 // WorkoutMainCard — v2 (senior redesign)
@@ -64,7 +64,7 @@ fun WorkoutMainCardy(onStart: () -> Unit) {
                 drawCircle(
                     brush  = Brush.radialGradient(
                         colors = listOf(
-                            FitverseColors.Accent.copy(alpha = 0.08f),
+                            FitColors.Accent.copy(alpha = 0.08f),
                             Color.Transparent,
                         ),
                         center = Offset.Zero,
@@ -87,9 +87,9 @@ fun WorkoutMainCardy(onStart: () -> Unit) {
                         Brush.horizontalGradient(
                             listOf(
                                 Color.Transparent,
-                                FitverseColors.Accent.copy(alpha = 0.50f),
-                                FitverseColors.Accent,
-                                FitverseColors.Accent.copy(alpha = 0.50f),
+                                FitColors.Accent.copy(alpha = 0.50f),
+                                FitColors.Accent,
+                                FitColors.Accent.copy(alpha = 0.50f),
                                 Color.Transparent,
                             )
                         )
@@ -110,17 +110,17 @@ fun WorkoutMainCardy(onStart: () -> Unit) {
                         Box(
                             modifier = Modifier
                                 .clip(RoundedCornerShape(4.dp))
-                                .background(FitverseColors.Accent.copy(alpha = 0.13f))
+                                .background(FitColors.Accent.copy(alpha = 0.13f))
                                 .border(
                                     0.5.dp,
-                                    FitverseColors.Accent.copy(alpha = 0.28f),
+                                    FitColors.Accent.copy(alpha = 0.28f),
                                     RoundedCornerShape(4.dp),
                                 )
                                 .padding(horizontal = 7.dp, vertical = 3.dp),
                         ) {
                             Text(
                                 text          = "PUSH DAY",
-                                color         = FitverseColors.Accent,
+                                color         = FitColors.Accent,
                                 fontSize      = 9.sp,
                                 fontWeight    = FontWeight.ExtraBold,
                                 letterSpacing = 1.2.sp,
@@ -131,7 +131,7 @@ fun WorkoutMainCardy(onStart: () -> Unit) {
 
                         Text(
                             text          = "Hypertrophy A",
-                            color         = FitverseColors.TextPrimary,
+                            color         = FitColors.TextPrimary,
                             fontSize      = 22.sp,
                             fontWeight    = FontWeight.Black,
                             letterSpacing = (-0.5).sp,
@@ -140,7 +140,7 @@ fun WorkoutMainCardy(onStart: () -> Unit) {
                         Spacer(Modifier.height(3.dp))
                         Text(
                             text          = "Fase 2 · Semana 3",
-                            color         = FitverseColors.TextMuted,
+                            color         = FitColors.TextMuted,
                             fontSize      = 12.sp,
                             letterSpacing = 0.1.sp,
                         )
@@ -162,12 +162,12 @@ fun WorkoutMainCardy(onStart: () -> Unit) {
                                     modifier = Modifier
                                         .size(6.dp)
                                         .clip(CircleShape)
-                                        .background(FitverseColors.Red.copy(alpha = pulseAlpha)),
+                                        .background(FitColors.Red.copy(alpha = pulseAlpha)),
                                 )
                                 Spacer(Modifier.width(7.dp))
                                 Text(
                                     text          = "42:15",
-                                    color         = FitverseColors.TextPrimary,
+                                    color         = FitColors.TextPrimary,
                                     fontSize      = 18.sp,
                                     fontWeight    = FontWeight.Black,
                                     letterSpacing = 0.5.sp,
@@ -177,7 +177,7 @@ fun WorkoutMainCardy(onStart: () -> Unit) {
                         Spacer(Modifier.height(5.dp))
                         Text(
                             text          = "duração estimada",
-                            color         = FitverseColors.TextMuted,
+                            color         = FitColors.TextMuted,
                             fontSize      = 9.sp,
                         )
                     }
@@ -200,19 +200,19 @@ fun WorkoutMainCardy(onStart: () -> Unit) {
                 ) {
                     Text(
                         text     = "Progresso do plano",
-                        color    = FitverseColors.TextMuted,
+                        color    = FitColors.TextMuted,
                         fontSize = 11.sp,
                     )
                     Row(verticalAlignment = Alignment.Bottom) {
                         Text(
                             text       = "37",
-                            color      = FitverseColors.TextPrimary,
+                            color      = FitColors.TextPrimary,
                             fontSize   = 13.sp,
                             fontWeight = FontWeight.Bold,
                         )
                         Text(
                             text     = "%",
-                            color    = FitverseColors.TextMuted,
+                            color    = FitColors.TextMuted,
                             fontSize = 10.sp,
                         )
                     }
@@ -235,8 +235,8 @@ fun WorkoutMainCardy(onStart: () -> Unit) {
                             .background(
                                 Brush.horizontalGradient(
                                     listOf(
-                                        FitverseColors.Accent.copy(alpha = 0.70f),
-                                        FitverseColors.Accent,
+                                        FitColors.Accent.copy(alpha = 0.70f),
+                                        FitColors.Accent,
                                     )
                                 )
                             ),
@@ -255,7 +255,7 @@ fun WorkoutMainCardy(onStart: () -> Unit) {
                             .size(9.dp)
                             .clip(CircleShape)
                             .border(2.dp, CardBg, CircleShape)
-                            .background(FitverseColors.TextPrimary),
+                            .background(FitColors.TextPrimary),
                     )
                 }
 
@@ -272,11 +272,11 @@ fun WorkoutMainCardy(onStart: () -> Unit) {
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    WorkoutStat(Icons.Rounded.FitnessCenter, "18",   "Séries", FitverseColors.Accent)
+                    WorkoutStat(Icons.Rounded.FitnessCenter, "18",   "Séries", FitColors.Accent)
                     Box(Modifier.width(1.dp).height(32.dp).background(DividerColor))
-                    WorkoutStat(Icons.Rounded.Bolt,          "8.4k", "Volume", FitverseColors.Blue)
+                    WorkoutStat(Icons.Rounded.Bolt,          "8.4k", "Volume", FitColors.Blue)
                     Box(Modifier.width(1.dp).height(32.dp).background(DividerColor))
-                    WorkoutStat(Icons.Rounded.Favorite,      "134",  "BPM",    FitverseColors.Red)
+                    WorkoutStat(Icons.Rounded.Favorite,      "134",  "BPM",    FitColors.Red)
                 }
 
                 Spacer(Modifier.height(20.dp))
@@ -291,13 +291,13 @@ fun WorkoutMainCardy(onStart: () -> Unit) {
                             Brush.horizontalGradient(
                                 listOf(
                                     Color(0xFF6D28D9),  // e.g. Color(0xFF6D28D9)
-                                    FitverseColors.Accent,
+                                    FitColors.Accent,
                                 )
                             )
                         )
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
-                            indication        = ripple(color = FitverseColors.Bg.copy(alpha = 0.15f)),
+                            indication        = ripple(color = FitColors.Bg.copy(alpha = 0.15f)),
                             onClick           = onStart,
                         ),
                     contentAlignment = Alignment.Center,
@@ -309,13 +309,13 @@ fun WorkoutMainCardy(onStart: () -> Unit) {
                         Icon(
                             imageVector     = Icons.Rounded.PlayArrow,
                             contentDescription = null,
-                            tint            = FitverseColors.Bg,
+                            tint            = FitColors.Bg,
                             modifier        = Modifier.size(22.dp),
                         )
                         Spacer(Modifier.width(8.dp))
                         Text(
                             text          = "INICIAR TREINO",
-                            color         = FitverseColors.Bg,
+                            color         = FitColors.Bg,
                             fontSize      = 15.sp,
                             fontWeight    = FontWeight.ExtraBold,
                             letterSpacing = 1.5.sp,
@@ -336,17 +336,17 @@ private fun MuscleChip(label: String) {
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(6.dp))
-            .background(FitverseColors.Accent.copy(alpha = 0.10f))
+            .background(FitColors.Accent.copy(alpha = 0.10f))
             .border(
                 0.5.dp,
-                FitverseColors.Accent.copy(alpha = 0.25f),
+                FitColors.Accent.copy(alpha = 0.25f),
                 RoundedCornerShape(6.dp),
             )
             .padding(horizontal = 9.dp, vertical = 4.dp),
     ) {
         Text(
             text          = label,
-            color         = FitverseColors.Accent.copy(alpha = 0.85f),
+            color         = FitColors.Accent.copy(alpha = 0.85f),
             fontSize      = 10.sp,
             fontWeight    = FontWeight.SemiBold,
             letterSpacing = 0.3.sp,
@@ -383,14 +383,14 @@ private fun WorkoutStat(
         Spacer(Modifier.height(6.dp))
         Text(
             text          = value,
-            color         = FitverseColors.TextPrimary,
+            color         = FitColors.TextPrimary,
             fontSize      = 18.sp,
             fontWeight    = FontWeight.Black,
             letterSpacing = (-0.3).sp,
         )
         Text(
             text     = label,
-            color    = FitverseColors.TextMuted,
+            color    = FitColors.TextMuted,
             fontSize = 10.sp,
         )
     }

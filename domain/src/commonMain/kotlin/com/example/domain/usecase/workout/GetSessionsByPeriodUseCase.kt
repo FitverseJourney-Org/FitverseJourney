@@ -1,8 +1,8 @@
-package com.example.domain.usecase.workout
+﻿package org.fitverse.domain.usecase.workout
 
-import com.example.domain.repository.authentication.AuthRepository
-import com.example.domain.repository.dbLocal.sqldelight.workout.WorkoutSessionDao
-import com.example.domain.repository.dbLocal.sqldelight.workout.WorkoutSessionRecord
+import org.fitverse.domain.repository.authentication.AuthRepository
+import org.fitverse.domain.repository.dbLocal.sqldelight.workout.WorkoutSessionDao
+import org.fitverse.domain.repository.dbLocal.sqldelight.workout.WorkoutSessionRecord
 
 class GetSessionsByPeriodUseCase(
     private val dao: WorkoutSessionDao,

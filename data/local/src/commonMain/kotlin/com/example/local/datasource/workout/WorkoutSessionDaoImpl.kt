@@ -1,10 +1,10 @@
-package com.example.local.datasource.workout
+﻿package org.fitverse.data.local.datasource.workout
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
-import com.example.domain.repository.dbLocal.sqldelight.workout.WorkoutSessionDao
-import com.example.domain.repository.dbLocal.sqldelight.workout.WorkoutSessionRecord
-import com.journey.database.AppDatabase.AppDatabase
+import org.fitverse.domain.repository.dbLocal.sqldelight.workout.WorkoutSessionDao
+import org.fitverse.domain.repository.dbLocal.sqldelight.workout.WorkoutSessionRecord
+import com.journey.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
@@ -13,7 +13,7 @@ import kotlinx.coroutines.withContext
 
 class WorkoutSessionDaoImpl(database: AppDatabase) : WorkoutSessionDao {
 
-    private val queries = database.appDatabaseQueries
+    private val queries = database.workoutSessionEntityQueries
 
     override fun observeSessionsByUser(userId: String): Flow<List<WorkoutSessionRecord>> =
         queries.selectSessionsByUser(userId)
@@ -95,7 +95,7 @@ class WorkoutSessionDaoImpl(database: AppDatabase) : WorkoutSessionDao {
 
     // ── Mapper ────────────────────────────────────────────────────────────────
 
-    private fun com.journey.database.migrations.WorkoutSessionEntity.toRecord() = WorkoutSessionRecord(
+    private fun com.journey.workout.WorkoutSessionEntity.toRecord() = WorkoutSessionRecord(
         id              = id,
         userId          = userId,
         workoutPlanId   = workoutPlanId,

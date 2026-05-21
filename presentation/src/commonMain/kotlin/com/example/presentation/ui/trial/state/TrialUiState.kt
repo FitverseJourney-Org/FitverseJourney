@@ -1,6 +1,6 @@
-package com.example.presentation.ui.trial.state
+﻿package org.fitverse.presentation.ui.trial.state
 
-import com.example.domain.models.plan.PlanId
+import org.fitverse.domain.models.PlanId
 
 data class TrialUiState(
     val selectedPlan : PlanId = PlanId.PRO,

@@ -1,4 +1,4 @@
-package org.fitverse.project.destinations.auth
+﻿package org.fitverse.project.destinations.auth
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
@@ -40,13 +40,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
- import com.example.presentation.navigationState.LoginNavigation
-import com.example.presentation.ui.LanguageViewModel
-import com.example.presentation.ui.authentication.login.LoginScreen
-import com.example.presentation.ui.authentication.login.LoginViewModel
-import com.example.presentation.ui.authentication.login.states.LoginAction
-import com.example.presentation.ui.setupLanguage.SetupLanguageScreen
-import com.example.presentation.utils.LanguageAvailableApp
+import org.fitverse.presentation.ui.authentication.login.states.LoginNavigation
+import org.fitverse.presentation.ui.LanguageViewModel
+import org.fitverse.presentation.ui.authentication.login.LoginScreen
+import org.fitverse.presentation.ui.authentication.login.LoginViewModel
+import org.fitverse.presentation.ui.authentication.login.states.LoginAction
+import org.fitverse.presentation.ui.setupLanguage.SetupLanguageScreen
+import org.fitverse.presentation.utils.LanguageAvailableApp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import org.koin.compose.koinInject

@@ -1,9 +1,9 @@
-package com.example.presentation.ui.authentication.register.states
+﻿package org.fitverse.presentation.ui.authentication.register.states
 
-import com.example.domain.models.user.ClassType
-import com.example.domain.models.user.Genero
-import com.example.domain.models.user.NivelExperiencia
-import com.example.domain.models.user.Objetivo
+import org.fitverse.domain.models.user.ClassType
+import org.fitverse.domain.models.user.Genero
+import org.fitverse.domain.models.user.NivelExperiencia
+import org.fitverse.domain.models.user.Objetivo
 
 sealed interface RegisterIntent {
     // Step 1
@@ -36,4 +36,8 @@ sealed interface RegisterIntent {
     data object Next : RegisterIntent
     data object Back : RegisterIntent
     data object Leave : RegisterIntent
+
+    // Internal
+    data class LocaleResolved(val pattern: String) : RegisterIntent
+    data object SnackbarConsumed : RegisterIntent
 }

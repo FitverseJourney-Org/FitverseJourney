@@ -12,7 +12,7 @@ kotlin {
     // which platforms this KMP module supports.
     // See: https://kotlinlang.org/docs/multiplatform-discover-project.html#targets
     androidLibrary {
-        namespace = "com.example.local"
+        namespace = "org.fitverse.data.local"
         compileSdk = 36
         minSdk = 26
 
@@ -88,11 +88,12 @@ kotlin {
 sqldelight {
     databases {
         create("AppDatabase") {
-            packageName.set("com.journey.database.AppDatabase")
+            packageName.set("com.journey")
             srcDirs.setFrom("src/commonMain/sqldelight")
             generateAsync.set(true)
-            schemaOutputDirectory.set(file("src/commonMain/sqldelight"))
+            schemaOutputDirectory.set(file("src/commonMain/sqldelight/databases"))
             deriveSchemaFromMigrations.set(false)
+            verifyMigrations.set(true)  // ← adicione para validar migrations
         }
     }
     linkSqlite.set(true)

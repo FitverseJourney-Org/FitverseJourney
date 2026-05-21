@@ -1,4 +1,4 @@
-package com.example.remote.util
+﻿package org.fitverse.data.remote.util
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

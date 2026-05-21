@@ -1,4 +1,4 @@
-package com.example.presentation.ui
+﻿package org.fitverse.presentation.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

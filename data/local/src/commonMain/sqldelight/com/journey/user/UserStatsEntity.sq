@@ -1,0 +1,68 @@
+-- ============================================================
+-- USER_STATS — Estatísticas agregadas do usuário (XP, nível, passos, água)
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS UserStatsEntity (
+    userId        TEXT    NOT NULL PRIMARY KEY,
+    currentXp     INTEGER NOT NULL DEFAULT 0,
+    currentLevel  INTEGER NOT NULL DEFAULT 1,
+    totalXp       INTEGER NOT NULL DEFAULT 0,
+    stepsToday    INTEGER NOT NULL DEFAULT 0,
+    stepsGoal     INTEGER NOT NULL DEFAULT 10000,
+    waterGlasses  INTEGER NOT NULL DEFAULT 0,  -- copos hoje
+    waterGoal     INTEGER NOT NULL DEFAULT 8,
+    currentStreak INTEGER NOT NULL DEFAULT 0,
+    longestStreak INTEGER NOT NULL DEFAULT 0,
+    totalWorkouts INTEGER NOT NULL DEFAULT 0,
+    totalPRs      INTEGER NOT NULL DEFAULT 0,
+    updatedAt     INTEGER NOT NULL DEFAULT 0   -- epoch ms
+);
+
+-- ── Queries ───────────────────────────────────────────────────────────────────
+
+selectStatsByUser:
+SELECT * FROM UserStatsEntity WHERE userId = ?;
+
+upsertStats:
+INSERT OR REPLACE INTO UserStatsEntity(
+    userId, currentXp, currentLevel, totalXp,
+    stepsToday, stepsGoal, waterGlasses, waterGoal,
+    currentStreak, longestStreak, totalWorkouts, totalPRs, updatedAt
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+addXp:
+UPDATE UserStatsEntity
+SET currentXp = currentXp + ?, totalXp = totalXp + ?, updatedAt = ?
+WHERE userId = ?;
+
+incrementWater:
+UPDATE UserStatsEntity
+SET waterGlasses = waterGlasses + 1, updatedAt = ?
+WHERE userId = ?;
+
+resetDailyStats:
+UPDATE UserStatsEntity
+SET stepsToday = 0, waterGlasses = 0, updatedAt = ?
+WHERE userId = ?;
+
+updateSteps:
+UPDATE UserStatsEntity
+SET stepsToday = ?, updatedAt = ?
+WHERE userId = ?;
+
+incrementWorkouts:
+UPDATE UserStatsEntity
+SET totalWorkouts = totalWorkouts + 1, updatedAt = ?
+WHERE userId = ?;
+
+incrementPRs:
+UPDATE UserStatsEntity
+SET totalPRs = totalPRs + ?, updatedAt = ?
+WHERE userId = ?;
+
+updateStreak:
+UPDATE UserStatsEntity
+SET currentStreak = ?,
+    longestStreak = MAX(longestStreak, ?),
+    updatedAt = ?
+WHERE userId = ?;

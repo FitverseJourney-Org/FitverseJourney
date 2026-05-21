@@ -1,4 +1,4 @@
-package com.example.presentation.ui.authentication.login
+﻿package org.fitverse.presentation.ui.authentication.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -42,13 +42,13 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.presentation.ui.authentication.login.components.FitverseOutlinedTextField
-import com.example.presentation.ui.authentication.login.states.LoginAction
-import com.example.presentation.ui.authentication.login.states.LoginState
-import com.example.presentation.widgets.FitVerseSpacer
-import com.example.presentation.widgets.FitverseButton
-import com.example.presentation.widgets.FitverseDivider
-import com.example.presentation.theme.FitverseColors
+import org.fitverse.presentation.ui.authentication.login.components.FitverseOutlinedTextField
+import org.fitverse.presentation.ui.authentication.login.states.LoginAction
+import org.fitverse.presentation.ui.authentication.login.states.LoginState
+import org.fitverse.presentation.widgets.FitVerseSpacer
+import org.fitverse.presentation.widgets.FitverseButton
+import org.fitverse.presentation.widgets.FitverseDivider
+import org.fitverse.presentation.theme.FitColors
 import fitversejourneyapp.presentation.generated.resources.Res
 import fitversejourneyapp.presentation.generated.resources.bg_girl_pose
 import fitversejourneyapp.presentation.generated.resources.login_button_enter
@@ -118,7 +118,7 @@ fun LoginScreenContent(
     icon                         : ImageVector,
 ) {
     Scaffold(
-        containerColor = FitverseColors.Bg,
+        containerColor = FitColors.Bg,
         snackbarHost   = { SnackbarHost(hostState = snackBarHostState) },
     ) { _ ->
         Column(
@@ -175,7 +175,7 @@ fun LoginScreenContent(
                         text       = stringResource(Res.string.login_forgot_password),
                         fontSize   = 14.sp,
                         fontWeight = FontWeight.SemiBold,
-                        color      = FitverseColors.Accent,
+                        color      = FitColors.Accent,
                         modifier   = Modifier.clickable(onClick = onForgotPassword),
                     )
                 }
@@ -205,13 +205,13 @@ fun LoginScreenContent(
                     Text(
                         text     = stringResource(Res.string.login_no_account),
                         fontSize = 14.sp,
-                        color    = FitverseColors.TextMuted,
+                        color    = FitColors.TextMuted,
                     )
                     Text(
                         text       = stringResource(Res.string.login_create_account),
                         fontSize   = 14.sp,
                         fontWeight = FontWeight.Bold,
-                        color      = FitverseColors.Accent,
+                        color      = FitColors.Accent,
                         modifier   = Modifier.clickable(onClick = onCreateAccount),
                     )
                 }
@@ -228,7 +228,7 @@ private fun LoginHero(onOpenLanguage: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .height(250.dp)
-            .background(FitverseColors.Surface2),
+            .background(FitColors.Surface2),
     ) {
         Image(
             modifier           = Modifier.fillMaxWidth(),
@@ -243,12 +243,12 @@ private fun LoginHero(onOpenLanguage: () -> Unit) {
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
-                            FitverseColors.Bg.copy(alpha = 0.85f),
-                            FitverseColors.Bg.copy(alpha = 0.85f),
-                            FitverseColors.Bg.copy(alpha = 0.85f),
-                            FitverseColors.Bg.copy(alpha = 0.85f),
-                            FitverseColors.Bg.copy(alpha = 0.95f),
-                            FitverseColors.Bg.copy(alpha = 1.00f),
+                            FitColors.Bg.copy(alpha = 0.85f),
+                            FitColors.Bg.copy(alpha = 0.85f),
+                            FitColors.Bg.copy(alpha = 0.85f),
+                            FitColors.Bg.copy(alpha = 0.85f),
+                            FitColors.Bg.copy(alpha = 0.95f),
+                            FitColors.Bg.copy(alpha = 1.00f),
                         ),
                     )
                 ),
@@ -263,14 +263,14 @@ private fun LoginHero(onOpenLanguage: () -> Unit) {
                 .padding(end = 8.dp, top = 4.dp)
                 .size(40.dp)
                 .background(
-                    color = FitverseColors.Surface.copy(alpha = 0.55f),
+                    color = FitColors.Surface.copy(alpha = 0.55f),
                     shape = CircleShape,
                 ),
         ) {
             Icon(
                 imageVector        = Icons.Outlined.Language,
                 contentDescription = stringResource(Res.string.login_select_language),
-                tint               = FitverseColors.TextPrimary,
+                tint               = FitColors.TextPrimary,
                 modifier           = Modifier.size(22.dp),
             )
         }
@@ -285,14 +285,14 @@ private fun LoginHero(onOpenLanguage: () -> Unit) {
                 text       = stringResource(Res.string.login_welcome_title),
                 fontSize   = 36.sp,
                 fontWeight = FontWeight.Black,
-                color      = FitverseColors.TextPrimary,
+                color      = FitColors.TextPrimary,
                 lineHeight = 36.sp,
             )
             Text(
                 text          = stringResource(Res.string.login_welcome_subtitle),
                 fontSize      = 16.sp,
                 fontWeight    = FontWeight.ExtraBold,
-                color         = FitverseColors.Accent,
+                color         = FitColors.Accent,
                 letterSpacing = 0.5.sp,
             )
         }
@@ -314,9 +314,9 @@ private fun SocialLoginRow(onSocialLogin: (String) -> Unit) {
             Box(
                 modifier = Modifier
                     .weight(1f)
-                    .border(1.dp, FitverseColors.Border, RoundedCornerShape(15.dp))
+                    .border(1.dp, FitColors.Border, RoundedCornerShape(15.dp))
                     .clip(RoundedCornerShape(15.dp))
-                    .background(FitverseColors.Surface)
+                    .background(FitColors.Surface)
                     .clickable { onSocialLogin(provider) }
                     .padding(vertical = 13.dp),
                 contentAlignment = Alignment.Center,
@@ -325,7 +325,7 @@ private fun SocialLoginRow(onSocialLogin: (String) -> Unit) {
                     text       = label,
                     fontSize   = 15.sp,
                     fontWeight = FontWeight.ExtraBold,
-                    color      = FitverseColors.TextPrimary,
+                    color      = FitColors.TextPrimary,
                 )
             }
         }

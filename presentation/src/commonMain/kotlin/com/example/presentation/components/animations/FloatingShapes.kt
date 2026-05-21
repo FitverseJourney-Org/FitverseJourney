@@ -1,4 +1,4 @@
-package com.example.presentation.components.animations
+﻿package org.fitverse.presentation.components.animations
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode

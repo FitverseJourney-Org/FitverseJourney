@@ -1,4 +1,4 @@
-package com.example.local.mapper
+﻿package org.fitverse.data.local.mapper
 
 
 interface EntityMapper<Entity, Domain> {

@@ -1,4 +1,4 @@
-package com.example.domain.models.progression
+﻿package org.fitverse.domain.models.progression
 
 import androidx.compose.runtime.Immutable
 
@@ -19,9 +19,3 @@ data class ProgressionInsight(
  * Classificação de nível de progressão.
  * Permite que a UI adapte cores e ícones sem nenhuma lógica `if/when` local.
  */
-enum class InsightLevel {
-    EXCELLENT,  // ≥ 8% de ganho no período
-    GOOD,       // ≥ 2% de ganho no período
-    NEUTRAL,    // < 2% de ganho no período
-    NO_DATA,    // Dados insuficientes (< 2 sessões)
-}

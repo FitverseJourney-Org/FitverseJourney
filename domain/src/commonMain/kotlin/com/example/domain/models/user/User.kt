@@ -1,6 +1,6 @@
-package com.example.domain.models.user
+﻿package org.fitverse.domain.models.user
 
-import com.example.domain.expect.AgeCalculator
+import org.fitverse.domain.expect.AgeCalculator
 
 data class User(
     val uid: String = "",

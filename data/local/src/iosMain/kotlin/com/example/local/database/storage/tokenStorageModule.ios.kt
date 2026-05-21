@@ -1,6 +1,6 @@
-package com.example.local.database.storage
+﻿package org.fitverse.data.local.database.storage
 
-import com.example.local.datasource.token.TokenStorageImpl
+import org.fitverse.data.local.datasource.token.TokenStorageImpl
 import com.russhwolf.settings.ExperimentalSettingsImplementation
 import com.russhwolf.settings.KeychainSettings
 import com.russhwolf.settings.Settings

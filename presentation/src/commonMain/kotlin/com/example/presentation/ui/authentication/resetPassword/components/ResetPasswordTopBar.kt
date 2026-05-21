@@ -1,4 +1,4 @@
-package com.example.presentation.ui.authentication.resetPassword.components
+﻿package org.fitverse.presentation.ui.authentication.resetPassword.components
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth

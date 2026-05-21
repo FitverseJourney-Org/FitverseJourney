@@ -1,4 +1,4 @@
-package com.example.domain.models.progression
+﻿package org.fitverse.domain.models.progression
 
 import androidx.compose.runtime.Immutable
 

@@ -1,6 +1,6 @@
-package com.example.local.datasource.exercises
+﻿package org.fitverse.data.local.datasource.exercises
 
-import com.example.local.model.ExerciseEntity
+import org.fitverse.data.local.model.ExerciseEntity
 import kotlinx.coroutines.flow.Flow
 
 // ─────────────────────────────────────────────────────────────────────────────

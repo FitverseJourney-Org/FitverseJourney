@@ -1,10 +1,10 @@
-package com.example.local.datasource.missions
+﻿package org.fitverse.data.local.datasource.missions
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
-import com.example.domain.repository.dbLocal.sqldelight.missions.DailyMissionDao
-import com.example.domain.repository.dbLocal.sqldelight.missions.DailyMissionRecord
-import com.journey.database.AppDatabase.AppDatabase
+import org.fitverse.domain.repository.dbLocal.sqldelight.missions.DailyMissionDao
+import org.fitverse.domain.repository.dbLocal.sqldelight.missions.DailyMissionRecord
+import com.journey.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
@@ -13,7 +13,7 @@ import kotlinx.coroutines.withContext
 
 class DailyMissionDaoImpl(database: AppDatabase) : DailyMissionDao {
 
-    private val queries = database.appDatabaseQueries
+    private val queries = database.dailyMissionEntityQueries
 
     override fun observeMissionsByDate(userId: String, date: String): Flow<List<DailyMissionRecord>> =
         queries.selectMissionsByUserAndDate(userId, date)
@@ -64,7 +64,7 @@ class DailyMissionDaoImpl(database: AppDatabase) : DailyMissionDao {
 
     // ── Mapper ────────────────────────────────────────────────────────────────
 
-    private fun com.journey.database.migrations.DailyMissionEntity.toRecord() = DailyMissionRecord(
+    private fun com.journey.mission.DailyMissionEntity.toRecord() = DailyMissionRecord(
         id          = id,
         userId      = userId,
         date        = date,

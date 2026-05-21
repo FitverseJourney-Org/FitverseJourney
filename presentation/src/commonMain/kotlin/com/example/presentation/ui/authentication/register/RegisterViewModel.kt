@@ -1,4 +1,4 @@
-package com.example.presentation.ui.authentication.register
+﻿package org.fitverse.presentation.ui.authentication.register
 
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.OffsetMapping
@@ -6,18 +6,18 @@ import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.expect.AgeCalculator
-import com.example.domain.models.user.User
-import com.example.domain.usecase.register.RegisterUseCase
-import com.example.expect.NumberFormatter
-import com.example.expect.TimerManager
-import com.example.domain.models.validations.ValidationType
-import com.example.presentation.ui.authentication.register.states.HeightUnit
-import com.example.presentation.ui.authentication.register.states.RegisterIntent
-import com.example.presentation.ui.authentication.register.states.RegisterStep
-import com.example.presentation.ui.authentication.register.states.RegisterUiState
-import com.example.presentation.ui.authentication.register.states.WeightUnit
-import com.example.presentation.ui.authentication.register.states.snackbar.SnackbarEvent
+import org.fitverse.domain.expect.AgeCalculator
+import org.fitverse.domain.models.user.User
+import org.fitverse.domain.usecase.register.RegisterUseCase
+import org.fitverse.presentation.expect.NumberFormat
+import org.fitverse.presentation.expect.TimerManager
+import org.fitverse.domain.models.validations.ValidationType
+import org.fitverse.presentation.ui.authentication.register.states.HeightUnit
+import org.fitverse.presentation.ui.authentication.register.states.RegisterIntent
+import org.fitverse.presentation.ui.authentication.register.states.RegisterStep
+import org.fitverse.presentation.ui.authentication.register.states.RegisterUiState
+import org.fitverse.presentation.ui.authentication.register.states.WeightUnit
+import org.fitverse.presentation.ui.authentication.register.states.snackbar.SnackbarEvent
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -51,7 +51,7 @@ class RegisterViewModel(
                 val current   = _uiState.value
                 val rawValue  = current.weight.toDoubleOrNull() ?: 0.0
                 val converted = current.weightUnit.convert(rawValue, intent.unit)
-                val formatted = if (converted == 0.0) "" else NumberFormatter.formatOneDecimal(converted) // ✅
+                val formatted = if (converted == 0.0) "" else NumberFormat.decimal(converted) // ✅
 
                 _uiState.update {
                     it.copy(
@@ -65,7 +65,7 @@ class RegisterViewModel(
                 val current   = _uiState.value
                 val rawValue  = current.height.toDoubleOrNull() ?: 0.0
                 val converted = current.heightUnit.convert(rawValue, intent.unit)
-                val formatted = if (converted == 0.0) "" else NumberFormatter.formatOneDecimal(converted) // ✅
+                val formatted = if (converted == 0.0) "" else NumberFormat.decimal(converted) // ✅
 
                 _uiState.update {
                     it.copy(
@@ -104,6 +104,8 @@ class RegisterViewModel(
             }
             is RegisterIntent.Leave -> _uiState.update { it.copy(registrationCancellable = true) }
 
+            is RegisterIntent.LocaleResolved -> onLocaleResolved(intent.pattern)
+            RegisterIntent.SnackbarConsumed -> onSnackbarConsumed()
         }
     }
 

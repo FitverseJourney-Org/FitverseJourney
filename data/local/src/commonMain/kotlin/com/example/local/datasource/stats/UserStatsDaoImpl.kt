@@ -1,10 +1,10 @@
-package com.example.local.datasource.stats
+﻿package org.fitverse.data.local.datasource.stats
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToOneOrNull
-import com.example.domain.repository.dbLocal.sqldelight.stats.UserStatsDao
-import com.example.domain.repository.dbLocal.sqldelight.stats.UserStatsRecord
-import com.journey.database.AppDatabase.AppDatabase
+import org.fitverse.domain.repository.dbLocal.sqldelight.stats.UserStatsDao
+import org.fitverse.domain.repository.dbLocal.sqldelight.stats.UserStatsRecord
+import com.journey.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
@@ -13,7 +13,7 @@ import kotlinx.coroutines.withContext
 
 class UserStatsDaoImpl(database: AppDatabase) : UserStatsDao {
 
-    private val queries = database.appDatabaseQueries
+    private val queries = database.userStatsEntityQueries
 
     override fun observeStats(userId: String): Flow<UserStatsRecord?> =
         queries.selectStatsByUser(userId)
@@ -69,7 +69,7 @@ class UserStatsDaoImpl(database: AppDatabase) : UserStatsDao {
 
     // ── Mapper ────────────────────────────────────────────────────────────────
 
-    private fun com.journey.database.migrations.UserStatsEntity.toRecord() = UserStatsRecord(
+    private fun com.journey.user.UserStatsEntity.toRecord() = UserStatsRecord(
         userId        = userId,
         currentXp     = currentXp.toInt(),
         currentLevel  = currentLevel.toInt(),

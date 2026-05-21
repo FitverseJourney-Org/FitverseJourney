@@ -1,6 +1,6 @@
-package com.example.remote.datasource.progression
+﻿package org.fitverse.data.remote.datasource.progression
 
-import com.example.remote.dto.progression.ProgressionPointDto
+import org.fitverse.data.remote.dto.progression.ProgressionPointDto
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Interface

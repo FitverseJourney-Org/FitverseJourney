@@ -1,12 +1,12 @@
-package com.example.presentation.ui.trial.viewmodel
+﻿package org.fitverse.presentation.ui.trial.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.models.plan.PlanId
-import com.example.domain.usecase.activatePlan.ActivatePlanUseCase
-import com.example.domain.usecase.db.datastore.trial.SetIsTrialCompletedUseCase
-import com.example.presentation.ui.trial.event.TrialEvent
-import com.example.presentation.ui.trial.state.TrialUiState
+import org.fitverse.domain.models.PlanId
+import org.fitverse.domain.usecase.activatePlan.ActivatePlanUseCase
+import org.fitverse.domain.usecase.db.datastore.trial.SetIsTrialCompletedUseCase
+import org.fitverse.presentation.ui.trial.event.TrialEvent
+import org.fitverse.presentation.ui.trial.state.TrialUiState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

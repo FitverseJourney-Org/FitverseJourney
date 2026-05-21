@@ -1,6 +1,6 @@
-package com.example.local.datasource.progression
+﻿package org.fitverse.data.local.datasource.progression
 
-import com.example.local.model.ProgressionPointEntity
+import org.fitverse.data.local.model.ProgressionPointEntity
 import kotlinx.coroutines.flow.Flow
 
 interface ProgressionLocalDataSource {

@@ -1,9 +1,9 @@
-package org.fitverse.project.destinations.modal_destinations.wiki
+﻿package org.fitverse.project.destinations.modal_destinations.wiki
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.presentation.ui.wiki.WikiFitnessScreen
-import com.example.presentation.ui.wiki.viewmodel.WikiViewModel
+import org.fitverse.presentation.ui.wiki.WikiFitnessScreen
+import org.fitverse.presentation.ui.wiki.viewmodel.WikiViewModel
 
 @Composable
 fun WikiFitnessDestination(

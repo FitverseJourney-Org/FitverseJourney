@@ -1,2 +1,2 @@
-package com.example.presentation.widgets
+﻿package org.fitverse.presentation.widgets
 

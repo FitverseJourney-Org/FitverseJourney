@@ -1,15 +1,15 @@
-package com.example.local.datasource.workout
+﻿package org.fitverse.data.local.datasource.workout
 
-import com.example.domain.repository.dbLocal.sqldelight.workout.WorkoutSetDao
-import com.example.domain.repository.dbLocal.sqldelight.workout.WorkoutSetRecord
-import com.journey.database.AppDatabase.AppDatabase
+import org.fitverse.domain.repository.dbLocal.sqldelight.workout.WorkoutSetDao
+import org.fitverse.domain.repository.dbLocal.sqldelight.workout.WorkoutSetRecord
+import com.journey.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.withContext
 
 class WorkoutSetDaoImpl(database: AppDatabase) : WorkoutSetDao {
 
-    private val queries = database.appDatabaseQueries
+    private val queries = database.workoutSetEntityQueries
 
     override suspend fun getSetsBySession(sessionId: String): List<WorkoutSetRecord> =
         withContext(Dispatchers.IO) {
@@ -62,7 +62,7 @@ class WorkoutSetDaoImpl(database: AppDatabase) : WorkoutSetDao {
 
     // ── Mapper ────────────────────────────────────────────────────────────────
 
-    private fun com.journey.database.migrations.WorkoutSetEntity.toRecord() = WorkoutSetRecord(
+    private fun com.journey.workout.WorkoutSetEntity.toRecord() = WorkoutSetRecord(
         id           = id,
         sessionId    = sessionId,
         exerciseName = exerciseName,

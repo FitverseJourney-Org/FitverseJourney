@@ -1,4 +1,4 @@
-package com.example.remote.util
+﻿package org.fitverse.data.remote.util
 
 object ApiConstants {
     // Base URLs

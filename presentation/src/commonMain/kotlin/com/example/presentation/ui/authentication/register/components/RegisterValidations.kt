@@ -1,7 +1,7 @@
-package com.example.presentation.ui.authentication.register.components
+﻿package org.fitverse.presentation.ui.authentication.register.components
 
 import androidx.compose.runtime.Composable
-import com.example.domain.models.validations.ValidationType
+import org.fitverse.domain.models.validations.ValidationType
 import fitversejourneyapp.presentation.generated.resources.Res
 import fitversejourneyapp.presentation.generated.resources.error_blank
 import fitversejourneyapp.presentation.generated.resources.error_invalid_age

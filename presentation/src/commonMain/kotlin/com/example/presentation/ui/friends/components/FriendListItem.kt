@@ -1,4 +1,4 @@
-package com.example.presentation.ui.friends.components
+﻿package org.fitverse.presentation.ui.friends.components
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ListItem
@@ -12,7 +12,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.example.domain.models.dashboard.UserProfile
+import org.fitverse.domain.models.dashboard.UserProfile
 
 /**
  * Item de lista de amigo otimizado

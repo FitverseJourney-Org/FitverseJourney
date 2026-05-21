@@ -1,7 +1,7 @@
-package com.example.presentation.ui.historic.viewmodel
+﻿package org.fitverse.presentation.ui.historic.viewmodel
 
-import com.example.presentation.ui.historic.HistoricPeriod
-import com.example.presentation.ui.historic.WorkoutHistory
+import org.fitverse.presentation.ui.historic.HistoricPeriod
+import org.fitverse.presentation.ui.historic.WorkoutHistory
 
 data class HistoricUiState(
     val history: List<WorkoutHistory> = emptyList(),

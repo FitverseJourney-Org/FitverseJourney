@@ -1,4 +1,4 @@
-package com.example.presentation.ui.splash.actions
+﻿package org.fitverse.presentation.ui.splash.actions
 
 sealed class SplashActions {
     object NavigateToOnboarding: SplashActions()

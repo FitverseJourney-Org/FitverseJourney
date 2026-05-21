@@ -1,4 +1,4 @@
-package com.example.presentation.ui.authentication.register.components
+﻿package org.fitverse.presentation.ui.authentication.register.components
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
@@ -24,17 +24,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.domain.models.user.ClassType
-import com.example.presentation.ui.authentication.register.helpers.bonuses
-import com.example.presentation.ui.authentication.register.helpers.displayName
-import com.example.presentation.ui.authentication.register.helpers.quote
-import com.example.presentation.ui.authentication.register.helpers.subtitle
-import com.example.presentation.theme.RegisterDimens
-import com.example.presentation.ui.authentication.register.helpers.accentColor
-import com.example.presentation.ui.authentication.register.helpers.forca
-import com.example.presentation.ui.authentication.register.helpers.iconEmoji
-import com.example.presentation.ui.authentication.register.helpers.nutricao
-import com.example.presentation.ui.authentication.register.helpers.resistencia
+import org.fitverse.domain.models.user.ClassType
+import org.fitverse.presentation.ui.authentication.register.helpers.bonuses
+import org.fitverse.presentation.ui.authentication.register.helpers.displayName
+import org.fitverse.presentation.ui.authentication.register.helpers.quote
+import org.fitverse.presentation.ui.authentication.register.helpers.subtitle
+import org.fitverse.presentation.theme.RegisterDimens
+import org.fitverse.presentation.ui.authentication.register.helpers.accentColor
+import org.fitverse.presentation.ui.authentication.register.helpers.forca
+import org.fitverse.presentation.ui.authentication.register.helpers.iconEmoji
+import org.fitverse.presentation.ui.authentication.register.helpers.nutricao
+import org.fitverse.presentation.ui.authentication.register.helpers.resistencia
 import fitversejourneyapp.presentation.generated.resources.Res
 import fitversejourneyapp.presentation.generated.resources.stat_forca
 import fitversejourneyapp.presentation.generated.resources.stat_nutricao

@@ -1,0 +1,61 @@
+-- ============================================================
+-- NOTIFICATION — Notificações persistidas do usuário
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS NotificationEntity (
+    id          TEXT    NOT NULL PRIMARY KEY,
+    userId      TEXT    NOT NULL,
+    type        TEXT    NOT NULL,              -- NotificationType: XP, STREAK, CURTIDA, COMENTARIO, TREINO, CONQUISTA, DESAFIO, RANKING, SISTEMA
+    title       TEXT    NOT NULL,
+    description TEXT    NOT NULL DEFAULT '',
+    isRead      INTEGER NOT NULL DEFAULT 0,   -- 0 = não lida, 1 = lida
+    createdAt   INTEGER NOT NULL              -- epoch ms
+);
+
+CREATE INDEX IF NOT EXISTS idx_notification_user_created
+    ON NotificationEntity(userId, createdAt DESC);
+
+CREATE INDEX IF NOT EXISTS idx_notification_unread
+    ON NotificationEntity(userId, isRead);
+
+-- ── Queries ───────────────────────────────────────────────────────────────────
+
+
+selectNotificationsByUser:
+SELECT * FROM NotificationEntity
+WHERE userId = ?
+ORDER BY createdAt DESC;
+
+selectUnreadByUser:
+SELECT * FROM NotificationEntity
+WHERE userId = ? AND isRead = 0
+ORDER BY createdAt DESC;
+
+selectNotificationById:
+SELECT * FROM NotificationEntity WHERE id = ?;
+
+insertNotification:
+INSERT OR REPLACE INTO NotificationEntity(
+    id, userId, type, title, description, isRead, createdAt
+) VALUES (?, ?, ?, ?, ?, ?, ?);
+
+markAsRead:
+UPDATE NotificationEntity
+SET isRead = 1
+WHERE id = ? AND userId = ?;
+
+markAllAsRead:
+UPDATE NotificationEntity
+SET isRead = 1
+WHERE userId = ?;
+
+deleteNotification:
+DELETE FROM NotificationEntity WHERE id = ? AND userId = ?;
+
+deleteOldNotifications:
+DELETE FROM NotificationEntity
+WHERE userId = ? AND createdAt < ? AND isRead = 1;
+
+countUnreadByUser:
+SELECT COUNT(*) FROM NotificationEntity
+WHERE userId = ? AND isRead = 0;

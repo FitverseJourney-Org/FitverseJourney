@@ -1,7 +1,7 @@
-package com.example.util
+﻿package org.fitverse.data.repository.util
 
-import com.example.local.datasource.token.TokenStorageImpl
-import com.example.remote.datasource.HttpClientFactory
+import org.fitverse.data.local.datasource.token.TokenStorageImpl
+import org.fitverse.data.remote.datasource.HttpClientFactory
 import io.ktor.client.*
 import org.koin.dsl.module
 

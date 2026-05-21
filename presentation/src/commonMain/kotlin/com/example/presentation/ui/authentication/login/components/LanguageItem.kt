@@ -1,4 +1,4 @@
-package com.example.presentation.ui.authentication.login.components
+﻿package org.fitverse.presentation.ui.authentication.login.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement

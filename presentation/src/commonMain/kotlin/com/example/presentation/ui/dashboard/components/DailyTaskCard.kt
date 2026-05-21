@@ -1,2 +1,2 @@
-package com.example.presentation.ui.dashboard.components
+﻿package org.fitverse.presentation.ui.dashboard.components
 

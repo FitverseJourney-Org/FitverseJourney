@@ -1,6 +1,6 @@
-package com.example.local.mapper.user
+﻿package org.fitverse.data.local.mapper.user
 
-import com.example.domain.models.user.Objetivo
+import org.fitverse.domain.models.user.Objetivo
 
 // -------------------------------------------------------------
 // Objetivo

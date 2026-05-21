@@ -11,7 +11,7 @@ kotlin {
     // which platforms this KMP module supports.
     // See: https://kotlinlang.org/docs/multiplatform-discover-project.html#targets
     androidLibrary {
-        namespace = "com.example.domain"
+        namespace = "org.fitverse.domain"
         compileSdk = 36
         minSdk = 26
 
@@ -58,6 +58,8 @@ kotlin {
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+            implementation(libs.turbine)
+            implementation(libs.kotlinx.coroutines.test)
         }
     }
 

@@ -1,9 +1,9 @@
-package com.example.repository.exercise
+﻿package org.fitverse.data.repository.exercise
 
-import com.example.domain.models.progression.Exercise
-import com.example.domain.repository.ExerciseRepository
-import com.example.mapper.exercise.toDomain
-import com.example.local.datasource.exercises.ExerciseLocalDataSource
+import org.fitverse.domain.models.progression.Exercise
+import org.fitverse.domain.repository.ExerciseRepository
+import org.fitverse.data.repository.mapper.exercise.toDomain
+import org.fitverse.data.local.datasource.exercises.ExerciseLocalDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

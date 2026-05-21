@@ -1,7 +1,6 @@
-package com.example.domain.models.snackbar
+﻿package org.fitverse.domain.models.snackbar
 
-import com.example.domain.expect.DateTimerManager
-import kotlin.time.Clock
+import org.fitverse.domain.expect.DateTimerManager
 
 data class SnackBarData(
     val id: Long = DateTimerManager.currentTimeMillis(),

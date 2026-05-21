@@ -1,4 +1,4 @@
-package com.example.presentation.ui.authentication.register
+﻿package org.fitverse.presentation.ui.authentication.register
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
@@ -24,24 +24,22 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.presentation.ui.authentication.register.components.RegisterBackButton
-import com.example.presentation.ui.authentication.register.components.RegisterStepBar
-import com.example.presentation.ui.authentication.register.pages.ClasseStep
-import com.example.presentation.ui.authentication.register.pages.ContaStep
-import com.example.presentation.ui.authentication.register.pages.GoalsStep
-import com.example.presentation.ui.authentication.register.pages.PerfilStep
-import com.example.presentation.ui.authentication.register.states.RegisterIntent
-import com.example.presentation.ui.authentication.register.states.RegisterStep
-import com.example.presentation.ui.authentication.register.states.RegisterUiState
-import com.example.presentation.theme.RegisterDimens
-import com.example.presentation.utils.getLocaleDatePattern
+import org.fitverse.presentation.ui.authentication.register.components.RegisterBackButton
+import org.fitverse.presentation.ui.authentication.register.components.RegisterStepBar
+import org.fitverse.presentation.ui.authentication.register.pages.ClasseStep
+import org.fitverse.presentation.ui.authentication.register.pages.ContaStep
+import org.fitverse.presentation.ui.authentication.register.pages.GoalsStep
+import org.fitverse.presentation.ui.authentication.register.pages.PerfilStep
+import org.fitverse.presentation.ui.authentication.register.states.RegisterIntent
+import org.fitverse.presentation.ui.authentication.register.states.RegisterStep
+import org.fitverse.presentation.ui.authentication.register.states.RegisterUiState
+import org.fitverse.presentation.theme.RegisterDimens
+import org.fitverse.presentation.utils.getLocaleDatePattern
 import fitversejourneyapp.presentation.generated.resources.Res
 import fitversejourneyapp.presentation.generated.resources.register_choose_class_title
 import fitversejourneyapp.presentation.generated.resources.register_screen_title
@@ -54,21 +52,19 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun RegisterScreen(
+    state: RegisterUiState,
+    onAction: (RegisterIntent) -> Unit,
     onBack: () -> Unit = {},
-    viewModel: RegisterViewModel,
 ) {
-    val colors = MaterialTheme.colorScheme
     val pattern      = getLocaleDatePattern()
-    val state        by viewModel.uiState.collectAsState()
     val snackbarHost = remember { SnackbarHostState() }
-    val scope        = rememberCoroutineScope()
 
-    LaunchedEffect(pattern) { viewModel.onLocaleResolved(pattern) }
+    LaunchedEffect(pattern) { onAction(RegisterIntent.LocaleResolved(pattern)) }
 
     LaunchedEffect(
         key1 = state.registrationComplete,
         key2 = state.registrationCancellable
-    ){
+    ) {
         if (state.registrationComplete) {
             delay(3000)
             onBack()
@@ -76,24 +72,22 @@ fun RegisterScreen(
         if (state.registrationCancellable) onBack()
     }
 
-    // ── Consome o evento de snackbar ──────────────────────────────────────
     LaunchedEffect(state.snackbarEvent) {
         state.snackbarEvent?.let { event ->
             snackbarHost.showSnackbar(
                 message  = event.message,
                 duration = SnackbarDuration.Short,
             )
-            viewModel.onSnackbarConsumed()
+            onAction(RegisterIntent.SnackbarConsumed)
         }
     }
+
     RegisterScreenContent(
         state = state,
         snackbarHost = snackbarHost,
         onIntent = { intent ->
-            if (intent == RegisterIntent.Leave) {
-                onBack()
-            }
-            else viewModel.onIntent(intent)
+            if (intent == RegisterIntent.Leave) onBack()
+            else onAction(intent)
         }
     )
 }

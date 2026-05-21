@@ -1,4 +1,4 @@
-package com.example.presentation.widgets
+﻿package org.fitverse.presentation.widgets
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height

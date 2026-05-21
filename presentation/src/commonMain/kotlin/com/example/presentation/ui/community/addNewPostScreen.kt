@@ -1,4 +1,4 @@
-package com.example.presentation.ui.community
+﻿package org.fitverse.presentation.ui.community
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

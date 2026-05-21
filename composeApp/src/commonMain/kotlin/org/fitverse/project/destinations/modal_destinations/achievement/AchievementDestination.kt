@@ -1,9 +1,9 @@
-package org.fitverse.project.destinations.modal_destinations.achievement
+﻿package org.fitverse.project.destinations.modal_destinations.achievement
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.presentation.ui.achievements.AchievementsRoot
-import com.example.presentation.ui.achievements.viewmodel.AchievementsViewModel
+import org.fitverse.presentation.ui.achievements.AchievementsRoot
+import org.fitverse.presentation.ui.achievements.viewmodel.AchievementsViewModel
 
 @Composable
 fun AchievementDestination(

@@ -1,4 +1,4 @@
-package com.example.presentation.widgets
+﻿package org.fitverse.presentation.widgets
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -22,11 +22,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.presentation.theme.FVExtension
+import org.fitverse.presentation.theme.FitColors
+import org.fitverse.presentation.theme.FVTypography
 
 @Composable
 fun FVScreenHeader(
@@ -38,38 +36,35 @@ fun FVScreenHeader(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = FVExtension.margin, vertical = 14.dp),
+            .padding(horizontal = 20.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(
             onClick = onBack,
             modifier = Modifier
                 .size(36.dp)
-                .background(FVExtension.surface2, RoundedCornerShape(10.dp))
+                .background(FitColors.Surface2, RoundedCornerShape(10.dp))
         ) {
-            Text("←", color = FVExtension.text, fontSize = 18.sp)
+            Text("←", style = FVTypography.headlineMedium, color = FitColors.TextPrimary)
         }
         Spacer(Modifier.width(12.dp))
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = title,
-                fontFamily = FontFamily.Default,
-                fontWeight = FontWeight.ExtraBold,
-                fontSize = 22.sp,
-                color = FVExtension.text,
-                letterSpacing = 1.sp
+                text  = title,
+                style = FVTypography.headlineLarge,
+                color = FitColors.TextPrimary,
             )
             if (sub.isNotEmpty()) {
                 Text(
-                    text = sub,
-                    fontSize = 11.sp,
-                    color = FVExtension.textMuted
+                    text  = sub,
+                    style = FVTypography.labelMedium,
+                    color = FitColors.TextMuted,
                 )
             }
         }
         action?.invoke()
     }
-    Divider(color = FVExtension.outline, thickness = 0.5.dp)
+    Divider(color = FitColors.Outline, thickness = 0.5.dp)
 }
 
 
@@ -81,22 +76,21 @@ fun FVFilterPill(
 ) {
     Box(
         modifier = Modifier
-            .clip(RoundedCornerShape(FVExtension.radiusPill))
-            .background(if (selected) FVExtension.primary else FVExtension.surface2)
+            .clip(RoundedCornerShape(100.dp))
+            .background(if (selected) FitColors.Accent else FitColors.Surface2)
             .border(
                 width = if (selected) 0.dp else 1.dp,
-                color = if (selected) Color.Transparent else FVExtension.outline,
-                shape = RoundedCornerShape(FVExtension.radiusPill)
+                color = if (selected) Color.Transparent else FitColors.Outline,
+                shape = RoundedCornerShape(100.dp)
             )
             .clickable(onClick = onClick)
             .padding(horizontal = 14.dp, vertical = 7.dp),
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = label,
-            fontSize = 12.sp,
-            fontWeight = FontWeight.SemiBold,
-            color = if (selected) FVExtension.bg else FVExtension.textMuted
+            text  = label,
+            style = FVTypography.labelLarge,
+            color = if (selected) FitColors.Bg else FitColors.TextMuted,
         )
     }
 }
@@ -107,17 +101,17 @@ fun FVCard(
     glowColor: Color? = null,
     content: @Composable ColumnScope.() -> Unit
 ) {
-    val borderColor = glowColor?.copy(alpha = 0.3f) ?: FVExtension.outline
+    val borderColor = glowColor?.copy(alpha = 0.3f) ?: FitColors.Outline
     val shadow = if (glowColor != null)
-        Modifier.shadow(0.dp, shape = RoundedCornerShape(FVExtension.radius))
+        Modifier.shadow(0.dp, shape = RoundedCornerShape(16.dp))
     else Modifier
 
     Column(
         modifier = modifier
             .then(shadow)
-            .clip(RoundedCornerShape(FVExtension.radius))
-            .background(FVExtension.surface)
-            .border(1.dp, borderColor, RoundedCornerShape(FVExtension.radius))
+            .clip(RoundedCornerShape(16.dp))
+            .background(FitColors.Surface)
+            .border(1.dp, borderColor, RoundedCornerShape(16.dp))
             .padding(16.dp),
         content = content
     )
@@ -128,51 +122,22 @@ fun FVSectionLabel(title: String, action: String = "", onAction: () -> Unit = {}
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = FVExtension.margin, vertical = 8.dp),
+            .padding(horizontal = 20.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = title.uppercase(),
-            fontSize = 10.sp,
-            fontWeight = FontWeight.Bold,
-            color = FVExtension.textMuted,
-            letterSpacing = 1.sp,
-            modifier = Modifier.weight(1f)
+            text     = title.uppercase(),
+            style    = FVTypography.overline,
+            color    = FitColors.TextMuted,
+            modifier = Modifier.weight(1f),
         )
         if (action.isNotEmpty()) {
             Text(
-                text = action,
-                fontSize = 11.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = FVExtension.primary,
-                modifier = Modifier.clickable(onClick = onAction)
+                text     = action,
+                style    = FVTypography.labelMedium,
+                color    = FitColors.Accent,
+                modifier = Modifier.clickable(onClick = onAction),
             )
         }
     }
 }
-
-// ─────────────────────────────────────────────────────────────
-// 16 · PROGRESSION SCREEN
-// ─────────────────────────────────────────────────────────────
-
-// ─────────────────────────────────────────────────────────────
-// 17 · LEADERBOARD SCREEN
-// ─────────────────────────────────────────────────────────────
-
-// ─────────────────────────────────────────────────────────────
-// 18 · FRIENDS SCREEN
-// ─────────────────────────────────────────────────────────────
-
-
-// ─────────────────────────────────────────────────────────────
-// 19 · ACHIEVEMENTS SCREEN
-// ─────────────────────────────────────────────────────────────
-
-
-
-
-// ─────────────────────────────────────────────────────────────
-// NAVIGATION (opcional — conecta as 4 telas)
-// ─────────────────────────────────────────────────────────────
-
-

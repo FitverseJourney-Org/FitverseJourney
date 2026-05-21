@@ -1,4 +1,4 @@
-package com.example.presentation.ui.community.viewmodel
+﻿package org.fitverse.presentation.ui.community.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,13 +19,21 @@ class CommunityViewModel : ViewModel() {
 
     fun onIntent(intent: CommunityIntent) {
         when (intent) {
-            CommunityIntent.ShowCreateSheet -> _uiState.update { it.copy(showCreateSheet = true,  showJoinSheet = false) }
-            CommunityIntent.ShowJoinSheet   -> _uiState.update { it.copy(showJoinSheet   = true,  showCreateSheet = false) }
-            CommunityIntent.DismissSheets   -> _uiState.update { it.copy(showCreateSheet = false, showJoinSheet = false) }
+            CommunityIntent.ShowCreateSheet     -> _uiState.update { it.copy(showCreateSheet = true,  showJoinSheet = false) }
+            CommunityIntent.ShowJoinSheet       -> _uiState.update { it.copy(showJoinSheet   = true,  showCreateSheet = false) }
+            CommunityIntent.DismissSheets       -> _uiState.update { it.copy(showCreateSheet = false, showJoinSheet = false) }
+            is CommunityIntent.OpenGroupHome    -> navigateToGroupHome(intent.groupName)
         }
     }
 
     fun navigateToAddPost() {
         viewModelScope.launch { _events.send(CommunityEvent.NavigateToAddPost) }
+    }
+
+    private fun navigateToGroupHome(groupName: String) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(showCreateSheet = false, showJoinSheet = false) }
+            _events.send(CommunityEvent.NavigateToGroupHome(groupName))
+        }
     }
 }

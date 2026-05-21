@@ -1,4 +1,4 @@
-package com.example.presentation.widgets
+﻿package org.fitverse.presentation.widgets
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -26,7 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.presentation.theme.DarkGamifiedColors
+import org.fitverse.presentation.theme.FitColors
 
 //@Composable
 //fun FitverseCardRecommended(
@@ -39,7 +39,7 @@ import com.example.presentation.theme.DarkGamifiedColors
 //        onClick = onClick,
 //        shape = RoundedCornerShape(20.dp),
 //        color = cs.surface.copy(alpha = 0.6f),
-//        border = BorderStroke(1.dp, DarkGamifiedColors.PrimarySoft.copy(alpha = 0.15f))
+//        border = BorderStroke(1.dp, FitColors.AccentContainer.copy(alpha = 0.15f))
 //    ) {
 //        Row(
 //            modifier = Modifier.padding(12.dp),

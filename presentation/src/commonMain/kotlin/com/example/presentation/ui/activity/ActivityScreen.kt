@@ -1,4 +1,4 @@
-package com.example.presentation.ui.activity
+﻿package org.fitverse.presentation.ui.activity
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -48,7 +48,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.presentation.theme.FitverseColors
+import org.fitverse.presentation.theme.FitColors
 
 // ── Tipos de atividade ─────────────────────────────────────────────────────────
 // Cada tipo carrega seu próprio ícone e cor — sem ambiguidade visual no seletor.
@@ -58,10 +58,10 @@ enum class ActivityType(
     val icon: ImageVector,
     val color: Color,
 ) {
-    Corrida  ("Corrida",   Icons.Rounded.DirectionsRun,  FitverseColors.Orange),
-    Caminhada("Caminhada", Icons.Rounded.DirectionsWalk, FitverseColors.Green),
-    Bike     ("Bike",      Icons.Rounded.DirectionsBike, FitverseColors.Blue),
-    Outro    ("Outro",     Icons.Rounded.FitnessCenter,  FitverseColors.Purple),
+    Corrida  ("Corrida",   Icons.Rounded.DirectionsRun,  FitColors.Orange),
+    Caminhada("Caminhada", Icons.Rounded.DirectionsWalk, FitColors.Green),
+    Bike     ("Bike",      Icons.Rounded.DirectionsBike, FitColors.Blue),
+    Outro    ("Outro",     Icons.Rounded.FitnessCenter,  FitColors.Purple),
 }
 
 // ── Data models ───────────────────────────────────────────────────────────────
@@ -199,14 +199,14 @@ private fun ActivityHeader(modifier: Modifier = Modifier) {
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Text(
             "HOJE",
-            color         = FitverseColors.TextMuted,
+            color         = FitColors.TextMuted,
             fontSize      = 11.sp,
             fontWeight    = FontWeight.Medium,
             letterSpacing = 1.5.sp,
         )
         Text(
             "ATIVIDADE",
-            color         = FitverseColors.TextPrimary,
+            color         = FitColors.TextPrimary,
             fontSize      = 28.sp,
             fontWeight    = FontWeight.Black,
             letterSpacing = (-0.5).sp,
@@ -234,7 +234,7 @@ private fun TypeSelector(
                 modifier = Modifier
                     .weight(1f)
                     .clip(RoundedCornerShape(12.dp))
-                    .background(if (isSelected) type.color else FitverseColors.Surface2)
+                    .background(if (isSelected) type.color else FitColors.Surface2)
                     .clickable { onSelect(type) }
                     .padding(vertical = 11.dp),
                 horizontalArrangement = Arrangement.Center,
@@ -243,13 +243,13 @@ private fun TypeSelector(
                 Icon(
                     imageVector        = type.icon,
                     contentDescription = null,
-                    tint               = if (isSelected) FitverseColors.Bg else FitverseColors.TextMuted,
+                    tint               = if (isSelected) FitColors.Bg else FitColors.TextMuted,
                     modifier           = Modifier.size(15.dp),
                 )
                 Spacer(Modifier.width(4.dp))
                 Text(
                     type.label,
-                    color      = if (isSelected) FitverseColors.Bg else FitverseColors.TextMuted,
+                    color      = if (isSelected) FitColors.Bg else FitColors.TextMuted,
                     fontSize   = 11.sp,
                     fontWeight = if (isSelected) FontWeight.Black else FontWeight.Medium,
                 )
@@ -297,12 +297,12 @@ private fun StartCTA(
                     Icon(
                         imageVector        = Icons.Rounded.PlayArrow,
                         contentDescription = "Iniciar atividade",
-                        tint               = FitverseColors.Bg,
+                        tint               = FitColors.Bg,
                         modifier           = Modifier.size(44.dp),
                     )
                     Text(
                         "INICIAR",
-                        color         = FitverseColors.Bg,
+                        color         = FitColors.Bg,
                         fontSize      = 12.sp,
                         fontWeight    = FontWeight.Black,
                         letterSpacing = 2.sp,
@@ -323,7 +323,7 @@ private fun StartCTA(
         )
         Text(
             "toque para iniciar",
-            color    = FitverseColors.TextMuted2,
+            color    = FitColors.TextDisabled,
             fontSize = 11.sp,
         )
     }
@@ -352,7 +352,7 @@ private fun DaySummarySection(
                 icon         = Icons.Rounded.DirectionsWalk,
                 value        = formatSteps(summary.steps),
                 label        = "Passos",
-                accentColor  = FitverseColors.Accent,
+                accentColor  = FitColors.Accent,
             )
             MetricCard(
                 modifier     = Modifier.weight(1f),
@@ -360,7 +360,7 @@ private fun DaySummarySection(
                 value        = "${summary.calories}",
                 unit         = "kcal",
                 label        = "Calorias ativas",
-                accentColor  = FitverseColors.Orange,
+                accentColor  = FitColors.Orange,
             )
         }
 
@@ -376,14 +376,14 @@ private fun DaySummarySection(
                 value       = summary.distanceKm.toString().replace(".", ","),
                 unit        = "km",
                 label       = "Distância",
-                accentColor = FitverseColors.Blue,
+                accentColor = FitColors.Blue,
             )
             MetricCard(
                 modifier    = Modifier.weight(1f),
                 icon        = Icons.Rounded.Schedule,
                 value       = formatTime(summary.activeMinutes),
                 label       = "Tempo ativo",
-                accentColor = FitverseColors.Purple,
+                accentColor = FitColors.Purple,
             )
         }
     }
@@ -449,7 +449,7 @@ private fun MetricCard(
             Row(verticalAlignment = Alignment.Bottom) {
                 Text(
                     value,
-                    color         = FitverseColors.TextPrimary,
+                    color         = FitColors.TextPrimary,
                     fontSize      = 28.sp,
                     fontWeight    = FontWeight.Black,
                     letterSpacing = (-0.5).sp,
@@ -458,7 +458,7 @@ private fun MetricCard(
                     Spacer(Modifier.width(3.dp))
                     Text(
                         unit,
-                        color    = FitverseColors.TextMuted,
+                        color    = FitColors.TextMuted,
                         fontSize = 13.sp,
                         modifier = Modifier.padding(bottom = 4.dp),
                     )
@@ -467,7 +467,7 @@ private fun MetricCard(
 
             Text(
                 label,
-                color    = FitverseColors.TextMuted,
+                color    = FitColors.TextMuted,
                 fontSize = 11.sp,
             )
         }
@@ -496,7 +496,7 @@ private fun WeeklyGoalSection(
             SectionLabel("META SEMANAL")
             Text(
                 "$activeCount de $weeklyGoal dias",
-                color      = FitverseColors.Accent,
+                color      = FitColors.Accent,
                 fontSize   = 13.sp,
                 fontWeight = FontWeight.Bold,
             )
@@ -516,7 +516,7 @@ private fun WeeklyGoalSection(
 @Composable
 private fun DayPill(day: WeekDay) {
     // Comunicação visual passiva — ativo=conquistado, hoje=urgência, futuro=disponível
-    val bgColor = if (day.isActive) FitverseColors.Accent else FitverseColors.Surface2
+    val bgColor = if (day.isActive) FitColors.Accent else FitColors.Surface2
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -530,7 +530,7 @@ private fun DayPill(day: WeekDay) {
                 .then(
                     // Borda sutil apenas no dia atual inativo — sinaliza "sua vez"
                     if (day.isToday && !day.isActive)
-                        Modifier.background(FitverseColors.Surface2)
+                        Modifier.background(FitColors.Surface2)
                     else Modifier
                 ),
             contentAlignment = Alignment.Center,
@@ -539,23 +539,23 @@ private fun DayPill(day: WeekDay) {
                 day.isActive -> Icon(
                     Icons.Rounded.Check,
                     contentDescription = null,
-                    tint     = FitverseColors.Bg,
+                    tint     = FitColors.Bg,
                     modifier = Modifier.size(17.dp),
                 )
                 day.isToday -> Box(
                     modifier = Modifier
                         .size(8.dp)
                         .clip(CircleShape)
-                        .background(FitverseColors.Accent),
+                        .background(FitColors.Accent),
                 )
             }
         }
         Text(
             day.label,
             color      = when {
-                day.isActive -> FitverseColors.TextPrimary
-                day.isToday  -> FitverseColors.Accent
-                else         -> FitverseColors.TextMuted2
+                day.isActive -> FitColors.TextPrimary
+                day.isToday  -> FitColors.Accent
+                else         -> FitColors.TextDisabled
             },
             fontSize   = 10.sp,
             fontWeight = if (day.isActive || day.isToday) FontWeight.Bold else FontWeight.Normal,
@@ -625,13 +625,13 @@ private fun ActivityRow(
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     activity.type.label,
-                    color      = FitverseColors.TextPrimary,
+                    color      = FitColors.TextPrimary,
                     fontSize   = 14.sp,
                     fontWeight = FontWeight.SemiBold,
                 )
                 Text(
                     activity.date,
-                    color    = FitverseColors.TextMuted,
+                    color    = FitColors.TextMuted,
                     fontSize = 12.sp,
                 )
             }
@@ -640,13 +640,13 @@ private fun ActivityRow(
             Column(horizontalAlignment = Alignment.End) {
                 Text(
                     "${activity.durationMinutes} min",
-                    color      = FitverseColors.TextPrimary,
+                    color      = FitColors.TextPrimary,
                     fontSize   = 14.sp,
                     fontWeight = FontWeight.Bold,
                 )
                 Text(
                     "${activity.distanceKm.toString().replace(".", ",")} km",
-                    color    = FitverseColors.TextMuted,
+                    color    = FitColors.TextMuted,
                     fontSize = 12.sp,
                 )
             }
@@ -661,7 +661,7 @@ private fun SectionLabel(text: String, modifier: Modifier = Modifier) {
     Text(
         text,
         modifier      = modifier,
-        color         = FitverseColors.TextMuted,
+        color         = FitColors.TextMuted,
         fontSize      = 10.sp,
         fontWeight    = FontWeight.Bold,
         letterSpacing = 1.2.sp,

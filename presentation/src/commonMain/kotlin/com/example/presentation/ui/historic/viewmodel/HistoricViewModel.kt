@@ -1,14 +1,14 @@
-package com.example.presentation.ui.historic.viewmodel
+﻿package org.fitverse.presentation.ui.historic.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.repository.dbLocal.sqldelight.workout.WorkoutSessionRecord
-import com.example.domain.usecase.workout.DeleteWorkoutSessionUseCase
-import com.example.domain.usecase.workout.GetSessionsByPeriodUseCase
-import com.example.domain.usecase.workout.ObserveWorkoutSessionsUseCase
-import com.example.expect.PlatformDateFormatter
-import com.example.presentation.ui.historic.HistoricPeriod
-import com.example.presentation.ui.historic.WorkoutHistory
+import org.fitverse.domain.repository.dbLocal.sqldelight.workout.WorkoutSessionRecord
+import org.fitverse.domain.usecase.workout.DeleteWorkoutSessionUseCase
+import org.fitverse.domain.usecase.workout.GetSessionsByPeriodUseCase
+import org.fitverse.domain.usecase.workout.ObserveWorkoutSessionsUseCase
+import org.fitverse.presentation.expect.DateFormatter
+import org.fitverse.presentation.ui.historic.HistoricPeriod
+import org.fitverse.presentation.ui.historic.WorkoutHistory
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -81,7 +81,7 @@ class HistoricViewModel(
     // ── Helpers ───────────────────────────────────────────────────────────────
 
     private fun List<WorkoutHistory>.filterByPeriod(period: HistoricPeriod): List<WorkoutHistory> {
-        val cutoff = PlatformDateFormatter.getCurrentTimeMillis() - period.days * 86_400_000L
+        val cutoff = DateFormatter.getCurrentTimeMillis() - period.days * 86_400_000L
         return filter { it.timestamp >= cutoff }
     }
 

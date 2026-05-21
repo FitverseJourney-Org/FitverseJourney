@@ -1,11 +1,11 @@
-package com.example.presentation.ui.authentication.register.states
+﻿package org.fitverse.presentation.ui.authentication.register.states
 
-import com.example.domain.models.user.ClassType
-import com.example.domain.models.user.Genero
-import com.example.domain.models.user.NivelExperiencia
-import com.example.domain.models.user.Objetivo
-import com.example.domain.models.validations.ValidationType
-import com.example.presentation.ui.authentication.register.states.snackbar.SnackbarEvent
+import org.fitverse.domain.models.user.ClassType
+import org.fitverse.domain.models.user.Genero
+import org.fitverse.domain.models.user.NivelExperiencia
+import org.fitverse.domain.models.user.Objetivo
+import org.fitverse.domain.models.validations.ValidationType
+import org.fitverse.presentation.ui.authentication.register.states.snackbar.SnackbarEvent
 
 data class RegisterUiState(
     val currentStep: RegisterStep = RegisterStep.CONTA,

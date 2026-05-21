@@ -1,4 +1,4 @@
-package com.example.domain.models.dashboard.tasks
+﻿package org.fitverse.domain.models.dashboard.tasks
 
 
 

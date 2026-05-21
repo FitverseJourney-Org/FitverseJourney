@@ -1,9 +1,9 @@
-package org.fitverse.project.destinations.modal_destinations.historic
+﻿package org.fitverse.project.destinations.modal_destinations.historic
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.presentation.ui.historic.HistoricRoot
-import com.example.presentation.ui.historic.viewmodel.HistoricViewModel
+import org.fitverse.presentation.ui.historic.HistoricRoot
+import org.fitverse.presentation.ui.historic.viewmodel.HistoricViewModel
 
 @Composable
 fun HistoricDestination(

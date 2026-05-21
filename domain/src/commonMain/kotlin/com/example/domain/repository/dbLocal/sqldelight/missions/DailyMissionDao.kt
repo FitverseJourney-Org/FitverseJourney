@@ -1,4 +1,4 @@
-package com.example.domain.repository.dbLocal.sqldelight.missions
+﻿package org.fitverse.domain.repository.dbLocal.sqldelight.missions
 
 import kotlinx.coroutines.flow.Flow
 

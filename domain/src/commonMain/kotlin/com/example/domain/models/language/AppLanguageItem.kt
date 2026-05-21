@@ -1,4 +1,4 @@
-package com.example.domain.models.language
+﻿package org.fitverse.domain.models.language
 
 import org.jetbrains.compose.resources.DrawableResource
 

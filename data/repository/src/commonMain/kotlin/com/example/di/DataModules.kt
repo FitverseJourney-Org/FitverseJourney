@@ -1,71 +1,70 @@
-package com.example.di
+﻿package org.fitverse.data.repository.di
 
-import com.example.domain.models.user.User
-import com.example.domain.repository.ActivatePlanRepository
-import com.example.domain.repository.ExerciseRepository
-import com.example.domain.repository.FakeFriendsRepository
-import com.example.domain.repository.FriendsRepository
-import com.example.domain.repository.ProgressionRepository
-import com.example.domain.repository.dbLocal.datastore.AppAuthenticateRepository
-import com.example.domain.repository.dbLocal.datastore.AppLanguageRepository
-import com.example.domain.repository.dbLocal.datastore.AppOnboardingRepository
-import com.example.domain.repository.dbLocal.datastore.AppTrialRepository
-import com.example.domain.repository.dbLocal.sqldelight.configurations.ConfigTokenDataSourceDao
-import com.example.domain.repository.dbLocal.sqldelight.user.UserRepository
-import com.example.domain.repository.wiki.WikiRepository
-import com.example.local.database.datastore.repository.AppAuthenticateRepositoryImpl
-import com.example.local.database.datastore.repository.AppLanguageRepositoryImpl
-import com.example.local.database.datastore.repository.AppOnboardingRepositoryImpl
-import com.example.local.database.datastore.repository.AppTrialRepositoryImpl
-import com.example.local.database.sqldelight.repository.configuration.ConfigLanguageDataSourceDao
-import com.example.local.database.sqldelight.repository.configuration.ConfigOnboardingDataSourceDao
-import com.example.local.database.sqldelight.repository.configuration.ConfigTokenDaoDataSourceImpl
-import com.example.domain.repository.dbLocal.sqldelight.achievements.AchievementDao
-import com.example.domain.repository.dbLocal.sqldelight.catalog.CatalogMissionDao
-import com.example.domain.repository.dbLocal.sqldelight.missions.DailyMissionDao
-import com.example.domain.repository.dbLocal.sqldelight.notifications.NotificationDao
-import com.example.domain.repository.dbLocal.sqldelight.nutrition.FoodItemDao
-import com.example.domain.repository.dbLocal.sqldelight.nutrition.MealEntryDao
-import com.example.domain.repository.dbLocal.sqldelight.stats.UserStatsDao
-import com.example.domain.repository.dbLocal.sqldelight.streak.StreakDao
-import com.example.domain.repository.dbLocal.sqldelight.workout.WorkoutSessionDao
-import com.example.domain.repository.dbLocal.sqldelight.workout.WorkoutSetDao
-import com.example.local.datasource.achievements.AchievementDaoImpl
-import com.example.local.datasource.catalog.CatalogMissionDaoImpl
-import com.example.local.datasource.exercises.ExerciseLocalDataSource
-import com.example.local.datasource.exercises.ExerciseLocalDataSourceImpl
-import com.example.local.datasource.missions.DailyMissionDaoImpl
-import com.example.local.datasource.notifications.NotificationDaoImpl
-import com.example.local.datasource.nutrition.FoodItemDaoImpl
-import com.example.local.datasource.nutrition.MealEntryDaoImpl
-import com.example.local.datasource.progression.ProgressionLocalDataSource
-import com.example.local.datasource.progression.ProgressionLocalDataSourceImpl
-import com.example.local.datasource.stats.UserStatsDaoImpl
-import com.example.local.datasource.streak.StreakDaoImpl
-import com.example.local.datasource.user.UserLocalDataSource
-import com.example.local.datasource.user.UserLocalDataSourceImpl
-import com.example.local.datasource.workout.WorkoutSessionDaoImpl
-import com.example.local.datasource.workout.WorkoutSetDaoImpl
-import com.example.local.di.databaseModule
-import com.example.local.mapper.EntityMapper
-import com.example.util.networkModule
-import com.example.local.mapper.user.UserEntityMapper
-import com.example.remote.datasource.activePlan.ActivatePlanRemoteDataSource
-import com.example.remote.datasource.activePlan.ActivatePlanRemoteDataSourceImpl
-import com.example.remote.datasource.friends.FriendsRemoteDataSourceImpl
-import com.example.remote.datasource.progression.ProgressionRemoteDataSource
-import com.example.remote.datasource.progression.ProgressionRemoteDataSourceImpl
-import com.example.remote.datasource.user.UserRemoteDataSource
-import com.example.remote.datasource.user.UserRemoteDataSourceImpl
-import com.example.remote.dto.user.UserRequestDto
-import com.example.remote.mapper.DtoMapper
-import com.example.remote.mapper.user.UserDtoMapper
-import com.example.repository.UserRepositoryImpl
-import com.example.repository.WikiRepositoryImpl
-import com.example.repository.activePlan.ActivatePlanRepositoryImpl
-import com.example.repository.exercise.ExerciseRepositoryImpl
-import com.example.repository.progression.ProgressionRepositoryImpl
-import com.journey.database.migrations.UserEntity
+import org.fitverse.domain.models.user.User
+import org.fitverse.domain.repository.ActivatePlanRepository
+import org.fitverse.domain.repository.ExerciseRepository
+import org.fitverse.domain.repository.FakeFriendsRepository
+import org.fitverse.domain.repository.FriendsRepository
+import org.fitverse.domain.repository.ProgressionRepository
+import org.fitverse.domain.repository.dbLocal.datastore.AppAuthenticateRepository
+import org.fitverse.domain.repository.dbLocal.datastore.AppLanguageRepository
+import org.fitverse.domain.repository.dbLocal.datastore.AppOnboardingRepository
+import org.fitverse.domain.repository.dbLocal.datastore.AppTrialRepository
+import org.fitverse.domain.repository.dbLocal.sqldelight.configurations.ConfigTokenDataSourceDao
+import org.fitverse.domain.repository.dbLocal.sqldelight.user.UserRepository
+import org.fitverse.domain.repository.wiki.WikiRepository
+import org.fitverse.data.local.database.datastore.repository.AppAuthenticateRepositoryImpl
+import org.fitverse.data.local.database.datastore.repository.AppLanguageRepositoryImpl
+import org.fitverse.data.local.database.datastore.repository.AppOnboardingRepositoryImpl
+import org.fitverse.data.local.database.datastore.repository.AppTrialRepositoryImpl
+import org.fitverse.domain.repository.dbLocal.sqldelight.achievements.AchievementDao
+import org.fitverse.domain.repository.dbLocal.sqldelight.catalog.CatalogMissionDao
+import org.fitverse.domain.repository.dbLocal.sqldelight.missions.DailyMissionDao
+import org.fitverse.domain.repository.dbLocal.sqldelight.notifications.NotificationDao
+import org.fitverse.domain.repository.dbLocal.sqldelight.nutrition.FoodItemDao
+import org.fitverse.domain.repository.dbLocal.sqldelight.nutrition.MealEntryDao
+import org.fitverse.domain.repository.dbLocal.sqldelight.stats.UserStatsDao
+import org.fitverse.domain.repository.dbLocal.sqldelight.streak.StreakDao
+import org.fitverse.domain.repository.dbLocal.sqldelight.workout.WorkoutSessionDao
+import org.fitverse.domain.repository.dbLocal.sqldelight.workout.WorkoutSetDao
+import org.fitverse.data.local.datasource.achievements.AchievementDaoImpl
+import org.fitverse.data.local.datasource.catalog.CatalogMissionDaoImpl
+import org.fitverse.data.local.datasource.exercises.ExerciseLocalDataSource
+import org.fitverse.data.local.datasource.exercises.ExerciseLocalDataSourceImpl
+import org.fitverse.data.local.datasource.missions.DailyMissionDaoImpl
+import org.fitverse.data.local.datasource.notifications.NotificationDaoImpl
+import org.fitverse.data.local.datasource.nutrition.FoodItemDaoImpl
+import org.fitverse.data.local.datasource.nutrition.MealEntryDaoImpl
+import org.fitverse.data.local.datasource.progression.ProgressionLocalDataSource
+import org.fitverse.data.local.datasource.progression.ProgressionLocalDataSourceImpl
+import org.fitverse.data.local.datasource.stats.UserStatsDaoImpl
+import org.fitverse.data.local.datasource.streak.StreakDaoImpl
+import org.fitverse.data.local.datasource.user.UserLocalDataSource
+import org.fitverse.data.local.datasource.user.UserLocalDataSourceImpl
+import org.fitverse.data.local.datasource.workout.WorkoutSessionDaoImpl
+import org.fitverse.data.local.datasource.workout.WorkoutSetDaoImpl
+import org.fitverse.data.local.di.databaseModule
+import org.fitverse.data.local.mapper.EntityMapper
+import org.fitverse.data.repository.util.networkModule
+import org.fitverse.data.local.mapper.user.UserEntityMapper
+import org.fitverse.data.remote.datasource.activePlan.ActivatePlanRemoteDataSource
+import org.fitverse.data.remote.datasource.activePlan.ActivatePlanRemoteDataSourceImpl
+import org.fitverse.data.remote.datasource.friends.FriendsRemoteDataSourceImpl
+import org.fitverse.data.remote.datasource.progression.ProgressionRemoteDataSource
+import org.fitverse.data.remote.datasource.progression.ProgressionRemoteDataSourceImpl
+import org.fitverse.data.remote.datasource.user.UserRemoteDataSource
+import org.fitverse.data.remote.datasource.user.UserRemoteDataSourceImpl
+import org.fitverse.data.remote.dto.user.UserRequestDto
+import org.fitverse.data.remote.mapper.DtoMapper
+import org.fitverse.data.remote.mapper.user.UserDtoMapper
+import org.fitverse.domain.repository.workoutPlan.WorkoutPlanRepository
+import org.fitverse.data.repository.UserRepositoryImpl
+import org.fitverse.data.repository.WikiRepositoryImpl
+import org.fitverse.data.repository.WorkoutPlanRepositoryImpl
+import org.fitverse.data.repository.activePlan.ActivatePlanRepositoryImpl
+import org.fitverse.data.repository.exercise.ExerciseRepositoryImpl
+import org.fitverse.data.repository.progression.ProgressionRepositoryImpl
+import com.journey.user.UserEntity
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
@@ -75,9 +74,7 @@ import org.koin.dsl.module
 // ── DataStore ─────────────────────────────────────────────────────────────────
 // ──────────────────────────────────────────────────────────────────────────────
 val dataStoreModule = module {
-    single { ConfigLanguageDataSourceDao(databaseSqlDeLightHelper = get()) }
-    single { ConfigOnboardingDataSourceDao(databaseSqlDeLightHelper = get()) }
-    single<ConfigTokenDataSourceDao> { ConfigTokenDaoDataSourceImpl(databaseSqlDeLightHelper = get()) }
+
 }
 // ──────────────────────────────────────────────────────────────────────────────
 // ── Data Sources ──────────────────────────────────────────────────────────────
@@ -142,6 +139,8 @@ val repositoryModule = module {
     // ── Shopping ─────────────────────────────────────────────────────────────|
     // ── Wiki ─────────────────────────────────────────────────────────────────|
     singleOf(::WikiRepositoryImpl) { bind<WikiRepository>() }
+    // ── WorkoutPlan ───────────────────────────────────────────────────────────|
+    single<WorkoutPlanRepository> { WorkoutPlanRepositoryImpl() }
 }
 
 // ── Agregador ────────────────────────────────────────────────────────────────|

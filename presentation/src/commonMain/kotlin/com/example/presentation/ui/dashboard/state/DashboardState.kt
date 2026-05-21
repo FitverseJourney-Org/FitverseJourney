@@ -1,1 +1,1 @@
-package com.example.presentation.ui.dashboard.state
+﻿package org.fitverse.presentation.ui.dashboard.state

@@ -1,4 +1,4 @@
-package com.example.presentation.ui.trial
+﻿package org.fitverse.presentation.ui.trial
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -33,11 +33,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.domain.models.plan.PlanId
-import com.example.presentation.ui.trial.state.TrialUiState
-import com.example.presentation.widgets.FitverseButton
-import com.example.presentation.theme.FitverseColors
-import com.example.presentation.theme.ShapeCard
+import org.fitverse.domain.models.PlanId
+import org.fitverse.presentation.ui.trial.state.TrialUiState
+import org.fitverse.presentation.widgets.FitverseButton
+import org.fitverse.presentation.theme.FitColors
+import org.fitverse.presentation.theme.ShapeCard
 import fitversejourneyapp.presentation.generated.resources.Res
 import fitversejourneyapp.presentation.generated.resources.trial_activate_button
 import fitversejourneyapp.presentation.generated.resources.trial_dismiss
@@ -89,7 +89,7 @@ private fun rememberPlans(): List<Plan> = listOf(
     Plan(
         id          = PlanId.TRIAL,
         name        = stringResource(Res.string.trial_plan_name_trial),
-        nameColor   = FitverseColors.TextMuted,
+        nameColor   = FitColors.TextMuted,
         priceLabel  = stringResource(Res.string.trial_price_free),
         priceSuffix = stringResource(Res.string.trial_price_days),
         features    = listOf(
@@ -102,7 +102,7 @@ private fun rememberPlans(): List<Plan> = listOf(
     Plan(
         id           = PlanId.PRO,
         name         = stringResource(Res.string.trial_plan_name_pro),
-        nameColor    = FitverseColors.Accent,
+        nameColor    = FitColors.Accent,
         priceLabel   = "R\$ 29,90",
         priceSuffix  = stringResource(Res.string.trial_price_month),
         features     = listOf(
@@ -116,7 +116,7 @@ private fun rememberPlans(): List<Plan> = listOf(
     Plan(
         id          = PlanId.ELITE,
         name        = stringResource(Res.string.trial_plan_name_elite),
-        nameColor   = FitverseColors.Blue,
+        nameColor   = FitColors.Blue,
         priceLabel  = "R\$ 49,90",
         priceSuffix = stringResource(Res.string.trial_price_month),
         features    = listOf(
@@ -157,7 +157,7 @@ fun TrialIntroScreenContent(
     val plans = rememberPlans()
 
     LazyColumn(
-        modifier            = Modifier.fillMaxSize().background(FitverseColors.Bg),
+        modifier            = Modifier.fillMaxSize().background(FitColors.Bg),
         contentPadding      = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically),
@@ -184,7 +184,7 @@ fun TrialIntroScreenContent(
             Text(
                 text      = stringResource(Res.string.trial_dismiss),
                 fontSize  = 12.sp,
-                color     = FitverseColors.TextMuted,
+                color     = FitColors.TextMuted,
                 textAlign = TextAlign.Center,
                 modifier  = Modifier
                     .fillMaxWidth()
@@ -212,7 +212,7 @@ fun HeroSection() {
             text          = stringResource(Res.string.trial_title),
             fontSize      = 28.sp,
             fontWeight    = FontWeight.Black,
-            color         = FitverseColors.TextPrimary,
+            color         = FitColors.TextPrimary,
             textAlign     = TextAlign.Center,
             letterSpacing = 0.5.sp,
         )
@@ -220,7 +220,7 @@ fun HeroSection() {
         Text(
             text      = stringResource(Res.string.trial_subtitle),
             fontSize  = 13.sp,
-            color     = FitverseColors.TextMuted,
+            color     = FitColors.TextMuted,
             textAlign = TextAlign.Center,
         )
         Spacer(Modifier.height(20.dp))
@@ -242,11 +242,11 @@ private fun PlanCard(
                 .fillMaxWidth()
                 .border(
                     width = if (isSelected) 2.dp else 1.dp,
-                    color = if (isSelected) FitverseColors.Accent else FitverseColors.Border,
+                    color = if (isSelected) FitColors.Accent else FitColors.Border,
                     shape = ShapeCard,
                 )
                 .clip(ShapeCard)
-                .background(if (isSelected) FitverseColors.Surface2 else FitverseColors.Surface)
+                .background(if (isSelected) FitColors.Surface2 else FitColors.Surface)
                 .clickable(onClick = onSelect)
                 .padding(16.dp),
         ) {
@@ -275,12 +275,12 @@ private fun PlanCard(
                     withStyle(SpanStyle(
                         fontSize   = 14.sp,
                         fontWeight = FontWeight.Normal,
-                        color      = FitverseColors.TextMuted,
+                        color      = FitColors.TextMuted,
                     )) { append("  ${plan.priceSuffix}") }
                 },
                 fontSize   = 28.sp,
                 fontWeight = FontWeight.ExtraBold,
-                color      = FitverseColors.TextPrimary,
+                color      = FitColors.TextPrimary,
             )
 
             Spacer(Modifier.height(10.dp))
@@ -303,7 +303,7 @@ private fun PlanCard(
                     .align(Alignment.TopCenter)
                     .offset(y = (-1).dp)
                     .clip(RoundedCornerShape(bottomStart = 8.dp, bottomEnd = 8.dp))
-                    .background(FitverseColors.Accent)
+                    .background(FitColors.Accent)
                     .padding(horizontal = 14.dp, vertical = 4.dp),
             ) {
                 Text(
@@ -311,7 +311,7 @@ private fun PlanCard(
                     fontSize      = 10.sp,
                     fontWeight    = FontWeight.ExtraBold,
                     letterSpacing = 0.8.sp,
-                    color         = FitverseColors.Bg,
+                    color         = FitColors.Bg,
                 )
             }
         }
@@ -324,8 +324,8 @@ private fun PlanRadio(isSelected: Boolean) {
         modifier = Modifier
             .size(20.dp)
             .clip(CircleShape)
-            .background(if (isSelected) FitverseColors.Accent else Color.Transparent)
-            .border(2.dp, if (isSelected) FitverseColors.Accent else FitverseColors.TextMuted2, CircleShape),
+            .background(if (isSelected) FitColors.Accent else Color.Transparent)
+            .border(2.dp, if (isSelected) FitColors.Accent else FitColors.TextDisabled, CircleShape),
         contentAlignment = Alignment.Center,
     ) {
         if (isSelected) {
@@ -333,7 +333,7 @@ private fun PlanRadio(isSelected: Boolean) {
                 modifier = Modifier
                     .size(8.dp)
                     .clip(CircleShape)
-                    .background(FitverseColors.Bg),
+                    .background(FitColors.Bg),
             )
         }
     }
@@ -343,11 +343,11 @@ private fun PlanRadio(isSelected: Boolean) {
 private fun FeatureChip(text: String) {
     Box(
         modifier = Modifier
-            .border(1.dp, FitverseColors.Border, RoundedCornerShape(6.dp))
+            .border(1.dp, FitColors.Border, RoundedCornerShape(6.dp))
             .clip(RoundedCornerShape(6.dp))
-            .background(FitverseColors.Surface2)
+            .background(FitColors.Surface2)
             .padding(horizontal = 8.dp, vertical = 4.dp),
     ) {
-        Text(text, fontSize = 11.sp, color = FitverseColors.TextPrimary)
+        Text(text, fontSize = 11.sp, color = FitColors.TextPrimary)
     }
 }

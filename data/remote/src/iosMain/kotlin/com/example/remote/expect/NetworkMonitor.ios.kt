@@ -1,6 +1,6 @@
-package com.example.remote.expect
+﻿package org.fitverse.data.remote.expect
 
-import com.example.remote.expect.NetworkMonitor
+import org.fitverse.data.remote.expect.NetworkMonitor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import platform.Network.*

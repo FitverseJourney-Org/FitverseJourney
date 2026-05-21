@@ -1,0 +1,49 @@
+-- WorkoutPlanDay.sq
+-- Dias de treino e descanso vinculados ao plano
+-- Separados em duas tabelas para queries independentes
+
+CREATE TABLE WorkoutPlanTrainingDay (
+    workout_plan_id TEXT NOT NULL,
+    day_of_week     TEXT NOT NULL,  -- Enum: DayOfWeek (ex: "MONDAY", "TUESDAY" ...)
+
+    PRIMARY KEY (workout_plan_id, day_of_week),
+    FOREIGN KEY (workout_plan_id) REFERENCES WorkoutPlan(id) ON DELETE CASCADE
+);
+
+CREATE TABLE WorkoutPlanRestDay (
+    workout_plan_id TEXT NOT NULL,
+    day_of_week     TEXT NOT NULL,  -- Enum: DayOfWeek
+
+    PRIMARY KEY (workout_plan_id, day_of_week),
+    FOREIGN KEY (workout_plan_id) REFERENCES WorkoutPlan(id) ON DELETE CASCADE
+);
+
+-- ─────────────────────────────────────────────
+-- Training Days
+-- ─────────────────────────────────────────────
+
+insertTrainingDay:
+INSERT OR IGNORE INTO WorkoutPlanTrainingDay (workout_plan_id, day_of_week)
+VALUES (?, ?);
+
+deleteTrainingDaysByPlan:
+DELETE FROM WorkoutPlanTrainingDay WHERE workout_plan_id = ?;
+
+selectTrainingDaysByPlan:
+SELECT day_of_week FROM WorkoutPlanTrainingDay
+WHERE workout_plan_id = ?;
+
+-- ─────────────────────────────────────────────
+-- Rest Days
+-- ─────────────────────────────────────────────
+
+insertRestDay:
+INSERT OR IGNORE INTO WorkoutPlanRestDay (workout_plan_id, day_of_week)
+VALUES (?, ?);
+
+deleteRestDaysByPlan:
+DELETE FROM WorkoutPlanRestDay WHERE workout_plan_id = ?;
+
+selectRestDaysByPlan:
+SELECT day_of_week FROM WorkoutPlanRestDay
+WHERE workout_plan_id = ?;

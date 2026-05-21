@@ -1,0 +1,60 @@
+-- ============================================================
+-- MEAL_ENTRY — Refeições diárias do usuário
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS MealEntryEntity (
+    id           TEXT    NOT NULL PRIMARY KEY,
+    userId       TEXT    NOT NULL,
+    date         TEXT    NOT NULL,    -- YYYY-MM-DD
+    mealType     TEXT    NOT NULL,    -- CUSTOM (user-defined name)
+    name         TEXT    NOT NULL,
+    totalKcal    INTEGER NOT NULL DEFAULT 0,
+    totalProtein REAL    NOT NULL DEFAULT 0.0,  -- gramas
+    totalCarbs   REAL    NOT NULL DEFAULT 0.0,
+    totalFat     REAL    NOT NULL DEFAULT 0.0,
+    loggedAt     INTEGER NOT NULL               -- epoch ms
+);
+
+CREATE INDEX IF NOT EXISTS idx_meal_entry_user_date
+    ON MealEntryEntity(userId, date);
+
+-- ── Queries ───────────────────────────────────────────────────────────────────
+
+selectMealsByUserAndDate:
+SELECT * FROM MealEntryEntity
+WHERE userId = ? AND date = ?
+ORDER BY loggedAt ASC;
+
+selectMealById:
+SELECT * FROM MealEntryEntity WHERE id = ?;
+
+selectMealsByUserAndPeriod:
+SELECT * FROM MealEntryEntity
+WHERE userId = ? AND date >= ? AND date <= ?
+ORDER BY date DESC, loggedAt DESC;
+
+insertMeal:
+INSERT OR REPLACE INTO MealEntryEntity(
+    id, userId, date, mealType, name,
+    totalKcal, totalProtein, totalCarbs, totalFat, loggedAt
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+updateMealTotals:
+UPDATE MealEntryEntity
+SET totalKcal = ?, totalProtein = ?, totalCarbs = ?, totalFat = ?
+WHERE id = ? AND userId = ?;
+
+deleteMeal:
+DELETE FROM MealEntryEntity WHERE id = ? AND userId = ?;
+
+deleteMealsByUserBeforeDate:
+DELETE FROM MealEntryEntity WHERE userId = ? AND date < ?;
+
+sumMacrosByUserAndDate:
+SELECT
+    COALESCE(SUM(totalKcal),    0)   AS kcal,
+    COALESCE(SUM(totalProtein), 0.0) AS protein,
+    COALESCE(SUM(totalCarbs),   0.0) AS carbs,
+    COALESCE(SUM(totalFat),     0.0) AS fat
+FROM MealEntryEntity
+WHERE userId = ? AND date = ?;

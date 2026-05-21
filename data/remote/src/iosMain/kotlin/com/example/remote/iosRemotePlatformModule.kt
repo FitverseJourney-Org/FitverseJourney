@@ -1,7 +1,7 @@
-package com.example.remote
+﻿package org.fitverse.data.remote
 
-import com.example.remote.expect.IOSNetworkMonitor
-import com.example.remote.expect.NetworkMonitor
+import org.fitverse.data.remote.expect.IOSNetworkMonitor
+import org.fitverse.data.remote.expect.NetworkMonitor
 import org.koin.dsl.module
 
 val iosRemotePlatformModule = module {

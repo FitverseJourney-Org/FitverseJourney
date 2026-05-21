@@ -1,4 +1,4 @@
-package com.example.presentation.ui.dashboard.components
+﻿package org.fitverse.presentation.ui.dashboard.components
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode
@@ -35,7 +35,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.presentation.theme.FitverseColors
+import org.fitverse.presentation.theme.FitColors
 
 @Composable
 fun MissionCard(
@@ -67,9 +67,9 @@ fun MissionCard(
             width = 1.5.dp,
             brush = Brush.horizontalGradient(
                 listOf(
-                    FitverseColors.Red.copy(alpha = borderAlpha * 0.5f),
-                    FitverseColors.Red.copy(alpha = borderAlpha),
-                    FitverseColors.Red.copy(alpha = borderAlpha * 0.5f),
+                    FitColors.Red.copy(alpha = borderAlpha * 0.5f),
+                    FitColors.Red.copy(alpha = borderAlpha),
+                    FitColors.Red.copy(alpha = borderAlpha * 0.5f),
                 )
             ),
             shape = shape
@@ -82,7 +82,7 @@ fun MissionCard(
             .alpha(cardAlpha)
             .then(animatedBorderModifier),
         shape = shape,
-        color = if (isChallengeType) FitverseColors.Red.copy(alpha = 0.06f)
+        color = if (isChallengeType) FitColors.Red.copy(alpha = 0.06f)
                 else cs.surface.copy(alpha = 0.5f),
         border = if (isChallengeType) null
                  else BorderStroke(1.dp, Color(0xFF2a2a35))

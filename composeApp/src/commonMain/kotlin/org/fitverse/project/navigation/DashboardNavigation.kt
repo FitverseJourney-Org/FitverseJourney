@@ -1,5 +1,6 @@
-package org.fitverse.project.navigation
+﻿package org.fitverse.project.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -9,17 +10,22 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
+import androidx.navigation3.scene.Scene
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
-import com.example.domain.models.levelUp.LevelUpData
-import com.example.presentation.ui.dashboard.viewmodel.DashboardViewModel
-import com.example.presentation.ui.notification.NotificationViewModel
-import com.example.presentation.widgets.LevelUpScreen
+import org.fitverse.domain.models.levelUp.LevelUpData
+import org.fitverse.presentation.ui.dashboard.viewmodel.DashboardViewModel
+import org.fitverse.presentation.ui.notification.NotificationViewModel
+import org.fitverse.presentation.widgets.LevelUpScreen
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import org.fitverse.project.destinations.dashboad.DashboardDestination
 import org.fitverse.project.destinations.dashboad.NotificationDestination
+import org.fitverse.project.noTransition
 import org.fitverse.project.routes.NavRoutes
+import org.fitverse.project.slideFromBottom
+import org.fitverse.project.slideFromRight
+import org.fitverse.project.slideFromTop
 import org.koin.compose.koinInject
 
 @Composable
@@ -33,9 +39,17 @@ fun DashboardNavigation(
         SavedStateConfiguration {
             serializersModule = SerializersModule {
                 polymorphic(NavKey::class) {
-                    subclass(NavRoutes.HomeFlow.Dashboard::class,                 NavRoutes.HomeFlow.Dashboard.serializer())
-                    subclass(NavRoutes.HomeFlow.SubFlow.Notification::class,      NavRoutes.HomeFlow.SubFlow.Notification.serializer())
-                    subclass(NavRoutes.HomeFlow.SubFlow.UserLevelUp::class,       NavRoutes.HomeFlow.SubFlow.UserLevelUp.serializer())
+                    subclass(NavRoutes.HomeFlow.Dashboard::class,
+                        NavRoutes.HomeFlow.Dashboard.serializer())
+
+                    subclass(NavRoutes.HomeFlow.SubFlow::class,           // ← adicione
+                        NavRoutes.HomeFlow.SubFlow.serializer())
+
+                    subclass(NavRoutes.HomeFlow.SubFlow.Notification::class,
+                        NavRoutes.HomeFlow.SubFlow.Notification.serializer())
+
+                    subclass(NavRoutes.HomeFlow.SubFlow.UserLevelUp::class,
+                        NavRoutes.HomeFlow.SubFlow.UserLevelUp.serializer())
                 }
             }
         },
@@ -55,6 +69,12 @@ fun DashboardNavigation(
             rememberSaveableStateHolderNavEntryDecorator(),
             rememberViewModelStoreNavEntryDecorator()
         ),
+        transitionSpec = {
+            this.slideFromTop<NavRoutes.HomeFlow.SubFlow.Notification>() ?: noTransition()
+        },
+        popTransitionSpec = {
+            this.slideFromTop<NavRoutes.HomeFlow.SubFlow.Notification>() ?: noTransition()
+        },
         entryProvider = entryProvider {
             entry<NavRoutes.HomeFlow.Dashboard> {
                 val viewModel = koinInject<DashboardViewModel>()

@@ -1,7 +1,7 @@
-package com.example.presentation.ui.authentication.register.states.inputsValidations
+﻿package org.fitverse.presentation.ui.authentication.register.states.inputsValidations
 
-import com.example.domain.models.validations.ValidationType
-import com.example.domain.models.validations.ValidationResult
+import org.fitverse.domain.models.validations.ValidationType
+import org.fitverse.domain.models.validations.ValidationResult
 
 sealed class RegisterValidator<T> {
 

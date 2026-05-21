@@ -1,4 +1,4 @@
-package com.example.presentation.ui.workout
+﻿package org.fitverse.presentation.ui.workout
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
@@ -69,10 +69,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.expect.PlatformDateFormatter
-import com.example.expect.TimerManager
-import com.example.expect.format
-import com.example.expect.formatWorkoutTime
+import org.fitverse.presentation.expect.DateFormatter
+import org.fitverse.presentation.expect.TimerManager
+import org.fitverse.presentation.expect.format
+import org.fitverse.presentation.expect.formatWorkoutTime
 import fitversejourneyapp.presentation.generated.resources.Res
 import fitversejourneyapp.presentation.generated.resources.bg_girl_pose
 import kotlinx.coroutines.delay
@@ -206,7 +206,7 @@ object WorkoutDataSource {
         return listOf(
             PastWorkoutLog(
                 id = "1",
-                date = PlatformDateFormatter.getFormattedDate(daysOffset = -1),
+                date = DateFormatter.getFormattedDate(daysOffset = -1),
                 exerciseId = exerciseId,
                 exerciseName = exerciseName,
                 sets = listOf(
@@ -220,7 +220,7 @@ object WorkoutDataSource {
             ),
             PastWorkoutLog(
                 id = "2",
-                date = PlatformDateFormatter.getFormattedDate(daysOffset = -2),
+                date = DateFormatter.getFormattedDate(daysOffset = -2),
                 exerciseId = exerciseId,
                 exerciseName = exerciseName,
                 sets = listOf(

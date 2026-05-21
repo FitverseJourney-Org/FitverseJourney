@@ -1,4 +1,4 @@
-package com.example.local.database.datastore
+﻿package org.fitverse.data.local.database.datastore
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -15,7 +15,7 @@ actual object DataStoreFactory {
 
     @OptIn(ExperimentalForeignApi::class)
     actual fun createDataStore(): DataStore<Preferences> {
-        return com.example.local.expect.createDataStore(
+        return org.fitverse.data.local.expect.createDataStore(
             producePath = {
                 val documentDirectory: NSURL? = NSFileManager.defaultManager.URLForDirectory(
                     directory = NSDocumentDirectory,

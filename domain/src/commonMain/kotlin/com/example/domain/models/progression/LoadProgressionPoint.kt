@@ -1,7 +1,7 @@
-package com.example.domain.models.progression
+﻿package org.fitverse.domain.models.progression
 
 import androidx.compose.runtime.Immutable
-import com.example.domain.expect.PlatformDate
+import org.fitverse.domain.expect.PlatformDate
 
 /**
  * Ponto de dado de uma sessão de treino para um exercício específico.

@@ -1,4 +1,4 @@
-package com.example.presentation.widgets
+﻿package org.fitverse.presentation.widgets
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
@@ -22,7 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.domain.models.levelUp.LevelUpData
+import org.fitverse.domain.models.levelUp.LevelUpData
 import kotlin.math.PI
 import kotlin.random.Random
 

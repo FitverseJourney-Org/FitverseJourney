@@ -1,4 +1,4 @@
-package com.example.domain.models.friends
+﻿package org.fitverse.domain.models.friends
 
 /**
  * Sealed interface para erros tipados

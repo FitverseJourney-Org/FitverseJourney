@@ -1,7 +1,7 @@
-package com.example.presentation.ui.leaderboards.viewmodel
+﻿package org.fitverse.presentation.ui.leaderboards.viewmodel
 
 import androidx.compose.ui.graphics.Color
-import com.example.presentation.theme.FVExtension
+import org.fitverse.presentation.theme.FitColors
 
 data class LeaderboardEntry(
     val rank:       Int,
@@ -12,7 +12,7 @@ data class LeaderboardEntry(
     val delta:      Int,
     val isMe:       Boolean = false,
     val isOnline:   Boolean = false,
-    val classColor: Color   = FVExtension.primary,
+    val classColor: Color   = FitColors.Accent,
 )
 
 val defaultLeaderboardEntries = listOf(

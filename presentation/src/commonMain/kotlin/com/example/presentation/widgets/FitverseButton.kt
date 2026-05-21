@@ -1,4 +1,4 @@
-package com.example.presentation.widgets
+﻿package org.fitverse.presentation.widgets
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,8 +15,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.presentation.theme.FitverseColors
-import com.example.presentation.theme.ShapeButton
+import org.fitverse.presentation.theme.FitColors
+import org.fitverse.presentation.theme.ShapeButton
 
 @Composable
 fun FitverseButton(
@@ -35,8 +35,8 @@ fun FitverseButton(
         colors = ButtonDefaults.buttonColors(
             containerColor         = if(isLoading) cs.primary.copy(alpha = 0.85f) else cs.primary,
             contentColor           = cs.background,
-            disabledContainerColor = FitverseColors.Surface2,
-            disabledContentColor   = FitverseColors.TextMuted,
+            disabledContainerColor = FitColors.Surface2,
+            disabledContentColor   = FitColors.TextMuted,
         ),
         contentPadding = PaddingValues(horizontal = 24.dp),
     ) {

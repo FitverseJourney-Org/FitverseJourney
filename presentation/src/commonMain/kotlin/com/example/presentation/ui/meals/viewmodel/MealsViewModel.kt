@@ -1,14 +1,16 @@
-package com.example.presentation.ui.meals.viewmodel
+﻿package org.fitverse.presentation.ui.meals.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.repository.dbLocal.sqldelight.nutrition.DailyMacros
-import com.example.domain.repository.dbLocal.sqldelight.nutrition.MealEntryRecord
-import com.example.domain.usecase.meals.DeleteMealUseCase
-import com.example.domain.usecase.meals.GetDailyMacrosUseCase
-import com.example.domain.usecase.meals.InsertMealUseCase
-import com.example.domain.usecase.meals.ObserveMealsByDateUseCase
-import com.example.expect.PlatformDateFormatter
+import org.fitverse.domain.repository.dbLocal.sqldelight.nutrition.MealEntryRecord
+import org.fitverse.domain.usecase.meals.CleanupOldMealsUseCase
+import org.fitverse.domain.usecase.meals.CreateMealUseCase
+import org.fitverse.domain.usecase.meals.DeleteMealUseCase
+import org.fitverse.domain.usecase.meals.GetDailyMacrosUseCase
+import org.fitverse.domain.usecase.meals.GetFoodsByMealUseCase
+import org.fitverse.domain.usecase.meals.InsertMealUseCase
+import org.fitverse.domain.usecase.meals.ObserveMealsByDateUseCase
+import org.fitverse.presentation.expect.DateFormatter
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,9 +21,12 @@ import kotlinx.coroutines.launch
 
 class MealsViewModel(
     private val observeMealsByDate: ObserveMealsByDateUseCase,
+    private val createMeal: CreateMealUseCase,
     private val insertMeal: InsertMealUseCase,
     private val deleteMeal: DeleteMealUseCase,
     private val getDailyMacros: GetDailyMacrosUseCase,
+    private val getFoodsByMeal: GetFoodsByMealUseCase,
+    private val cleanupOldMeals: CleanupOldMealsUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MealsUiState())
@@ -31,17 +36,19 @@ class MealsViewModel(
     val events = _events.receiveAsFlow()
 
     private val today: String
-        get() = PlatformDateFormatter.getTodayIsoDate()
+        get() = DateFormatter.getTodayIsoDate()
 
     init {
+        viewModelScope.launch { cleanupOldMeals(today) }
         observeToday()
     }
 
     fun onIntent(intent: MealsIntent) {
         when (intent) {
-            is MealsIntent.AddMeal    -> addMeal(intent.record)
-            is MealsIntent.DeleteMeal -> removeMeal(intent.mealId)
-            is MealsIntent.SelectDate -> changeDate(intent.date)
+            is MealsIntent.CreateMeal  -> createNewMeal(intent.name)
+            is MealsIntent.AddMeal     -> addMeal(intent.record)
+            is MealsIntent.DeleteMeal  -> removeMeal(intent.mealId)
+            is MealsIntent.SelectDate  -> changeDate(intent.date)
         }
     }
 
@@ -53,20 +60,25 @@ class MealsViewModel(
                 .collect { records ->
                     _uiState.update { it.copy(meals = records, selectedDate = date, isLoading = false) }
                     refreshMacros()
+                    refreshFoods(records.map { it.id })
                 }
         }
     }
 
-    private fun addMeal(record: MealEntryRecord) {
+    private fun createNewMeal(name: String) {
+        if (name.isBlank()) return
         viewModelScope.launch {
-            insertMeal(record)
+            val now = DateFormatter.getCurrentTimeMillis()
+            createMeal(name = name, date = today, nowMillis = now)
         }
     }
 
+    private fun addMeal(record: MealEntryRecord) {
+        viewModelScope.launch { insertMeal(record) }
+    }
+
     private fun removeMeal(mealId: String) {
-        viewModelScope.launch {
-            deleteMeal(mealId)
-        }
+        viewModelScope.launch { deleteMeal(mealId) }
     }
 
     private fun changeDate(date: String) {
@@ -77,6 +89,7 @@ class MealsViewModel(
                 .collect { records ->
                     _uiState.update { it.copy(meals = records, isLoading = false) }
                     refreshMacros()
+                    refreshFoods(records.map { it.id })
                 }
         }
     }
@@ -87,6 +100,13 @@ class MealsViewModel(
                 .onSuccess { macros ->
                     _uiState.update { it.copy(dailyMacros = macros) }
                 }
+        }
+    }
+
+    private fun refreshFoods(mealIds: List<String>) {
+        viewModelScope.launch {
+            val map = mealIds.associateWith { id -> getFoodsByMeal(id) }
+            _uiState.update { it.copy(foodsByMeal = map) }
         }
     }
 }

@@ -1,8 +1,8 @@
-package com.example.mapper.exercise
+﻿package org.fitverse.data.repository.mapper.exercise
 
-import com.example.domain.models.progression.Exercise
-import com.example.local.model.ExerciseEntity
-import com.example.remote.dto.exercise.ExerciseDto
+import org.fitverse.domain.models.progression.Exercise
+import org.fitverse.data.local.model.ExerciseEntity
+import org.fitverse.data.remote.dto.exercise.ExerciseDto
 import kotlin.jvm.JvmName
 
 // ── Dto → Entity (remote → local) ────────────────────────────────────────────

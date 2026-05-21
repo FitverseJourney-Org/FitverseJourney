@@ -1,69 +1,79 @@
-package com.example.domain.di
+﻿package org.fitverse.domain.di
 
 // ── Auth ──────────────────────────────────────────────────────────────────────
-import com.example.domain.usecase.login.LoginUseCase
-import com.example.domain.usecase.register.RegisterUseCase
-import com.example.domain.usecase.reset.ResetPasswordUseCase
+import org.fitverse.domain.usecase.login.LoginUseCase
+import org.fitverse.domain.usecase.register.RegisterUseCase
+import org.fitverse.domain.usecase.reset.ResetPasswordUseCase
 // ── DataStore — Authentication ────────────────────────────────────────────────
-import com.example.domain.usecase.db.datastore.authentication.ObserveIsAuthenticatedUseCase
-import com.example.domain.usecase.db.datastore.authentication.SetIsAuthenticatedUseCase
+import org.fitverse.domain.usecase.db.datastore.authentication.ObserveIsAuthenticatedUseCase
+import org.fitverse.domain.usecase.db.datastore.authentication.SetIsAuthenticatedUseCase
 // ── DataStore — Onboarding ────────────────────────────────────────────────────
-import com.example.domain.usecase.db.datastore.onboarding.ObserveOnboardingCompletedUseCase
-import com.example.domain.usecase.db.datastore.onboarding.SetOnboardingCompletedUseCase
+import org.fitverse.domain.usecase.db.datastore.onboarding.ObserveOnboardingCompletedUseCase
+import org.fitverse.domain.usecase.db.datastore.onboarding.SetOnboardingCompletedUseCase
 // ── DataStore — Trial ─────────────────────────────────────────────────────────
-import com.example.domain.usecase.db.datastore.trial.ObserveIsTrialCompletedUseCase
-import com.example.domain.usecase.db.datastore.trial.SetIsTrialCompletedUseCase
+import org.fitverse.domain.usecase.db.datastore.trial.ObserveIsTrialCompletedUseCase
+import org.fitverse.domain.usecase.db.datastore.trial.SetIsTrialCompletedUseCase
 // ── DataStore — Language ──────────────────────────────────────────────────────
-import com.example.domain.usecase.db.datastore.language.ChangeAppLanguageUseCase
-import com.example.domain.usecase.db.datastore.language.GetAppLanguageUseCase
-import com.example.domain.usecase.db.datastore.language.GetCurrentLanguageUseCase
-import com.example.domain.usecase.db.datastore.language.GetSystemLocaleUseCase
+import org.fitverse.domain.usecase.db.datastore.language.ChangeAppLanguageUseCase
+import org.fitverse.domain.usecase.db.datastore.language.GetAppLanguageUseCase
+import org.fitverse.domain.usecase.db.datastore.language.GetCurrentLanguageUseCase
+import org.fitverse.domain.usecase.db.datastore.language.GetSystemLocaleUseCase
 // ── Progression ───────────────────────────────────────────────────────────────
-import com.example.domain.usecase.progression.BuildProgressionInsightUseCase
-import com.example.domain.usecase.progression.GetExercisesByTrainingSplitUseCase
-import com.example.domain.usecase.progression.GetProgressionDataUseCase
-import com.example.domain.usecase.progression.GetTrainingSplitsUseCase
+import org.fitverse.domain.usecase.progression.BuildProgressionInsightUseCase
+import org.fitverse.domain.usecase.progression.GetExercisesByTrainingSplitUseCase
+import org.fitverse.domain.usecase.progression.GetProgressionDataUseCase
+import org.fitverse.domain.usecase.progression.GetTrainingSplitsUseCase
 // ── Wiki ──────────────────────────────────────────────────────────────────────
-import com.example.domain.usecase.wiki.GetWikiArticlesUseCase
-import com.example.domain.usecase.wiki.SearchWikiArticlesUseCase
-import com.example.domain.usecase.wiki.ToggleBookmarkUseCase
+import org.fitverse.domain.usecase.wiki.GetWikiArticlesUseCase
+import org.fitverse.domain.usecase.wiki.SearchWikiArticlesUseCase
+import org.fitverse.domain.usecase.wiki.ToggleBookmarkUseCase
 // ── Plan ──────────────────────────────────────────────────────────────────────
-import com.example.domain.usecase.activatePlan.ActivatePlanUseCase
+import org.fitverse.domain.usecase.activatePlan.ActivatePlanUseCase
+// ── WorkoutPlan ───────────────────────────────────────────────────────────────
+import org.fitverse.domain.usecase.workoutPlan.ActivateWorkoutPlanUseCase
+import org.fitverse.domain.usecase.workoutPlan.AddWorkoutPlanUseCase
+import org.fitverse.domain.usecase.workoutPlan.DeleteWorkoutPlanUseCase
+import org.fitverse.domain.usecase.workoutPlan.GetWorkoutPlansUseCase
+import org.fitverse.domain.usecase.workoutPlan.WorkoutPlanUseCases
 // ── Missions ──────────────────────────────────────────────────────────────────
-import com.example.domain.usecase.missions.CompleteMissionUseCase
-import com.example.domain.usecase.missions.GetDailyMissionsUseCase
-import com.example.domain.usecase.missions.InsertDailyMissionsUseCase
-import com.example.domain.usecase.missions.ObserveDailyMissionsUseCase
-import com.example.domain.usecase.missions.SwapMissionUseCase
+import org.fitverse.domain.usecase.missions.CompleteMissionUseCase
+import org.fitverse.domain.usecase.missions.GetDailyMissionsUseCase
+import org.fitverse.domain.usecase.missions.InsertDailyMissionsUseCase
+import org.fitverse.domain.usecase.missions.ObserveDailyMissionsUseCase
+import org.fitverse.domain.usecase.missions.SwapMissionUseCase
 // ── Stats ─────────────────────────────────────────────────────────────────────
-import com.example.domain.usecase.stats.AddXpUseCase
-import com.example.domain.usecase.stats.IncrementWaterUseCase
-import com.example.domain.usecase.stats.ObserveUserStatsUseCase
-import com.example.domain.usecase.stats.UpdateStepsUseCase
-import com.example.domain.usecase.stats.UpsertUserStatsUseCase
+import org.fitverse.domain.usecase.stats.AddXpUseCase
+import org.fitverse.domain.usecase.stats.IncrementWaterUseCase
+import org.fitverse.domain.usecase.stats.ObserveUserStatsUseCase
+import org.fitverse.domain.usecase.stats.UpdateStepsUseCase
+import org.fitverse.domain.usecase.stats.UpsertUserStatsUseCase
 // ── Streak ────────────────────────────────────────────────────────────────────
-import com.example.domain.usecase.streak.CheckInTodayUseCase
-import com.example.domain.usecase.streak.ObserveStreakWeekUseCase
+import org.fitverse.domain.usecase.streak.CheckInTodayUseCase
+import org.fitverse.domain.usecase.streak.ObserveStreakWeekUseCase
 // ── Notifications ─────────────────────────────────────────────────────────────
-import com.example.domain.usecase.notifications.DeleteNotificationUseCase
-import com.example.domain.usecase.notifications.MarkAllNotificationsReadUseCase
-import com.example.domain.usecase.notifications.MarkNotificationReadUseCase
-import com.example.domain.usecase.notifications.ObserveNotificationsUseCase
+import org.fitverse.domain.usecase.notifications.DeleteNotificationUseCase
+import org.fitverse.domain.usecase.notifications.MarkAllNotificationsReadUseCase
+import org.fitverse.domain.usecase.notifications.MarkNotificationReadUseCase
+import org.fitverse.domain.usecase.notifications.ObserveNotificationsUseCase
 // ── Meals ─────────────────────────────────────────────────────────────────────
-import com.example.domain.usecase.meals.DeleteMealUseCase
-import com.example.domain.usecase.meals.GetDailyMacrosUseCase
-import com.example.domain.usecase.meals.InsertMealUseCase
-import com.example.domain.usecase.meals.ObserveMealsByDateUseCase
+import org.fitverse.domain.usecase.meals.AddFoodToMealUseCase
+import org.fitverse.domain.usecase.meals.CleanupOldMealsUseCase
+import org.fitverse.domain.usecase.meals.CreateMealUseCase
+import org.fitverse.domain.usecase.meals.DeleteMealUseCase
+import org.fitverse.domain.usecase.meals.GetDailyMacrosUseCase
+import org.fitverse.domain.usecase.meals.GetFoodsByMealUseCase
+import org.fitverse.domain.usecase.meals.InsertMealUseCase
+import org.fitverse.domain.usecase.meals.ObserveMealsByDateUseCase
 // ── Workout ───────────────────────────────────────────────────────────────────
-import com.example.domain.usecase.workout.DeleteWorkoutSessionUseCase
-import com.example.domain.usecase.workout.GetRecentWorkoutSessionsUseCase
-import com.example.domain.usecase.workout.GetSessionsByPeriodUseCase
-import com.example.domain.usecase.workout.ObserveWorkoutSessionsUseCase
+import org.fitverse.domain.usecase.workout.DeleteWorkoutSessionUseCase
+import org.fitverse.domain.usecase.workout.GetRecentWorkoutSessionsUseCase
+import org.fitverse.domain.usecase.workout.GetSessionsByPeriodUseCase
+import org.fitverse.domain.usecase.workout.ObserveWorkoutSessionsUseCase
 // ── Achievements ──────────────────────────────────────────────────────────────
-import com.example.domain.usecase.achievements.InsertAchievementsUseCase
-import com.example.domain.usecase.achievements.ObserveAchievementsUseCase
-import com.example.domain.usecase.achievements.UnlockAchievementUseCase
-import com.example.domain.usecase.achievements.UpdateAchievementProgressUseCase
+import org.fitverse.domain.usecase.achievements.InsertAchievementsUseCase
+import org.fitverse.domain.usecase.achievements.ObserveAchievementsUseCase
+import org.fitverse.domain.usecase.achievements.UnlockAchievementUseCase
+import org.fitverse.domain.usecase.achievements.UpdateAchievementProgressUseCase
 import org.koin.dsl.module
 
 val AuthUseCase = module {
@@ -114,6 +124,21 @@ val planUseCase = module {
     factory { ActivatePlanUseCase(get()) }
 }
 
+val workoutPlanUseCase = module {
+    factory { GetWorkoutPlansUseCase(repository = get()) }
+    factory { AddWorkoutPlanUseCase(repository = get()) }
+    factory { DeleteWorkoutPlanUseCase(repository = get()) }
+    factory { ActivateWorkoutPlanUseCase(repository = get()) }
+    factory {
+        WorkoutPlanUseCases(
+            getWorkoutPlans  = get(),
+            addPlan          = get(),
+            deleteWorkoutPlan = get(),
+            activatePlan     = get(),
+        )
+    }
+}
+
 val missionsUseCase = module {
     factory { ObserveDailyMissionsUseCase(dao = get(), authRepository = get()) }
     factory { CompleteMissionUseCase(dao = get(), authRepository = get()) }
@@ -144,9 +169,13 @@ val notificationsUseCase = module {
 
 val mealsUseCase = module {
     factory { ObserveMealsByDateUseCase(dao = get(), authRepository = get()) }
+    factory { CreateMealUseCase(dao = get(), authRepository = get()) }
     factory { InsertMealUseCase(dao = get()) }
     factory { DeleteMealUseCase(dao = get(), authRepository = get()) }
     factory { GetDailyMacrosUseCase(dao = get(), authRepository = get()) }
+    factory { AddFoodToMealUseCase(foodDao = get(), mealDao = get(), authRepository = get()) }
+    factory { GetFoodsByMealUseCase(foodDao = get()) }
+    factory { CleanupOldMealsUseCase(mealDao = get(), foodDao = get(), authRepository = get()) }
 }
 
 val workoutUseCase = module {
@@ -169,6 +198,7 @@ val domainModule = listOf(
     progressionUseCase,
     wikiUseCase,
     planUseCase,
+    workoutPlanUseCase,
     missionsUseCase,
     statsUseCase,
     streakUseCase,

@@ -1,4 +1,4 @@
-package org.fitverse.project.navigation
+﻿package org.fitverse.project.navigation
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -51,16 +51,15 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import androidx.savedstate.serialization.SavedStateConfiguration
-import com.example.domain.repository.authentication.AuthRepository
-import com.example.presentation.theme.FVExtension
-import com.example.presentation.theme.FitverseColors
-import com.example.presentation.ui.achievements.viewmodel.AchievementsViewModel
-import com.example.presentation.ui.friends.viewmodel.FriendsViewModel
-import com.example.presentation.ui.historic.viewmodel.HistoricViewModel
-import com.example.presentation.ui.leaderboards.viewmodel.LeaderboardsViewModel
-import com.example.presentation.ui.progress.viewmodel.ProgressViewModel
-import com.example.presentation.ui.wiki.viewmodel.WikiViewModel
-import com.example.presentation.widgets.DarkGamifiedDashboardBackground
+import org.fitverse.domain.repository.authentication.AuthRepository
+import org.fitverse.presentation.theme.FitColors
+import org.fitverse.presentation.ui.achievements.viewmodel.AchievementsViewModel
+import org.fitverse.presentation.ui.friends.viewmodel.FriendsViewModel
+import org.fitverse.presentation.ui.historic.viewmodel.HistoricViewModel
+import org.fitverse.presentation.ui.leaderboards.viewmodel.LeaderboardsViewModel
+import org.fitverse.presentation.ui.progress.viewmodel.ProgressViewModel
+import org.fitverse.presentation.ui.wiki.viewmodel.WikiViewModel
+import org.fitverse.presentation.widgets.DarkGamifiedDashboardBackground
 import kotlinx.coroutines.launch
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
@@ -72,6 +71,7 @@ import org.fitverse.project.destinations.modal_destinations.historic.HistoricDes
 import org.fitverse.project.destinations.modal_destinations.leaderboards.LeaderboardsDestination
 import org.fitverse.project.destinations.modal_destinations.progress.ProgressDestination
 import org.fitverse.project.destinations.payments.PlanPaymentDestination
+import org.fitverse.project.destinations.modal_destinations.language.LanguageDestination
 import org.fitverse.project.destinations.modal_destinations.shopping.ShoppingDestination
 import org.fitverse.project.destinations.modal_destinations.wiki.WikiFitnessDestination
 import org.fitverse.project.routes.NavRoutes
@@ -104,6 +104,7 @@ fun HomeNavigation(
                     subclass(NavRoutes.Devices::class,             NavRoutes.Devices.serializer())
                     subclass(NavRoutes.HelpSupport::class,         NavRoutes.HelpSupport.serializer())
                     subclass(NavRoutes.PlanPayment::class,         NavRoutes.PlanPayment.serializer())
+                    subclass(NavRoutes.Language::class,            NavRoutes.Language.serializer())
                     // ── Sub-navegações ────────────────────────────────────────
                     subclass(NavRoutes.NutritionAddManualFood::class, NavRoutes.NutritionAddManualFood.serializer())
                     subclass(NavRoutes.PlanWorkoutFlow::class,     NavRoutes.PlanWorkoutFlow.serializer())
@@ -128,6 +129,7 @@ fun HomeNavigation(
     var isCommunitySubScreen by remember { mutableStateOf(false) }
     var isCommunitySheetOpen by remember { mutableStateOf(false) }
     var isNutritionSubScreen by remember { mutableStateOf(false) }
+
     val showBottomBar = rootBackStack.lastOrNull() in bottomBarItems &&
         !isMealsSheetOpen &&
         !isWorkoutFullScreen &&
@@ -157,7 +159,7 @@ fun HomeNavigation(
             Box(modifier = Modifier.fillMaxSize()){
                 if(showBottomBar) DarkGamifiedDashboardBackground()
                 Scaffold(
-                    containerColor = if(showBottomBar) Color.Transparent else FVExtension.bg,
+                    containerColor = if(showBottomBar) Color.Transparent else FitColors.Bg,
                     bottomBar = {
                         AnimatedVisibility(
                             visible = showBottomBar,
@@ -170,7 +172,7 @@ fun HomeNavigation(
                 ) { paddingValues ->
                     val subScreenModifier = Modifier.fillMaxSize().padding(top = paddingValues.calculateTopPadding())
 
-                    val modifier = Modifier.background(FitverseColors.Bg).padding(paddingValues)
+                    val modifier = Modifier.background(FitColors.Bg).padding(paddingValues)
                     NavDisplay(
                         modifier = Modifier,
                         backStack = rootBackStack,
@@ -298,6 +300,13 @@ fun HomeNavigation(
                                     toBack = { rootBackStack.removeLastOrNull() }
                                 )
                             }
+                            entry<NavRoutes.Language> {
+                                LanguageDestination(
+                                    modifier = modifier,
+                                    toBack = { rootBackStack.removeLastOrNull() },
+                                    toLoadingLanguage = toLoadingLanguage
+                                )
+                            }
                             entry<NavRoutes.PlanPayment> {
                                 PlanPaymentDestination(
                                     modifier = modifier,
@@ -350,7 +359,7 @@ fun FitVerseBottomBar(items: List<NavKey>, backStack: MutableList<NavKey>) {
         border = BorderStroke(
             width = 0.5.dp,
             brush = Brush.horizontalGradient(
-                listOf(Color.Transparent, FitverseColors.Accent.copy(alpha = 0.25f), Color.Transparent)
+                listOf(Color.Transparent, FitColors.Accent.copy(alpha = 0.25f), Color.Transparent)
             )
         ),
         shadowElevation = 20.dp
@@ -389,11 +398,11 @@ fun FitVerseBottomBar(items: List<NavKey>, backStack: MutableList<NavKey>) {
                         )
                     },
                     colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor   = FitverseColors.Accent,
-                        selectedTextColor   = FitverseColors.Accent,
-                        indicatorColor      = FitverseColors.Accent.copy(alpha = 0.12f),
-                        unselectedIconColor = FitverseColors.TextMuted.copy(alpha = 0.5f),
-                        unselectedTextColor = FitverseColors.TextMuted.copy(alpha = 0.5f)
+                        selectedIconColor   = FitColors.Accent,
+                        selectedTextColor   = FitColors.Accent,
+                        indicatorColor      = FitColors.Accent.copy(alpha = 0.12f),
+                        unselectedIconColor = FitColors.TextMuted.copy(alpha = 0.5f),
+                        unselectedTextColor = FitColors.TextMuted.copy(alpha = 0.5f)
                     )
                 )
             }

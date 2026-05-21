@@ -1,10 +1,12 @@
-package com.example.remote
+﻿package org.fitverse.data.remote
 
-import com.example.domain.models.auth.AuthResult
-import com.example.domain.repository.authentication.AuthRepository
-import com.example.domain.repository.authentication.AuthResultDto
-import com.example.domain.repository.dbLocal.datastore.AppAuthenticateRepository
-import com.example.remote.mapper.AuthMapper
+import org.fitverse.domain.models.auth.AuthResult
+import org.fitverse.domain.models.errors.AuthError
+import org.fitverse.domain.repository.authentication.AuthRepository
+import org.fitverse.domain.repository.dbLocal.datastore.AppAuthenticateRepository
+import org.fitverse.data.remote.datasource.auth.AuthRemoteDataSource
+import org.fitverse.data.remote.dto.auth.AuthResultDto
+import org.fitverse.data.remote.mapper.AuthMapper
 import com.google.firebase.FirebaseApiNotAvailableException
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.FirebaseTooManyRequestsException
@@ -16,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
+import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.tasks.await
 import kotlin.coroutines.cancellation.CancellationException
 
@@ -23,144 +26,55 @@ class FirebaseAuthRepositoryImpl(
     private val firebaseAuth: FirebaseAuth,
     private val authMapper: AuthMapper,
     private val appAuthenticateRepository: AppAuthenticateRepository,
-) : AuthRepository {
+) : AuthRepository, AuthRemoteDataSource {
 
-    override suspend fun login(email: String, password: String): AuthResult {
-        try {
+    // ── Handlers centralizados ──────────────────────────────────────────────
+
+    private fun handleFirebaseError(e: Exception): Nothing = throw when (e) {
+        is CancellationException                  -> e  // sempre relançar
+        is FirebaseAuthInvalidCredentialsException -> AuthError.InvalidCredentials("Credenciais inválidas: ${e.message}")
+        is FirebaseAuthInvalidUserException        -> AuthError.UserNotFound("Usuário não encontrado ou desabilitado: ${e.message}")
+        is FirebaseAuthUserCollisionException      -> AuthError.EmailAlreadyInUse("E-mail já está em uso: ${e.message}")
+        is FirebaseAuthWeakPasswordException       -> AuthError.WeakPassword("Senha fraca: ${e.reason}")
+        is FirebaseAuthRecentLoginRequiredException-> AuthError.ReauthRequired("Reautenticação necessária: ${e.message}")
+        is FirebaseAuthEmailException              -> AuthError.InvalidCredentials("Erro de e-mail: ${e.message}")
+        is FirebaseAuthException                   -> AuthError.Unknown("Erro de autenticação [${e.errorCode}]: ${e.message}")
+        is FirebaseNetworkException                -> AuthError.NetworkError("Sem conexão: verifique sua internet")
+        is FirebaseTooManyRequestsException        -> AuthError.TooManyRequests("Muitas tentativas. Tente novamente mais tarde")
+        is FirebaseApiNotAvailableException        -> AuthError.ServiceUnavailable("Serviço Firebase indisponível")
+        else                                       -> AuthError.Unknown("Erro inesperado: ${e.message}")
+    }
+
+    private suspend fun FirebaseUser.getFreshToken(forceRefresh: Boolean = true): String =
+        getIdToken(forceRefresh).await().token
+            ?: throw AuthError.Unknown("Token inválido: Firebase retornou nulo")
+
+    private fun mapToDto(user: FirebaseUser, token: String) = AuthResultDto(
+        uid   = user.uid,
+        email = user.email,
+        token = token,
+    )
+
+    // ── Métodos públicos ────────────────────────────────────────────────────
+
+    override suspend fun login(email: String, password: String): Result<AuthResult> =
+        runCatching {
             val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
-            val user   = result.user ?: throw Exception("Login falhou: usuário nulo")
-            val token = user.getIdToken(true).await().token  // true = força refresh
-                ?: throw Exception("Token inválido: Firebase retornou token nulo")
+            val user   = result.user ?: throw AuthError.Unknown("Login falhou: usuário nulo")
+            authMapper.mapDtoToDomain(mapToDto(user, user.getFreshToken()))
+        }.recoverNetworkFallback(email).mapError(::handleFirebaseError)
 
-            return authMapper.mapDtoToDomain(
-                dto = AuthResultDto(
-                    uid   = user.uid,
-                    email = user.email,
-                    token = token,
-                )
-            )
-        } catch (e: FirebaseAuthInvalidUserException) {
-            // Conta desativada ou não encontrada
-            throw Exception("Usuário não encontrado ou conta desativada: ${e.message}")
-        } catch (e: FirebaseAuthInvalidCredentialsException) {
-            // E-mail malformado ou senha incorreta
-            throw Exception("Credenciais inválidas: ${e.message}")
-        } catch (e: FirebaseAuthUserCollisionException) {
-            // E-mail já vinculado a outro provedor
-            throw Exception("Conflito de conta: ${e.message}")
-        } catch (e: FirebaseAuthWeakPasswordException) {
-            // Senha fraca (raro no login, mas possível em fluxos mistos)
-            throw Exception("Senha fraca: ${e.message}")
-        } catch (e: FirebaseAuthRecentLoginRequiredException) {
-            // Operação sensível exige reautenticação recente
-            throw Exception("Reautenticação necessária: ${e.message}")
-        } catch (e: FirebaseAuthEmailException) {
-            // Problema genérico relacionado ao e-mail
-            throw Exception("Erro de e-mail: ${e.message}")
-        } catch (e: FirebaseAuthException) {
-            // Qualquer outro erro do FirebaseAuth não coberto acima
-            throw Exception("Erro de autenticação [${e.errorCode}]: ${e.message}")
-        } catch (e: FirebaseNetworkException) {
-            // Sem conexão ou timeout de rede
-            throw Exception("Erro de rede: verifique sua conexão")
-        } catch (e: FirebaseTooManyRequestsException) {
-            // Muitas tentativas → conta temporariamente bloqueada
-            throw Exception("Muitas tentativas. Tente novamente mais tarde")
-        } catch (e: FirebaseApiNotAvailableException) {
-            // Google Play Services indisponível
-            throw Exception("Serviço Firebase indisponível no momento")
-        } catch (e: CancellationException) {
-            // Coroutine cancelada — deve ser relançada sempre
-            throw e
-        } catch (e: Exception) {
-            // Fallback para erros inesperados
-            throw Exception("Erro inesperado: ${e.message}")
-        }
-    }
-
-    override suspend fun register(email: String, password: String): AuthResult {
-        try {
+    override suspend fun register(email: String, password: String): Result<AuthResult> =
+        runCatching {
             val result = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
-            val user   = result.user ?: throw Exception("Registro falhou: usuário nulo")
-            val token = user.getIdToken(false).await().token
-                ?: throw Exception("Token inválido: Firebase retornou token nulo")
+            val user   = result.user ?: throw AuthError.Unknown("Registro falhou: usuário nulo")
+            authMapper.mapDtoToDomain(mapToDto(user, user.getFreshToken(forceRefresh = true)))
+        }.mapError(::handleFirebaseError)
 
-            return authMapper.mapDtoToDomain(
-                AuthResultDto(
-                    uid   = user.uid,
-                    email = user.email,
-                    token = token,
-                )
-            )
-        } catch (e: FirebaseAuthWeakPasswordException) {
-            // Senha não atende ao requisito mínimo do Firebase (6 caracteres)
-            throw Exception("Senha fraca: ${e.reason}")
-        } catch (e: FirebaseAuthInvalidCredentialsException) {
-            // E-mail com formato inválido
-            throw Exception("E-mail inválido: ${e.message}")
-        } catch (e: FirebaseAuthUserCollisionException) {
-            // E-mail já cadastrado por este ou outro provedor
-            throw Exception("E-mail já está em uso: ${e.message}")
-        } catch (e: FirebaseAuthInvalidUserException) {
-            // Conta criada mas imediatamente desabilitada por regra do projeto
-            throw Exception("Usuário inválido ou desabilitado: ${e.message}")
-        } catch (e: FirebaseAuthEmailException) {
-            // Problema genérico relacionado ao e-mail
-            throw Exception("Erro de e-mail: ${e.message}")
-        } catch (e: FirebaseAuthException) {
-            // Qualquer outro erro de autenticação não coberto acima
-            throw Exception("Erro de autenticação [${e.errorCode}]: ${e.message}")
-        } catch (e: FirebaseNetworkException) {
-            // Sem conexão ou timeout durante o registro
-            throw Exception("Erro de rede: verifique sua conexão")
-        } catch (e: FirebaseTooManyRequestsException) {
-            // Muitas requisições em curto período
-            throw Exception("Muitas tentativas. Tente novamente mais tarde")
-        } catch (e: FirebaseApiNotAvailableException) {
-            // Google Play Services ausente ou desatualizado
-            throw Exception("Serviço Firebase indisponível no momento")
-        } catch (e: CancellationException) {
-            // Cancelamento de coroutine — sempre relançar
-            throw e
-        } catch (e: Exception) {
-            // Fallback para erros inesperados
-            throw Exception("Erro inesperado: ${e.message}")
-        }
-    }
-
-    override suspend fun resetPassword(email: String): Result<Unit> {
-        return try {
+    override suspend fun resetPassword(email: String): Result<Unit> =
+        runCatching {
             firebaseAuth.sendPasswordResetEmail(email).await()
-            Result.success(Unit)
-        } catch (e: CancellationException) {
-            // Cancelamento de coroutine — sempre relançar
-            throw e
-        } catch (e: FirebaseAuthInvalidUserException) {
-            // E-mail não cadastrado ou conta desabilitada
-            Result.failure(Exception("Nenhuma conta encontrada para este e-mail: ${e.message}"))
-        } catch (e: FirebaseAuthInvalidCredentialsException) {
-            // E-mail com formato inválido
-            Result.failure(Exception("E-mail inválido: ${e.message}"))
-        } catch (e: FirebaseAuthEmailException) {
-            // Problema genérico relacionado ao e-mail
-            Result.failure(Exception("Erro de e-mail: ${e.message}"))
-        } catch (e: FirebaseAuthException) {
-            // Qualquer outro erro de auth não coberto acima
-            Result.failure(Exception("Erro de autenticação [${e.errorCode}]: ${e.message}"))
-        } catch (e: FirebaseNetworkException) {
-            // Sem conexão ou timeout
-            Result.failure(Exception("Erro de rede: verifique sua conexão"))
-        } catch (e: FirebaseTooManyRequestsException) {
-            // Muitos e-mails enviados em curto período
-            Result.failure(Exception("Muitas tentativas. Tente novamente mais tarde"))
-        } catch (e: FirebaseApiNotAvailableException) {
-            // Google Play Services ausente ou desatualizado
-            Result.failure(Exception("Serviço Firebase indisponível no momento"))
-        } catch (e: Exception) {
-            // Fallback para erros inesperados
-            Result.failure(Exception("Erro inesperado: ${e.message}"))
         }
-    }
 
     override suspend fun logout() {
         appAuthenticateRepository.setIsAuthenticated(false)
@@ -168,4 +82,25 @@ class FirebaseAuthRepositoryImpl(
     }
 
     override fun getCurrentUserId(): String? = firebaseAuth.currentUser?.uid
+    // ── Extensões privadas ──────────────────────────────────────────────────
+
+    /** Fallback offline: reutiliza sessão cacheada do Firebase sem chamar o servidor */
+    private suspend fun Result<AuthResult>.recoverNetworkFallback(email: String): Result<AuthResult> =
+        recover { error ->
+            if (error !is FirebaseNetworkException) throw error
+            val cached = firebaseAuth.currentUser
+                ?.takeIf { it.email == email }
+                ?: throw AuthError.NetworkError("Sem conexão e nenhuma sessão local encontrada")
+            val token = runCatching { cached.getFreshToken(forceRefresh = false) }
+                .getOrElse { throw AuthError.NetworkError("Sem conexão: sessão expirada") }
+            authMapper.mapDtoToDomain(mapToDto(cached, token))
+        }
+
+
+    /** Converte qualquer exceção não-AuthError via handleFirebaseError */
+    private fun <T> Result<T>.mapError(handler: (Exception) -> Nothing): Result<T> =
+        onFailure { e ->
+            if (e !is AuthError && e !is CancellationException)
+                handler(e as Exception)
+        }
 }

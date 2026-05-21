@@ -1,14 +1,18 @@
-package com.example.presentation.ui.authentication.resetPassword
+﻿package org.fitverse.presentation.ui.authentication.resetPassword
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.usecase.reset.ResetPasswordUseCase
-import com.example.domain.models.snackbar.SnackBarData
-import com.example.domain.models.snackbar.SnackbarType
-import com.example.presentation.ui.authentication.resetPassword.states.ResetPasswordIntent
-import com.example.presentation.ui.authentication.resetPassword.states.ResetPasswordState
+import org.fitverse.domain.models.snackbar.SnackBarData
+import org.fitverse.domain.models.snackbar.SnackbarType
+import org.fitverse.domain.usecase.reset.ResetPasswordUseCase
+import org.fitverse.presentation.ui.authentication.resetPassword.states.ResetPasswordAction
+import org.fitverse.presentation.ui.authentication.resetPassword.states.ResetPasswordNavigation
+import org.fitverse.presentation.ui.authentication.resetPassword.states.ResetPasswordState
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -17,15 +21,18 @@ class ResetPasswordViewModel(
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ResetPasswordState())
-    val state: StateFlow<ResetPasswordState> = _state
+    val state: StateFlow<ResetPasswordState> = _state.asStateFlow()
 
-    fun onIntent(intent: ResetPasswordIntent) {
-        when (intent) {
-            is ResetPasswordIntent.EmailChanged -> {
-                _state.update { it.copy(email = intent.value) }
+    private val _navigation = Channel<ResetPasswordNavigation>()
+    val navigationState = _navigation.receiveAsFlow()
+
+    fun onAction(action: ResetPasswordAction) {
+        when (action) {
+            is ResetPasswordAction.EmailChanged -> _state.update { it.copy(email = action.value) }
+            ResetPasswordAction.BtnSubmit -> submitResetPassword()
+            ResetPasswordAction.BtnBack -> viewModelScope.launch {
+                _navigation.send(ResetPasswordNavigation.NavigateBack)
             }
-            ResetPasswordIntent.BtnSubmit -> submitResetPassword()
-            ResetPasswordIntent.BtnBack -> { /* tratado via callback na UI */ }
         }
     }
 
@@ -48,12 +55,7 @@ class ResetPasswordViewModel(
             resetPasswordUseCase(_state.value.email)
                 .fold(
                     onSuccess = {
-                        _state.update {
-                            it.copy(
-                                isLoading = false,
-                                isEmailSent = true,
-                            )
-                        }
+                        _state.update { it.copy(isLoading = false, isEmailSent = true) }
                     },
                     onFailure = { error ->
                         _state.update {

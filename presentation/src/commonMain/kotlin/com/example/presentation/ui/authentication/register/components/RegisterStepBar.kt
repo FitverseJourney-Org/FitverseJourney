@@ -1,4 +1,4 @@
-package com.example.presentation.ui.authentication.register.components
+﻿package org.fitverse.presentation.ui.authentication.register.components
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
@@ -17,9 +17,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.example.presentation.ui.authentication.register.label
-import com.example.presentation.ui.authentication.register.states.RegisterStep
-import com.example.presentation.theme.RegisterDimens
+import org.fitverse.presentation.ui.authentication.register.label
+import org.fitverse.presentation.ui.authentication.register.states.RegisterStep
+import org.fitverse.presentation.theme.RegisterDimens
 
 @Composable
 fun RegisterStepBar(

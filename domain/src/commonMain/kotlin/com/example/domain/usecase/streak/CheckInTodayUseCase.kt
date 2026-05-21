@@ -1,8 +1,8 @@
-package com.example.domain.usecase.streak
+﻿package org.fitverse.domain.usecase.streak
 
-import com.example.domain.repository.authentication.AuthRepository
-import com.example.domain.repository.dbLocal.sqldelight.streak.StreakDao
-import com.example.domain.repository.dbLocal.sqldelight.streak.StreakRecord
+import org.fitverse.domain.repository.authentication.AuthRepository
+import org.fitverse.domain.repository.dbLocal.sqldelight.streak.StreakDao
+import org.fitverse.domain.repository.dbLocal.sqldelight.streak.StreakRecord
 
 class CheckInTodayUseCase(
     private val dao: StreakDao,

@@ -1,4 +1,4 @@
-package com.example.presentation.widgets
+﻿package org.fitverse.presentation.widgets
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -18,11 +18,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.example.presentation.theme.FitverseColors
+import org.fitverse.presentation.theme.FitColors
+import org.fitverse.presentation.theme.FVTypography
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -41,7 +39,7 @@ fun FitverseTopAppBar(
             windowInsets = WindowInsets(0, 0, 0, 0),
             scrollBehavior = scrollBehavior,
             colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = FitverseColors.Bg,
+                containerColor = Color.Transparent,
                 scrolledContainerColor = Color.Transparent
             ),
             navigationIcon = {
@@ -50,11 +48,9 @@ fun FitverseTopAppBar(
             title = {
                 Column(modifier = Modifier) {
                     Text(
-                        text = title,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Black,
+                        text  = title,
+                        style = FVTypography.headlineSmall,
                         color = cs.onBackground,
-                        letterSpacing = 1.sp
                     )
                     subtitle?.invoke()
                 }
@@ -70,9 +66,9 @@ fun FitverseTopAppBar(
                 .background(
                     Brush.horizontalGradient(
                         listOf(
-                            Color.Transparent,
-                            FitverseColors.AccentDim2.copy(alpha = 0.25f),
-                            Color.Transparent
+                            Color(0xFF1C1C1C).copy(alpha = .75f),
+                            Color(0xFF1C1C1C),
+                            Color(0xFF1C1C1C).copy(alpha = .75f)
                         )
                     )
                 )

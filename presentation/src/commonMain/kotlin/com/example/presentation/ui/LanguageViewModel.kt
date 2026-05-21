@@ -1,11 +1,11 @@
-package com.example.presentation.ui
+﻿package org.fitverse.presentation.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.repository.dbLocal.datastore.AppLanguageRepository
-import com.example.domain.usecase.db.datastore.language.ChangeAppLanguageUseCase
-import com.example.domain.usecase.db.datastore.language.GetAppLanguageUseCase
-import com.example.domain.usecase.db.datastore.language.GetSystemLocaleUseCase
+import org.fitverse.domain.repository.dbLocal.datastore.AppLanguageRepository
+import org.fitverse.domain.usecase.db.datastore.language.ChangeAppLanguageUseCase
+import org.fitverse.domain.usecase.db.datastore.language.GetAppLanguageUseCase
+import org.fitverse.domain.usecase.db.datastore.language.GetSystemLocaleUseCase
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn

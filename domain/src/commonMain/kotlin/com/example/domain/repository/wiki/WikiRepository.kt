@@ -1,7 +1,7 @@
-package com.example.domain.repository.wiki
+﻿package org.fitverse.domain.repository.wiki
 
-import com.example.domain.models.wiki.WikiArticle
-import com.example.domain.models.wiki.WikiCategory
+import org.fitverse.domain.models.wiki.WikiArticle
+import org.fitverse.domain.models.wiki.WikiCategory
 import kotlinx.coroutines.flow.Flow
 
 /**

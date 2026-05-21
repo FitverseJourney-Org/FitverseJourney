@@ -1,0 +1,72 @@
+-- ============================================================
+-- USER.SQ - Schema e Queries SQLDelight
+-- ============================================================
+-- Arquivo: data/src/commonMain/sqldelight/com/example/database/User.sq
+
+-- ============================================================
+-- SCHEMA
+-- ============================================================
+-- Renomeia para evitar colisão com o domínio
+
+CREATE TABLE IF NOT EXISTS UserEntity (
+    uid             TEXT NOT NULL PRIMARY KEY,
+    name            TEXT NOT NULL,
+    email           TEXT NOT NULL UNIQUE,
+    lastname        TEXT NOT NULL DEFAULT '',
+    username        TEXT NOT NULL DEFAULT '',
+    birthDate       TEXT NOT NULL DEFAULT '',
+    gender          TEXT NOT NULL,
+    classType       TEXT NOT NULL DEFAULT '',
+    weight          REAL NOT NULL,
+    height          INTEGER NOT NULL,
+    experienceLevel TEXT NOT NULL,
+    goals           TEXT NOT NULL,
+    isPremium       INTEGER NOT NULL DEFAULT 0,
+    targetWeight    REAL,
+    targetCalories  INTEGER,
+    targetProtein   REAL,
+    targetCarbs     REAL,
+    targetFat       REAL,
+    createdAt       INTEGER NOT NULL,
+    updatedAt       INTEGER NOT NULL
+);
+
+-- ── Queries ───────────────────────────────────────────────────────────────────
+
+selectUserByUid:
+SELECT * FROM UserEntity WHERE uid = ?;
+
+insertUser:
+INSERT OR REPLACE INTO UserEntity(
+    uid, name, email, lastname, username, birthDate,
+    gender, classType, weight, height, experienceLevel,
+    goals, isPremium, targetWeight, targetCalories,
+    targetProtein, targetCarbs, targetFat,
+    createdAt, updatedAt
+)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+updateUser:
+UPDATE UserEntity SET
+    name = ?,
+    email = ?,
+    lastname = ?,
+    username = ?,
+    birthDate = ?,
+    gender = ?,
+    classType = ?,
+    weight = ?,
+    height = ?,
+    experienceLevel = ?,
+    goals = ?,
+    isPremium = ?,
+    targetWeight = ?,
+    targetCalories = ?,
+    targetProtein = ?,
+    targetCarbs = ?,
+    targetFat = ?,
+    updatedAt = ?
+WHERE uid = ?;
+
+deleteUser:
+DELETE FROM UserEntity WHERE uid = ?;

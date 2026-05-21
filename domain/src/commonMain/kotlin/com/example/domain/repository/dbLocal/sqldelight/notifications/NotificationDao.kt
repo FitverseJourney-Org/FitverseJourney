@@ -1,4 +1,4 @@
-package com.example.domain.repository.dbLocal.sqldelight.notifications
+﻿package org.fitverse.domain.repository.dbLocal.sqldelight.notifications
 
 import kotlinx.coroutines.flow.Flow
 

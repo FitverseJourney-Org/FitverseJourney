@@ -1,15 +1,15 @@
-package com.example.presentation.ui.tasks.viewmodel
+﻿package org.fitverse.presentation.ui.tasks.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.models.dashboard.tasks.TaskIcon
-import com.example.domain.models.dashboard.tasks.TaskItem
-import com.example.domain.repository.dbLocal.sqldelight.catalog.CatalogMissionDao
-import com.example.domain.repository.dbLocal.sqldelight.catalog.CatalogMissionRecord
-import com.example.domain.repository.dbLocal.sqldelight.missions.DailyMissionRecord
-import com.example.domain.usecase.missions.ObserveDailyMissionsUseCase
-import com.example.domain.usecase.missions.SwapMissionUseCase
-import com.example.expect.PlatformDateFormatter
+import org.fitverse.domain.models.dashboard.tasks.TaskIcon
+import org.fitverse.domain.models.dashboard.tasks.TaskItem
+import org.fitverse.domain.repository.dbLocal.sqldelight.catalog.CatalogMissionDao
+import org.fitverse.domain.repository.dbLocal.sqldelight.catalog.CatalogMissionRecord
+import org.fitverse.domain.repository.dbLocal.sqldelight.missions.DailyMissionRecord
+import org.fitverse.domain.usecase.missions.ObserveDailyMissionsUseCase
+import org.fitverse.domain.usecase.missions.SwapMissionUseCase
+import org.fitverse.presentation.expect.DateFormatter
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -46,7 +46,7 @@ class TasksViewModel(
     private val _events = Channel<TasksEvent>()
     val events = _events.receiveAsFlow()
 
-    private val today: String get() = PlatformDateFormatter.getTodayIsoDate()
+    private val today: String get() = DateFormatter.getTodayIsoDate()
 
     init {
         observeMissions()
@@ -88,7 +88,7 @@ class TasksViewModel(
 
     private fun swap(taskToReplaceId: String, catalogMissionId: String) {
         viewModelScope.launch {
-            val now = PlatformDateFormatter.getCurrentTimeMillis()
+            val now = DateFormatter.getCurrentTimeMillis()
             swapMission(taskToReplaceId, catalogMissionId, today, now)
                 .onSuccess {
                     _uiState.update { it.copy(swapsRemaining = (it.swapsRemaining - 1).coerceAtLeast(0)) }

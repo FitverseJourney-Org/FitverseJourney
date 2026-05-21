@@ -1,7 +1,7 @@
-package com.example.domain.usecase.achievements
+﻿package org.fitverse.domain.usecase.achievements
 
-import com.example.domain.repository.dbLocal.sqldelight.achievements.AchievementDao
-import com.example.domain.repository.dbLocal.sqldelight.achievements.AchievementRecord
+import org.fitverse.domain.repository.dbLocal.sqldelight.achievements.AchievementDao
+import org.fitverse.domain.repository.dbLocal.sqldelight.achievements.AchievementRecord
 
 class InsertAchievementsUseCase(
     private val dao: AchievementDao,

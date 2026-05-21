@@ -1,4 +1,4 @@
-package com.example.presentation.ui.meals
+﻿package org.fitverse.presentation.ui.meals
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions

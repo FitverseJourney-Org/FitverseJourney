@@ -1,8 +1,8 @@
-package com.example.remote.datasource.friends
+﻿package org.fitverse.data.remote.datasource.friends
 
-import com.example.domain.models.dashboard.UserProfile
-import com.example.domain.repository.FakeFriendsRepository
-import com.example.domain.repository.FriendsRepository
+import org.fitverse.domain.models.dashboard.UserProfile
+import org.fitverse.domain.repository.FakeFriendsRepository
+import org.fitverse.domain.repository.FriendsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onStart

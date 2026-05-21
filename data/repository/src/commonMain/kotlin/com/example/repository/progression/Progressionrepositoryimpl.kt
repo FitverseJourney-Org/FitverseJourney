@@ -1,14 +1,14 @@
-package com.example.repository.progression
+﻿package org.fitverse.data.repository.progression
 
-import com.example.domain.models.progression.LoadProgressionPoint
-import com.example.domain.repository.ProgressionRepository
-import com.example.local.datasource.progression.ProgressionLocalDataSource
-import com.example.local.mapper.progression.toDomain
-import com.example.local.model.ProgressionPointEntity
-import com.example.mapper.progression.toDto
-import com.example.mapper.progression.toEntity
-import com.example.remote.datasource.progression.ProgressionRemoteDataSource
-import com.example.remote.dto.progression.ProgressionPointDto
+import org.fitverse.domain.models.progression.LoadProgressionPoint
+import org.fitverse.domain.repository.ProgressionRepository
+import org.fitverse.data.local.datasource.progression.ProgressionLocalDataSource
+import org.fitverse.data.local.mapper.progression.toDomain
+import org.fitverse.data.local.model.ProgressionPointEntity
+import org.fitverse.data.repository.mapper.progression.toDto
+import org.fitverse.data.repository.mapper.progression.toEntity
+import org.fitverse.data.remote.datasource.progression.ProgressionRemoteDataSource
+import org.fitverse.data.remote.dto.progression.ProgressionPointDto
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO

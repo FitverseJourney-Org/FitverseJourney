@@ -7,7 +7,7 @@ plugins {
 
 kotlin {
     androidLibrary {
-        namespace = "com.example.data.repository"
+        namespace = "org.fitverse.data.repository"
         compileSdk = 36
         minSdk = 26
         withHostTestBuilder {}

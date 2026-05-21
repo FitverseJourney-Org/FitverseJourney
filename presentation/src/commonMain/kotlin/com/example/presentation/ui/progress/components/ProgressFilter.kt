@@ -1,4 +1,4 @@
-package com.example.presentation.ui.progress.components
+﻿package org.fitverse.presentation.ui.progress.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
@@ -50,9 +50,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.example.domain.models.progression.Exercise
-import com.example.presentation.ui.progress.PeriodFilter
-import com.example.presentation.utils.MonthNames
+import org.fitverse.domain.models.progression.Exercise
+import org.fitverse.presentation.ui.progress.PeriodFilter
+import org.fitverse.presentation.utils.MonthNames
 
 // ─────────────────────────────────────────────────────────────────────────────
 // SplitTabRow — substitui o DropdownMenu de ficha

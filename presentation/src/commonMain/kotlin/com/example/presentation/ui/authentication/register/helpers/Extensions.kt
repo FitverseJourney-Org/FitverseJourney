@@ -1,12 +1,12 @@
-package com.example.presentation.ui.authentication.register.helpers
+﻿package org.fitverse.presentation.ui.authentication.register.helpers
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import com.example.domain.models.user.ClassType
-import com.example.domain.models.user.ClassType.*
-import com.example.domain.models.user.Genero
-import com.example.domain.models.user.NivelExperiencia
-import com.example.domain.models.user.Objetivo
+import org.fitverse.domain.models.user.ClassType
+import org.fitverse.domain.models.user.ClassType.*
+import org.fitverse.domain.models.user.Genero
+import org.fitverse.domain.models.user.NivelExperiencia
+import org.fitverse.domain.models.user.Objetivo
 import fitversejourneyapp.presentation.generated.resources.Res
 import fitversejourneyapp.presentation.generated.resources.class_nomade_bonus_1
 import fitversejourneyapp.presentation.generated.resources.class_nomade_bonus_2

@@ -1,6 +1,6 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+﻿@file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.example.presentation.ui.helpSupport
+package org.fitverse.presentation.ui.helpSupport
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -46,11 +46,11 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.presentation.widgets.FitverseScreenTitle
-import com.example.presentation.widgets.FitverseTopAppBar
-import com.example.presentation.widgets.SectionLabel
-import com.example.presentation.theme.FitverseColors
-import com.example.presentation.theme.ShapeCard
+import org.fitverse.presentation.widgets.FitverseScreenTitle
+import org.fitverse.presentation.widgets.FitverseTopAppBar
+import org.fitverse.presentation.widgets.SectionLabel
+import org.fitverse.presentation.theme.FitColors
+import org.fitverse.presentation.theme.ShapeCard
 
 // ── Models ────────────────────────────────────────────────────────────────────
 
@@ -99,7 +99,7 @@ fun SupportScreen(onBack: () -> Unit, modifier: Modifier = Modifier) {
 
     Scaffold(
         modifier = modifier,
-        containerColor = FitverseColors.Bg,
+        containerColor = FitColors.Bg,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = {
             FitverseTopAppBar(
@@ -111,7 +111,7 @@ fun SupportScreen(onBack: () -> Unit, modifier: Modifier = Modifier) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(FitverseColors.Bg)
+                .background(FitColors.Bg)
                 .padding(paddingValues),
             contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp),
         ) {
@@ -143,20 +143,20 @@ private fun QuickGuideCard(steps: List<QuickStep>) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .border(1.dp, FitverseColors.Border, ShapeCard)
+            .border(1.dp, FitColors.Border, ShapeCard)
             .clip(ShapeCard)
-            .background(FitverseColors.Surface)
+            .background(FitColors.Surface)
             .padding(14.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Text("✦", color = FitverseColors.Accent, fontSize = 12.sp)
+            Text("✦", color = FitColors.Accent, fontSize = 12.sp)
             Spacer(Modifier.width(6.dp))
             Text(
                 text          = "GUIA RÁPIDO",
                 fontSize      = 11.sp,
                 fontWeight    = FontWeight.ExtraBold,
                 letterSpacing = 0.8.sp,
-                color         = FitverseColors.Accent,
+                color         = FitColors.Accent,
             )
         }
         Spacer(Modifier.height(12.dp))
@@ -176,22 +176,22 @@ private fun QuickStepRow(step: QuickStep) {
             modifier = Modifier
                 .size(22.dp)
                 .clip(CircleShape)
-                .background(FitverseColors.PurpleDim)
-                .border(1.dp, FitverseColors.Purple, CircleShape),
+                .background(FitColors.PurpleDim)
+                .border(1.dp, FitColors.Purple, CircleShape),
             contentAlignment = Alignment.Center,
         ) {
             Text(
                 text       = step.number.toString(),
                 fontSize   = 11.sp,
                 fontWeight = FontWeight.Bold,
-                color      = FitverseColors.Purple,
+                color      = FitColors.Purple,
             )
         }
         Spacer(Modifier.width(10.dp))
         Text(
             text     = step.text,
             fontSize = 13.sp,
-            color    = FitverseColors.TextPrimary,
+            color    = FitColors.TextPrimary,
         )
     }
 }
@@ -210,11 +210,11 @@ private fun FaqRow(
             .fillMaxWidth()
             .border(
                 width  = 1.dp,
-                color  = if (isExpanded) FitverseColors.Border2 else FitverseColors.Border,
+                color  = if (isExpanded) FitColors.Border2 else FitColors.Border,
                 shape  = ShapeCard,
             )
             .clip(ShapeCard)
-            .background(FitverseColors.Surface)
+            .background(FitColors.Surface)
             .clickable(onClick = onClick),
     ) {
         Row(
@@ -228,13 +228,13 @@ private fun FaqRow(
                 text       = item.question,
                 fontSize   = 13.sp,
                 fontWeight = FontWeight.Medium,
-                color      = FitverseColors.TextPrimary,
+                color      = FitColors.TextPrimary,
                 modifier   = Modifier.weight(1f),
             )
             Icon(
                 imageVector        = Icons.Default.ChevronRight,
                 contentDescription = null,
-                tint               = FitverseColors.TextMuted,
+                tint               = FitColors.TextMuted,
                 modifier           = Modifier
                     .size(18.dp)
                     .rotate(if (isExpanded) 90f else 0f),
@@ -247,11 +247,11 @@ private fun FaqRow(
             exit    = fadeOut(tween(150)) + shrinkVertically(tween(200)),
         ) {
             Column {
-                HorizontalDivider(color = FitverseColors.Border, thickness = 1.dp)
+                HorizontalDivider(color = FitColors.Border, thickness = 1.dp)
                 Text(
                     text     = item.answer,
                     fontSize = 13.sp,
-                    color    = FitverseColors.TextMuted,
+                    color    = FitColors.TextMuted,
                     lineHeight = 19.sp,
                     modifier = Modifier.padding(14.dp),
                 )

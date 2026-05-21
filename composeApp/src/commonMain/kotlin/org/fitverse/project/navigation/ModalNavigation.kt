@@ -151,7 +151,7 @@ fun ModalDrawerSheetMainScreen(
                     MenuCardContainer {
                         ActionRow("Devices", Icons.Rounded.Devices, colors) { onNavigate(NavRoutes.Devices) }
                         ActionRow("Help", Icons.AutoMirrored.Rounded.Help, colors) { onNavigate(NavRoutes.HelpSupport) }
-                        ActionRow("Language", Icons.Rounded.Language, colors) { onNavigate(NavRoutes.HelpSupport) }
+                        ActionRow("Language", Icons.Rounded.Language, colors) { onNavigate(NavRoutes.Language) }
                     }
 
                     Spacer(modifier = Modifier.height(24.dp))

@@ -1,10 +1,10 @@
-package com.example.local.datasource.achievements
+﻿package org.fitverse.data.local.datasource.achievements
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
-import com.example.domain.repository.dbLocal.sqldelight.achievements.AchievementDao
-import com.example.domain.repository.dbLocal.sqldelight.achievements.AchievementRecord
-import com.journey.database.AppDatabase.AppDatabase
+import org.fitverse.domain.repository.dbLocal.sqldelight.achievements.AchievementDao
+import org.fitverse.domain.repository.dbLocal.sqldelight.achievements.AchievementRecord
+import com.journey.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
@@ -13,7 +13,7 @@ import kotlinx.coroutines.withContext
 
 class AchievementDaoImpl(database: AppDatabase) : AchievementDao {
 
-    private val queries = database.appDatabaseQueries
+    private val queries = database.achievementEntityQueries
 
     override fun observeAchievementsByUser(userId: String): Flow<List<AchievementRecord>> =
         queries.selectAllAchievementsByUser(userId)
@@ -78,7 +78,7 @@ class AchievementDaoImpl(database: AppDatabase) : AchievementDao {
 
     // ── Mapper ────────────────────────────────────────────────────────────────
 
-    private fun com.journey.database.migrations.AchievementEntity.toRecord() = AchievementRecord(
+    private fun com.journey.achievement.AchievementEntity.toRecord() = AchievementRecord(
         id          = id,
         userId      = userId,
         icon        = icon,

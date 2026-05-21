@@ -1,6 +1,6 @@
-package com.example.local.datasource.token
+﻿package org.fitverse.data.local.datasource.token
 
-import com.example.domain.models.token.TokenProvider
+import org.fitverse.domain.models.token.TokenProvider
 import com.russhwolf.settings.Settings
 
 

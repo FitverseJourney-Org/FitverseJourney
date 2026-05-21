@@ -1,4 +1,4 @@
-package com.example.presentation.ui.dashboard.util
+﻿package org.fitverse.presentation.ui.dashboard.util
 
 data class StreakState(
     val totalStreakCount: Int = 0,

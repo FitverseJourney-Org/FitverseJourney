@@ -1,9 +1,9 @@
-package org.fitverse.project.destinations.modal_destinations.device
+﻿package org.fitverse.project.destinations.modal_destinations.device
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavKey
-import com.example.presentation.ui.device.DevicesScreen
+import org.fitverse.presentation.ui.device.DevicesScreen
 
 @Composable
 fun DevicesDestination(toBack: () -> NavKey?, modifier: Modifier) {

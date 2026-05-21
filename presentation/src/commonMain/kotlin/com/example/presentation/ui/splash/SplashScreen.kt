@@ -1,4 +1,4 @@
-package com.example.presentation.ui.splash
+﻿package org.fitverse.presentation.ui.splash
 
 import androidx.compose.animation.core.EaseOut
 import androidx.compose.animation.core.animateFloatAsState

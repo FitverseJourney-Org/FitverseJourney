@@ -1,4 +1,4 @@
-package com.example.presentation.widgets
+﻿package org.fitverse.presentation.widgets
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -30,7 +30,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.presentation.theme.DarkGamifiedColors
+import org.fitverse.presentation.theme.FitColors
 
 @Composable
 fun FitverseIconStreak(
@@ -43,7 +43,7 @@ fun FitverseIconStreak(
         shape = RoundedCornerShape(16.dp),
         // Usando transparência para o efeito de vidro
         color = cs.surface.copy(alpha = 0.6f),
-        border = BorderStroke(1.dp, DarkGamifiedColors.PrimarySoft.copy(alpha = 0.2f)),
+        border = BorderStroke(1.dp, FitColors.AccentContainer.copy(alpha = 0.2f)),
         modifier = Modifier.height(48.dp)
     ) {
         Row(
@@ -81,7 +81,7 @@ fun FitverseIconNotifications(
         onClick = { onNotificationsClick() },
         shape = RoundedCornerShape(16.dp),
         color = cs.surface.copy(alpha = 0.6f),
-        border = BorderStroke(1.dp, DarkGamifiedColors.PrimarySoft.copy(alpha = 0.2f)),
+        border = BorderStroke(1.dp, FitColors.AccentContainer.copy(alpha = 0.2f)),
         modifier = Modifier.size(48.dp)
     ) {
         Box(contentAlignment = Alignment.Center) {

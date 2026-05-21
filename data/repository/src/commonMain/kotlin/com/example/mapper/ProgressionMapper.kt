@@ -1,8 +1,8 @@
-package com.example.mapper
+﻿package org.fitverse.data.repository.mapper
 
-import com.example.domain.expect.toPlatformDate
-import com.example.domain.models.progression.LoadProgressionPoint
-import com.example.remote.dto.progression.ProgressionPointDto
+import org.fitverse.domain.expect.toPlatformDate
+import org.fitverse.domain.models.progression.LoadProgressionPoint
+import org.fitverse.data.remote.dto.progression.ProgressionPointDto
 
 /**
  * Funções de extensão para conversão [ProgressionPointDto] ↔ [LoadProgressionPoint].

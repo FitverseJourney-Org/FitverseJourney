@@ -1,4 +1,4 @@
-package com.example.domain.models.user
+﻿package org.fitverse.domain.models.user
 
 enum class Objetivo {
     PERDER_PESO,

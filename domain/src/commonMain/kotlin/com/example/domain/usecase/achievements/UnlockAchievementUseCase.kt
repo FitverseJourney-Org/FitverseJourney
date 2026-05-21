@@ -1,7 +1,7 @@
-package com.example.domain.usecase.achievements
+﻿package org.fitverse.domain.usecase.achievements
 
-import com.example.domain.repository.authentication.AuthRepository
-import com.example.domain.repository.dbLocal.sqldelight.achievements.AchievementDao
+import org.fitverse.domain.repository.authentication.AuthRepository
+import org.fitverse.domain.repository.dbLocal.sqldelight.achievements.AchievementDao
 
 class UnlockAchievementUseCase(
     private val dao: AchievementDao,

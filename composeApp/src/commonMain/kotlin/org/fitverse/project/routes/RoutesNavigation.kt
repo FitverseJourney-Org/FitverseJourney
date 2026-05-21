@@ -34,10 +34,11 @@ sealed interface NavRoutes : NavKey {
 
         // Telas internas da Home
 
-        object SubFlow : NavRoutes {
-            @Serializable data object AddPost            : NavRoutes
-            @Serializable data object Notification : NavRoutes
-            @Serializable data object UserLevelUp        : NavRoutes
+        @Serializable data object SubFlow : NavRoutes {
+            @Serializable data object AddPost                            : NavRoutes
+            @Serializable data object Notification                       : NavRoutes
+            @Serializable data object UserLevelUp                        : NavRoutes
+            @Serializable data class  GroupHome(val groupName: String)   : NavRoutes
         }
     }
 
@@ -65,7 +66,7 @@ sealed interface NavRoutes : NavKey {
     }
 
     // ── Nutrition sub-screens ─────────────────────────────────
-    @Serializable data class NutritionAddManualFood(val mealName: String) : NavRoutes
+    @Serializable data class NutritionAddManualFood(val mealId: String, val mealName: String) : NavRoutes
 
     // ── Telas avulsas ─────────────────────────────────────────
     @Serializable data object Shopping         : NavRoutes
@@ -78,4 +79,5 @@ sealed interface NavRoutes : NavKey {
     @Serializable data object Progress         : NavRoutes
     @Serializable data object Achievements     : NavRoutes
     @Serializable data object HelpSupport      : NavRoutes
+    @Serializable data object Language         : NavRoutes
 }

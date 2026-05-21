@@ -1,12 +1,12 @@
-package com.example.repository
+﻿package org.fitverse.data.repository
 
-import com.example.domain.models.user.User
-import com.example.domain.repository.dbLocal.sqldelight.user.UserRepository
-import com.example.local.datasource.user.UserLocalDataSource
-import com.example.local.mapper.user.UserEntityMapper
-import com.example.remote.datasource.user.UserRemoteDataSource
-import com.example.remote.expect.NetworkMonitor
-import com.example.remote.mapper.user.UserDtoMapper
+import org.fitverse.domain.models.user.User
+import org.fitverse.domain.repository.dbLocal.sqldelight.user.UserRepository
+import org.fitverse.data.local.datasource.user.UserLocalDataSource
+import org.fitverse.data.local.mapper.user.UserEntityMapper
+import org.fitverse.data.remote.datasource.user.UserRemoteDataSource
+import org.fitverse.data.remote.expect.NetworkMonitor
+import org.fitverse.data.remote.mapper.user.UserDtoMapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -25,14 +25,15 @@ class UserRepositoryImpl(
     private val remoteDataSource: UserRemoteDataSource,
     private val entityMapper: UserEntityMapper,
     private val dtoMapper: UserDtoMapper,
-    private val networkMonitor: NetworkMonitor,  // ← authRepository removido
+    private val networkMonitor: NetworkMonitor,
 ) : UserRepository {
 
-    // ✅ busca local primeiro, fallback remoto
+    // local-first; se remoto falha mas cache existe, usa cache (suporta backend offline)
     override suspend fun getUser(userId: String): User {
         val local = localDataSource.getUser(userId)
         if (local != null) return entityMapper.mapEntityToDomain(local)
 
+        // Sem cache local: precisa do backend — propaga o erro para quem chamou
         val remote = remoteDataSource.getUserById(userId)
         val user   = dtoMapper.mapDtoToDomain(remote)
         localDataSource.insertUser(entityMapper.mapDomainToEntity(user))
@@ -53,17 +54,23 @@ class UserRepositoryImpl(
 
     // ✅ local + remoto
     override suspend fun deleteUser(userId: String) {
-        localDataSource.deleteUser(userId)
+        localDataSource.deleteUser(userId = userId)
         if (networkMonitor.isConnected()) {
             remoteDataSource.deleteUser(userId)
         }
     }
 
     override suspend fun createUser(user: User) {
-        // ✅ salva no Firestore via remote
-        remoteDataSource.createUser(dtoMapper.mapDomainToRequestDto(user))
-        // ✅ salva local
-        localDataSource.insertUser(entityMapper.mapDomainToEntity(user))
+        // local-first: persiste localmente antes de tentar o backend
+        // se o backend estiver down, o dado fica disponível para login offline
+        localDataSource.insertUser(
+            entityMapper.mapDomainToEntity(domain = user)
+        )
+        runCatching {
+            remoteDataSource.createUser(
+                user = dtoMapper.mapDomainToRequestDto(domain = user)
+            )
+        }
     }
 
     // ✅ stream local mapeado

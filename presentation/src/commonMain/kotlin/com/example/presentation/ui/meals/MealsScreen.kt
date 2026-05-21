@@ -1,4 +1,4 @@
-package com.example.presentation.ui.meals
+﻿package org.fitverse.presentation.ui.meals
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.EaseIn
@@ -30,24 +30,25 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.rounded.Bedtime
-import androidx.compose.material.icons.rounded.Bolt
 import androidx.compose.material.icons.rounded.CameraAlt
 import androidx.compose.material.icons.rounded.ChevronRight
+import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.EmojiEvents
 import androidx.compose.material.icons.rounded.LocalFireDepartment
 import androidx.compose.material.icons.rounded.Restaurant
-import androidx.compose.material.icons.rounded.Spa
 import androidx.compose.material.icons.rounded.WaterDrop
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -59,6 +60,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -66,107 +69,126 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.presentation.theme.FitverseColors
-import com.example.presentation.ui.dashboard.components.SectionHeader
-import com.example.presentation.ui.workout.FitChip
+import org.fitverse.domain.repository.dbLocal.sqldelight.nutrition.DailyMacros
+import org.fitverse.domain.repository.dbLocal.sqldelight.nutrition.FoodItemRecord
+import org.fitverse.domain.repository.dbLocal.sqldelight.nutrition.MealEntryRecord
+import org.fitverse.presentation.theme.FitColors
+import org.fitverse.presentation.theme.FVTypography
+import org.fitverse.presentation.ui.dashboard.components.SectionHeader
+import org.fitverse.presentation.ui.meals.viewmodel.MealsIntent
+import org.fitverse.presentation.ui.meals.viewmodel.MealsUiState
+import org.fitverse.presentation.ui.workout.FitChip
 
-// ── Data ──────────────────────────────────────────────────────────────────────
-
-data class Meal(
-    val icon: ImageVector,
-    val name: String,
-    val foods: List<String>,
-    val kcal: Int,
-    val kcalGoal: Int,
-    val accentColor: Color,
-)
-
-private val meals = listOf(
-    Meal(Icons.Rounded.Bolt,        "Café da Manhã", listOf("Ovos mexidos (3)", "Pão integral", "Whey protein"), 420, 600, FitverseColors.Orange),
-    Meal(Icons.Rounded.Restaurant,  "Almoço",        listOf("Frango grelhado", "Arroz integral", "Salada"),       680, 800, FitverseColors.Green),
-    Meal(Icons.Rounded.Spa,         "Lanche",        listOf("Banana", "Pasta de amendoim"),                       280, 350, FitverseColors.Purple),
-    Meal(Icons.Rounded.Bedtime,     "Jantar",        listOf("Salmão", "Batata doce", "Brócolis"),                 520, 700, FitverseColors.Blue),
+private val mealAccentColors = listOf(
+    FitColors.Orange,
+    FitColors.Green,
+    FitColors.Purple,
+    FitColors.Blue,
+    FitColors.Accent,
 )
 
 // ── Screen ────────────────────────────────────────────────────────────────────
 
 @Composable
 fun MealsScreen(
+    uiState: MealsUiState,
+    onIntent: (MealsIntent) -> Unit,
     onBottomSheetOpen: (Boolean) -> Unit = {},
-    onNavigateToManualFood: (mealName: String) -> Unit = {},
+    onNavigateToManualFood: (mealId: String, mealName: String) -> Unit = { _, _ -> },
 ) {
-    var showAddSheet by remember { mutableStateOf(false) }
-    var selectedMeal by remember { mutableStateOf<Meal?>(null) }
+    var showAddFoodSheet by remember { mutableStateOf(false) }
+    var selectedMeal by remember { mutableStateOf<MealEntryRecord?>(null) }
+    var showCreateMealSheet by remember { mutableStateOf(false) }
 
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             contentWindowInsets = WindowInsets(0, 0, 0, 0),
             containerColor = Color.Transparent,
-            content = {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(10.dp),
-                ) {
-                    item { MealsHeader() }
-                    item { MacrosSummaryCard() }
-                    item { SectionHeader(title = "REFEIÇÕES DO DIA", actionText = "+ ADICIONAR") }
-                    items(meals) { meal ->
-                        MealCard(
-                            meal = meal,
-                            onAddFood = {
-                                selectedMeal = meal
-                                showAddSheet = true
-                                onBottomSheetOpen(true)
-                            },
-                        )
-                    }
+        ) {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+            ) {
+                item { MealsHeader(uiState.dailyMacros) }
+                item { MacrosSummaryCard(uiState.dailyMacros) }
+                item {
+                    SectionHeader(
+                        title = "REFEIÇÕES DO DIA",
+                        actionText = "+ ADICIONAR",
+                        onActionClick = { showCreateMealSheet = true },
+                    )
                 }
-
-                if (showAddSheet) {
-                    AddFoodBottomSheet(
-                        mealName  = selectedMeal?.name.orEmpty(),
-                        onCamera  = { showAddSheet = false; onBottomSheetOpen(false) },
-                        onCustom  = {
-                            val mealName = selectedMeal?.name.orEmpty()
-                            showAddSheet = false
-                            onBottomSheetOpen(false)
-                            onNavigateToManualFood(mealName)
+                if (uiState.meals.isEmpty() && !uiState.isLoading) {
+                    item { EmptyMealsPlaceholder { showCreateMealSheet = true } }
+                }
+                itemsIndexed(uiState.meals, key = { _, r -> r.id }) { index, record ->
+                    MealCard(
+                        record      = record,
+                        foods       = uiState.foodsByMeal[record.id].orEmpty(),
+                        accentColor = mealAccentColors[index % mealAccentColors.size],
+                        onAddFood   = {
+                            selectedMeal = record
+                            showAddFoodSheet = true
+                            onBottomSheetOpen(true)
                         },
-                        onDismiss = { showAddSheet = false; onBottomSheetOpen(false) },
+                        onDelete    = { onIntent(MealsIntent.DeleteMeal(record.id)) },
                     )
                 }
             }
-        )
+        }
+
+        if (showAddFoodSheet) {
+            AddFoodBottomSheet(
+                mealName  = selectedMeal?.name.orEmpty(),
+                onCamera  = { showAddFoodSheet = false; onBottomSheetOpen(false) },
+                onCustom  = {
+                    val id   = selectedMeal?.id.orEmpty()
+                    val name = selectedMeal?.name.orEmpty()
+                    showAddFoodSheet = false
+                    onBottomSheetOpen(false)
+                    onNavigateToManualFood(id, name)
+                },
+                onDismiss = { showAddFoodSheet = false; onBottomSheetOpen(false) },
+            )
+        }
+
+        if (showCreateMealSheet) {
+            CreateMealBottomSheet(
+                onConfirm = { name ->
+                    onIntent(MealsIntent.CreateMeal(name))
+                    showCreateMealSheet = false
+                },
+                onDismiss = { showCreateMealSheet = false },
+            )
+        }
     }
 }
 
 // ── Header ────────────────────────────────────────────────────────────────────
 
 @Composable
-private fun MealsHeader() {
+private fun MealsHeader(macros: DailyMacros?) {
+    val kcal = macros?.kcal ?: 0
     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Text(
-            "SEGUNDA-FEIRA",
-            color = FitverseColors.TextMuted,
-            fontSize = 11.sp,
-            fontWeight = FontWeight.Medium,
-            letterSpacing = 1.5.sp,
+            text  = "HOJE",
+            style = FVTypography.overlineLarge,
+            color = FitColors.TextMuted,
         )
         Text(
-            "NUTRIÇÃO",
-            color = FitverseColors.TextPrimary,
-            fontSize = 28.sp,
-            fontWeight = FontWeight.Black,
-            letterSpacing = (-0.5).sp,
+            text  = "NUTRIÇÃO",
+            style = FVTypography.displayLarge,
+            color = FitColors.TextPrimary,
         )
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            FitChip("1830 KCAL", FitverseColors.OrangeDim, textColor = FitverseColors.Orange)
-            FitChip("76% META",  FitverseColors.AccentDim,  textColor = FitverseColors.Accent)
+            FitChip("$kcal KCAL", FitColors.OrangeDim, textColor = FitColors.Orange)
         }
     }
 }
@@ -174,16 +196,20 @@ private fun MealsHeader() {
 // ── Macros summary card ───────────────────────────────────────────────────────
 
 @Composable
-private fun MacrosSummaryCard() {
+private fun MacrosSummaryCard(macros: DailyMacros?) {
+    val kcal    = macros?.kcal?.toInt() ?: 0
+    val protein = macros?.protein?.toFloat() ?: 0f
+    val carbs   = macros?.carbs?.toFloat() ?: 0f
+    val fat     = macros?.fat?.toFloat() ?: 0f
+
     Box(
         modifier = Modifier
-            .border(1.dp, FitverseColors.Accent.copy(alpha = 0.20f), RoundedCornerShape(20.dp))
+            .border(1.dp, FitColors.Accent.copy(alpha = 0.20f), RoundedCornerShape(20.dp))
             .fillMaxWidth()
             .clip(RoundedCornerShape(20.dp))
-            .background(FitverseColors.SurfaceCard),
+            .background(FitColors.SurfaceModal),
     ) {
         Column {
-            // Accent gradient top strip
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -192,9 +218,9 @@ private fun MacrosSummaryCard() {
                         Brush.horizontalGradient(
                             listOf(
                                 Color.Transparent,
-                                FitverseColors.Accent.copy(alpha = 0.6f),
-                                FitverseColors.Accent,
-                                FitverseColors.Accent.copy(alpha = 0.6f),
+                                FitColors.Accent.copy(alpha = 0.6f),
+                                FitColors.Accent,
+                                FitColors.Accent.copy(alpha = 0.6f),
                                 Color.Transparent,
                             )
                         )
@@ -204,8 +230,8 @@ private fun MacrosSummaryCard() {
             Column(modifier = Modifier.padding(20.dp)) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     CalorieRing(
-                        calories = 1830,
-                        total    = 2400,
+                        calories = kcal,
+                        total    = 2000,
                         modifier = Modifier.size(110.dp),
                     )
 
@@ -216,26 +242,24 @@ private fun MacrosSummaryCard() {
                         verticalArrangement = Arrangement.spacedBy(10.dp),
                     ) {
                         Text(
-                            "MACROS DO DIA",
-                            color = FitverseColors.TextMuted,
-                            fontSize = 10.sp,
-                            fontWeight = FontWeight.SemiBold,
-                            letterSpacing = 1.sp,
+                            text  = "MACROS DO DIA",
+                            style = FVTypography.overline,
+                            color = FitColors.TextMuted,
                         )
-                        MacroRow("Proteína",     168f, 180f, "g", FitverseColors.Accent)
-                        MacroRow("Carboidratos", 210f, 250f, "g", FitverseColors.Blue)
-                        MacroRow("Gorduras",      68f,  80f, "g", FitverseColors.Purple)
+                        MacroRow("Proteína",     protein, "g", FitColors.Accent)
+                        MacroRow("Carboidratos", carbs,   "g", FitColors.Blue)
+                        MacroRow("Gorduras",     fat,     "g", FitColors.Purple)
                     }
                 }
 
                 Spacer(Modifier.height(16.dp))
-                HorizontalDivider(color = FitverseColors.Border, thickness = 0.5.dp)
+                HorizontalDivider(color = FitColors.Border, thickness = 0.5.dp)
                 Spacer(Modifier.height(14.dp))
 
                 Row(Modifier.fillMaxWidth(), Arrangement.SpaceAround) {
-                    NutritionStat(Icons.Rounded.WaterDrop,          "2.4L",    "Água",     FitverseColors.Blue)
-                    NutritionStat(Icons.Rounded.LocalFireDepartment, "570kcal", "Restante", FitverseColors.Orange)
-                    NutritionStat(Icons.Rounded.EmojiEvents,         "76%",     "Meta",     FitverseColors.Accent)
+                    NutritionStat(Icons.Rounded.LocalFireDepartment, "${kcal}kcal",          "Consumido", FitColors.Orange)
+                    NutritionStat(Icons.Rounded.WaterDrop,           "${protein.toInt()}g",  "Proteína",  FitColors.Accent)
+                    NutritionStat(Icons.Rounded.EmojiEvents,         "${carbs.toInt()}g",    "Carbos",    FitColors.Blue)
                 }
             }
         }
@@ -246,55 +270,33 @@ private fun MacrosSummaryCard() {
 
 @Composable
 fun CalorieRing(calories: Int, total: Int, modifier: Modifier = Modifier) {
+    val progress = if (total > 0) (calories.toFloat() / total).coerceIn(0f, 1f) else 0f
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
         Canvas(Modifier.fillMaxSize()) {
             val sw   = 10.dp.toPx()
             val half = sw / 2f
             val r    = Rect(half, half, size.width - half, size.height - half)
-            drawArc(FitverseColors.Surface2, -90f, 360f, false, r.topLeft, r.size, style = Stroke(sw, cap = StrokeCap.Round))
-            drawArc(FitverseColors.Accent,   -90f, 360f * calories / total, false, r.topLeft, r.size, style = Stroke(sw, cap = StrokeCap.Round))
+            drawArc(FitColors.Surface2, -90f, 360f, false, r.topLeft, r.size, style = Stroke(sw, cap = StrokeCap.Round))
+            drawArc(FitColors.Accent,   -90f, 360f * progress, false, r.topLeft, r.size, style = Stroke(sw, cap = StrokeCap.Round))
         }
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("$calories", color = FitverseColors.TextPrimary, fontSize = 22.sp, fontWeight = FontWeight.Black)
-            Text("kcal",      color = FitverseColors.TextMuted,   fontSize = 11.sp)
-            Text("de $total", color = FitverseColors.TextMuted,   fontSize = 10.sp)
+            Text(text = "$calories", style = FVTypography.monoLarge, color = FitColors.TextPrimary)
+            Text(text = "kcal",      style = FVTypography.labelMedium, color = FitColors.TextMuted)
         }
     }
 }
 
-// ── Macro progress row ────────────────────────────────────────────────────────
+// ── Macro row ─────────────────────────────────────────────────────────────────
 
 @Composable
-fun MacroRow(label: String, current: Float, goal: Float, unit: String, color: Color) {
-    val progress = (current / goal).coerceIn(0f, 1f)
-    val animated by animateFloatAsState(
-        targetValue   = progress,
-        animationSpec = tween(600, easing = EaseOut),
-        label         = "macro_$label",
-    )
-    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+fun MacroRow(label: String, value: Float, unit: String, color: Color) {
+    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
         Row(Modifier.fillMaxWidth(), Arrangement.SpaceBetween) {
-            Text(label, color = FitverseColors.TextMuted, fontSize = 12.sp)
+            Text(text = label, style = FVTypography.bodySmall, color = FitColors.TextMuted)
             Text(
-                "${current.toInt()}/${goal.toInt()}$unit",
-                color      = color,
-                fontSize   = 12.sp,
-                fontWeight = FontWeight.SemiBold,
-            )
-        }
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(3.dp)
-                .clip(RoundedCornerShape(2.dp))
-                .background(FitverseColors.Surface2),
-        ) {
-            Box(
-                Modifier
-                    .fillMaxHeight()
-                    .fillMaxWidth(animated)
-                    .clip(RoundedCornerShape(2.dp))
-                    .background(color),
+                text  = "${value.toInt()}$unit",
+                style = FVTypography.titleSmall,
+                color = color,
             )
         }
     }
@@ -308,26 +310,23 @@ private fun NutritionStat(icon: ImageVector, value: String, label: String, color
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = null,
-            tint = color,
-            modifier = Modifier.size(16.dp),
-        )
-        Text(value, color = color, fontSize = 16.sp, fontWeight = FontWeight.Bold)
-        Text(label, color = FitverseColors.TextMuted, fontSize = 11.sp)
+        Icon(imageVector = icon, contentDescription = null, tint = color, modifier = Modifier.size(16.dp))
+        Text(text = value, style = FVTypography.headlineSmall, color = color)
+        Text(text = label, style = FVTypography.labelMedium,   color = FitColors.TextMuted)
     }
 }
 
-// ── Meal card ─────────────────────────────────────────────────────────────────
+// ── Meal card (real data) ─────────────────────────────────────────────────────
 
 @Composable
 fun MealCard(
-    meal: Meal,
+    record: MealEntryRecord,
+    foods: List<FoodItemRecord> = emptyList(),
+    accentColor: Color,
     onAddFood: () -> Unit,
+    onDelete: () -> Unit,
     defaultExpanded: Boolean = false,
 ) {
-    val cs = MaterialTheme.colorScheme
     var expanded by remember { mutableStateOf(defaultExpanded) }
 
     val chevronRotation by animateFloatAsState(
@@ -336,21 +335,17 @@ fun MealCard(
         label         = "chevron",
     )
 
-    val mealProgress = (meal.kcal.toFloat() / meal.kcalGoal).coerceIn(0f, 1f)
-
     Column(
         modifier = Modifier
             .border(1.dp, Color(0xFF2a2a35), RoundedCornerShape(20.dp))
             .fillMaxWidth()
             .clip(RoundedCornerShape(20.dp))
-            .background(cs.surface)
+            .background(MaterialTheme.colorScheme.surface)
             .clickable { expanded = !expanded },
     ) {
         // ── Header ────────────────────────────────────────────
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 14.dp),
+            modifier              = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 14.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment     = Alignment.CenterVertically,
         ) {
@@ -358,14 +353,14 @@ fun MealCard(
                 modifier = Modifier
                     .size(44.dp)
                     .clip(RoundedCornerShape(12.dp))
-                    .background(meal.accentColor.copy(alpha = 0.10f))
-                    .border(1.dp, meal.accentColor.copy(alpha = 0.25f), RoundedCornerShape(12.dp)),
+                    .background(accentColor.copy(alpha = 0.10f))
+                    .border(1.dp, accentColor.copy(alpha = 0.25f), RoundedCornerShape(12.dp)),
                 contentAlignment = Alignment.Center,
-            ) {
+            ){
                 Icon(
-                    imageVector        = meal.icon,
+                    imageVector        = Icons.Rounded.Restaurant,
                     contentDescription = null,
-                    tint               = meal.accentColor,
+                    tint               = accentColor,
                     modifier           = Modifier.size(22.dp),
                 )
             }
@@ -373,42 +368,39 @@ fun MealCard(
             Spacer(Modifier.width(12.dp))
 
             Column(Modifier.weight(1f)) {
-                Text(meal.name,           color = FitverseColors.TextPrimary, fontSize = 15.sp, fontWeight = FontWeight.SemiBold)
-                Text("${meal.kcal} kcal", color = FitverseColors.TextMuted,   fontSize = 12.sp)
+                Text(text = record.name,               style = FVTypography.titleLarge, color = FitColors.TextPrimary)
+                Text(text = "${record.totalKcal} kcal", style = FVTypography.bodySmall,  color = FitColors.TextMuted)
             }
 
-            Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(meal.accentColor.copy(alpha = 0.10f))
-                    .border(1.dp, meal.accentColor.copy(alpha = 0.20f), RoundedCornerShape(8.dp))
-                    .padding(horizontal = 8.dp, vertical = 4.dp),
-            ) {
-                Text(
-                    "${((meal.kcal.toFloat() / meal.kcalGoal) * 100).toInt()}%",
-                    color      = meal.accentColor,
-                    fontSize   = 11.sp,
-                    fontWeight = FontWeight.Bold,
-                )
-            }
+            Icon(
+                imageVector        = Icons.Rounded.Delete,
+                contentDescription = "Excluir",
+                tint               = FitColors.TextDisabled,
+                modifier           = Modifier.size(18.dp).clickable(
+                    indication        = null,
+                    interactionSource = remember { MutableInteractionSource() },
+                    onClick           = onDelete,
+                ),
+            )
 
-            Spacer(Modifier.width(8.dp))
+            Spacer(Modifier.width(10.dp))
 
             Icon(
                 imageVector        = Icons.Rounded.ChevronRight,
                 contentDescription = null,
-                tint               = FitverseColors.TextMuted2,
+                tint               = FitColors.TextDisabled,
                 modifier           = Modifier.size(20.dp).rotate(chevronRotation),
             )
         }
 
-        // Calorie progress bar (always visible)
-        Box(modifier = Modifier.fillMaxWidth().height(2.dp).background(FitverseColors.Surface2)) {
+        // Progress strip
+        val progress = if (record.totalKcal > 0) (record.totalKcal.toFloat() / 600f).coerceIn(0f, 1f) else 0f
+        Box(modifier = Modifier.fillMaxWidth().height(2.dp).background(FitColors.Surface2)) {
             Box(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .fillMaxWidth(mealProgress)
-                    .background(meal.accentColor.copy(alpha = 0.75f)),
+                    .fillMaxWidth(progress)
+                    .background(accentColor.copy(alpha = 0.75f)),
             )
         }
 
@@ -423,70 +415,254 @@ fun MealCard(
 
                 Row(Modifier.fillMaxWidth(), Arrangement.SpaceBetween, Alignment.CenterVertically) {
                     Text(
-                        "ALIMENTOS",
-                        color         = meal.accentColor,
-                        fontSize      = 10.sp,
-                        fontWeight    = FontWeight.Bold,
-                        letterSpacing = 0.8.sp,
+                        text  = "ALIMENTOS",
+                        style = FVTypography.overline,
+                        color = accentColor,
                     )
-                    Text(
-                        "${meal.kcal} / ${meal.kcalGoal} kcal",
-                        color    = FitverseColors.TextMuted,
-                        fontSize = 11.sp,
-                    )
-                }
-
-                Spacer(Modifier.height(10.dp))
-
-                if (meal.foods.isEmpty()) {
-                    Text(
-                        "Nenhum alimento registrado",
-                        color     = FitverseColors.TextMuted,
-                        fontSize  = 13.sp,
-                        modifier  = Modifier.fillMaxWidth().padding(vertical = 8.dp),
-                        textAlign = TextAlign.Center,
-                    )
-                } else {
-                    meal.foods.forEach { food ->
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier          = Modifier.padding(vertical = 5.dp),
-                        ) {
-                            Box(Modifier.size(6.dp).clip(CircleShape).background(meal.accentColor))
-                            Spacer(Modifier.width(10.dp))
-                            Text(food, color = FitverseColors.TextMuted, fontSize = 13.sp)
-                        }
+                    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                        MacroChip("P ${record.totalProtein.toInt()}g", FitColors.Accent)
+                        MacroChip("C ${record.totalCarbs.toInt()}g",   FitColors.Blue)
+                        MacroChip("G ${record.totalFat.toInt()}g",     FitColors.Purple)
                     }
                 }
 
                 Spacer(Modifier.height(12.dp))
 
+                if (foods.isNotEmpty()) {
+                    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        foods.forEach { food ->
+                            FoodItemRow(food = food, accentColor = accentColor)
+                        }
+                    }
+                    Spacer(Modifier.height(10.dp))
+                }
+
                 Row(
-                    modifier = Modifier
+                    modifier              = Modifier
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(10.dp))
-                        .background(meal.accentColor.copy(alpha = 0.08f))
-                        .border(1.dp, meal.accentColor.copy(alpha = 0.15f), RoundedCornerShape(10.dp))
+                        .background(accentColor.copy(alpha = 0.08f))
+                        .border(1.dp, accentColor.copy(alpha = 0.15f), RoundedCornerShape(10.dp))
                         .clickable(onClick = onAddFood)
                         .padding(vertical = 11.dp),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment     = Alignment.CenterVertically,
                 ) {
-                    Icon(
-                        Icons.Default.Add,
-                        contentDescription = null,
-                        tint     = meal.accentColor,
-                        modifier = Modifier.size(16.dp),
-                    )
+                    Icon(Icons.Default.Add, contentDescription = null, tint = accentColor, modifier = Modifier.size(16.dp))
                     Spacer(Modifier.width(6.dp))
-                    Text(
-                        "Adicionar alimento",
-                        color      = meal.accentColor,
-                        fontSize   = 13.sp,
-                        fontWeight = FontWeight.SemiBold,
-                    )
+                    Text(text = "Adicionar alimento", style = FVTypography.titleMedium, color = accentColor)
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun FoodItemRow(food: FoodItemRecord, accentColor: Color) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(10.dp))
+            .background(FitColors.Surface2)
+            .padding(horizontal = 12.dp, vertical = 10.dp),
+        verticalAlignment     = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+    ) {
+        Box(
+            modifier = Modifier
+                .size(6.dp)
+                .clip(androidx.compose.foundation.shape.CircleShape)
+                .background(accentColor),
+        )
+        Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+            Text(
+                text  = food.name,
+                style = FVTypography.titleMedium,
+                color = FitColors.TextPrimary,
+            )
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(text = "${food.portion.toInt()} ${food.unit}", style = FVTypography.labelMedium, color = FitColors.TextMuted)
+                Text(text = "·", style = FVTypography.labelMedium, color = FitColors.TextDisabled)
+                Text(text = "P ${food.protein.toInt()}g", style = FVTypography.labelLarge, color = FitColors.Accent)
+                Text(text = "C ${food.carbs.toInt()}g",   style = FVTypography.labelLarge, color = FitColors.Blue)
+                Text(text = "G ${food.fat.toInt()}g",     style = FVTypography.labelLarge, color = FitColors.Purple)
+            }
+        }
+        Text(
+            text  = "${food.kcal} kcal",
+            style = FVTypography.monoSmall.copy(fontWeight = FontWeight.Bold),
+            color = accentColor,
+        )
+    }
+}
+
+@Composable
+private fun MacroChip(text: String, color: Color) {
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(6.dp))
+            .background(color.copy(alpha = 0.10f))
+            .padding(horizontal = 6.dp, vertical = 2.dp),
+    ) {
+        Text(text = text, style = FVTypography.overline.copy(fontWeight = FontWeight.SemiBold), color = color)
+    }
+}
+
+// ── Empty state ───────────────────────────────────────────────────────────────
+
+@Composable
+private fun EmptyMealsPlaceholder(onCreateMeal: () -> Unit) {
+    Column(
+        modifier            = Modifier.fillMaxWidth().padding(vertical = 32.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Icon(
+            imageVector        = Icons.Rounded.Restaurant,
+            contentDescription = null,
+            tint               = FitColors.TextDisabled,
+            modifier           = Modifier.size(48.dp),
+        )
+        Text(
+            text  = "Nenhuma refeição ainda",
+            style = FVTypography.titleLarge,
+            color = FitColors.TextMuted,
+        )
+        Text(
+            text      = "Crie sua primeira refeição\ncom o nome que preferir",
+            style     = FVTypography.bodyMedium,
+            color     = FitColors.TextDisabled,
+            textAlign = TextAlign.Center,
+        )
+        Box(
+            modifier = Modifier
+                .clip(RoundedCornerShape(12.dp))
+                .background(FitColors.Accent.copy(alpha = 0.12f))
+                .border(1.dp, FitColors.Accent.copy(alpha = 0.25f), RoundedCornerShape(12.dp))
+                .clickable(onClick = onCreateMeal)
+                .padding(horizontal = 20.dp, vertical = 10.dp),
+        ) {
+            Text(text = "+ Nova refeição", style = FVTypography.bodyLarge.copy(fontWeight = FontWeight.Bold), color = FitColors.Accent)
+        }
+    }
+}
+
+// ── Create meal bottom sheet ──────────────────────────────────────────────────
+
+@Composable
+fun CreateMealBottomSheet(
+    onConfirm: (String) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    var name by remember { mutableStateOf("") }
+    val focusRequester = remember { FocusRequester() }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black.copy(alpha = 0.6f))
+            .clickable(
+                indication        = null,
+                interactionSource = remember { MutableInteractionSource() },
+                onClick           = onDismiss,
+            ),
+        contentAlignment = Alignment.BottomCenter,
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(
+                    indication        = null,
+                    interactionSource = remember { MutableInteractionSource() },
+                    onClick           = {},
+                )
+                .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
+                .background(FitColors.Surface)
+                .padding(horizontal = 20.dp, vertical = 24.dp),
+        ) {
+            Box(
+                modifier = Modifier
+                    .width(36.dp)
+                    .height(4.dp)
+                    .clip(RoundedCornerShape(2.dp))
+                    .background(FitColors.Border2)
+                    .align(Alignment.CenterHorizontally),
+            )
+
+            Spacer(Modifier.height(20.dp))
+
+            Text(
+                text  = "Nova refeição",
+                style = FVTypography.headlineMedium,
+                color = FitColors.TextPrimary,
+            )
+            Spacer(Modifier.height(4.dp))
+            Text(
+                text  = "Dê um nome para sua refeição",
+                style = FVTypography.bodyMedium,
+                color = FitColors.TextMuted,
+            )
+
+            Spacer(Modifier.height(20.dp))
+
+            OutlinedTextField(
+                value         = name,
+                onValueChange = { name = it },
+                modifier      = Modifier.fillMaxWidth().focusRequester(focusRequester),
+                placeholder   = { Text("Ex: Pré-treino, Jantar tardio...", color = FitColors.TextDisabled, fontSize = 14.sp) },
+                singleLine    = true,
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Sentences,
+                    imeAction      = ImeAction.Done,
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = { if (name.isNotBlank()) onConfirm(name) }
+                ),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor   = FitColors.Accent,
+                    unfocusedBorderColor = FitColors.Border2,
+                    focusedTextColor     = FitColors.TextPrimary,
+                    unfocusedTextColor   = FitColors.TextPrimary,
+                    cursorColor          = FitColors.Accent,
+                ),
+                shape = RoundedCornerShape(14.dp),
+            )
+
+            Spacer(Modifier.height(16.dp))
+
+            Row(
+                modifier              = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+            ) {
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(FitColors.Surface2)
+                        .clickable(onClick = onDismiss)
+                        .padding(vertical = 14.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text("Cancelar", color = FitColors.TextMuted, fontWeight = FontWeight.SemiBold)
+                }
+
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(
+                            if (name.isNotBlank()) FitColors.Accent
+                            else FitColors.Accent.copy(alpha = 0.3f)
+                        )
+                        .clickable(enabled = name.isNotBlank()) { onConfirm(name) }
+                        .padding(vertical = 14.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text("Criar refeição", color = Color.Black, fontWeight = FontWeight.Bold)
+                }
+            }
+
+            Spacer(Modifier.height(8.dp))
         }
     }
 }
@@ -520,47 +696,34 @@ fun AddFoodBottomSheet(
                     onClick           = {},
                 )
                 .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp))
-                .background(FitverseColors.Surface)
+                .background(FitColors.Surface)
                 .padding(horizontal = 20.dp, vertical = 24.dp),
         ) {
-            // Handle
             Box(
                 modifier = Modifier
                     .width(36.dp)
                     .height(4.dp)
                     .clip(RoundedCornerShape(2.dp))
-                    .background(FitverseColors.Border2)
+                    .background(FitColors.Border2)
                     .align(Alignment.CenterHorizontally),
             )
 
             Spacer(Modifier.height(20.dp))
 
-            Text(
-                "Adicionar alimento",
-                color      = FitverseColors.TextPrimary,
-                fontSize   = 17.sp,
-                fontWeight = FontWeight.Bold,
-            )
+            Text(text = "Adicionar alimento", style = FVTypography.headlineMedium, color = FitColors.TextPrimary)
             Spacer(Modifier.height(4.dp))
-            Text(
-                "Em: $mealName",
-                color    = FitverseColors.TextMuted,
-                fontSize = 13.sp,
-            )
+            Text(text = "Em: $mealName", style = FVTypography.bodyMedium, color = FitColors.TextMuted)
 
             Spacer(Modifier.height(20.dp))
 
-            Row(
-                modifier              = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 AddFoodOption(
                     modifier    = Modifier.weight(1f),
                     icon        = Icons.Rounded.CameraAlt,
                     title       = "Via Câmera",
                     description = "IA identifica o alimento automaticamente",
                     badgeLabel  = "✦ IA",
-                    accentColor = FitverseColors.Green,
+                    accentColor = FitColors.Green,
                     onClick     = onCamera,
                 )
                 AddFoodOption(
@@ -569,7 +732,7 @@ fun AddFoodBottomSheet(
                     title       = "Personalizado",
                     description = "Insira nome, calorias e macros manualmente",
                     badgeLabel  = "Manual",
-                    accentColor = FitverseColors.Purple,
+                    accentColor = FitColors.Purple,
                     onClick     = onCustom,
                 )
             }
@@ -593,7 +756,7 @@ private fun AddFoodOption(
         modifier = modifier
             .clip(RoundedCornerShape(16.dp))
             .border(1.dp, accentColor.copy(alpha = 0.25f), RoundedCornerShape(16.dp))
-            .background(FitverseColors.SurfaceCard)
+            .background(FitColors.SurfaceModal)
             .clickable(onClick = onClick)
             .padding(16.dp),
     ) {
@@ -605,31 +768,20 @@ private fun AddFoodOption(
                 .border(1.dp, accentColor.copy(alpha = 0.25f), RoundedCornerShape(12.dp)),
             contentAlignment = Alignment.Center,
         ) {
-            Icon(
-                imageVector        = icon,
-                contentDescription = null,
-                tint               = accentColor,
-                modifier           = Modifier.size(22.dp),
-            )
+            Icon(imageVector = icon, contentDescription = null, tint = accentColor, modifier = Modifier.size(22.dp))
         }
-
         Spacer(Modifier.height(12.dp))
-
-        Text(title, color = accentColor, fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
-
+        Text(text = title, style = FVTypography.titleMedium.copy(fontWeight = FontWeight.SemiBold, fontSize = 14.sp), color = accentColor)
         Spacer(Modifier.height(4.dp))
-
-        Text(description, color = FitverseColors.TextMuted, fontSize = 11.sp, lineHeight = 15.sp)
-
+        Text(text = description, style = FVTypography.labelMedium, color = FitColors.TextMuted)
         Spacer(Modifier.height(10.dp))
-
         Box(
             modifier = Modifier
                 .clip(RoundedCornerShape(20.dp))
                 .background(accentColor.copy(alpha = 0.12f))
                 .padding(horizontal = 8.dp, vertical = 3.dp),
         ) {
-            Text(badgeLabel, color = accentColor, fontSize = 10.sp, fontWeight = FontWeight.SemiBold)
+            Text(text = badgeLabel, style = FVTypography.overline.copy(fontWeight = FontWeight.SemiBold), color = accentColor)
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.example.presentation.ui.onboarding.components
+﻿package org.fitverse.presentation.ui.onboarding.components
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas

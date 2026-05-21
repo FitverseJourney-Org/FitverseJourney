@@ -1,4 +1,4 @@
-package com.example.domain.models.wiki
+﻿package org.fitverse.domain.models.wiki
 
 /**
  * Representa as categorias disponíveis na Wiki Global.

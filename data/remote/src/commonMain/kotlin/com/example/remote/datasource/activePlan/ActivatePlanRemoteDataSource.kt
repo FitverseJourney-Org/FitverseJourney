@@ -1,6 +1,6 @@
-package com.example.remote.datasource.activePlan
+﻿package org.fitverse.data.remote.datasource.activePlan
 
-import com.example.domain.models.plan.PlanId
+import org.fitverse.domain.models.PlanId
 
 interface ActivatePlanRemoteDataSource {
     suspend fun activatePlan(planId: PlanId): Result<Unit>

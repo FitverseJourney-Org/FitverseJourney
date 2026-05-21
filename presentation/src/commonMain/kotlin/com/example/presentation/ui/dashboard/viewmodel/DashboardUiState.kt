@@ -1,7 +1,7 @@
-package com.example.presentation.ui.dashboard.viewmodel
+﻿package org.fitverse.presentation.ui.dashboard.viewmodel
 
-import com.example.presentation.ui.dashboard.DailyMission
-import com.example.presentation.widgets.StreakDay
+import org.fitverse.presentation.ui.dashboard.DailyMission
+import org.fitverse.presentation.widgets.StreakDay
 
 data class DashboardUiState(
     val username: String = "Athlete",

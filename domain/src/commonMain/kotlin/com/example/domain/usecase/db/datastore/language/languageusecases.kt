@@ -1,6 +1,6 @@
-package com.example.domain.usecase.db.datastore.language
+﻿package org.fitverse.domain.usecase.db.datastore.language
 
-import com.example.domain.repository.dbLocal.datastore.AppLanguageRepository
+import org.fitverse.domain.repository.dbLocal.datastore.AppLanguageRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 

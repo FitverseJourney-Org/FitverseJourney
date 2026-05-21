@@ -1,4 +1,4 @@
-package com.example.remote
+﻿package org.fitverse.data.remote
 
 import kotlin.test.Test
 import kotlin.test.assertEquals

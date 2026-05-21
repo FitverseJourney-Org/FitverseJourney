@@ -1,13 +1,13 @@
-package com.example.presentation.ui.wiki.viewmodel
+﻿package org.fitverse.presentation.ui.wiki.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.models.wiki.WikiCategory
-import com.example.presentation.ui.wiki.state.WikiUiEvent
-import com.example.presentation.ui.wiki.state.WikiUiState
-import com.example.domain.usecase.wiki.GetWikiArticlesUseCase
-import com.example.domain.usecase.wiki.SearchWikiArticlesUseCase
-import com.example.domain.usecase.wiki.ToggleBookmarkUseCase
+import org.fitverse.domain.models.wiki.WikiCategory
+import org.fitverse.presentation.ui.wiki.state.WikiUiEvent
+import org.fitverse.presentation.ui.wiki.state.WikiUiState
+import org.fitverse.domain.usecase.wiki.GetWikiArticlesUseCase
+import org.fitverse.domain.usecase.wiki.SearchWikiArticlesUseCase
+import org.fitverse.domain.usecase.wiki.ToggleBookmarkUseCase
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow

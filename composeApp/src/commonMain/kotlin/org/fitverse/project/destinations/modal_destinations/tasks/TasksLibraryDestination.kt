@@ -1,13 +1,13 @@
-package org.fitverse.project.destinations.modal_destinations.tasks
+﻿package org.fitverse.project.destinations.modal_destinations.tasks
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.presentation.ui.tasks.TaskLibraryScreen
-import com.example.presentation.ui.tasks.viewmodel.TasksEvent
-import com.example.presentation.ui.tasks.viewmodel.TasksIntent
-import com.example.presentation.ui.tasks.viewmodel.TasksViewModel
+import org.fitverse.presentation.ui.tasks.TaskLibraryScreen
+import org.fitverse.presentation.ui.tasks.viewmodel.TasksEvent
+import org.fitverse.presentation.ui.tasks.viewmodel.TasksIntent
+import org.fitverse.presentation.ui.tasks.viewmodel.TasksViewModel
 
 @Composable
 fun TasksLibraryDestination(

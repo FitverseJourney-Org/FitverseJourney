@@ -1,4 +1,4 @@
-package com.example.domain.models.friends
+﻿package org.fitverse.domain.models.friends
 
 /**
  * Eventos de UI (user interactions)

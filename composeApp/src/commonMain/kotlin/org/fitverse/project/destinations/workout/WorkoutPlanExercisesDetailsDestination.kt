@@ -1,10 +1,10 @@
-package org.fitverse.project.destinations.workout
+﻿package org.fitverse.project.destinations.workout
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.FitnessCenter
 import androidx.compose.runtime.Composable
-import com.example.domain.models.workout.workout_plan.ExerciseLibraryItem
-import com.example.presentation.ui.planWorkout.WorkoutPLanExerciseDetailsScreen
+import org.fitverse.domain.models.workout.workout_plan.ExerciseLibraryItem
+import org.fitverse.presentation.ui.workoutPlan.WorkoutPLanExerciseDetailsScreen
 
 @Composable
 fun WorkoutPlanExercisesDetailsDestination(

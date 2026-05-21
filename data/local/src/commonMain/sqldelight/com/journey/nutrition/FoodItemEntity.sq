@@ -1,0 +1,54 @@
+-- ============================================================
+-- FOOD_ITEM — Alimentos individuais dentro de uma refeição
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS FoodItemEntity (
+    id      TEXT    NOT NULL PRIMARY KEY,
+    mealId  TEXT    NOT NULL,
+    name    TEXT    NOT NULL,
+    portion REAL    NOT NULL DEFAULT 100.0,  -- quantidade
+    unit    TEXT    NOT NULL DEFAULT 'g',    -- g, ml, unidade, colher...
+    kcal    INTEGER NOT NULL DEFAULT 0,
+    protein REAL    NOT NULL DEFAULT 0.0,
+    carbs   REAL    NOT NULL DEFAULT 0.0,
+    fat     REAL    NOT NULL DEFAULT 0.0
+);
+
+CREATE INDEX IF NOT EXISTS idx_food_item_meal
+    ON FoodItemEntity(mealId);
+
+-- ── Queries ───────────────────────────────────────────────────────────────────
+
+selectFoodsByMeal:
+SELECT * FROM FoodItemEntity WHERE mealId = ? ORDER BY rowid;
+
+selectFoodById:
+SELECT * FROM FoodItemEntity WHERE id = ?;
+
+insertFood:
+INSERT OR REPLACE INTO FoodItemEntity(
+    id, mealId, name, portion, unit, kcal, protein, carbs, fat
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+updateFood:
+UPDATE FoodItemEntity
+SET name = ?, portion = ?, unit = ?, kcal = ?, protein = ?, carbs = ?, fat = ?
+WHERE id = ?;
+
+deleteFood:
+DELETE FROM FoodItemEntity WHERE id = ?;
+
+deleteFoodsByMeal:
+DELETE FROM FoodItemEntity WHERE mealId = ?;
+
+deleteFoodsByUserBeforeDate:
+DELETE FROM FoodItemEntity
+WHERE mealId IN (SELECT id FROM MealEntryEntity WHERE userId = ? AND date < ?);
+
+sumMacrosByMeal:
+SELECT
+    COALESCE(SUM(kcal),    0)   AS totalKcal,
+    COALESCE(SUM(protein), 0.0) AS totalProtein,
+    COALESCE(SUM(carbs),   0.0) AS totalCarbs,
+    COALESCE(SUM(fat),     0.0) AS totalFat
+FROM FoodItemEntity WHERE mealId = ?;

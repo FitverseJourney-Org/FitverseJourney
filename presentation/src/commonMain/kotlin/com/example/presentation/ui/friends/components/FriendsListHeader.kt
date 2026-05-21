@@ -1,4 +1,4 @@
-package com.example.presentation.ui.friends.components
+﻿package org.fitverse.presentation.ui.friends.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -20,7 +20,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.domain.models.friends.SortOrder
+import org.fitverse.domain.models.friends.SortOrder
 import fitversejourneyapp.presentation.generated.resources.Res
 import fitversejourneyapp.presentation.generated.resources.cd_sort_ascending
 import fitversejourneyapp.presentation.generated.resources.cd_sort_descending

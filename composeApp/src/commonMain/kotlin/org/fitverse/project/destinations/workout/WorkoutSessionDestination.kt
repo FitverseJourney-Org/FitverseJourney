@@ -1,9 +1,9 @@
-package org.fitverse.project.destinations.workout
+﻿package org.fitverse.project.destinations.workout
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.presentation.ui.workout.WorkoutCompletionResult
-import com.example.presentation.ui.workout.WorkoutSessionScreen
+import org.fitverse.presentation.ui.workout.WorkoutCompletionResult
+import org.fitverse.presentation.ui.workout.WorkoutSessionScreen
 
 @Composable
 fun WorkoutSessionDestination(

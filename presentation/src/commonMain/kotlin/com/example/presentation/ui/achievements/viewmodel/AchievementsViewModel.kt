@@ -1,12 +1,12 @@
-package com.example.presentation.ui.achievements.viewmodel
+﻿package org.fitverse.presentation.ui.achievements.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.repository.authentication.AuthRepository
-import com.example.domain.repository.dbLocal.sqldelight.achievements.AchievementDao
-import com.example.domain.repository.dbLocal.sqldelight.achievements.AchievementRecord
-import com.example.presentation.ui.achievements.Achievement
-import com.example.presentation.ui.achievements.AchievementsData
+import org.fitverse.domain.repository.authentication.AuthRepository
+import org.fitverse.domain.repository.dbLocal.sqldelight.achievements.AchievementDao
+import org.fitverse.domain.repository.dbLocal.sqldelight.achievements.AchievementRecord
+import org.fitverse.presentation.ui.achievements.Achievement
+import org.fitverse.presentation.ui.achievements.AchievementsData
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

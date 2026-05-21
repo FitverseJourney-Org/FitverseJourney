@@ -1,4 +1,4 @@
-package com.example.presentation.components.snackbar
+﻿package org.fitverse.presentation.components.snackbar
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -38,7 +38,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.isUnspecified
-import com.example.domain.models.snackbar.SnackbarType
+import org.fitverse.domain.models.snackbar.SnackbarType
 
 // Supondo que SnackbarType já exista no seu projeto
 

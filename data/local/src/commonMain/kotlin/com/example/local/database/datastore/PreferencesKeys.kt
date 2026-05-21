@@ -1,4 +1,4 @@
-package com.example.local.database.datastore
+﻿package org.fitverse.data.local.database.datastore
 
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey

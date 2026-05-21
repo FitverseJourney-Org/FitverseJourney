@@ -1,6 +1,6 @@
-package com.example.domain.repository.dbLocal.sqldelight.user
+﻿package org.fitverse.domain.repository.dbLocal.sqldelight.user
 
-import com.example.domain.models.user.User
+import org.fitverse.domain.models.user.User
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {

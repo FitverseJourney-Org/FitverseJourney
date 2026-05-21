@@ -1,4 +1,4 @@
-package com.example.domain.models.dashboard
+﻿package org.fitverse.domain.models.dashboard
 
 import androidx.compose.runtime.Immutable
 

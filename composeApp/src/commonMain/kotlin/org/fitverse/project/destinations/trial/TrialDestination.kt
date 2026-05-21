@@ -1,4 +1,4 @@
-package org.fitverse.project.destinations.trial
+﻿package org.fitverse.project.destinations.trial
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -6,9 +6,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.presentation.ui.trial.TrialIntroScreen
-import com.example.presentation.ui.trial.event.TrialEvent
-import com.example.presentation.ui.trial.viewmodel.TrialViewModel
+import org.fitverse.presentation.ui.trial.TrialIntroScreen
+import org.fitverse.presentation.ui.trial.event.TrialEvent
+import org.fitverse.presentation.ui.trial.viewmodel.TrialViewModel
 
 @Composable
 fun TrialDestination(

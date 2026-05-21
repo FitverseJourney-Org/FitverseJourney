@@ -1,4 +1,4 @@
-package com.example.presentation.widgets
+﻿package org.fitverse.presentation.widgets
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.presentation.theme.FitverseColors
+import org.fitverse.presentation.theme.FitColors
 
 @Composable
 fun FitverseScreenTitle(
@@ -21,14 +21,14 @@ fun FitverseScreenTitle(
         Text(
             text       = title.uppercase(),
             fontSize   = 36.sp,
-            color      = FitverseColors.TextPrimary,
+            color      = FitColors.TextPrimary,
         )
         if (subtitle != null) {
             Spacer(Modifier.height(4.dp))
             Text(
                 text  = subtitle,
                 style = MaterialTheme.typography.bodyMedium,
-                color = FitverseColors.TextMuted,
+                color = FitColors.TextMuted,
             )
         }
     }

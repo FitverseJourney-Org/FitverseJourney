@@ -1,9 +1,9 @@
-package com.example.presentation.ui.progress
+﻿package org.fitverse.presentation.ui.progress
 
 import androidx.compose.runtime.Immutable
-import com.example.domain.models.progression.Exercise
-import com.example.domain.models.progression.ProgressionInsight
-import com.example.domain.models.progression.ProgressionStats
+import org.fitverse.domain.models.progression.Exercise
+import org.fitverse.domain.models.progression.ProgressionInsight
+import org.fitverse.domain.models.progression.ProgressionStats
 import ir.ehsannarmani.compose_charts.models.Line
 
 /**

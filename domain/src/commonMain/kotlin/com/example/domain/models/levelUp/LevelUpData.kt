@@ -1,4 +1,4 @@
-package com.example.domain.models.levelUp
+﻿package org.fitverse.domain.models.levelUp
 
 /**
  * All the data needed to render the LevelUp celebration screen.

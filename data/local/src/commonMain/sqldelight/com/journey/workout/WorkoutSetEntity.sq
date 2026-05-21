@@ -1,0 +1,59 @@
+-- ============================================================
+-- WORKOUT_SET — Séries individuais de cada sessão
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS WorkoutSetEntity (
+    id           TEXT    NOT NULL PRIMARY KEY,
+    sessionId    TEXT    NOT NULL,
+    exerciseName TEXT    NOT NULL,
+    muscleGroup  TEXT    NOT NULL DEFAULT '',
+    setNumber    INTEGER NOT NULL DEFAULT 1,
+    reps         INTEGER NOT NULL DEFAULT 0,
+    weight       REAL    NOT NULL DEFAULT 0.0,  -- kg
+    isPR         INTEGER NOT NULL DEFAULT 0,    -- 0/1 boolean
+    rpe          INTEGER,                       -- Rate of Perceived Exertion 1-10, nullable
+    notes        TEXT    NOT NULL DEFAULT ''
+);
+
+CREATE INDEX IF NOT EXISTS idx_workout_set_session
+    ON WorkoutSetEntity(sessionId);
+
+CREATE INDEX IF NOT EXISTS idx_workout_set_exercise
+    ON WorkoutSetEntity(exerciseName);
+
+-- ── Queries ───────────────────────────────────────────────────────────────────
+
+selectSetsBySession:
+SELECT * FROM WorkoutSetEntity
+WHERE sessionId = ?
+ORDER BY exerciseName, setNumber;
+
+selectSetsByExercise:
+SELECT * FROM WorkoutSetEntity
+WHERE exerciseName = ?
+ORDER BY rowid DESC;
+
+selectPRsByExercise:
+SELECT * FROM WorkoutSetEntity
+WHERE exerciseName = ? AND isPR = 1
+ORDER BY weight DESC
+LIMIT 1;
+
+selectMaxWeightByExercise:
+SELECT MAX(weight) FROM WorkoutSetEntity WHERE exerciseName = ?;
+
+insertSet:
+INSERT OR REPLACE INTO WorkoutSetEntity(
+    id, sessionId, exerciseName, muscleGroup,
+    setNumber, reps, weight, isPR, rpe, notes
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+deleteSetsBySession:
+DELETE FROM WorkoutSetEntity WHERE sessionId = ?;
+
+deleteSet:
+DELETE FROM WorkoutSetEntity WHERE id = ?;
+
+countPRsInSession:
+SELECT COUNT(*) FROM WorkoutSetEntity
+WHERE sessionId = ? AND isPR = 1;

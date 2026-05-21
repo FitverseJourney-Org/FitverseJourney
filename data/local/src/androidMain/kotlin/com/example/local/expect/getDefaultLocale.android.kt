@@ -1,4 +1,4 @@
-package com.example.local.expect
+﻿package org.fitverse.data.local.expect
 
 import java.util.Locale
 

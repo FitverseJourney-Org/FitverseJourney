@@ -1,9 +1,9 @@
-package org.fitverse.project.destinations.modal_destinations.progress
+﻿package org.fitverse.project.destinations.modal_destinations.progress
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.presentation.ui.progress.ProgressionRoot
-import com.example.presentation.ui.progress.viewmodel.ProgressViewModel
+import org.fitverse.presentation.ui.progress.ProgressionRoot
+import org.fitverse.presentation.ui.progress.viewmodel.ProgressViewModel
 
 @Composable
 fun ProgressDestination(

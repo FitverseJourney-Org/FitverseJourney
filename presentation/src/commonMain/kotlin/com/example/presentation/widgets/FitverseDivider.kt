@@ -1,4 +1,4 @@
-package com.example.presentation.widgets
+﻿package org.fitverse.presentation.widgets
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -12,7 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.presentation.theme.FitverseColors
+import org.fitverse.presentation.theme.FitColors
 
 
 // ── Horizontal divider with label ─────────────────────────────────────────────
@@ -26,19 +26,19 @@ fun FitverseDivider(label: String, modifier: Modifier = Modifier) {
     ) {
         HorizontalDivider(
             modifier  = Modifier.weight(1f),
-            color     = FitverseColors.Border,
+            color     = FitColors.Border,
             thickness = 1.dp,
         )
         Text(
             text     = label.uppercase(),
             modifier = Modifier.padding(horizontal = 12.dp),
             style    = MaterialTheme.typography.labelSmall,
-            color    = FitverseColors.TextMuted,
+            color    = FitColors.TextMuted,
             letterSpacing = 0.8.sp,
         )
         HorizontalDivider(
             modifier  = Modifier.weight(1f),
-            color     = FitverseColors.Border,
+            color     = FitColors.Border,
             thickness = 1.dp,
         )
     }

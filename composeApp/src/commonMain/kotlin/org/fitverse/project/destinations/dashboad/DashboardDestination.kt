@@ -1,8 +1,8 @@
-package org.fitverse.project.destinations.dashboad
+﻿package org.fitverse.project.destinations.dashboad
 
 import androidx.compose.runtime.Composable
-import com.example.presentation.ui.dashboard.DashboardRoot
-import com.example.presentation.ui.dashboard.viewmodel.DashboardViewModel
+import org.fitverse.presentation.ui.dashboard.DashboardRoot
+import org.fitverse.presentation.ui.dashboard.viewmodel.DashboardViewModel
 
 @Composable
 fun DashboardDestination(

@@ -1,4 +1,4 @@
-package com.example.presentation.ui.authentication.register.pages
+﻿package org.fitverse.presentation.ui.authentication.register.pages
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box

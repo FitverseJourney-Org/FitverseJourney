@@ -1,2 +1,2 @@
-package com.example.presentation.ui.authentication.login.components
+﻿package org.fitverse.presentation.ui.authentication.login.components
 

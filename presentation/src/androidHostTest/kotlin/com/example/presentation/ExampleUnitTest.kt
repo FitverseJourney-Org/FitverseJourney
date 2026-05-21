@@ -1,4 +1,4 @@
-package com.example.presentation
+﻿package org.fitverse.presentation
 
 import kotlin.test.Test
 import kotlin.test.assertEquals

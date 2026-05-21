@@ -1,8 +1,8 @@
-package com.example.local.mapper.progression
+﻿package org.fitverse.data.local.mapper.progression
 
-import com.example.domain.expect.toPlatformDate
-import com.example.domain.models.progression.LoadProgressionPoint
-import com.example.local.model.ProgressionPointEntity
+import org.fitverse.domain.expect.toPlatformDate
+import org.fitverse.domain.models.progression.LoadProgressionPoint
+import org.fitverse.data.local.model.ProgressionPointEntity
 import kotlin.jvm.JvmName
 
 // ── Entity → Domain (local → domínio) ────────────────────────────────────────

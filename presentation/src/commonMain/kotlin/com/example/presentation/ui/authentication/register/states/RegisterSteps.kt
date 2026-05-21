@@ -1,4 +1,4 @@
-package com.example.presentation.ui.authentication.register.states
+﻿package org.fitverse.presentation.ui.authentication.register.states
 
 
 enum class RegisterStep(

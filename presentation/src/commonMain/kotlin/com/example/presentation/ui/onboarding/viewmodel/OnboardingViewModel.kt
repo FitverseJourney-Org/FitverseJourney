@@ -1,10 +1,10 @@
-package com.example.presentation.ui.onboarding.viewmodel
+﻿package org.fitverse.presentation.ui.onboarding.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.usecase.db.datastore.onboarding.SetOnboardingCompletedUseCase
-import com.example.presentation.navigationState.OnboardingNavigation
-import com.example.presentation.ui.onboarding.state.OnboardingState
+import org.fitverse.domain.usecase.db.datastore.onboarding.SetOnboardingCompletedUseCase
+import org.fitverse.presentation.navigationState.OnboardingNavigation
+import org.fitverse.presentation.ui.onboarding.state.OnboardingState
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

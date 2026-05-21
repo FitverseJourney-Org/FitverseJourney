@@ -1,6 +1,6 @@
-package com.example.domain.usecase.db.datastore.onboarding
+﻿package org.fitverse.domain.usecase.db.datastore.onboarding
 
-import com.example.domain.repository.dbLocal.datastore.AppOnboardingRepository
+import org.fitverse.domain.repository.dbLocal.datastore.AppOnboardingRepository
 import kotlinx.coroutines.flow.Flow
 
 class ObserveOnboardingCompletedUseCase(

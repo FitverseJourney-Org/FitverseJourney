@@ -1,4 +1,4 @@
-package com.example.presentation.ui.profile
+﻿package org.fitverse.presentation.ui.profile
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -1,0 +1,66 @@
+-- WorkoutPlan.sq
+-- Tabela principal do plano de treino do usuário
+
+CREATE TABLE WorkoutPlan (
+    id                  TEXT    NOT NULL PRIMARY KEY,
+    name                TEXT    NOT NULL,
+    is_active           INTEGER NOT NULL DEFAULT 0,         -- Boolean: 0 = false, 1 = true
+    creation_type       TEXT    NOT NULL,                   -- Enum: PlanCreationType (ex: "MANUAL", "AI")
+    days_per_week       INTEGER NOT NULL,
+    exercises_count     INTEGER NOT NULL DEFAULT 0,
+    weeks_count         INTEGER                             -- NULL = infinito (∞ na UI)
+);
+
+-- ─────────────────────────────────────────────
+-- Queries de escrita
+-- ─────────────────────────────────────────────
+
+insertWorkoutPlan:
+INSERT OR REPLACE INTO WorkoutPlan (
+    id,
+    name,
+    is_active,
+    creation_type,
+    days_per_week,
+    exercises_count,
+    weeks_count
+) VALUES (?, ?, ?, ?, ?, ?, ?);
+
+updateWorkoutPlan:
+UPDATE WorkoutPlan
+SET
+    name            = ?,
+    is_active       = ?,
+    creation_type   = ?,
+    days_per_week   = ?,
+    exercises_count = ?,
+    weeks_count     = ?
+WHERE id = ?;
+
+setActivePlan:
+UPDATE WorkoutPlan SET is_active = 1 WHERE id = ?;
+
+deactivateAllPlans:
+UPDATE WorkoutPlan SET is_active = 0;
+
+deleteWorkoutPlan:
+DELETE FROM WorkoutPlan WHERE id = ?;
+
+deleteAllWorkoutPlans:
+DELETE FROM WorkoutPlan;
+
+-- ─────────────────────────────────────────────
+-- Queries de leitura
+-- ─────────────────────────────────────────────
+
+selectAll:
+SELECT * FROM WorkoutPlan ORDER BY is_active DESC;
+
+selectById:
+SELECT * FROM WorkoutPlan WHERE id = ?;
+
+selectActivePlan:
+SELECT * FROM WorkoutPlan WHERE is_active = 1 LIMIT 1;
+
+countPlans:
+SELECT COUNT(*) FROM WorkoutPlan;

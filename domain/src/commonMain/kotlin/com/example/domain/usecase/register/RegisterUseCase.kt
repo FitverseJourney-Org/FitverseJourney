@@ -1,9 +1,9 @@
-package com.example.domain.usecase.register
+﻿package org.fitverse.domain.usecase.register
 
-import com.example.domain.models.user.User
-import com.example.domain.repository.authentication.AuthRepository
-import com.example.domain.repository.dbLocal.datastore.AppAuthenticateRepository
-import com.example.domain.repository.dbLocal.sqldelight.user.UserRepository
+import org.fitverse.domain.models.user.User
+import org.fitverse.domain.repository.authentication.AuthRepository
+import org.fitverse.domain.repository.dbLocal.datastore.AppAuthenticateRepository
+import org.fitverse.domain.repository.dbLocal.sqldelight.user.UserRepository
 
 class RegisterUseCase(
     private val authRepository: AuthRepository,
@@ -16,9 +16,12 @@ class RegisterUseCase(
         userData: User,
     ): Result<Unit> = runCatching {
         val authResult = authRepository.register(email, password)
-        appAuthenticateRepository.saveToken(authResult.token)
-        appAuthenticateRepository.setIsAuthenticated(true)
-        val userWithUid = userData.copy(uid = authResult.uid)
+        val uid = authResult.getOrThrow().uid
+        val userWithUid = userData.copy(uid = uid)
         userRepository.createUser(userWithUid)
+        // Token só é salvo após createUser ter êxito — garante que o User
+        // existe localmente antes de marcar a sessão como autenticada.
+        appAuthenticateRepository.saveToken(uid)
+        appAuthenticateRepository.setIsAuthenticated(true)
     }
 }

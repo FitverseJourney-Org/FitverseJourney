@@ -1,10 +1,10 @@
-package com.example.presentation.ui.achievements.viewmodel
+﻿package org.fitverse.presentation.ui.achievements.viewmodel
 
-import com.example.domain.repository.dbLocal.sqldelight.achievements.AchievementRecord
-import com.example.presentation.ui.achievements.Achievement
-import com.example.presentation.ui.achievements.AchievementCategory
-import com.example.presentation.ui.achievements.AchievementRarity
-import com.example.presentation.ui.achievements.AchievementStatus
+import org.fitverse.domain.repository.dbLocal.sqldelight.achievements.AchievementRecord
+import org.fitverse.presentation.ui.achievements.Achievement
+import org.fitverse.presentation.ui.achievements.AchievementCategory
+import org.fitverse.presentation.ui.achievements.AchievementRarity
+import org.fitverse.presentation.ui.achievements.AchievementStatus
 
 data class AchievementsUiState(
     val achievements: List<Achievement> = emptyList(),

@@ -1,4 +1,4 @@
-package com.example.presentation.ui.authentication.resetPassword
+﻿package org.fitverse.presentation.ui.authentication.resetPassword
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
@@ -39,14 +39,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.presentation.ui.authentication.login.components.FitverseOutlinedTextField
-import com.example.presentation.ui.authentication.register.components.RegisterBackButton
-import com.example.presentation.ui.authentication.resetPassword.states.ResetPasswordIntent
-import com.example.presentation.ui.authentication.resetPassword.states.ResetPasswordState
-import com.example.presentation.theme.FitverseColors
-import com.example.presentation.theme.RegisterDimens
-import com.example.presentation.widgets.FitVerseSpacer
-import com.example.presentation.widgets.FitverseButton
+import org.fitverse.presentation.ui.authentication.login.components.FitverseOutlinedTextField
+import org.fitverse.presentation.ui.authentication.register.components.RegisterBackButton
+import org.fitverse.presentation.ui.authentication.resetPassword.states.ResetPasswordAction
+import org.fitverse.presentation.ui.authentication.resetPassword.states.ResetPasswordState
+import org.fitverse.presentation.theme.FitColors
+import org.fitverse.presentation.theme.RegisterDimens
+import org.fitverse.presentation.widgets.FitVerseSpacer
+import org.fitverse.presentation.widgets.FitverseButton
 import fitversejourneyapp.presentation.generated.resources.Res
 import fitversejourneyapp.presentation.generated.resources.reset_button_send
 import fitversejourneyapp.presentation.generated.resources.reset_email_label
@@ -87,8 +87,8 @@ fun ResetPasswordScreen(
     ResetPasswordScreenContent(
         state = state,
         snackbarHost = snackbarHost,
-        onIntent = { intent ->
-            if (intent == ResetPasswordIntent.BtnBack) onNavigateBack() else viewmodel.onIntent(intent)
+        onIntent = { action ->
+            if (action == ResetPasswordAction.BtnBack) onNavigateBack() else viewmodel.onAction(action)
         }
     )
 }
@@ -98,7 +98,7 @@ fun ResetPasswordScreen(
 fun ResetPasswordScreenContent(
     state    : ResetPasswordState,
     snackbarHost: SnackbarHostState,
-    onIntent : (ResetPasswordIntent) -> Unit,
+    onIntent : (ResetPasswordAction) -> Unit,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -117,26 +117,26 @@ fun ResetPasswordScreenContent(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 RegisterBackButton(
-                    onBack = { onIntent(ResetPasswordIntent.BtnBack) }
+                    onBack = { onIntent(ResetPasswordAction.BtnBack) }
                 )
             }
         },
         snackbarHost = {
             SnackbarHost(hostState = snackbarHost) { data ->
                 Snackbar(
-                    snackbarData     = data,
-                    containerColor   = if (state.snackbarEvent?.isError == true)
+                    snackbarData   = data,
+                    containerColor = if (state.snackBarData?.type == org.fitverse.domain.models.snackbar.SnackbarType.ERROR)
                         MaterialTheme.colorScheme.errorContainer
                     else
                         MaterialTheme.colorScheme.primaryContainer,
-                    contentColor     = if (state.snackbarEvent?.isError == true)
+                    contentColor   = if (state.snackBarData?.type == org.fitverse.domain.models.snackbar.SnackbarType.ERROR)
                         MaterialTheme.colorScheme.onErrorContainer
                     else
                         MaterialTheme.colorScheme.onPrimaryContainer,
                 )
             }
         },
-        containerColor = FitverseColors.Bg,
+        containerColor = FitColors.Bg,
         content = { paddingValues ->
             AnimatedContent(
                 modifier = Modifier
@@ -188,7 +188,7 @@ fun ResetPasswordScreenContent(
                         Text(
                             text     = stringResource(Res.string.reset_success_subtitle),
                             fontSize = 16.sp,
-                            color    = FitverseColors.TextMuted,
+                            color    = FitColors.TextMuted,
                         )
                     }
                 } else {
@@ -207,7 +207,7 @@ fun ResetPasswordScreenContent(
                         Text(
                             text       = stringResource(Res.string.reset_title),
                             style      = MaterialTheme.typography.labelMedium,
-                            color      = FitverseColors.TextPrimary,
+                            color      = FitColors.TextPrimary,
                             fontWeight = FontWeight.Bold,
                             fontSize   = 28.sp,
                         )
@@ -217,7 +217,7 @@ fun ResetPasswordScreenContent(
                         Text(
                             text       = stringResource(Res.string.reset_subtitle),
                             fontSize   = 16.sp,
-                            color      = FitverseColors.TextMuted,
+                            color      = FitColors.TextMuted,
                             lineHeight = 19.sp,
                         )
 
@@ -226,7 +226,7 @@ fun ResetPasswordScreenContent(
                         FitverseOutlinedTextField(
                             value = state.email,
                             subtitle = stringResource(Res.string.reset_email_label),
-                            onValueChange = { onIntent(ResetPasswordIntent.EmailChanged(it)) },
+                            onValueChange = { onIntent(ResetPasswordAction.EmailChanged(it)) },
                             placeholder = stringResource(Res.string.reset_email_placeholder),
                             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
                             modifier = Modifier.fillMaxWidth(),
@@ -237,7 +237,7 @@ fun ResetPasswordScreenContent(
                         FitverseButton(
                             text = stringResource(Res.string.reset_button_send),
                             onClick = {
-                                onIntent(ResetPasswordIntent.BtnSubmit)
+                                onIntent(ResetPasswordAction.BtnSubmit)
                                 keyboardController?.hide()
                             },
                             enabled = state.email.isNotEmpty(),

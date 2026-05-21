@@ -1,3 +1,3 @@
-package com.example.local.expect
+﻿package org.fitverse.data.local.expect
 
 expect fun getDefaultLocale(): String

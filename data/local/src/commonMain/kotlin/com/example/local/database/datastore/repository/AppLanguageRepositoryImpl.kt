@@ -1,12 +1,12 @@
-package com.example.local.database.datastore.repository
+﻿package org.fitverse.data.local.database.datastore.repository
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.example.domain.repository.dbLocal.datastore.AppLanguageRepository
-import com.example.local.database.datastore.PreferencesKeys.APP_LANGUAGE
-import com.example.local.expect.getDefaultLocale
+import org.fitverse.domain.repository.dbLocal.datastore.AppLanguageRepository
+import org.fitverse.data.local.database.datastore.PreferencesKeys.APP_LANGUAGE
+import org.fitverse.data.local.expect.getDefaultLocale
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

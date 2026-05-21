@@ -1,6 +1,6 @@
-package com.example.local.di
+﻿package org.fitverse.data.local.di
 
-import com.example.local.datasource.token.TokenStorageImpl
+import org.fitverse.data.local.datasource.token.TokenStorageImpl
 import com.russhwolf.settings.ExperimentalSettingsImplementation
 import com.russhwolf.settings.KeychainSettings    // ← import correto iOS
 import com.russhwolf.settings.Settings

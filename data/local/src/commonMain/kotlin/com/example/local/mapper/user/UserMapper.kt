@@ -1,9 +1,9 @@
-package com.example.local.mapper.user
+﻿package org.fitverse.data.local.mapper.user
 
 
-import com.example.domain.models.user.User
-import com.example.local.mapper.EntityMapper
-import com.journey.database.migrations.UserEntity
+import org.fitverse.domain.models.user.User
+import org.fitverse.data.local.mapper.EntityMapper
+import com.journey.user.UserEntity
 
 /**
  * Mapper para User

@@ -1,4 +1,4 @@
-package com.example.presentation.ui.dashboard
+﻿package org.fitverse.presentation.ui.dashboard
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Bedtime
@@ -12,15 +12,15 @@ import androidx.compose.material.icons.rounded.Spa
 import androidx.compose.material.icons.rounded.WaterDrop
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.example.presentation.theme.FitverseColors
+import org.fitverse.presentation.theme.FitColors
 
 enum class MissionType(val icon: ImageVector, val color: Color) {
-    HYDRATION(Icons.Rounded.WaterDrop,      FitverseColors.Teal),
-    CARDIO(Icons.Rounded.DirectionsRun,     FitverseColors.Orange),
-    STRENGTH(Icons.Rounded.FitnessCenter,   FitverseColors.Accent),
-    NUTRITION(Icons.Rounded.Restaurant,     FitverseColors.Green),
-    STEPS(Icons.Rounded.DirectionsWalk,     FitverseColors.Amber),
-    CHALLENGE(Icons.Rounded.EmojiEvents,    FitverseColors.Amber),
+    HYDRATION(Icons.Rounded.WaterDrop,      FitColors.Teal),
+    CARDIO(Icons.Rounded.DirectionsRun,     FitColors.Orange),
+    STRENGTH(Icons.Rounded.FitnessCenter,   FitColors.Accent),
+    NUTRITION(Icons.Rounded.Restaurant,     FitColors.Green),
+    STEPS(Icons.Rounded.DirectionsWalk,     FitColors.Amber),
+    CHALLENGE(Icons.Rounded.EmojiEvents,    FitColors.Amber),
 }
 
 data class DailyMission(
