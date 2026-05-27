@@ -120,8 +120,14 @@ fun FitverseRootNavigation(
                         rootBackStack.add(NavRoutes.HomeFlow)
                     },
                     onNavigateToLogin = {
-                        rootBackStack.clear()
-                        rootBackStack.add(NavRoutes.AuthFlow)
+                        // If HomeFlow is already in the stack the user opened the trial
+                        // from inside the app — just pop back instead of logging out.
+                        if (rootBackStack.any { it == NavRoutes.HomeFlow }) {
+                            rootBackStack.removeLastOrNull()
+                        } else {
+                            rootBackStack.clear()
+                            rootBackStack.add(NavRoutes.AuthFlow)
+                        }
                     },
                 )
             }
@@ -144,7 +150,10 @@ fun FitverseRootNavigation(
                     },
                     toLoadingLanguage = {
                         rootBackStack.add(NavRoutes.LoadingLanguage)
-                    }
+                    },
+                    toTrial = {
+                        rootBackStack.add(NavRoutes.TrialScreen)
+                    },
                 )
             }
             entry<NavRoutes.LoadingLanguage>{

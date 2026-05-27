@@ -44,13 +44,14 @@ fun WorkoutNavigation(
 
     var lastWorkoutResult by remember { mutableStateOf<WorkoutCompletionResult?>(null) }
     var workoutCompletedToday by remember { mutableStateOf(false) }
+    var isDetailOpen by remember { mutableStateOf(false) }
 
     val fullScreenRoutes = remember {
         setOf<NavKey>(NavRoutes.WorkoutFlow.WorkoutSession, NavRoutes.WorkoutFlow.WorkoutCompleted)
     }
     val isFullScreen = backStack.lastOrNull() in fullScreenRoutes
 
-    LaunchedEffect(isFullScreen) { onFullScreen(isFullScreen) }
+    LaunchedEffect(isFullScreen, isDetailOpen) { onFullScreen(isFullScreen || isDetailOpen) }
 
     DisposableEffect(Unit) { onDispose { onFullScreen(false) } }
 
@@ -65,8 +66,10 @@ fun WorkoutNavigation(
             entry<NavRoutes.HomeFlow.Workout> {
                 val viewModel = koinInject<WorkoutViewModel>()
                 org.fitverse.project.destinations.workout.WorkoutDestination(
-                    onStartWorkout = { backStack.add(NavRoutes.WorkoutFlow.WorkoutSession) },
-                    workoutCompletedToday = workoutCompletedToday
+                    viewModel             = viewModel,
+                    onStartWorkout        = { backStack.add(NavRoutes.WorkoutFlow.WorkoutSession) },
+                    workoutCompletedToday = workoutCompletedToday,
+                    onDetailOpen          = { isDetailOpen = it },
                 )
             }
             entry<NavRoutes.WorkoutFlow.WorkoutSession> {

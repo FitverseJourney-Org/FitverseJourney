@@ -1,0 +1,367 @@
+﻿package org.fitverse.presentation.ui.dashboard
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DirectionsRun
+import androidx.compose.material.icons.filled.Water
+import androidx.compose.material.icons.rounded.ChevronRight
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import org.fitverse.presentation.theme.FitColors
+import org.fitverse.presentation.theme.FVTypography
+import org.fitverse.presentation.ui.dashboard.DailyMission.Companion.defaultDailyMissions
+import org.fitverse.presentation.ui.dashboard.MissionType
+import org.fitverse.presentation.ui.dashboard.components.AnimatedStreakDialog
+import org.fitverse.presentation.ui.dashboard.viewmodel.DashboardEvent
+import org.fitverse.presentation.ui.dashboard.viewmodel.DashboardIntent
+import org.fitverse.presentation.ui.dashboard.viewmodel.DashboardViewModel
+import org.fitverse.presentation.ui.dashboard.components.CardStreakWeek
+import org.fitverse.presentation.ui.dashboard.components.HomeHeader
+import org.fitverse.presentation.ui.dashboard.components.MetricCard
+import org.fitverse.presentation.ui.dashboard.components.MissionCard
+import org.fitverse.presentation.ui.dashboard.components.PlayerProfileCard
+import org.fitverse.presentation.ui.dashboard.components.SectionHeader
+import org.fitverse.presentation.ui.dashboard.util.StreakState
+import org.fitverse.presentation.ui.dashboard.util.getGreeting
+import org.fitverse.presentation.widgets.DailyStreakCard
+import org.fitverse.presentation.widgets.StreakDay
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.daysUntil
+import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Clock
+
+
+// ── Root — wires ViewModel to Screen ─────────────────────────────────────────
+
+@Composable
+fun DashboardRoot(
+    viewModel:          DashboardViewModel,
+    exit:               () -> Unit,
+    onNotificationsClick: () -> Unit,
+    onEnergyClick:      () -> Unit,
+    onNavigateToWorkout: () -> Unit = {},
+) {
+    val uiState by viewModel.uiState.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(Unit) {
+        viewModel.events.collect { event ->
+            when (event) {
+                is DashboardEvent.ShowSnackbar -> snackbarHostState.showSnackbar(event.message)
+            }
+        }
+    }
+
+    DashboardScreen(
+        username             = uiState.username,
+        avatarInitials       = uiState.avatarInitials,
+        missions             = uiState.missions,
+        streakDays           = uiState.streakDays,
+        isRefreshing         = uiState.isRefreshing,
+        exit                 = exit,
+        onNotificationsClick = onNotificationsClick,
+        onEnergyClick        = onEnergyClick,
+        onNavigateToWorkout  = onNavigateToWorkout,
+        onClaimMission       = { id, title -> viewModel.onIntent(DashboardIntent.ClaimMission(id, title)) },
+        onRefresh            = { viewModel.refresh() },
+    )
+}
+
+// ── Screen ────────────────────────────────────────────────────────────────────
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Suppress("UnusedMaterial3ScaffoldPaddingParameter")
+@Composable
+fun DashboardScreen(
+    username: String = "Athlete",
+    avatarInitials: String = "A",
+    missions: List<DailyMission> = defaultDailyMissions,
+    streakDays: List<StreakDay> = emptyList(),
+    isRefreshing: Boolean = false,
+    exit: () -> Unit,
+    onNotificationsClick: () -> Unit,
+    onEnergyClick: () -> Unit,
+    onNavigateToWorkout: () -> Unit = {},
+    onClaimMission: (String, String) -> Unit = { _, _ -> },
+    onRefresh: () -> Unit = {},
+) {
+    var showStreakDialog by remember { mutableStateOf(false) }
+    var totalStreakCount by rememberSaveable { mutableStateOf(0) }
+    var lastCheckInDate by rememberSaveable { mutableStateOf<String?>(null) }
+
+    val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+    val isTodayChecked = lastCheckInDate == today.toString()
+
+    val streakState = StreakState(
+        totalStreakCount = totalStreakCount,
+        isTodayChecked = isTodayChecked
+    )
+
+    val listOfStreakDay = streakDays.ifEmpty {
+        listOf(
+            StreakDay("S", isCompleted = true),
+            StreakDay("T", isCompleted = true),
+            StreakDay("Q", isCompleted = true),
+            StreakDay("Q", isCompleted = true),
+            StreakDay("S", isCompleted = true),
+            StreakDay("S", isCompleted = true),
+            StreakDay("D", isCompleted = true),
+        )
+    }
+
+    AnimatedStreakDialog(
+        visible = showStreakDialog,
+        streakState = streakState,
+        onDismiss = { showStreakDialog = false }
+    ) {
+        CardStreakWeek(
+            state = streakState,
+            onCheckInClick = {
+                val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+                if (lastCheckInDate == null) {
+                    totalStreakCount = 1
+                } else {
+                    val lastDate = LocalDate.parse(lastCheckInDate!!)
+                    val daysBetween = lastDate.daysUntil(now)
+                    when {
+                        now == lastDate -> {}
+                        daysBetween == 1 -> { totalStreakCount += 1 }
+                        else -> { totalStreakCount = 1 }
+                    }
+                }
+                lastCheckInDate = now.toString()
+            },
+            onClaimPremium = {
+                println("Resgatou prêmio do dia ${streakState.totalStreakCount}!")
+            }
+        )
+    }
+
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        containerColor = Color.Transparent,
+        content = { scaffoldPadding ->
+            PullToRefreshBox(
+                isRefreshing = isRefreshing,
+                onRefresh    = onRefresh,
+                modifier     = Modifier.fillMaxSize(),
+            ) {
+                ContentDashboardScreen(
+                    modifier             = Modifier.padding(scaffoldPadding),
+                    username             = username,
+                    avatarInitials       = avatarInitials,
+                    exit                 = exit,
+                    onNotificationsClick = onNotificationsClick,
+                    onEnergyClick        = onEnergyClick,
+                    onStreakClick        = { showStreakDialog = true },
+                    totalStreakCount     = totalStreakCount,
+                    listOfStreakDay      = listOfStreakDay,
+                    missions             = missions,
+                    onClaimMission       = onClaimMission,
+                    onNavigateToWorkout  = onNavigateToWorkout,
+                )
+            }
+        }
+    )
+}
+
+@Composable
+fun ContentDashboardScreen(
+    modifier: Modifier,
+    username: String,
+    avatarInitials: String,
+    exit: () -> Unit,
+    onNotificationsClick: () -> Unit,
+    onEnergyClick: () -> Unit,
+    onStreakClick: () -> Unit,
+    totalStreakCount: Int,
+    listOfStreakDay: List<StreakDay>,
+    missions: List<DailyMission> = defaultDailyMissions,
+    onClaimMission: (String, String) -> Unit = { _, _ -> },
+    onNavigateToWorkout: () -> Unit = {},
+) {
+    LazyColumn(
+        modifier = modifier,
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        item {
+            HomeHeader(
+                greeting = getGreeting(),
+                userName = username,
+                onEnergyClick = onEnergyClick,
+                onNotificationClick = onNotificationsClick,
+            )
+        }
+
+        item { PlayerProfileCard() }
+
+        item { TodayWorkoutBanner(onStart = onNavigateToWorkout) }
+
+        item {
+            DailyStreakCard(
+                currentStreak = totalStreakCount,
+                days = listOfStreakDay
+            )
+        }
+
+        item { SectionHeader("Condição Física") }
+
+        item {
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                MetricCard(
+                    title = "Passos",
+                    value = "6.5k",
+                    target = "10k",
+                    subtitle = "65% da meta",
+                    icon = Icons.Default.DirectionsRun,
+                    accentColor = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.weight(1f)
+                )
+                MetricCard(
+                    title = "Água",
+                    value = "2.4",
+                    target = "3.5",
+                    subtitle = "Boa hidratação",
+                    icon = Icons.Default.Water,
+                    accentColor = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+        }
+
+        item { SectionHeader("Missões Diárias") }
+
+        items(missions) { mission ->
+            MissionCard(
+                title           = mission.title,
+                description     = mission.description,
+                xp              = mission.xp,
+                icon            = mission.type.icon,
+                iconColor       = mission.type.color,
+                isCompleted     = mission.isCompleted,
+                isChallengeType = mission.type == MissionType.CHALLENGE,
+                onClaim         = { onClaimMission(mission.id, mission.title) },
+            )
+        }
+    }
+}
+
+// ── Today's workout quick-access ──────────────────────────────────────────────
+
+@Composable
+private fun TodayWorkoutBanner(onStart: () -> Unit) {
+    val cs = MaterialTheme.colorScheme
+    Box(
+        modifier = Modifier
+            .border(1.dp, Color(0xFF2a2a35), RoundedCornerShape(20.dp))
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(20.dp))
+            .background(cs.surface)
+    ) {
+        Column {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(2.dp)
+                    .background(
+                        Brush.horizontalGradient(
+                            listOf(
+                                Color.Transparent,
+                                FitColors.Accent.copy(alpha = 0.6f),
+                                FitColors.Accent,
+                                FitColors.Accent.copy(alpha = 0.6f),
+                                Color.Transparent,
+                            )
+                        )
+                    )
+            )
+            Row(
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text  = "TREINO DE HOJE",
+                        style = FVTypography.overline,
+                        color = FitColors.TextMuted,
+                    )
+                    Spacer(Modifier.height(2.dp))
+                    Text(
+                        text  = "HYPERTROPHY A",
+                        style = FVTypography.headlineSmall,
+                        color = FitColors.TextPrimary,
+                    )
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        text  = "Fase 2 · 18 séries · 45 min",
+                        style = FVTypography.bodySmall,
+                        color = FitColors.TextMuted,
+                    )
+                }
+                Spacer(Modifier.width(12.dp))
+                Button(
+                    onClick = onStart,
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = FitColors.Accent),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp)
+                ) {
+                    Text(
+                        text  = "TREINO",
+                        style = FVTypography.labelLarge.copy(fontWeight = FontWeight.Black),
+                        color = FitColors.Bg,
+                    )
+                    Spacer(Modifier.width(4.dp))
+                    Icon(
+                        Icons.Rounded.ChevronRight,
+                        contentDescription = null,
+                        tint = FitColors.Bg,
+                        modifier = Modifier.size(16.dp)
+                    )
+                }
+            }
+        }
+    }
+}

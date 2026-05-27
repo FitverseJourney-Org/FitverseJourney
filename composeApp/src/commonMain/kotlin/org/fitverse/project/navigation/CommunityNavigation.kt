@@ -3,6 +3,10 @@
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavKey
@@ -42,8 +46,10 @@ fun CommunityNavigation(
     )
 
     val isSubScreen = backStack.lastOrNull() != NavRoutes.HomeFlow.Community
+    var isPostDetailOpen by remember { mutableStateOf(false) }
+    val hideBottomNav = isSubScreen || isPostDetailOpen
 
-    LaunchedEffect(isSubScreen) { onSubScreenChange(isSubScreen) }
+    LaunchedEffect(hideBottomNav) { onSubScreenChange(hideBottomNav) }
 
     DisposableEffect(Unit) { onDispose { onSubScreenChange(false) } }
 
@@ -62,6 +68,7 @@ fun CommunityNavigation(
                     toAddPost          = { backStack.add(NavRoutes.HomeFlow.SubFlow.AddPost) },
                     toGroupHome        = { groupName -> backStack.add(NavRoutes.HomeFlow.SubFlow.GroupHome(groupName)) },
                     onSheetStateChange = onSheetStateChange,
+                    onPostDetailOpen   = { isPostDetailOpen = it },
                 )
             }
             entry<NavRoutes.HomeFlow.SubFlow.AddPost> {

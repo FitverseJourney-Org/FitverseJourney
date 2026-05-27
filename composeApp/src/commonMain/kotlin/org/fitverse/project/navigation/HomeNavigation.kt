@@ -63,6 +63,7 @@ import org.fitverse.presentation.widgets.DarkGamifiedDashboardBackground
 import kotlinx.coroutines.launch
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
+import org.fitverse.project.destinations.activity.ActivityDestination
 import org.fitverse.project.destinations.modal_destinations.achievement.AchievementDestination
 import org.fitverse.project.destinations.modal_destinations.device.DevicesDestination
 import org.fitverse.project.destinations.modal_destinations.friends.FriendsDestination
@@ -71,6 +72,7 @@ import org.fitverse.project.destinations.modal_destinations.historic.HistoricDes
 import org.fitverse.project.destinations.modal_destinations.leaderboards.LeaderboardsDestination
 import org.fitverse.project.destinations.modal_destinations.progress.ProgressDestination
 import org.fitverse.project.destinations.payments.PlanPaymentDestination
+import org.fitverse.project.destinations.modal_destinations.referrals.ReferralsDestination
 import org.fitverse.project.destinations.modal_destinations.language.LanguageDestination
 import org.fitverse.project.destinations.modal_destinations.shopping.ShoppingDestination
 import org.fitverse.project.destinations.modal_destinations.wiki.WikiFitnessDestination
@@ -79,8 +81,9 @@ import org.koin.compose.koinInject
 
 @Composable
 fun HomeNavigation(
-    logout: () -> Unit,
-    toLoadingLanguage: () -> Unit
+    logout            : () -> Unit,
+    toLoadingLanguage : () -> Unit,
+    toTrial           : () -> Unit = {},
 ) {
     val rootBackStack = rememberNavBackStack(
         SavedStateConfiguration {
@@ -104,6 +107,7 @@ fun HomeNavigation(
                     subclass(NavRoutes.Devices::class,             NavRoutes.Devices.serializer())
                     subclass(NavRoutes.HelpSupport::class,         NavRoutes.HelpSupport.serializer())
                     subclass(NavRoutes.PlanPayment::class,         NavRoutes.PlanPayment.serializer())
+                    subclass(NavRoutes.Referrals::class,           NavRoutes.Referrals.serializer())
                     subclass(NavRoutes.Language::class,            NavRoutes.Language.serializer())
                     // ── Sub-navegações ────────────────────────────────────────
                     subclass(NavRoutes.NutritionAddManualFood::class, NavRoutes.NutritionAddManualFood.serializer())
@@ -205,7 +209,7 @@ fun HomeNavigation(
                                 )
                             }
                             entry<NavRoutes.HomeFlow.Activity> {
-                                org.fitverse.project.destinations.activity.ActivityDestination(
+                                ActivityDestination(
                                     modifier = Modifier.padding(paddingValues),
                                 )
                             }
@@ -310,7 +314,14 @@ fun HomeNavigation(
                             entry<NavRoutes.PlanPayment> {
                                 PlanPaymentDestination(
                                     modifier = modifier,
-                                    toBack = { rootBackStack.removeLastOrNull() }
+                                    toBack   = { rootBackStack.removeLastOrNull() },
+                                    toTrial  = toTrial,
+                                )
+                            }
+                            entry<NavRoutes.Referrals> {
+                                ReferralsDestination(
+                                    modifier = modifier,
+                                    onBack   = { rootBackStack.removeLastOrNull() }
                                 )
                             }
                             // ── Sub-navegações ────────────────────────────────────

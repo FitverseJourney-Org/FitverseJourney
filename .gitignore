@@ -17,8 +17,27 @@ captures
 !*.xcworkspace/contents.xcworkspacedata
 **/xcshareddata/WorkspaceSettings.xcsettings
 node_modules/
-server/src/main/resources/firebase-admin.json
+
+# ── Firebase / Google ────────────────────────────────────────────
 **/google-services.json
+**/firebase-admin.json
 androidApp/src/debug/google-services.json
 androidApp/src/release/google-services.json
+
+# ── Keystores & signing ──────────────────────────────────────────
+*.jks
+*.keystore
+*.p12
+*.pem
+keystore.properties
+release.properties
+
+# ── Env & secrets genéricos ──────────────────────────────────────
+.env
+.env.*
+*.env
+secrets.properties
+**/service-account*.json
+
+# ── Claude Code local ────────────────────────────────────────────
 .claude/

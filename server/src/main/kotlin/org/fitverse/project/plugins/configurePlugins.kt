@@ -73,16 +73,25 @@ fun Application.configurePlugins() {
         )
     }
     install(StatusPages) {
+        // Mapeia qualquer Throwable → ApiResponse.Error serializado
         exception<Throwable> { call, cause ->
-            // ← adicione isso
-            call.application.log.error("Erro na requisição ${call.request.httpMethod.value} ${call.request.path()}", cause)
+            call.application.log.error(
+                "Erro ${call.request.httpMethod.value} ${call.request.path()}",
+                cause,
+            )
+            call.respondError(
+                code    = cause::class.simpleName ?: "INTERNAL_ERROR",
+                message = cause.message ?: "Erro interno do servidor",
+                status  = HttpStatusCode.InternalServerError,
+            )
+        }
 
-            call.respondText(
-                text = Json.encodeToString(
-                    mapOf("error" to (cause.message ?: "Unknown error"))
-                ),
-                contentType = ContentType.Application.Json,
-                status = HttpStatusCode.InternalServerError
+        // 404 genérico quando a rota não existe
+        status(HttpStatusCode.NotFound) { call, status ->
+            call.respondError(
+                code    = "NOT_FOUND",
+                message = "Recurso não encontrado",
+                status  = status,
             )
         }
     }

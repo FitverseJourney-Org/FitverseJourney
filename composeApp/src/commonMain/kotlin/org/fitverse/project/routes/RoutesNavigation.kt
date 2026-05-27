@@ -71,7 +71,8 @@ sealed interface NavRoutes : NavKey {
     // ── Telas avulsas ─────────────────────────────────────────
     @Serializable data object Shopping         : NavRoutes
     @Serializable data object WikiFitness      : NavRoutes
-    @Serializable data object PlanPayment: NavRoutes
+    @Serializable data object PlanPayment      : NavRoutes
+    @Serializable data object Referrals        : NavRoutes
     @Serializable data object Devices          : NavRoutes
     @Serializable data object Friends          : NavRoutes
     @Serializable data object Leaderboards     : NavRoutes

@@ -92,8 +92,8 @@ sqldelight {
             srcDirs.setFrom("src/commonMain/sqldelight")
             generateAsync.set(true)
             schemaOutputDirectory.set(file("src/commonMain/sqldelight/databases"))
-            deriveSchemaFromMigrations.set(false)
-            verifyMigrations.set(true)  // ← adicione para validar migrations
+            migrationOutputFileFormat.set(".sqm")
+            verifyMigrations.set(false)
         }
     }
     linkSqlite.set(true)

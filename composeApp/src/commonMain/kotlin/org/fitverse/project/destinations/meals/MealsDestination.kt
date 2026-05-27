@@ -17,6 +17,8 @@ fun MealsDestination(
     MealsScreen(
         uiState                = uiState,
         onIntent               = viewModel::onIntent,
+        isRefreshing           = uiState.isRefreshing,
+        onRefresh              = { viewModel.refresh() },
         onBottomSheetOpen      = onBottomSheetOpen,
         onNavigateToManualFood = { mealId, mealName -> onNavigateToAddManualFood(mealId, mealName) },
     )
