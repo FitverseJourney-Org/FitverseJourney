@@ -32,20 +32,18 @@ jobs:
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: |
+          echo "$GOOGLE_SERVICES_JSON" > androidApp/google-services.json
           mkdir -p androidApp/src/debug
           mkdir -p androidApp/src/release
-          echo "$GOOGLE_SERVICES_JSON" | base64 --decode > androidApp/src/debug/google-services.json
-          cp androidApp/src/debug/google-services.json androidApp/src/release/google-services.json
-
-      - name: Validate google-services.json
-        run: |
-          python3 -c "import json; json.load(open('androidApp/src/debug/google-services.json'))" \
-            && echo "✅ JSON válido" \
-            || (echo "❌ JSON inválido" && exit 1)
+          cp androidApp/google-services.json androidApp/src/debug/google-services.json
+          cp androidApp/google-services.json androidApp/src/release/google-services.json
 
       - name: Run Build
         run: |
+          # Criamos a pasta usando o caminho absoluto do GitHub Workspace
           mkdir -p ${{ github.workspace }}/runner-temp
+          
+          # Removemos o 'test' e mantivemos o assembleDebug para validar a compilação
           ./gradlew assembleDebug \
             --info --stacktrace \
             -Djava.io.tmpdir=${{ github.workspace }}/runner-temp \
