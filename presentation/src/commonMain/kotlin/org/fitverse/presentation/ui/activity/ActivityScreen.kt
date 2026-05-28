@@ -656,7 +656,7 @@ private fun ActivityRow(
     val cs = MaterialTheme.colorScheme
     Column(
         modifier = modifier
-            .border(1.dp, Color(0xFF2a2a35), RoundedCornerShape(20.dp))
+            .border(1.dp, Color(0xFF2a2a35), RoundedCornerShape(25.dp))
             .fillMaxWidth()
             .clip(RoundedCornerShape(20.dp))
             .background(cs.surface)
